@@ -1,0 +1,2 @@
+gt_boxes,pred_boxes,matched_boxes_iou50,box_recall_iou50,box_precision_iou50,mean_best_iou_per_gt,pred_tracklets,interpolated_boxes,video,runs,interp_gap,nms_iou,raw_boxes_before_interp,boxes_before_nms,interpolated_boxes_before_nms
+776465,618223,460639,0.5932514665825247,0.7451016866082304,0.5552319263056354,3929,57500,vlincs_MS01_MC0001_MCAM04_2024-03-Tc6,yolo26x-botsort-loose-solider+yolov8x-botsort-solider,60,0.7,954190,1037394,83204

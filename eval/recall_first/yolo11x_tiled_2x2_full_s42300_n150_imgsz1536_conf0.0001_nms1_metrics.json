@@ -1,0 +1,67 @@
+{
+  "gt_boxes": 5079,
+  "pred_boxes": 1129456,
+  "matched_boxes_iou50": 4874,
+  "box_recall_iou50": 0.9596377239614097,
+  "box_precision_iou50": 0.004315351815387231,
+  "mean_best_iou_per_gt": 0.8031322093209725,
+  "pred_tracklets": 1129456,
+  "video": "/mnt/localssd/vlincs/VLINCS_Performer/sample/videos/vlincs_MS01_MC0001_MCAM04_2024-03-Tc6.mp4",
+  "gt_parquet": "/mnt/localssd/vlincs/VLINCS_Performer/sample/reference_annotations/vlincs_MS01_MC0001_MCAM04_2024-03-Tc6_v1.7.2.parquet",
+  "model": "/mnt/localssd/vlincs/yolo11x.pt",
+  "start_frame": 42300,
+  "num_frames_requested": 150,
+  "num_frames_processed": 150,
+  "imgsz": 1536,
+  "conf": 0.0001,
+  "model_nms_iou": 0.99,
+  "global_nms_iou": 1.0,
+  "max_det": 3000,
+  "rows": 2,
+  "cols": 2,
+  "overlap": 192,
+  "include_full_frame": true,
+  "half": true,
+  "augment": false,
+  "link_mode": "singleton",
+  "link_iou": 0.25,
+  "link_max_gap": 30,
+  "elapsed_seconds": 45.69153618812561,
+  "tile_spec": [
+    {
+      "name": "full",
+      "x0": 0,
+      "y0": 0,
+      "x1": 2560,
+      "y1": 1920
+    },
+    {
+      "name": "r0c0",
+      "x0": 0,
+      "y0": 0,
+      "x1": 1472,
+      "y1": 1152
+    },
+    {
+      "name": "r0c1",
+      "x0": 1088,
+      "y0": 0,
+      "x1": 2560,
+      "y1": 1152
+    },
+    {
+      "name": "r1c0",
+      "x0": 0,
+      "y0": 768,
+      "x1": 1472,
+      "y1": 1920
+    },
+    {
+      "name": "r1c1",
+      "x0": 1088,
+      "y0": 768,
+      "x1": 2560,
+      "y1": 1920
+    }
+  ]
+}

@@ -1,0 +1,2 @@
+run,interp_max_gap,videos,gt_boxes,pred_boxes,matched_boxes_iou50,interpolated_boxes,box_recall_iou50,box_precision_iou50,mean_best_iou_per_gt_weighted,weighted_pred_tracklet_purity_by_matches,mean_pred_fragments_per_gt_id_unweighted_video_mean
+yolo26x-botsort-loose-solider,60,10,1685704,1446602,1201344,93216,0.7126660433860275,0.8304592417264735,0.6585029607074248,0.9460221218901497,10.323730158730159

@@ -1,0 +1,8 @@
+# Ultralytics ByteTrack config for YOLO11x recall probing.
+tracker_type: bytetrack
+track_high_thresh: 0.05
+track_low_thresh: 0.001
+new_track_thresh: 0.01
+track_buffer: 120
+match_thresh: 0.90
+fuse_score: True

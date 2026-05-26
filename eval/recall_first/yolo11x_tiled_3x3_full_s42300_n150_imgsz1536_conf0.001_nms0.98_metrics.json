@@ -1,0 +1,102 @@
+{
+  "gt_boxes": 5079,
+  "pred_boxes": 392769,
+  "matched_boxes_iou50": 4720,
+  "box_recall_iou50": 0.929316794644615,
+  "box_precision_iou50": 0.012017241686589318,
+  "mean_best_iou_per_gt": 0.7625515933683282,
+  "pred_tracklets": 392769,
+  "video": "/mnt/localssd/vlincs/VLINCS_Performer/sample/videos/vlincs_MS01_MC0001_MCAM04_2024-03-Tc6.mp4",
+  "gt_parquet": "/mnt/localssd/vlincs/VLINCS_Performer/sample/reference_annotations/vlincs_MS01_MC0001_MCAM04_2024-03-Tc6_v1.7.2.parquet",
+  "model": "/mnt/localssd/vlincs/yolo11x.pt",
+  "start_frame": 42300,
+  "num_frames_requested": 150,
+  "num_frames_processed": 150,
+  "imgsz": 1536,
+  "conf": 0.001,
+  "model_nms_iou": 0.95,
+  "global_nms_iou": 0.98,
+  "max_det": 1000,
+  "rows": 3,
+  "cols": 3,
+  "overlap": 192,
+  "include_full_frame": true,
+  "half": true,
+  "augment": false,
+  "link_mode": "singleton",
+  "link_iou": 0.25,
+  "link_max_gap": 30,
+  "elapsed_seconds": 87.17779469490051,
+  "tile_spec": [
+    {
+      "name": "full",
+      "x0": 0,
+      "y0": 0,
+      "x1": 2560,
+      "y1": 1920
+    },
+    {
+      "name": "r0c0",
+      "x0": 0,
+      "y0": 0,
+      "x1": 1046,
+      "y1": 832
+    },
+    {
+      "name": "r0c1",
+      "x0": 757,
+      "y0": 0,
+      "x1": 1803,
+      "y1": 832
+    },
+    {
+      "name": "r0c2",
+      "x0": 1514,
+      "y0": 0,
+      "x1": 2560,
+      "y1": 832
+    },
+    {
+      "name": "r1c0",
+      "x0": 0,
+      "y0": 544,
+      "x1": 1046,
+      "y1": 1376
+    },
+    {
+      "name": "r1c1",
+      "x0": 757,
+      "y0": 544,
+      "x1": 1803,
+      "y1": 1376
+    },
+    {
+      "name": "r1c2",
+      "x0": 1514,
+      "y0": 544,
+      "x1": 2560,
+      "y1": 1376
+    },
+    {
+      "name": "r2c0",
+      "x0": 0,
+      "y0": 1088,
+      "x1": 1046,
+      "y1": 1920
+    },
+    {
+      "name": "r2c1",
+      "x0": 757,
+      "y0": 1088,
+      "x1": 1803,
+      "y1": 1920
+    },
+    {
+      "name": "r2c2",
+      "x0": 1514,
+      "y0": 1088,
+      "x1": 2560,
+      "y1": 1920
+    }
+  ]
+}

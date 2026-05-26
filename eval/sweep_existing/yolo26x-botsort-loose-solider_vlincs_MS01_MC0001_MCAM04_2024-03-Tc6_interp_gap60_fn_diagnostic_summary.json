@@ -1,0 +1,205 @@
+{
+  "video": "vlincs_MS01_MC0001_MCAM04_2024-03-Tc6",
+  "run": "yolo26x-botsort-loose-solider",
+  "interp_gap": 60,
+  "gt_boxes": 776465,
+  "pred_boxes": 556038,
+  "best_iou_covered_gt_boxes": 452846,
+  "best_iou_recall50": 0.5832149549561152,
+  "mean_best_iou": 0.545201728190022,
+  "uncovered_gt_boxes": 323619,
+  "top_missed_ids": [
+    {
+      "gt_id": "M0051",
+      "gt_boxes": 27430,
+      "covered": 7288,
+      "mean_area": 4754.091505650747,
+      "mean_height": 124.23740430185927,
+      "mean_best_iou": 0.27157041473557586,
+      "missed": 20142,
+      "best_iou_recall50": 0.26569449507838133
+    },
+    {
+      "gt_id": "M0030",
+      "gt_boxes": 18922,
+      "covered": 1739,
+      "mean_area": 1965.5870415389493,
+      "mean_height": 58.83146601839129,
+      "mean_best_iou": 0.1417450757586344,
+      "missed": 17183,
+      "best_iou_recall50": 0.09190360427016171
+    },
+    {
+      "gt_id": "M0016",
+      "gt_boxes": 22195,
+      "covered": 7555,
+      "mean_area": 4897.170128407299,
+      "mean_height": 99.92336111736877,
+      "mean_best_iou": 0.3156426926908149,
+      "missed": 14640,
+      "best_iou_recall50": 0.34039198017571526
+    },
+    {
+      "gt_id": "M0036",
+      "gt_boxes": 25059,
+      "covered": 10829,
+      "mean_area": 7933.894169759368,
+      "mean_height": 132.04070393870467,
+      "mean_best_iou": 0.4034842464143333,
+      "missed": 14230,
+      "best_iou_recall50": 0.4321401492477753
+    },
+    {
+      "gt_id": "M0029",
+      "gt_boxes": 20694,
+      "covered": 6690,
+      "mean_area": 7332.340195225669,
+      "mean_height": 110.90741277665023,
+      "mean_best_iou": 0.37713505808979253,
+      "missed": 14004,
+      "best_iou_recall50": 0.32328211075674107
+    },
+    {
+      "gt_id": "M0043",
+      "gt_boxes": 22250,
+      "covered": 8506,
+      "mean_area": 7161.391820224719,
+      "mean_height": 150.26737078651686,
+      "mean_best_iou": 0.3647784521773003,
+      "missed": 13744,
+      "best_iou_recall50": 0.3822921348314607
+    },
+    {
+      "gt_id": "M0038",
+      "gt_boxes": 22314,
+      "covered": 8932,
+      "mean_area": 4614.8496459621765,
+      "mean_height": 118.40467867706373,
+      "mean_best_iou": 0.398245900627457,
+      "missed": 13382,
+      "best_iou_recall50": 0.4002868154521825
+    },
+    {
+      "gt_id": "M0010",
+      "gt_boxes": 18485,
+      "covered": 5111,
+      "mean_area": 6878.430024344063,
+      "mean_height": 114.98972139572626,
+      "mean_best_iou": 0.3367977096721602,
+      "missed": 13374,
+      "best_iou_recall50": 0.2764944549634839
+    },
+    {
+      "gt_id": "M0019",
+      "gt_boxes": 24170,
+      "covered": 11355,
+      "mean_area": 3956.174927596194,
+      "mean_height": 95.54530409598676,
+      "mean_best_iou": 0.438753282065281,
+      "missed": 12815,
+      "best_iou_recall50": 0.4697972693421597
+    },
+    {
+      "gt_id": "M0025",
+      "gt_boxes": 25185,
+      "covered": 12835,
+      "mean_area": 8206.536192177884,
+      "mean_height": 149.5736748064324,
+      "mean_best_iou": 0.5096101075370637,
+      "missed": 12350,
+      "best_iou_recall50": 0.5096287472702005
+    }
+  ],
+  "worst_frame_bins_by_missed": [
+    {
+      "frame_bin": 42300,
+      "gt_boxes": 10137,
+      "covered": 4657,
+      "mean_area": 8315.253526684424,
+      "mean_best_iou": 0.4306690154465812,
+      "missed": 5480,
+      "best_iou_recall50": 0.4594061359376541
+    },
+    {
+      "frame_bin": 42600,
+      "gt_boxes": 10306,
+      "covered": 4834,
+      "mean_area": 8081.51853289346,
+      "mean_best_iou": 0.43526707205437853,
+      "missed": 5472,
+      "best_iou_recall50": 0.4690471569959247
+    },
+    {
+      "frame_bin": 41700,
+      "gt_boxes": 9900,
+      "covered": 4509,
+      "mean_area": 8796.642222222223,
+      "mean_best_iou": 0.44726880892377985,
+      "missed": 5391,
+      "best_iou_recall50": 0.45545454545454545
+    },
+    {
+      "frame_bin": 10800,
+      "gt_boxes": 10500,
+      "covered": 5363,
+      "mean_area": 13334.296476190477,
+      "mean_best_iou": 0.5012376078236689,
+      "missed": 5137,
+      "best_iou_recall50": 0.5107619047619048
+    },
+    {
+      "frame_bin": 14700,
+      "gt_boxes": 9989,
+      "covered": 4870,
+      "mean_area": 14816.276804484933,
+      "mean_best_iou": 0.4748073119364577,
+      "missed": 5119,
+      "best_iou_recall50": 0.4875362899189108
+    },
+    {
+      "frame_bin": 42000,
+      "gt_boxes": 10082,
+      "covered": 4968,
+      "mean_area": 8571.367883356477,
+      "mean_best_iou": 0.4672314737818688,
+      "missed": 5114,
+      "best_iou_recall50": 0.4927593731402499
+    },
+    {
+      "frame_bin": 14400,
+      "gt_boxes": 9732,
+      "covered": 4747,
+      "mean_area": 14798.782983970406,
+      "mean_best_iou": 0.4754789472527244,
+      "missed": 4985,
+      "best_iou_recall50": 0.4877722975750103
+    },
+    {
+      "frame_bin": 15900,
+      "gt_boxes": 9769,
+      "covered": 4822,
+      "mean_area": 15093.00992936841,
+      "mean_best_iou": 0.49726295324434416,
+      "missed": 4947,
+      "best_iou_recall50": 0.49360221107585217
+    },
+    {
+      "frame_bin": 13800,
+      "gt_boxes": 9996,
+      "covered": 5097,
+      "mean_area": 14511.402961184474,
+      "mean_best_iou": 0.47875290810003873,
+      "missed": 4899,
+      "best_iou_recall50": 0.5099039615846338
+    },
+    {
+      "frame_bin": 41100,
+      "gt_boxes": 9459,
+      "covered": 4690,
+      "mean_area": 9173.561687281954,
+      "mean_best_iou": 0.4676082382197142,
+      "missed": 4769,
+      "best_iou_recall50": 0.4958240828840258
+    }
+  ]
+}

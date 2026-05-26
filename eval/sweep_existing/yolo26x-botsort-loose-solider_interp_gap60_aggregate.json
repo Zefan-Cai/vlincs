@@ -1,0 +1,14 @@
+{
+  "run": "yolo26x-botsort-loose-solider",
+  "interp_max_gap": 60,
+  "videos": 10,
+  "gt_boxes": 1685704,
+  "pred_boxes": 1446602,
+  "matched_boxes_iou50": 1201344,
+  "interpolated_boxes": 93216,
+  "box_recall_iou50": 0.7126660433860275,
+  "box_precision_iou50": 0.8304592417264735,
+  "mean_best_iou_per_gt_weighted": 0.6585029607074248,
+  "weighted_pred_tracklet_purity_by_matches": 0.9460221218901497,
+  "mean_pred_fragments_per_gt_id_unweighted_video_mean": 10.323730158730159
+}

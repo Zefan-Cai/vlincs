@@ -1,0 +1,38 @@
+[
+  {
+    "run": "yolo26x-botsort-loose",
+    "videos": 10,
+    "gt_boxes": 1685704,
+    "pred_boxes": 1344281,
+    "matched_boxes_iou50": 1151353,
+    "box_recall_iou50": 0.6830101844689221,
+    "box_precision_iou50": 0.8564823872389775,
+    "mean_best_iou_per_gt_weighted": 0.6353740937191079,
+    "weighted_pred_tracklet_purity_by_matches": 0.9630582453860805,
+    "mean_pred_fragments_per_gt_id_unweighted_video_mean": 10.275873015873016
+  },
+  {
+    "run": "yolo26x-botsort-loose-solider",
+    "videos": 10,
+    "gt_boxes": 1685704,
+    "pred_boxes": 1353386,
+    "matched_boxes_iou50": 1154647,
+    "box_recall_iou50": 0.6849642641887307,
+    "box_precision_iou50": 0.853154236854822,
+    "mean_best_iou_per_gt_weighted": 0.6370132079334373,
+    "weighted_pred_tracklet_purity_by_matches": 0.9481997528248893,
+    "mean_pred_fragments_per_gt_id_unweighted_video_mean": 10.359920634920636
+  },
+  {
+    "run": "yolov8x-botsort",
+    "videos": 10,
+    "gt_boxes": 1685704,
+    "pred_boxes": 1061652,
+    "matched_boxes_iou50": 981090,
+    "box_recall_iou50": 0.5820060935965033,
+    "box_precision_iou50": 0.9241163771179256,
+    "mean_best_iou_per_gt_weighted": 0.5571170791866825,
+    "weighted_pred_tracklet_purity_by_matches": 0.9473809742225484,
+    "mean_pred_fragments_per_gt_id_unweighted_video_mean": 6.529285714285715
+  }
+]

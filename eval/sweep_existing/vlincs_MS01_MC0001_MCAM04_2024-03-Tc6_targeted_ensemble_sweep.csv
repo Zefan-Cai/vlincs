@@ -1,0 +1,5 @@
+gt_boxes,pred_boxes,matched_boxes_iou50,box_recall_iou50,box_precision_iou50,mean_best_iou_per_gt,pred_tracklets,config,runs,nms_iou,raw_pred_boxes,video
+776465,954190,447195,0.5759370995473073,0.4686645217409531,0.5484801492297722,4456,loose_solider_plus_yolov8x_solider_none,yolo26x-botsort-loose-solider+yolov8x-botsort-solider,none,954190,vlincs_MS01_MC0001_MCAM04_2024-03-Tc6
+776465,566951,444225,0.5721120720187002,0.7835333212217634,0.5370164095108827,4022,loose_solider_plus_yolov8x_solider_nms07,yolo26x-botsort-loose-solider+yolov8x-botsort-solider,0.7,954190,vlincs_MS01_MC0001_MCAM04_2024-03-Tc6
+776465,851471,438135,0.5642688337529702,0.5145624454620298,0.5379398547153196,2367,loose_solider_plus_baseline_none,yolo26x-botsort-loose-solider+yolov8x-botsort,none,851471,vlincs_MS01_MC0001_MCAM04_2024-03-Tc6
+776465,533514,436534,0.5622069249740812,0.8182240765940537,0.5285165431934051,2257,loose_solider_plus_baseline_nms07,yolo26x-botsort-loose-solider+yolov8x-botsort,0.7,851471,vlincs_MS01_MC0001_MCAM04_2024-03-Tc6

@@ -1,0 +1,26 @@
+# Large/generated artifacts
+*.pt
+*.pth
+*.onnx
+*.mp4
+*.parquet
+*.zip
+*.tar
+*.tar.gz
+*.npy
+*.npz
+
+# Python
+__pycache__/
+*.pyc
+.pytest_cache/
+.mypy_cache/
+
+# Local data mirrors
+VLINCS_Performer/
+videolincs/
+
+# Environment
+.env
+.venv/
+venv/
