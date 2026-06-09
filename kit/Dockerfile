@@ -5,13 +5,9 @@ RUN apt-get update && apt-get install -y --no-install-recommends libgl1 libglib2
     && rm -rf /var/lib/apt/lists/*
 WORKDIR /app
 COPY kit/requirements.txt kit/requirements.txt
-# reid_hota is internal (not on public PyPI). Install via the Novateur devpi index (it proxies upstream
-# PyPI for the public deps too). If your build host can't reach it, vendor a reid_hota wheel into
-# kit/vendor/ and pip-install that instead (see requirements.txt).
-RUN pip install --no-cache-dir \
-    --extra-index-url http://euclid.novateur.com:48731/novateur/dev/+simple/ \
-    --trusted-host euclid.novateur.com \
-    -r kit/requirements.txt
+# Every dependency is on public PyPI — reid_hota included (NIST: github.com/usnistgov/reid_hota). No
+# internal index, no auth, nothing to vendor: a clean clone builds anywhere with PyPI reachable.
+RUN pip install --no-cache-dir -r kit/requirements.txt
 COPY vlincs_gallery/ vlincs_gallery/
 COPY db/ db/
 COPY kit/ kit/

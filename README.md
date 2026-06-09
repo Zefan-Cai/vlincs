@@ -106,8 +106,8 @@ Defaults are the validated config. Tune `tau` first (to your embedding's cosine 
   `DATA = $DATA_ROOT/Box/VLINCS_Performer` (the canonical Box export — **the default data directory**) and
   `MS02_DATA = $DATA_ROOT/VLINCS_Performer-selected` (where the MS02 debug set still lives — it's bound to
   the `vlincs-baseline` repo, not in the Box export yet). `root_for_site('MS02')` → `-selected`, else Box.
-- **`reid_hota`** is an internal package (not on public PyPI) — the kit image installs it from the Novateur
-  devpi index (`euclid.novateur.com:48731`); see `kit/Dockerfile` / `kit/requirements.txt`.
+- **`reid_hota`** is the public NIST scorer ([github.com/usnistgov/reid_hota](https://github.com/usnistgov/reid_hota),
+  on PyPI) — the kit installs it straight from PyPI; no internal index, so a clean clone builds anywhere.
 - **MS02 demo data** is two 5-minute (9000-frame @ 30fps) videos (MCAM310 + MCAM318); its GT is sparse
   (~1.5 det/frame), so on MS02 **lead with AssA**, not IDF1.
 
@@ -164,6 +164,9 @@ parquet.
 
 ## Env
 
-Dedicated venv at `.venv` (the system Python is ABI-broken — always use the venv). The kit runs CPU-only
-in Docker (no torch, no weights). Internal deps (`reid_hota`, the SDK) come from the Novateur devpi index;
-public deps from PyPI.
+The **deployable kit** (`kit/requirements.txt`) is CPU-only and **public-PyPI-only** — no torch, no weights,
+no internal index (`reid_hota` is the public NIST package). `vlincs_sdk` is **not** needed by the kit: it's
+imported lazily only by two advanced gallery methods (`discriminability()` disc-ratio-keyed tau, and
+`split_low_coherence()` revise) — the core match/expand/resolve/score path is pure numpy. The **full
+dev/research** install is `pyproject.toml` (adds torch/ultralytics/sentence-transformers + `vlincs-sdk[harness]`
+from the internal devpi index); the dedicated venv lives at `.venv` (the system Python is ABI-broken).
