@@ -51,6 +51,10 @@ services:
       # with no way to recover in desktop mode. (PGADMIN_CONFIG_* values are eval'd as Python -> nested quotes.)
       PGADMIN_CONFIG_SECRET_KEY: "'vlincs-gallery-pgadmin-secret'"
       PGADMIN_CONFIG_CSRF_SESSION_KEY: "'vlincs-gallery-pgadmin-csrf'"
+      # Don't bind the session to the client IP: on localhost over Docker the perceived address flips
+      # between IPv4 and IPv6 (gunicorn binds [::]:80), which invalidates the session within seconds and
+      # spams the "CSRF token / refresh the page" prompt. Off = stable sessions for this local desktop use.
+      PGADMIN_CONFIG_ENHANCED_COOKIE_PROTECTION: "False"
     ports: ["5050:80"]                       # open it, expand the tree -> gallery_ms02 / gallery_ds1 (pwd: gallery)
 
   app:                                     # the CLI: docker compose run --rm app list-videos --dataset ds1
