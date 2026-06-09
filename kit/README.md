@@ -81,13 +81,15 @@ tracklets+embeddings streamed through the live gallery → real AssA, viz popula
 
 ## Setup — DB + Gallery view (one `docker compose up`)
 
-Everything runs from `kit/`. `docker compose up` starts five services; the only thing you must point it
-at is the dataset mount (videos + GT), via `DATA_ROOT`.
+Everything runs from `kit/`. `docker compose up` starts the four long-running services (`db` / `viz` /
+`ui` / `pgadmin`); `app` is the one-shot CLI (a `cli` compose profile, so `up` doesn't try to run it — you
+invoke it with `docker compose run --rm app …`). The only thing you must point it at is the dataset mount
+(videos + GT), via `DATA_ROOT`.
 
 ```bash
 cd kit
 export DATA_ROOT=/mnt/datastore2_videolincs/data      # where the VLINCS datastore is mounted (default if unset)
-DATASET=ds1 docker compose up -d                      # brings up all five services below
+DATASET=ds1 docker compose up -d                      # brings up the four services below (app is run-on-demand)
 ```
 
 | service | what | where |

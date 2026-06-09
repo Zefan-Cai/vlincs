@@ -38,21 +38,25 @@ services:
     ports: ["4200:4200"]
     command: sh -c "npm ci || npm install; npx ng serve --host 0.0.0.0 --port 4200 --proxy-config proxy.docker.json --disable-host-check"
 
-  pgadmin:                                 # http://localhost:5050 — inspect the DB visually; server pre-registered
-    image: dpage/pgadmin4:8
+  pgadmin:                                 # http://localhost:5050 — inspect the DB visually; server + password pre-seeded
+    build: { context: ./pgadmin }          # bakes servers.json + pgpass at libpq-correct perms (see pgadmin/Dockerfile)
     depends_on: { db: { condition: service_healthy } }
     environment:
-      PGADMIN_DEFAULT_EMAIL: admin@vlincs.local
+      PGADMIN_DEFAULT_EMAIL: admin@vlincs.com    # pgAdmin rejects .local (and other special-use TLDs) — use a real TLD
       PGADMIN_DEFAULT_PASSWORD: gallery
       PGADMIN_CONFIG_SERVER_MODE: "False"              # desktop mode — no pgAdmin login wall
       PGADMIN_CONFIG_MASTER_PASSWORD_REQUIRED: "False"
-    volumes:
-      - ./pgadmin/servers.json:/pgadmin4/servers.json:ro   # pre-registers the "VLINCS gallery (db)" connection
+      # Pin the session/CSRF secret so it survives container recreation. Without this pgAdmin generates a
+      # fresh key each start, which invalidates any existing browser cookie -> "CSRF token missing, refresh"
+      # with no way to recover in desktop mode. (PGADMIN_CONFIG_* values are eval'd as Python -> nested quotes.)
+      PGADMIN_CONFIG_SECRET_KEY: "'vlincs-gallery-pgadmin-secret'"
+      PGADMIN_CONFIG_CSRF_SESSION_KEY: "'vlincs-gallery-pgadmin-csrf'"
     ports: ["5050:80"]                       # open it, expand the tree -> gallery_ms02 / gallery_ds1 (pwd: gallery)
 
   app:                                     # the CLI: docker compose run --rm app list-videos --dataset ds1
     build: { context: .., dockerfile: kit/Dockerfile }
-    depends_on: { db: { condition: service_healthy } }
+    profiles: ["cli"]                        # a one-shot CLI, NOT a daemon — excluded from `docker compose up`
+    depends_on: { db: { condition: service_healthy } }   # `docker compose run --rm app <cmd>` still starts db first
     environment: { PGHOST: db, PGPORT: "5432", DATA_ROOT: /data }
     volumes: ["${DATA_ROOT:-/mnt/datastore2_videolincs/data}:/data:ro"]
     entrypoint: ["python", "cli.py"]
