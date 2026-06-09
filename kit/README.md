@@ -10,13 +10,11 @@ resolve (consolidation)**, assigns global IDs, and scores **IDF1** — with a vi
 every identity is what it is. (Per-*detection* ingestion is also supported for streaming use, but without a
 tracker's within-camera consolidation it over-fragments — push tracklets if you have them.)
 
-```
-your detector+embedder (your choice) ──► detections + embeddings ──► [ ingest-stream ──► match/expand/do-nothing ──► periodic resolve ] ──► IDF1 + decision viz
-                                                                         └──────────────── our gallery (no weights) ──────────────────┘
-```
+![ingest · decide · store · resolve](../assets/architecture.svg)
 
-The gallery ships **no weights and no models** — it's pure pgvector cosine + the decision strategies, so
-there's nothing to download. The DB ships **empty**; you fill it by running your pipeline.
+The gallery ships **no weights and no models** — it's pgvector (durable store + ANN) + an in-process
+cosine index over *your* embeddings + the decision rules, so there's nothing to download. The DB ships
+**empty**; you fill it by running your pipeline.
 
 ---
 
@@ -178,25 +176,39 @@ it tracks your ingest loop. Top-to-bottom:
 - **Config strip** (header) — the decision config this DB state was built with (`cannot_link`, `match_mode`,
   `tau`, `merge_tau`, …), persisted with the run as a `role='gallery'` row so you can always see whether the
   data in front of you is the vetoes-on or appearance-only run. `cannot_link` is highlighted green (on) / amber (off).
+- **Timeline lens** (`Playback (t)` / `Decision order`) — the **default is Decision order**: the scrubber
+  steps over **ingest order** (one step per tracklet decision), replaying the gallery exactly as it was built —
+  the lens for *auditing decisions* (no "future" crops). `Playback (t)` is the wall-clock view (where boxes are
+  on screen at time _t_). Everything below tracks whichever lens is active.
 - **Card toggle** (DS1 only: `Tc6` / `Tc8` / all) — Tc6 and Tc8 reuse camera names and sit ~2.5h apart;
   the toggle un-conflates the two sessions in space *and* time. Pick one to scrub a single session at
   full resolution.
 - **KPI strip** — live counts (identities, detections, tracklets, **cross-camera** identities) and the
   decision tallies (match / expand / admitted-to-bank).
-- **Time scrubber + play / pause / speed** — the scrubber maps over *actual detection time* (it skips
-  the Tc6/Tc8 dead gap), so playback shows the gallery **as of time _t_**: identities that exist yet,
-  and how many of their members have been seen.
-- **Per-camera canvases** — one canvas per video; live detection boxes near _t_, **colored by global
-  id**. The same color across two cameras is a cross-camera match the gallery made.
-- **Decision feed** — the match / expand / do-nothing trail up to _t_, newest first: each row's candidate
-  identities, their cosine scores, the chosen gid, the threshold, whether the tracklet was admitted to
-  the exemplar bank, and the **veto reasons** (`same_frame` / `simultaneity:CAM` / `travel:CAM` /
-  `below_tau`) — i.e. *why* each decision went the way it did.
-- **Click an identity (gid)** → identity detail: its tracklets (admitted vs rejected), exemplar crops,
-  the cameras it spans, and its time span. This is how you audit a merge — "should these really be the
-  same person?"
-- **Click a tracklet (seq)** → tracklet detail: that within-camera unit's detections and a subsampled
-  **crop strip**, plus the decision that placed it.
+- **Scrubber + transport** (⏮ / play / ⏭, speed) — in **Decision order** it steps over **ingest step N**
+  (each step = one tracklet decision, in the order made); in **Playback** it maps over *actual detection
+  time* (skipping the Tc6/Tc8 dead gap). Either way the whole view shows the gallery **as of the cursor**:
+  which identities exist yet, how much of each has been committed.
+- **Per-camera canvases** — boxes **colored by global id**. In Playback, every box near _t_ (same color
+  across cameras = a cross-camera match). In Decision order, the boxes of the **tracklet decided at this
+  step**, colored by the identity it had *as of this step*.
+- **Decision feed** — the trail up to the cursor, newest first. Each **decision** row shows the type
+  (match / expand / do-nothing), the chosen gid, `added` / `not-added` (bank admission), candidate ids +
+  cosine scores, and any **veto** (`same_frame` / `simultaneity:CAM` / `travel:CAM` / `below_tau`).
+  **Merge** rows (purple `⟳ merged`, Decision-order only) show a `resolve()` consolidation: `id A → id B`
+  with the centroid cosine that triggered it (`≥ merge_tau`) and the step it fired — the *when/where/why*.
+  A small legend distinguishes the two triggers (a decision per ingested tracklet; a merge per periodic
+  `resolve()`). Click an identity and every feed row that **involves** it (chose / considered / merged it)
+  is highlighted.
+- **Embedding space** — a 2D PCA/UMAP projection of the **match space**, colored by id: toggle **bank
+  exemplars** (the live FAISS/hnsw bank the matcher scores against) vs **per-detection**. **⤢ enlarge** opens
+  a large zoomable view (scroll-zoom/pan); a **☀ light/dark** toggle helps read clusters (persisted). It
+  tracks the cursor too — at step N it shows the bank *as of step N*.
+- **Click an identity (gid)** → identity detail: its tracklets (admitted vs rejected), exemplar crops, the
+  cameras it spans, and `X of Y tracklets added` — **cursor-aware**, so it matches the embedding bank at the
+  current step (e.g. "2 of 3" at step 10, "10 of 35" at the end). This is how you audit a merge.
+- **Click a tracklet (seq)** → tracklet detail (left column): its decision + why, and a subsampled **crop
+  strip** with `+ load more` / `show all`. Every crop carries its `camera:frame:box` det-id caption.
 - **Crops** are decoded on demand from the source video frames (`DATA_ROOT`), cached after first view.
 
 **Reading the view while tuning:** lots of `expand` with low scores ⇒ `tau` is too high for your
