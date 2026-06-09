@@ -26,8 +26,8 @@ from pgvector.psycopg import register_vector
 from fastapi import FastAPI, Response, Query
 from fastapi.middleware.cors import CORSMiddleware
 from vlincs_gallery import db as gdb
+from vlincs_gallery import paths
 
-DATA = os.environ.get("DATA_ROOT", "/mnt/datastore2_videolincs/data") + "/VLINCS_Performer-selected"
 DATASET = os.environ.get("GALLERY_DATASET", "ds1")
 DSN = gdb.dsn(DATASET)
 
@@ -161,10 +161,11 @@ def _video_path(stem: str) -> str:
     # card-from-stem guess only if the glob misses (e.g. an unusual mount layout).
     p = stem.split("_")            # vlincs_<SITE>_<CLUSTER>_<MCAMxx>_<...>
     site, cluster = p[1], p[2]
-    hits = glob.glob(f"{DATA}/{site}/{cluster}/*/{stem}.mp4")
+    root = paths.root_for_site(site)   # MS02 lives in the -selected tree; ds1/ds2 in the Box export
+    hits = glob.glob(f"{root}/{site}/{cluster}/*/{stem}.mp4")
     if hits:
         return hits[0]
-    return f"{DATA}/{site}/{cluster}/{'_'.join(p[4:])}/{stem}.mp4"
+    return f"{root}/{site}/{cluster}/{'_'.join(p[4:])}/{stem}.mp4"
 
 
 # Recursive CTE: for each birth gid (decision_log.chosen_gid) compute its CANONICAL gid after applying every
@@ -348,23 +349,34 @@ def tracklet(seq: int, n: int = 12):
 
 
 @app.get("/identity/{gid}")
-def identity(gid: int):
+def identity(gid: int, by: str = "wall", step: int = -1, t: int = -1):
+    """An identity's tracklets + bank, AS OF the timeline cursor so it agrees with the embedding panel/KPIs:
+      by=decision: tracklets decided by `step` whose identity AS OF step (canonical birth gid after
+        merges<=step) is this gid -> exemplars_added == the bank the embedding shows at this step.
+      by=wall: FINAL-gid membership (post-merge); t>=0 limits to tracklets whose representative det is
+        committed by t. t<0 (or absent) = the full/final identity."""
     info = _q("SELECT * FROM identities WHERE gid=%s", (gid,), one=True)
-    # ALL tracklets currently in this identity, by FINAL assignment (assignments.gid is the post-merge
-    # canonical gid — resolve() UPDATEs it), not by birth gid (dl.chosen_gid). So a merged identity shows
-    # its full membership + its TRUE live bank: addedTracklets (admitted) == the identity_reps the matcher
-    # actually holds, including exemplars that came in via merges. (Keyed on dl.seq = the tracklet.)
-    tracks = _q("""SELECT dl.seq, d.camera, d.abs_ms, dl.decision_type, dl.admitted, dl.det_id AS rep_det,
-                          dl.admit_reason, dl.admit_sim, dl.admit_min, dl.admit_tau, dl.coherence_floor,
-                          dl.max_reps,
-                          (SELECT count(*) FROM assignments a WHERE a.seq=dl.seq) AS n_dets
-                   FROM decision_log dl JOIN detections d ON d.det_id=dl.det_id
-                   WHERE dl.seq IN (SELECT DISTINCT a.seq FROM assignments a WHERE a.gid=%s)
-                   ORDER BY d.abs_ms""", (gid,))
-    _warm_bank([t["rep_det"] for t in tracks])   # background pre-decode of this id's crops, seek-ordered
+    cols = """dl.seq, d.camera, d.abs_ms, dl.decision_type, dl.admitted, dl.det_id AS rep_det,
+              dl.admit_reason, dl.admit_sim, dl.admit_min, dl.admit_tau, dl.coherence_floor, dl.max_reps,
+              (SELECT count(*) FROM assignments a WHERE a.seq=dl.seq) AS n_dets"""
+    if by == "decision":
+        tracks = _q(f"""{_CANON_CTE}
+                        SELECT {cols}
+                        FROM decision_log dl JOIN detections d ON d.det_id=dl.det_id
+                        JOIN _canon ON _canon.orig = dl.chosen_gid
+                        WHERE dl.seq <= %s AND _canon.cur = %s
+                        ORDER BY d.abs_ms""", (step, step, gid))
+    else:
+        tfilter = " AND d.abs_ms <= %s" if t >= 0 else ""
+        args = (gid, t) if t >= 0 else (gid,)
+        tracks = _q(f"""SELECT {cols}
+                        FROM decision_log dl JOIN detections d ON d.det_id=dl.det_id
+                        WHERE dl.seq IN (SELECT DISTINCT a.seq FROM assignments a WHERE a.gid=%s){tfilter}
+                        ORDER BY d.abs_ms""", args)
+    _warm_bank([r["rep_det"] for r in tracks])   # background pre-decode of this id's crops, seek-ordered
     return {"gid": gid, "info": info,
             "n_tracklets": len(tracks),
-            "exemplars_added": sum(1 for t in tracks if t["admitted"]),
+            "exemplars_added": sum(1 for r in tracks if r["admitted"]),
             "tracklets": tracks}
 
 

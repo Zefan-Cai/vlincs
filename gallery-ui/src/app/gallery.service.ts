@@ -13,7 +13,9 @@ export class GalleryService {
   next(t: number, dir: number, card = ''): Observable<any> { return this.http.get('/api/next', { params: { t, dir, card } }); }
   merges(): Observable<any> { return this.http.get('/api/merges'); }   // decision-order feed: consolidation events
   tracklet(seq: number): Observable<any> { return this.http.get('/api/tracklet/' + seq); }
-  identity(gid: number): Observable<any> { return this.http.get('/api/identity/' + gid); }
+  identity(gid: number, by = 'wall', step = -1, t = -1): Observable<any> {
+    return this.http.get('/api/identity/' + gid, { params: { by, step, t: Math.round(t) } });
+  }
   crop(detId: string): string { return '/api/crop/' + encodeURIComponent(detId); }
   embeddingProjection(mode = 'bank', card = '', t = 0, by = 'wall', step = -1): Observable<any> {
     // t must be an int — the backend (typed t: int) 422s on a float query value

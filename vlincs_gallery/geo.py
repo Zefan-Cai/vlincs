@@ -5,8 +5,8 @@ flat-ground calibration recovered from the geo_b608d03 submission (see runs/ds1_
 origin = per-camera, so outputs are absolute WGS84 and directly comparable across cameras.
 
 Geodesy is inlined (copied from vlincs_geo_flatground/src/model/geodesy.py) so this module has no
-cross-repo path dependency. Used by gallery_db.py to give each identity a world track, so the
-consolidation merge can be GATED on world-position consistency (a signal independent of appearance).
+cross-repo path dependency. Used by the gallery matcher (vlincs_gallery.gallery) to give each identity a
+world track, so the consolidation merge can be GATED on world-position consistency (independent of appearance).
 """
 from __future__ import annotations
 import json

@@ -30,12 +30,10 @@ import pandas as pd
 # reid_hota required columns for similarity_metric="iou"
 _REQ_COLS = ["frame", "id", "x1", "y1", "x2", "y2", "object_type"]
 
-# Canonical GT roots (confirmed present on this box, 2026-06-02)
-_MS02_DIR = "/mnt/datastore2_videolincs/data/VLINCS_Performer-selected/MS02/MC0002/2018-03-Tc85"
-_DS1_DIRS = {
-    "Tc6": "/mnt/datastore2_videolincs/data/VLINCS_Performer-selected/MS01/MC0001/2024-03-Tc6",
-    "Tc8": "/mnt/datastore2_videolincs/data/VLINCS_Performer-selected/MS01/MC0001/2024-03-Tc8",
-}
+# GT roots come from the central path config (vlincs_gallery.paths) so every module agrees and they
+# resolve wherever the datastore is mounted (host /mnt/...; kit container /data). MS02 lives in the
+# -selected tree, DS1 in the Box export.
+from vlincs_gallery.paths import MS02_GT_DIR as _MS02_DIR, DS1_GT_DIRS as _DS1_DIRS
 _CAM_RE = re.compile(r"(MCAM\d+)")
 
 DatasetKind = Literal["ms02", "ds1"]

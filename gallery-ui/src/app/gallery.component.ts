@@ -164,6 +164,7 @@ export class GalleryComponent implements OnInit, AfterViewInit {
     // all decisions up to t, newest first (index 0 = the decision being made "now")
     this.decisions = this.allDecisions.filter((x) => (x.abs_ms || 0) <= t).reverse();
     this.refreshEmbedding();   // time-sync the embedding panel to t (grows as the scrubber advances)
+    if (this.selGid != null) this.loadIdentity();   // keep the identity bank cursor-consistent
   }
 
   // Decision-order lens: the gallery AS OF ingest step N. Identities/bank/dets all gated on seq<=step, so
@@ -193,6 +194,7 @@ export class GalleryComponent implements OnInit, AfterViewInit {
       old_gid: m.old_gid, new_gid: m.new_gid, merge_id: m.merge_id, score: m.score }));
     this.decisions = [...decs, ...mrgs].sort((a, b) => (b.sortval - a.sortval) || ((b.merge_id || 0) - (a.merge_id || 0)));
     this.refreshEmbedding();
+    if (this.selGid != null) this.loadIdentity();   // keep the identity bank consistent with the step
     // auto-open the current decision's tracklet (step IS a seq) — guarded so a drag doesn't refetch each tick
     if (this.selSeq !== step && this.allDecisions.some((x) => x.seq === step)) this.selectTracklet(step);
   }
@@ -315,9 +317,17 @@ export class GalleryComponent implements OnInit, AfterViewInit {
   selectGid(g: number) {
     this.selGid = this.selGid === g ? null : g; this.identityDetail = null; this.selSeq = null; this.trackletDetail = null;
     this.selGidRelated = this.selGid === null ? null : this.relatedGids(this.selGid);
-    if (this.selGid !== null) this.api.identity(g).subscribe((d) => this.identityDetail = d);
+    this.loadIdentity();
     this.render();
     this.drawEmbedding();   // re-tint the cloud so the focused id pops
+  }
+  // fetch the selected identity AS OF the current cursor, so its bank/counts agree with the embedding + KPIs
+  private loadIdentity() {
+    if (this.selGid == null) { this.identityDetail = null; return; }
+    const obs = this.mode === 'decision'
+      ? this.api.identity(this.selGid, 'decision', this.step)
+      : this.api.identity(this.selGid, 'wall', -1, this.t);
+    obs.subscribe((d) => this.identityDetail = d);
   }
   // gid + all gids that canonicalize to it via merges (a survivor "is" its merged-away ids too)
   private relatedGids(gid: number): Set<number> {

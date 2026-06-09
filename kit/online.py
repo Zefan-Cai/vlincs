@@ -20,7 +20,6 @@ wraps it as a streaming, DB-persisting service and adds camera geo + abs-clock f
 shipped extrinsics (so the cross-camera simultaneity/travel vetoes work without you supplying timing).
 """
 from __future__ import annotations
-import os
 import sys
 from pathlib import Path
 
@@ -65,14 +64,9 @@ def _load_deps():
     evaluate, load_ds1_gt_by_video, load_ms02_gt = _evaluate, _load_ds1, _load_ms02
 
 
-DATA = os.environ.get("DATA_ROOT", "/mnt/datastore2_videolincs/data") + "/VLINCS_Performer-selected"
-_DS2_CARDS = [f"{DATA}/MS01/MC0001/2024-03-Tc{n}" for n in (1, 2, 3, 5, 7)] + [f"{DATA}/MS01/MC0001/2024-04-Tc4"]
-CARDDIRS = {
-    "ms02": [f"{DATA}/MS02/MC0002/2018-03-Tc85"],
-    "ds1": [f"{DATA}/MS01/MC0001/2024-03-Tc6", f"{DATA}/MS01/MC0001/2024-03-Tc8"],
-    "ds2": _DS2_CARDS,
-}
-HAS_GT = {"ms02": True, "ds1": True, "ds2": False}
+# Data locations live in ONE place (vlincs_gallery.paths). Re-exported here so the CLI keeps importing
+# them from `online` unchanged. paths is dependency-free, so this doesn't break online's import-light design.
+from vlincs_gallery.paths import DATA, CARDDIRS, HAS_GT   # noqa: E402  (re-export for kit/cli.py)
 
 # --- SQL the ingest/score path runs, named here so the methods below read as one-liners ---
 _INSERT_DETECTION = """
@@ -202,7 +196,7 @@ class OnlineGallery:
 
     def _refresh_identity_spans(self, cur, gids):
         """Recompute identities.{n_members,first_wall_ms,last_wall_ms,cameras} from the committed
-        assignments for the given gids. The batch path (gallery_db.py) fills these; the streaming path
+        assignments for the given gids. A batch persist would fill these; the streaming path
         otherwise leaves them at insert defaults (first_wall_ms NULL, cameras '{}'), which makes the viz
         /state query — `WHERE i.first_wall_ms <= t` — return NOTHING (NULL <= t is UNKNOWN), so the
         "identities so far" / "cross-camera" / "dets assigned" KPIs and the identity list never populate.
