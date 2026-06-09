@@ -1,0 +1,142 @@
+:host { display: block; padding: 20px 30px; }
+/* full-bleed: do NOT inherit Novular .container's 1400px cap — the videos column owns the width */
+.page { width: 100%; max-width: none; }
+.page-header { text-align: center; }
+.cfg { display: flex; flex-wrap: wrap; gap: 6px; justify-content: center; align-items: center; margin-top: 8px; }
+.cfg .cfglbl { font-size: 11px; text-transform: uppercase; letter-spacing: .5px; opacity: .5; margin-right: 2px; }
+.cfgchip { font-size: 11px; padding: 2px 8px; border-radius: 10px; background: rgba(127,127,127,.14); opacity: .85; }
+.cfgchip b { font-weight: 600; }
+.cfgchip.veto.on { background: rgba(46,160,67,.18); color: #2ea043; opacity: 1; }   /* cannot_link ON  */
+.cfgchip.veto.off { background: rgba(185,119,46,.18); color: #b9772e; opacity: 1; } /* cannot_link OFF */
+nv-kpi-strip { display: block; }
+.controls { display: flex; flex-direction: column; gap: 12px; padding: 14px 18px; margin: 0 0 18px; }
+.controls .ctrlrow { display: flex; align-items: center; gap: 14px; flex-wrap: wrap; }
+.controls .scrub { flex: 1; }
+.controls .t { font-variant-numeric: tabular-nums; min-width: 120px; font-size: 15px; }
+/* centered: tracklet 360 | feed 400 (left) | videos center min(44vw,1200) | identities 560 (right) */
+.grid { display: grid; grid-template-columns: 560px 400px min(44vw, 1200px) 560px; gap: 22px;
+        align-items: start; justify-content: center; }
+/* laptop / narrower: compact the sidebars so the four-column total fits without h-scroll;
+   videos stay the hero (let them flex with minmax) */
+@media (max-width: 2080px) {
+  .grid { grid-template-columns: 300px 340px minmax(0, min(46vw, 1280px)) 300px; gap: 16px; }
+  :host { padding: 16px 20px; }
+}
+/* very narrow: single column — videos full width, the side columns stack below (not sticky) */
+@media (max-width: 1300px) {
+  .grid { grid-template-columns: minmax(0, 1fr); }
+  .tracklet-col, .feed-col, .ids-col { position: static; max-height: none; }
+  .ids-col { flex-direction: row; flex-wrap: wrap; }
+  .feed { max-height: 420px; }
+  .cams-col { order: -1; }
+}
+.tracklet-col, .feed-col, .cams-col, .ids-col { min-width: 0; }
+/* tracklet detail, feed, controls (scrubber) and identities stay in view while scrolling the tall videos */
+.tracklet-col { position: sticky; top: 16px; align-self: start; max-height: calc(100vh - 32px); overflow: auto; }
+.tracklet-col .tracklet-empty { font-size: 13px; line-height: 1.5; }
+.feed-col { position: sticky; top: 16px; align-self: start; }
+.ids-col { position: sticky; top: 16px; align-self: start; display: flex; flex-direction: column;
+           gap: 18px; max-height: calc(100vh - 32px); overflow: auto; }
+.cams-col nv-kpi-strip { display: block; margin-bottom: 16px; }
+.cams-col .controls { position: sticky; top: 16px; z-index: 5; }
+/* thin time-divider between decisions; the topmost ('now') is accented */
+.tdiv { display: flex; align-items: center; gap: 8px; margin: 7px 2px 2px; font-size: 11px; opacity: .5; font-variant-numeric: tabular-nums; }
+.tdiv::before, .tdiv::after { content: ''; flex: 1; height: 1px; background: rgba(120,140,170,.22); }
+.tdiv.nowdiv { opacity: 1; color: #4ea1ff; font-weight: 600; }
+.tdiv.nowdiv::before, .tdiv.nowdiv::after { background: rgba(78,161,255,.5); }
+.dec.now { outline: 1px solid #4ea1ff; background: rgba(78,161,255,.12); }
+/* a feed row that involves the selected identity (chose it, considered it, or merged it) */
+.dec.involved { box-shadow: inset 3px 0 0 #ffcf5c; background: rgba(255,207,92,.10); }
+.feedlegend { display: flex; flex-direction: column; gap: 2px; font-size: 11px; line-height: 1.4; margin: -4px 0 8px; }
+.feedlegend .lg-merge { color: #a07ad2; opacity: .85; }
+.feedlegend .lg-inv { color: #ffcf5c; opacity: .9; }
+.iconbtn { padding: 5px 8px; display: inline-flex; align-items: center; justify-content: center; line-height: 0; }
+.iconbtn svg { display: block; }
+.embfoot { display: flex; align-items: center; gap: 8px; margin-top: 6px; }
+.embfoot .embmeta { margin-left: auto; }   /* meta text -> bottom-right, under the plot */
+/* enlarged embedding-space dialog */
+.embdialog { position: fixed; inset: 0; background: rgba(0,0,0,.62); z-index: 200; display: flex; align-items: center; justify-content: center; }
+.embdialog-box { background: #11161c; border: 1px solid rgba(120,140,170,.3); border-radius: 8px;
+                 width: 92vw; height: 92vh; display: flex; flex-direction: column; padding: 12px; }
+.embdialog-head { display: flex; align-items: center; gap: 14px; margin-bottom: 8px; flex-wrap: wrap; }
+.embdialog-light { margin-left: auto; }     /* push the light + close buttons to the right */
+.embdialog-hover { display: flex; align-items: center; gap: 8px; font-size: 13px; }
+.embdialog-hover .exq { height: 56px; border-width: 2px; }
+.embplotbig { flex: 1; min-height: 0; background: #0a0d10; border-radius: 4px; }
+.iconbtn.on { background: rgba(78,161,255,.28); outline: 1px solid #4ea1ff; }
+/* light theme for the embedding view */
+.embdialog-box.light { background: #eef1f5; border-color: rgba(0,0,0,.15); color: #1a1f26; }
+.embdialog-box.light .mut { color: rgba(0,0,0,.55); }
+.embdialog-box.light .embplotbig { background: #eef1f5; }
+.cams { display: flex; flex-direction: column; gap: 18px; }
+.cam { padding: 12px; }
+.cam .lab { font-size: 14px; opacity: .75; margin-bottom: 8px; }
+/* videos fill the center column at their native aspect ratio (buffer is 900px-wide for crispness) */
+.cam canvas { background: #0a0d10; border-radius: 4px; display: block; width: 100%; height: auto; }
+h3 { font-size: 15px; margin: 0 0 10px; }
+.mut { opacity: .6; font-size: 13px; }
+.veto { color: #e0794e; font-size: 13px; }
+.vetoicon { color: #e0794e; cursor: help; font-size: 14px; margin-left: auto; padding-left: 6px; }
+.sw { display: inline-block; width: 14px; height: 14px; border-radius: 3px; vertical-align: middle; margin-right: 6px; }
+.tag { font-size: 11px; padding: 1px 7px; border-radius: 8px; border: 1px solid currentColor; }
+.tag.added { color: #4caf72; } .tag.rej { color: #b9772e; }
+.idlist { max-height: 42vh; overflow: auto; }
+.feed { max-height: calc(100vh - 48px); overflow: auto; }
+.idrow, .trk, .dec { display: flex; align-items: center; gap: 8px; padding: 6px 8px; border-radius: 5px; font-size: 14px; cursor: pointer; }
+.idrow:hover, .trk:hover { background: rgba(120,140,170,.12); }
+.idrow.sel, .trk.sel { background: rgba(78,161,255,.18); outline: 1px solid #4ea1ff; }
+.dec.expand { background: rgba(120,200,140,.08); }
+.dec.merged { background: rgba(160,120,210,.12); border-left: 2px solid #a07ad2; }
+.dec.quar { background: rgba(210,150,90,.10); border-left: 2px solid #d2964e; }
+.cammap { background: #0a0d10; border-radius: 6px; display: block; margin: 2px 0 6px; }
+.cammap .ovl { stroke: rgba(120,140,170,.35); stroke-width: 1; }
+.cammap circle { transition: r .1s; }
+.cammap .caml { fill: #9fb0c0; font-size: 9px; text-anchor: middle; font-variant-numeric: tabular-nums; }
+.tag.mtag { color: #a07ad2; }
+.dtype.merged { color: #a07ad2; }                 /* merge keeps its purple cue on the type, not the tag */
+.mergearrow { color: #a07ad2; font-weight: 700; margin: 0 2px; }
+.loadmore { display: flex; gap: 8px; margin-top: 8px; }
+.loadmore .btn { font-size: 12px; }
+.dec:hover { background: rgba(120,140,170,.14); }
+.dec.sel { background: rgba(78,161,255,.18); outline: 1px solid #4ea1ff; }
+/* two-line decision entries: decision on line 1, muted context (camera · cand · sim) on line 2, so it
+   stays readable at small column widths instead of overflowing one cramped row. */
+.dec { flex-direction: column; align-items: stretch; gap: 2px; }
+.dec-main { display: flex; align-items: center; gap: 7px; flex-wrap: wrap; }
+.dec-sub { font-size: 12px; opacity: .6; padding-left: 20px; line-height: 1.3; }
+.xc { color: #ffcf5c; font-size: 12px; }
+.why { font-size: 14px; margin-bottom: 10px; line-height: 1.55; }
+.strip { display: flex; flex-wrap: wrap; gap: 7px; }
+.cropfig { margin: 0; display: flex; flex-direction: column; align-items: center; gap: 2px; }
+.cropfig figcaption { font-size: 10px; font-variant-numeric: tabular-nums; opacity: .65; user-select: all; cursor: text; white-space: nowrap; }
+.strip img { height: 150px; border-radius: 3px; background: #0a0d10; border: 1px solid rgba(120,140,170,.25); }
+.banklbl { font-size: 12px; opacity: .7; margin: 10px 0 5px; }
+.banklbl.rejlbl { color: #b9772e; opacity: .8; }
+.gatespec { font-size: 11px; opacity: .55; margin: -2px 0 6px; line-height: 1.4; }
+.exq { height: 128px; border-radius: 3px; background: #0a0d10; border: 2px solid #4caf72; cursor: pointer; object-fit: cover; }
+.exq.rejimg { border-color: #b9772e; opacity: .6; }
+.exq.selimg { outline: 2px solid #4ea1ff; outline-offset: 1px; }
+.exq:hover { opacity: 1; }
+/* crop loading state: a shimmer shows until the JPEG paints (.ld) or 404s (.er) — so the bank
+   visibly indicates it's working instead of sitting blank */
+@keyframes cropshimmer { 0% { background-position: 135% 0; } 100% { background-position: -135% 0; } }
+.strip img, .exq {
+  background: linear-gradient(100deg, #0c1116 30%, #1c2836 50%, #0c1116 70%) #0a0d10;
+  background-size: 135% 100%;
+  animation: cropshimmer 1.15s ease-in-out infinite;
+  min-width: 44px;
+}
+.strip img.ld, .exq.ld { animation: none; background: #0a0d10; }
+.strip img.er, .exq.er { animation: none; background: #2a1414; }
+/* per-card toggle (All / Tc6 / Tc8) */
+.cardtoggle { display: inline-flex; gap: 4px; margin-right: 8px; }
+.cardtoggle .btn.on { background: rgba(78,161,255,.28); outline: 1px solid #4ea1ff; font-weight: 600; color: white; }
+
+/* embedding-space panel */
+.embcard .embctl { display: flex; align-items: center; gap: 6px; margin-bottom: 6px; flex-wrap: wrap; }
+.embcard .btn.on { background: rgba(78,161,255,.28); outline: 1px solid #4ea1ff; font-weight: 600; }
+.embplot { width: 100%; height: 300px; border-radius: 4px; background: #0a0d10; }
+.embplot.hidden { display: none; }
+.embempty { padding: 14px 6px; }
+.embhover { display: flex; align-items: center; gap: 10px; margin-top: 8px; }
+.embhover .exq { height: 64px; border-color: #4ea1ff; }

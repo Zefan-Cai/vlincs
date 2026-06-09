@@ -1,0 +1,34 @@
+[project]
+name = "vlincs-gallery"
+version = "0.0.1"
+description = "Online revisable retrieval-based ReID (tracking-by-retrieval) PoC for VLINCS TA1"
+requires-python = ">=3.10"
+dependencies = [
+    "numpy",
+    "pandas",
+    "pyarrow",
+    "scikit-learn",
+    "faiss-cpu",
+    "psycopg[binary]",
+    "pgvector",
+    "geoalchemy2",
+    "sqlalchemy>=2",
+    "reid-hota",
+    "vlincs-sdk[harness]",
+    "torch",
+    "timm",
+    "ultralytics",
+    "sentence-transformers",
+]
+
+# Install from the internal devpi index (proxies PyPI):
+#   pip install --index-url http://euclid.novateur.com:48731/novateur/dev/+simple/ \
+#               --trusted-host euclid.novateur.com "vlincs-sdk[harness]" ...
+# reid-hota is installed editable from ~/git/reid_hota.
+
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[tool.setuptools.packages.find]
+include = ["vlincs_gallery*"]

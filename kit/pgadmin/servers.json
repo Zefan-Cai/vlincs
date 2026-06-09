@@ -1,0 +1,14 @@
+{
+  "Servers": {
+    "1": {
+      "Name": "VLINCS gallery (db)",
+      "Group": "Servers",
+      "Host": "db",
+      "Port": 5432,
+      "MaintenanceDB": "gallery",
+      "Username": "gallery",
+      "SSLMode": "prefer",
+      "Comment": "pgvector DB. Per-dataset databases appear once a Gallery is built: gallery_ms02 / gallery_ds1 / gallery_ds2. Password is 'gallery'."
+    }
+  }
+}

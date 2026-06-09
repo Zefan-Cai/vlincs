@@ -1,0 +1,61 @@
+# VLINCS online-gallery kit. `docker compose up` -> empty Postgres + the viz; you drive the gallery from
+# YOUR pipeline (pip install ./kit in your env, connect to localhost:55433) or via `docker compose run app`.
+# Set DATA_ROOT to wherever the VLINCS datastore is mounted (videos + GT). No weights, no GPU here.
+services:
+  db:
+    image: pgvector/pgvector:pg16          # pgvector only (the schema needs the `vector` type; no postgis)
+    environment:
+      POSTGRES_USER: gallery
+      POSTGRES_PASSWORD: gallery
+      POSTGRES_DB: gallery
+    ports: ["55433:5432"]                  # YOUR pipeline connects here: PGHOST=localhost PGPORT=55433
+    volumes: ["pgdata:/var/lib/postgresql/data"]
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U gallery"]
+      interval: 3s
+      timeout: 3s
+      retries: 20
+
+  viz:                                     # the viz API (FastAPI) — crops/decisions/identities from the DB
+    build: { context: .., dockerfile: kit/Dockerfile }
+    depends_on: { db: { condition: service_healthy } }
+    environment:
+      PGHOST: db
+      PGPORT: "5432"
+      DATA_ROOT: /data
+      GALLERY_DATASET: "${DATASET:-ds1}"   # which dataset's gallery the viz shows
+    volumes: ["${DATA_ROOT:-/mnt/datastore2_videolincs/data}:/data:ro"]   # videos (for crops) + GT, read-only
+    ports: ["8077:8077"]
+    command: ["serve"]
+
+  ui:                                      # http://localhost:4200 — the existing Angular frontend, proxied to viz
+    image: node:20-slim
+    working_dir: /ui
+    depends_on: [viz]
+    volumes:
+      - ../gallery-ui:/ui
+      - ./proxy.docker.json:/ui/proxy.docker.json:ro
+    ports: ["4200:4200"]
+    command: sh -c "npm ci || npm install; npx ng serve --host 0.0.0.0 --port 4200 --proxy-config proxy.docker.json --disable-host-check"
+
+  pgadmin:                                 # http://localhost:5050 — inspect the DB visually; server pre-registered
+    image: dpage/pgadmin4:8
+    depends_on: { db: { condition: service_healthy } }
+    environment:
+      PGADMIN_DEFAULT_EMAIL: admin@vlincs.local
+      PGADMIN_DEFAULT_PASSWORD: gallery
+      PGADMIN_CONFIG_SERVER_MODE: "False"              # desktop mode — no pgAdmin login wall
+      PGADMIN_CONFIG_MASTER_PASSWORD_REQUIRED: "False"
+    volumes:
+      - ./pgadmin/servers.json:/pgadmin4/servers.json:ro   # pre-registers the "VLINCS gallery (db)" connection
+    ports: ["5050:80"]                       # open it, expand the tree -> gallery_ms02 / gallery_ds1 (pwd: gallery)
+
+  app:                                     # the CLI: docker compose run --rm app list-videos --dataset ds1
+    build: { context: .., dockerfile: kit/Dockerfile }
+    depends_on: { db: { condition: service_healthy } }
+    environment: { PGHOST: db, PGPORT: "5432", DATA_ROOT: /data }
+    volumes: ["${DATA_ROOT:-/mnt/datastore2_videolincs/data}:/data:ro"]
+    entrypoint: ["python", "cli.py"]
+
+volumes:
+  pgdata: {}
