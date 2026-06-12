@@ -125,37 +125,49 @@ def _ds1_from_bundle(pkl: str, resolve_emb_path: str | None = None, resolve_emb_
     return out, (np.stack(remb) if remb else None)
 
 
-def _ds1_from_mlflow(spec: dict):
-    """Fetch the DS1 track + per-tracklet embed runs from MLflow (no recompute), join 1:1 on tracklet_key,
-    and reduce the raw embeddings to the 64-d match space with the SDK reducer the yaml declares. On-network
-    only: needs MLFLOW_TRACKING_URI + the DS1 extras (kit/requirements-ds1.txt)."""
+_DS1_BUNDLE = _HERE / "demo_data" / "ds1"     # optional offline (Git LFS) bundle; `git lfs pull` to populate
+
+
+def _ds1_input_dir(sub: str, run: str, mlflow_path: str):
+    """An offline-first DS1 input dir: use the local Git LFS bundle (`kit/demo_data/ds1/<sub>`) if its files are
+    really present (not LFS pointers), else download `mlflow_path` from the MLflow `run`. Returns (dir, source)."""
+    p = _DS1_BUNDLE / sub
+    real = [f for f in p.rglob("*") if f.suffix in (".parquet", ".npz")] if p.is_dir() else []
+    if real and all(f.stat().st_size > 4096 for f in real):     # LFS pointers are ~130 B; real artifacts are MB
+        return p, "local LFS bundle"
     try:
         import mlflow
-        from vlincs_sdk.harness.matching.clustering import reduce_embeddings
     except ImportError as e:
         raise SystemExit(
-            f"[demo] DS1 (MLflow inputs) needs the on-network extras: `pip install -r requirements-ds1.txt` "
-            f"(mlflow + vlincs-sdk[mlflow]) and a reachable MLFLOW_TRACKING_URI. ({e})")
+            f"[demo] DS1 inputs: the local LFS bundle (kit/demo_data/ds1/) isn't pulled and MLflow isn't "
+            f"available — either `git lfs pull`, or install the DS1 extras (`pip install -r requirements-ds1.txt`) "
+            f"+ set MLFLOW_TRACKING_URI. ({e})")
+    return Path(mlflow.artifacts.download_artifacts(run_id=run, artifact_path=mlflow_path)), "MLflow"
+
+
+def _ds1_from_mlflow(spec: dict):
+    """Load the DS1 track + per-tracklet embed inputs, join 1:1 on tracklet_key, and reduce to the 64-d match
+    space the yaml declares. Inputs come from the local Git LFS bundle if pulled, else from MLflow (needs
+    MLFLOW_TRACKING_URI + the DS1 extras, kit/requirements-ds1.txt)."""
     track_run = spec["inputs"]["track"]["mlflow_run"]
     embed_run = spec["inputs"]["embed"]["mlflow_run"]
     rc = spec.get("reduce", {})
-    _log(f"DS1: fetching track={track_run[:12]} + embed={embed_run[:12]} from MLflow "
-         f"({os.environ.get('MLFLOW_TRACKING_URI', '<MLFLOW_TRACKING_URI unset>')})")
-    trk_root = Path(mlflow.artifacts.download_artifacts(run_id=track_run, artifact_path="tracklets"))
-    emb_root = Path(mlflow.artifacts.download_artifacts(run_id=embed_run, artifact_path="embeddings"))
+    trk_root, s_trk = _ds1_input_dir("tracklets", track_run, "tracklets")
+    emb_root, s_emb = _ds1_input_dir("embeddings", embed_run, "embeddings")
+    _log(f"DS1: track from {s_trk}, greedy-embed from {s_emb}")
     # RESOLVE-space embed (osnet-xcam 512-d): a SECOND per-tracklet vector joined by the SAME tracklet_key,
     # stored in the gallery (role='resolve') and re-clustered by resolve_global(). Used as-is (no reduce).
     resolve_run = (spec.get("inputs", {}).get("resolve_embed") or {}).get("mlflow_run")
     resolve_vec_of: dict = {}
     if resolve_run:
-        rroot = Path(mlflow.artifacts.download_artifacts(run_id=resolve_run, artifact_path="embeddings"))
+        rroot, s_res = _ds1_input_dir("resolve/embeddings", resolve_run, "embeddings")
         for vd in sorted(p for p in rroot.iterdir() if p.is_dir()):
             rz = np.load(vd / "embeddings.npz", allow_pickle=True)
             rvecs, rtids = rz["vectors"], rz["track_ids"]   # read each array ONCE — z[...] re-decodes the WHOLE
             for i, t in enumerate(rtids):                    # array per access; indexing it in-loop is quadratic
                 resolve_vec_of[str(t)] = rvecs[i]
-        _log(f"DS1: resolve embed {resolve_run[:12]} loaded ({len(resolve_vec_of)} tracklets, osnet-xcam 512-d)")
-    _log("DS1: artifacts fetched; joining tracklets <-> per-tracklet embeddings per video")
+        _log(f"DS1: resolve-embed from {s_res} ({len(resolve_vec_of)} tracklets, osnet-xcam 512-d)")
+    _log("DS1: joining tracklets <-> per-tracklet embeddings per video")
     vdirs = sorted(p for p in emb_root.iterdir() if p.is_dir())
     rows = []
     for vi, vdir in enumerate(vdirs, 1):
@@ -189,6 +201,7 @@ def _ds1_from_mlflow(spec: dict):
         _log(f"DS1: reduce=none — embeddings already {embs.shape[1]}-d; pushing as-is")
         reduced = embs
     else:
+        from vlincs_sdk.harness.matching.clustering import reduce_embeddings   # only when actually reducing
         _log(f"DS1: reducing {len(rows)} tracklet embeddings -> {int(rc.get('dim', 64))}-d ({method})")
         reduced, info = reduce_embeddings(
             embs, method=method, n_components=int(rc.get("dim", 64)),

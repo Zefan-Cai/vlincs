@@ -134,6 +134,10 @@ cd kit
 #   then explore the gallery at http://localhost:4200   (ds1 needs MLFLOW_TRACKING_URI + the GT datastore mounted)
 ```
 
+DS1 inputs default to MLflow (provenance-tracked, ~8 MB clone). For an **offline DS1** run (no MLflow), `git lfs
+pull` first to fetch the ~83 MB bundle into `kit/demo_data/ds1/`; the demo reads it locally and falls back to
+MLflow only if it isn't pulled. (Scoring still needs the GT datastore mounted, same as MS02.)
+
 Drive it from your own pipeline with the tiny `OnlineGallery` API (no intermediate files):
 
 ```python
