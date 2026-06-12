@@ -1,6 +1,15 @@
 <div class="page" *ngIf="meta; else loading">
   <div class="page-header">
-    <h1>VLINCS Gallery — {{ meta.dataset }}</h1>
+    <div class="hdr-top">
+      <h1>VLINCS Gallery — {{ meta.dataset }}</h1>
+      <label class="dsswitch" *ngIf="datasetList.length"
+             title="Switch which gallery_<key> database you are viewing — your Postgres holds one DB per ingested dataset/run.">
+        dataset
+        <select [ngModel]="dataset" (ngModelChange)="selectDataset($event)">
+          <option *ngFor="let d of datasetList" [value]="d.key">{{ d.key }}{{ d.n_identities >= 0 ? ' · ' + d.n_identities + ' ids' : '' }}</option>
+        </select>
+      </label>
+    </div>
     <p>how / when / why the gallery is what it is at time <b>t</b> · {{ cams.length }} videos / {{ distinctCams().length }} cameras · colour = global id (same colour across cameras = a cross-camera match)</p>
     <div class="cfg" *ngIf="galleryConfig()">
       <span class="cfglbl" title="The decision config this DB state was built with, persisted with the run. Hover a chip for what it does.">config</span>
@@ -18,6 +27,9 @@
           <b class="dtype" [class.merged]="dc.decision_type==='merged'">{{ dc.decision_type }}</b>
           <span class="tag" [class.added]="dc.admitted" [class.rej]="!dc.admitted" *ngIf="dc.decision_type!=='merged'">{{ dc.admitted ? 'added' : 'not-added' }}</span>
           {{ whyText(dc) }}
+          <!-- per-vetoed-candidate explanation: the supporting numbers (computed on-demand from the DB) that
+               make "same_frame" / "travel:CAM" self-explanatory, one clear line per blocked candidate gid. -->
+          <div class="veto vetoexpl" *ngFor="let v of vetoLines()" [title]="v.veto_reason">{{ fmtVeto(v) }}</div>
           <div class="mut" *ngIf="dc.candidate_gids?.length && dc.decision_type!=='merged'">candidates {{ dc.candidate_gids.join(',') }} · sims {{ dc.scores.join(',') }}</div>
         </div>
         <ng-container *ngIf="trackletDetail.n_dets > 0; else mergeNote">

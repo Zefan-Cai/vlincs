@@ -1,0 +1,13 @@
+# DS1-demo extras (the MS02 demo does NOT need these — kit/requirements.txt stays public-PyPI-only).
+# DS1 inputs aren't shipped; they're fetched from MLflow per kit/pipelines/ds1.yaml, then reduced to the
+# 64-d match space with the SDK's reduce_embeddings. So the DS1 demo is ON-NETWORK only and needs:
+#
+#   pip install --index-url http://euclid.novateur.com:48731/novateur/dev/+simple/ \
+#               --trusted-host euclid.novateur.com -r kit/requirements-ds1.txt
+#   export MLFLOW_TRACKING_URI=http://maxwell.novateur.com:9091
+#
+# mlflow is public PyPI; vlincs-sdk[mlflow] is the internal package (the dim-reducer + provenance), from
+# the Novateur devpi index above. PyYAML reads the pipeline recipe.
+mlflow>=2.0
+pyyaml
+vlincs-sdk[mlflow]

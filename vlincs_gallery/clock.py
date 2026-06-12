@@ -23,9 +23,41 @@ _SUFFIX = "_camera_extrinsics"
 _M_PER_DEG = 111320.0                                       # local flat-earth lat/lon scale (good <0.1% over a site)
 
 
-def _ms_since_midnight(t: str) -> float:
-    h, m, s = str(t).split(":")
-    return (int(h) * 3600 + int(m) * 60 + float(s)) * 1000.0
+def _ms_since_midnight(t) -> float:
+    """Absolute ms-since-midnight from an extrinsics `time` value — a "HH:MM:SS.fff" string (v1.1.x,
+    single-row) OR a pandas Timestamp / datetime64 (v2.0.x, full date+time)."""
+    if isinstance(t, str):
+        h, m, s = t.split(":")
+        return (int(h) * 3600 + int(m) * 60 + float(s)) * 1000.0
+    ts = pd.Timestamp(t)
+    return float((ts - ts.normalize()).total_seconds() * 1000.0)
+
+
+def _times_to_ms(s: pd.Series) -> np.ndarray:
+    """Vectorized ms-since-midnight for a whole `time` column (datetime64 v2.0.x, or "HH:MM:SS" strings)."""
+    if pd.api.types.is_datetime64_any_dtype(s):
+        dt = pd.to_datetime(s)
+        return ((dt - dt.dt.normalize()).dt.total_seconds() * 1000.0).to_numpy(dtype=float)
+    return s.map(_ms_since_midnight).to_numpy(dtype=float)
+
+
+def _version(name: str) -> tuple:
+    m = re.search(r"_v(\d+(?:\.\d+)*)\.parquet$", name)
+    return tuple(int(x) for x in m.group(1).split(".")) if m else (0,)
+
+
+def _extrinsics_by_stem(dirs) -> dict[str, str]:
+    """Best (highest-version) `*_camera_extrinsics_*.parquet` per video stem across dirs — so the newer
+    PER-FRAME v2.0.x wins over the single-row v1.1.x when both sit in input_extrinsics/."""
+    best: dict[str, tuple] = {}
+    for d in dirs:
+        for f in glob.glob(str(Path(d) / f"*{_SUFFIX}*.parquet")):
+            name = Path(f).name
+            stem = name[: name.index(_SUFFIX)]
+            ver = _version(name)
+            if stem not in best or ver > best[stem][0]:
+                best[stem] = (ver, f)
+    return {stem: f for stem, (_ver, f) in best.items()}
 
 
 def _cam_token(stem: str) -> str | None:
@@ -78,57 +110,49 @@ def _params_geo(card_dir: Path) -> dict[str, dict]:
     return out
 
 
-def video_epochs(*card_dirs: str) -> dict[str, float]:
-    """{video_stem -> absolute start-ms (frame 0)} from each video's extrinsics across card dirs.
+def load_clock(*dirs: str):
+    """Read each video's best (highest-version) extrinsics ONCE and return (epochs, geo, frame_abs):
 
-    video_stem matches the `video` column build_inputs writes (the .mp4 stem). ms-since-midnight
-    (recordings are same-day; switch to epoch ms if a card spans midnight). Cards that ship the
-    DS1/DS2 `_camera_extrinsics_*.parquet` read its `time`; MS02 (no parquet) falls back to the
-    .mp4 filename's HH-MM-SS so the cross-camera timeline (and the simultaneity/travel veto) is real.
-    """
-    out: dict[str, float] = {}
-    for d in card_dirs:
-        pq = sorted(glob.glob(str(Path(d) / f"*{_SUFFIX}*.parquet")))
-        if pq:
-            for f in pq:
-                name = Path(f).name
-                stem = name[: name.index(_SUFFIX)]           # strip _camera_extrinsics_v…parquet
-                e = pd.read_parquet(f, columns=["time"])
-                out[stem] = _ms_since_midnight(e["time"].iloc[0])
-        else:
-            out.update(_mp4_epochs(Path(d)))
-    return out
+      epochs[stem]    -> absolute frame-0 ms-since-midnight (captures the cross-camera START offset, e.g.
+                         DS1 Tc6 cameras start ~0.64s apart).
+      geo[stem]       -> {lat,lon,alt,roll,pitch,yaw,camera} static pose (frame 0) — the geo-veto basis.
+      frame_abs[stem] -> np.ndarray indexed by frame_idx of absolute ms, ONLY for PER-FRAME (v2.0.x)
+                         extrinsics. The frame intervals are NON-uniform, so this is the EXACT clock; videos
+                         with single-row (v1.1.x) extrinsics or MS02 (camera_params.json + .mp4, no parquet)
+                         are absent here, so the caller falls back to the old `epoch + frame/fps` clock.
 
-
-def camera_geo(*card_dirs: str) -> dict[str, dict]:
-    """{video_stem -> {lat,lon,alt,roll,pitch,yaw,camera}} static camera pose (basis for the geo veto).
-
-    DS1/DS2 read the surveyed `_camera_extrinsics_*.parquet`; MS02 (which ships MCAMxxx_camera_params.json
-    instead) falls back to deriving the camera centre from R,t. Every entry carries `camera` (the MCAM
-    token) so cam_xy/dist are keyed by the SAME camera string the pipeline passes to add_tracklet — without
-    it the travel/simultaneity veto could never match a camera and silently never fired.
-    """
-    out: dict[str, dict] = {}
-    cols = ["lat", "lon", "alt", "roll", "pitch", "yaw"]
-    for d in card_dirs:
-        pq = sorted(glob.glob(str(Path(d) / f"*{_SUFFIX}*.parquet")))
-        if pq:
-            for f in pq:
-                name = Path(f).name
-                stem = name[: name.index(_SUFFIX)]
-                e = pd.read_parquet(f)
-                g = {c: float(e[c].iloc[0]) for c in cols if c in e.columns}
-                cam = _cam_token(stem)
-                if cam:
-                    g["camera"] = cam
-                out[stem] = g
-        else:
-            out.update(_params_geo(Path(d)))
-    return out
+    video_stem matches the `video` column the pipeline pushes (the .mp4 stem). ms-since-midnight
+    (recordings are same-day). MS02 has no extrinsics parquet -> epoch from the .mp4 filename HH-MM-SS,
+    geo from MCAMxxx_camera_params.json (camera centre from R,t)."""
+    epochs: dict[str, float] = {}
+    geo: dict[str, dict] = {}
+    frame_abs: dict[str, np.ndarray] = {}
+    pose_cols = ("lat", "lon", "alt", "roll", "pitch", "yaw")
+    for stem, f in _extrinsics_by_stem(dirs).items():
+        e = pd.read_parquet(f)
+        epochs[stem] = _ms_since_midnight(e["time"].iloc[0])
+        g = {c: float(e[c].iloc[0]) for c in pose_cols if c in e.columns}
+        cam = _cam_token(stem)
+        if cam:
+            g["camera"] = cam
+        geo[stem] = g
+        if len(e) > 1 and "frame" in e.columns:              # per-frame timing (v2.0.x) -> the exact clock
+            fr = e["frame"].to_numpy()
+            arr = np.full(int(fr.max()) + 1, np.nan)
+            arr[fr] = _times_to_ms(e["time"])
+            frame_abs[stem] = arr
+    for d in dirs:                                           # MS02 fallback: no extrinsics parquet in the dir
+        if not glob.glob(str(Path(d) / f"*{_SUFFIX}*.parquet")):
+            epochs.update(_mp4_epochs(Path(d)))
+            geo.update(_params_geo(Path(d)))
+    return epochs, geo, frame_abs
 
 
-def absolute_ms(meta: pd.DataFrame, epochs: dict[str, float], fps: float = 30.0) -> pd.Series:
-    """Per-detection absolute ms = video_epoch + frame_idx/fps*1000. Falls back to epoch 0."""
-    vid = str(meta["video"].values[0])
-    base = epochs.get(vid, 0.0)
-    return base + meta["frame_idx"].astype(float) / fps * 1000.0
+def video_epochs(*dirs: str) -> dict[str, float]:
+    """{video_stem -> absolute frame-0 ms}. Thin wrapper over load_clock (kept for external callers)."""
+    return load_clock(*dirs)[0]
+
+
+def camera_geo(*dirs: str) -> dict[str, dict]:
+    """{video_stem -> static pose dict}. Thin wrapper over load_clock (kept for external callers)."""
+    return load_clock(*dirs)[1]

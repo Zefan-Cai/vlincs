@@ -17,7 +17,7 @@
   <text x="117" y="125" text-anchor="middle" font-size="10" fill="#475569">detector → tracker → embedder</text>
   <!-- tracklet label sits ABOVE the boxes in the gap, so nothing overlaps -->
   <text x="295" y="70" text-anchor="middle" font-size="10.5" font-weight="600" fill="#334155">tracklet</text>
-  <text x="295" y="82" text-anchor="middle" font-size="9.5" fill="#94a3b8">frames · boxes · pooled emb (dim D)</text>
+  <text x="295" y="82" text-anchor="middle" font-size="9.5" fill="#94a3b8">frames · boxes · match emb (D) · resolve emb</text>
   <line x1="206" y1="113" x2="384" y2="113" stroke="#334155" stroke-width="1.5" marker-end="url(#arr)"/>
   <!-- B: add_tracklet -->
   <rect x="384" y="86" width="186" height="54" rx="9" fill="#f1f5f9" stroke="#0f172a" stroke-width="1.5"/>
@@ -83,18 +83,18 @@
   <!-- STORE -->
   <rect x="28" y="358" width="470" height="86" rx="9" fill="#f0fdfa" stroke="#0d9488" stroke-width="1.6"/>
   <text x="263" y="379" text-anchor="middle" font-size="12.5" font-weight="700" fill="#0f766e">STORE — pgvector + in-process index (live)</text>
-  <text x="263" y="398" text-anchor="middle" font-size="9.6" fill="#475569">pgvector DB gallery_&lt;ds&gt;:  detections · identities · identity_reps · assignments</text>
-  <text x="263" y="413" text-anchor="middle" font-size="9.6" fill="#475569">exemplar bank:  in-process FAISS-equiv · HNSW cosine on the 64-d vectors (hot path)</text>
+  <text x="263" y="398" text-anchor="middle" font-size="9.6" fill="#475569">gallery_&lt;ds&gt; tables:  detections · identities · assignments · embeddings (role=match + role=resolve)</text>
+  <text x="263" y="413" text-anchor="middle" font-size="9.6" fill="#475569">match: in-process FAISS (hot path) + opt-in per-model pgvector HNSW (vector ≤2000 / halfvec ≤4000)</text>
   <text x="263" y="428" text-anchor="middle" font-size="9.6" fill="#475569">event log:  decision_log + merges  →  a pure replayable fold</text>
   <!-- STORE -> RESOLVE -->
   <text x="519" y="395" text-anchor="middle" font-size="9" fill="#9333ea">g.resolve()</text>
   <line x1="498" y1="401" x2="540" y2="401" stroke="#9333ea" stroke-width="1.5" marker-end="url(#arrP)"/>
   <!-- RESOLVE -->
   <rect x="540" y="358" width="386" height="86" rx="9" fill="#faf5ff" stroke="#9333ea" stroke-width="1.7"/>
-  <text x="733" y="379" text-anchor="middle" font-size="12.5" font-weight="700" fill="#7e22ce">resolve() — re-resolution (periodic)</text>
-  <text x="733" y="399" text-anchor="middle" font-size="9.8" fill="#475569">pairwise identity-centroid cosine ≥ merge_tau (and vetoes allow) → MERGE</text>
-  <text x="733" y="414" text-anchor="middle" font-size="9.8" fill="#475569">record (old_gid → new_gid, cosine, step) in merges; remap to survivor</text>
-  <text x="733" y="429" text-anchor="middle" font-size="9.4" fill="#9333ea">→ the why (cosine) · when (step) · where (id pair) the viz feed shows per merge</text>
+  <text x="733" y="379" text-anchor="middle" font-size="12.5" font-weight="700" fill="#7e22ce">resolve() — periodic GLOBAL re-cluster</text>
+  <text x="733" y="399" text-anchor="middle" font-size="9.8" fill="#475569">re-partition ALL tracklets on the stored resolve emb (role=resolve)</text>
+  <text x="733" y="414" text-anchor="middle" font-size="9.8" fill="#475569">avg-linkage agglom / kNN x-cam cosine · recovers over-split AND over-merge</text>
+  <text x="733" y="429" text-anchor="middle" font-size="9.4" fill="#9333ea">→ relabel to new global ids in place · merge-only consolidate = alt mode</text>
   <!-- RESOLVE -> OUT -->
   <text x="943" y="395" text-anchor="middle" font-size="9" fill="#334155">global IDs</text>
   <line x1="926" y1="401" x2="962" y2="401" stroke="#334155" stroke-width="1.5" marker-end="url(#arr)"/>
@@ -105,5 +105,5 @@
   <text x="1167" y="413" text-anchor="middle" font-size="9.6" fill="#475569">g.export_submission() = canonical TA1 zip (only file written)</text>
   <text x="1167" y="428" text-anchor="middle" font-size="9.6" fill="#475569">viz = decision-order replay · embedding space · identity banks</text>
 
-  <text x="700" y="462" text-anchor="middle" font-size="10" fill="#94a3b8">Defaults: tau 0.60 · match_mode centroid · merge_tau 0.35 · admit_tau 0.9 · coherence_floor 0.4 · max_reps 16 · cannot_link on (max_speed 3 m/s · sim_window 200 ms · same_box_iou 0.35) · one pgvector DB per dataset</text>
+  <text x="700" y="462" text-anchor="middle" font-size="10" fill="#94a3b8">Defaults: tau 0.60 · match_mode centroid · merge_tau 0.35 · admit_tau 0.9 · coherence_floor 0.4 · max_reps 16 · cannot_link on (max_speed 3 m/s · sim_window 200 ms · same_box_iou 0.35) · resolve theta 0.02 / top_k 15 / min_dets 20 · one pgvector DB per dataset</text>
 </svg>

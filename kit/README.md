@@ -170,6 +170,24 @@ docker compose run --rm app selftest --dataset ms02       # wiring check on RAND
 > `docker compose run --rm app demo` alone only *populates* the DB — the `app` container is one-shot and
 > doesn't start viz/ui, so use `./demo.sh` (or `docker compose up -d` first) if you want the view.
 
+### DS1 demo (on-network) — `./demo.sh ds1`
+
+The MS02 demo ships its inputs. **DS1 doesn't** (too big), so the DS1 demo *fetches* a tracker's tracklets
++ per-tracklet embeddings from MLflow (no recompute, no GPU) per a small SDK pipeline recipe
+(`pipelines/ds1.yaml`: the `track` + `embed` run ids and a `reduce` to the 64-d match space), then streams
+them through the gallery exactly like MS02. So DS1 is **on-network only**:
+
+```bash
+# build the DS1-capable image (adds mlflow + vlincs-sdk[mlflow] from the internal index) — one-time
+WITH_DS1=1 docker compose build app
+export MLFLOW_TRACKING_URI=http://maxwell.novateur.com:9091   # passed through to the app container
+./demo.sh ds1                                                 # fetch -> gallery -> real IDF1 (dense GT)
+```
+
+DS1 has dense GT, so **IDF1 is the trustworthy number** here (unlike MS02). Swap the tracker/embed by
+editing the two run ids in `pipelines/ds1.yaml`. (Scoring + crops also need the datastore mount, same
+`DATA_ROOT` as always.)
+
 ## Using the Gallery view
 
 The view at **http://localhost:4200** is the *why/when/how* of every identity — it reads the live DB, so

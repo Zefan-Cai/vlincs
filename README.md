@@ -20,9 +20,9 @@ Your pipeline pushes tracklets (one pooled appearance embedding per within-camer
 gallery makes exactly one **decision**, and periodically **re-resolves** the whole set:
 
 ```
-your detector+tracker+embedder ─► tracklets+embeddings ─► [ match / expand / do-nothing ] ──┐
-                                                                                            │ periodic
-                                              global IDs + IDF1 + decision viz ◄── resolve() ┘  (merge)
+your detector+tracker+embedder ─► tracklets + match/resolve emb ─► [ match / expand / do-nothing ] ──┐
+                                                                                                     │ periodic
+                         global IDs + IDF1 + decision viz ◄── resolve() ┘  (global re-cluster on resolve emb)
 ```
 
 **Per-tracklet decision** (one per ingest):
@@ -38,9 +38,13 @@ your detector+tracker+embedder ─► tracklets+embeddings ─► [ match / expa
 than `coherence_floor` from them, and the bank isn't at `max_reps`. The identity centroid is a
 confidence-weighted EMA of its exemplars.
 
-**Periodic resolve()** (re-resolution): consolidates over-split identities whose exemplar-centroid cosine
-has reached `merge_tau`, subject to the cannot-link vetoes. Each merge is recorded with the cosine that
-triggered it (the "why"), the ingest step (the "when"), and the pair (the "where").
+**Periodic resolve()** (re-resolution) has two modes. The default **global re-cluster** (`resolve_global`)
+re-partitions *all* tracklets from scratch on a second, stored **resolve embedding** (`role='resolve'` — e.g.
+a rank-strong cross-camera backbone, read back from the DB) via kNN-sparse cross-camera cosine + average-linkage
+agglomeration — recovering greedy **over-split AND over-merge**, then relabelling the live gallery in place.
+The lighter **merge-only `consolidate()`** instead just merges over-split identities whose exemplar-centroid
+cosine reached `merge_tau` (vetoes permitting), recording the cosine ("why"), ingest step ("when") and id pair
+("where") for the viz feed. Either way the resolve is a *revision* of the live gallery — not a batch export.
 
 **cannot-link vetoes** (`cannot_link=True` by default): block physically-impossible matches/merges —
 `same_frame` (two spatially-distinct boxes in one `(video,frame)` can't be one person), `simultaneity`
@@ -55,14 +59,20 @@ so the viz can reconstruct the exact identity state as of any ingest step.
 - **Postgres + pgvector** (`pgvector/pgvector:pg16`) — the durable system-of-record AND the cannot-link
   query layer (haversine/time SQL). **One database per dataset** (`gallery_ms02` / `gallery_ds1` /
   `gallery_ds2`) so runs are isolated; `truncate=True` wipes one for a clean number.
-  - `detections.embedding   vector(1024)` — raw embedder output, kept for audit/replay.
-  - `detections.embedding_red vector(64)` — the reduced (warmup-PCA) **match space**; thresholds + ANN
-    operate here. An **HNSW cosine index** (`vector_cosine_ops`) on `identity_reps.embedding_red` is the ANN.
+  - **One polymorphic `embeddings` table** keyed by `(entity_kind, entity_id, model_id, role)` with an
+    **unconstrained `vector` column** — *any* dim (64/1024/2048/…), *multiple models* per entity (extra
+    rows), nothing enforced upfront. A small **`models`** registry records each embedder's `emb_dim`/`emb_type`.
+    The gallery stores **two vectors per tracklet**: `role='match'` (the scored match-space vector, the hot
+    path) and the optional `role='resolve'` (a second embedding the global re-cluster reads back from the DB).
+  - **DB-side ANN is opt-in per model**: a partial cast-expression HNSW index (`db.enable_ann`) created lazily
+    at first write — `vec::vector(N)` (≤2000 dims) or `vec::halfvec(N)` (≤4000). Query it through `db.ann_search`.
 - **In-process FAISS-equivalent** — exact inner-product cosine over the identity **exemplar bank**
-  (`rep_mat`). This is the hot path the matcher scores against; pgvector mirrors it for the viz + durability.
+  (`rep_mat`). This is the live matcher's hot path; pgvector stores the same vectors for the viz, durability,
+  and the DB-side ANN path. Both back-ends are available and selectable per model.
 
-The embedder is **yours** and **any dimension** — the index adapts on the first push. The gallery ships no
-weights and no models; it matches on whatever vectors you push.
+The embedder is **yours** and **any dimension** — registered on the first push; the gallery ships no weights
+and no models; it matches on whatever vectors you push. (>4000-dim backbones store + FAISS + viz fine but get
+no DB-side HNSW — pgvector's hard ceiling.)
 
 ## Knobs (`OnlineGallery(...)` kwargs)
 
@@ -72,7 +82,7 @@ Defaults are the validated config. Tune `tau` first (to your embedding's cosine 
 |---|---|---|
 | `tau` | **0.60** | **match** threshold — cosine ≥ τ ⇒ match, else expand |
 | `match_mode` | `"centroid"` | how a candidate is scored: `centroid` (cosine to the whole-bank mean; +0.06 IDF1 over `max` on DS1) / `max` (nearest exemplar) / `retrieval` (FAISS k-NN, needs `faiss-cpu`) |
-| `merge_tau` | **0.35** | **resolve** threshold — identities whose exemplar centroids agree ≥ this are merged |
+| `merge_tau` | **0.35** | merge-only **`consolidate()`** threshold — identities whose exemplar centroids agree ≥ this merge (the default global re-cluster uses `resolve_global(theta, top_k, min_dets)` instead) |
 | `admit_tau` | **0.9** | bank redundancy cutoff — admit a new exemplar only if at most this similar to existing ones |
 | `coherence_floor` | **0.4** | anti-accretion — reject a would-be exemplar farther than this from its bank (kills "matches-everything" attractors) |
 | `tracklet_coh_min` | **0.0** | do-nothing/quarantine cutoff (off by default; only fires on per-detection input where self-coherence is computed) |
@@ -88,11 +98,15 @@ Defaults are the validated config. Tune `tau` first (to your embedding's cosine 
 
 ## Magic numbers & strings (documented constants)
 
-- **Match space = `vector(64)`, raw = `vector(1024)`** (`online.py:_red_dim/_raw_dim`, `db/init.sql`). A
-  pushed embedding is persisted into `embedding_red` iff its dim is 64, into `embedding` iff 1024; any other
-  dim leaves both NULL (matcher + score still work; the embedding-projection viz is just empty).
-- **Resolve cadence (demo)**: `resolve()` every **100** tracklets + a final resolve (`demo.py:resolve_every`).
-  In a real stream, call it on your own cadence.
+- **Embeddings: any dim** (`db/init.sql:embeddings`, `db.py`). The pushed vector is stored in the polymorphic
+  `embeddings` table at whatever dim (unconstrained `vector` column) — no 64/1024 enforcement. **HNSW dim
+  ceilings are hard pgvector limits**: `vector` ≤ 2000, `halfvec` ≤ 4000; the registry's `emb_type` routes
+  the index cast, and a >4000-d model gets storage + FAISS + viz but no DB-side HNSW. The demo's 64-d is just
+  its reducer output (`pipelines/ds1.yaml:reduce.dim`), not a schema constraint.
+- **Resolve (demo)**: DS1 runs a single final **global re-cluster** — `resolve_global(theta=0.02, top_k=15,
+  min_dets=20)` on the stored osnet-xcam resolve embedding (`pipelines/ds1.yaml`); the merge-only
+  `consolidate()` path (MS02 / `resolve: auto`) runs every **100** tracklets. In a real stream, call resolve
+  on your own cadence.
 - **`det_id` format**: `"<video>::<camera>:<frame_idx>:<box_idx>"`, globally unique within a dataset DB.
   Auto-generated ids append `:t<tracklet_seq>` so two tracklets with a detection in the same `(video,frame)`
   never collide on the primary key.
@@ -115,9 +129,9 @@ Defaults are the validated config. Tune `tau` first (to your embedding's cosine 
 
 ```bash
 cd kit
-DATASET=ms02 docker compose up -d                 # Postgres(:55433) + viz(:8077) + UI(:4200) + pgAdmin(:5050)
-docker compose run --rm app demo                  # one-click REAL run on shipped MS02 data → AssA ≈ 0.70
-#   then explore the gallery at http://localhost:4200
+./demo.sh ms02      # MS02 (offline, shipped data) → AssA ≈ 0.70 — builds, brings up the stack, leaves it up
+./demo.sh ds1       # DS1 — pulls track + match-emb + resolve-emb from MLflow, runs the §13.3 global re-cluster → IDF1 ≈ 0.60
+#   then explore the gallery at http://localhost:4200   (ds1 needs MLFLOW_TRACKING_URI + the GT datastore mounted)
 ```
 
 Drive it from your own pipeline with the tiny `OnlineGallery` API (no intermediate files):
@@ -125,9 +139,10 @@ Drive it from your own pipeline with the tiny `OnlineGallery` API (no intermedia
 ```python
 from online import OnlineGallery                          # PYTHONPATH the kit, or run inside the app container
 g = OnlineGallery("ds1")                                  # connects to the EMPTY per-dataset DB; loads camera geo
-for video, camera, frames, boxes, embedding in your_tracker():
-    gid = g.add_tracklet(video, camera, frames, boxes, embedding)   # match / expand / do-nothing → gid, live
-    if your_cadence: g.resolve()                          # periodic consolidation, your cadence
+for video, camera, frames, boxes, match_emb, resolve_emb in your_tracker():
+    gid = g.add_tracklet(video, camera, frames, boxes, match_emb,   # match / expand / do-nothing → gid, live
+                         resolve_emb=resolve_emb)         # stores a 2nd vec (role='resolve'); omit to skip
+g.resolve_global(theta=0.02)                              # periodic GLOBAL re-cluster on the stored resolve emb
 print(g.score())                                          # IDF1/AssA from the live DB (ms02/ds1; ds2 → None)
 g.export_submission("out.zip")                            # the ONLY file ever written (canonical TA1 zip)
 ```
@@ -136,17 +151,19 @@ Full usage, the Gallery-view walkthrough, and the deploy notes are in [`kit/READ
 
 ## Status
 
-The online gallery is implemented end-to-end and **deployable** (clean clone → `docker compose build` →
-`demo` → `viz`, verified). The MS02 shakeout works (demo: **AssA ≈ 0.70 / IDF1 ≈ 0.42**, sparse-GT artifact
-on IDF1). **DS1 (dense GT) is the real test** — the honest streaming bar is the kit's online ref ≈ 0.53
-IDF1; the batch funnel's GNN-on-DS1-GT supervised ceiling (0.69) is a different regime the online kit is
-not trying to match.
+The online gallery is implemented end-to-end and **deployable** (clean clone → `cd kit && ./demo.sh ds1` →
+full pull from MLflow → `demo` → `viz`, verified through Docker). The MS02 shakeout works (demo: **AssA ≈ 0.70**,
+sparse-GT artifact on IDF1). **DS1 (dense GT) is the real test**: greedy online ≈ 0.53 IDF1, and the periodic
+**global re-cluster** on the osnet-xcam resolve embedding lifts it to **≈ 0.60** (`./demo.sh ds1` — track +
+both embeddings pulled entirely from MLflow, no local files). The batch funnel's GNN-on-DS1-GT supervised
+ceiling (0.69) is a different (DS1-trained, non-generalizing) regime the online kit isn't trying to match.
 
 ## Modules / layout
 
 | path | role |
 |---|---|
 | `vlincs_gallery/gallery.py` | **the one canonical matcher** (`IdentityGallery`) — match/expand/do-nothing + `consolidate()`. Pure, in-memory, numpy (+FAISS for `retrieval`). |
+| `vlincs_gallery/resolve.py` | **global re-cluster** (`global_agglom_resolve`) — kNN-sparse cross-camera cosine + average-linkage; the periodic re-partition `OnlineGallery.resolve_global` applies to the live gallery. |
 | `vlincs_gallery/paths.py` | **single source of truth for data locations** (DATA_ROOT / DATA / MS02_DATA / CARDDIRS). |
 | `vlincs_gallery/db.py` · `db/init.sql` | pgvector system-of-record: schema, per-dataset DB, haversine veto fn. |
 | `vlincs_gallery/clock.py` · `geo.py` | absolute clock + camera geo from shipped extrinsics (drives the time/geo vetoes). |

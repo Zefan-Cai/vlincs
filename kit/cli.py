@@ -54,9 +54,11 @@ def cmd_score(a):
 
 
 def cmd_demo(a):
-    # the REAL one-click demo: ships real MS02 tracklets+embeddings, drives the live gallery, scores.
+    # the REAL one-click demo: MS02 from the shipped bundle, or DS1 from pipelines/ds1.yaml.
     from demo import run_demo
-    run_demo("ms02", resolve_every=100, submit=a.submit, cannot_link=a.cannot_link)
+    # resolve_every + cannot_link default to None so run_demo / the dataset yaml decide (DS1's yaml sets
+    # cannot_link=false); the CLI flags below override only when explicitly passed.
+    run_demo(a.dataset, resolve_every=a.resolve_every, submit=a.submit, cannot_link=a.cannot_link)
 
 
 def cmd_selftest(a):
@@ -90,10 +92,15 @@ def main():
     for name in ("list-videos", "score", "selftest"):
         p = sub.add_parser(name)
         p.add_argument("--dataset", required=True, choices=list(CARDDIRS))
-    pdemo = sub.add_parser("demo")                       # real one-click MS02 demo — no --dataset needed
+    pdemo = sub.add_parser("demo")                       # real one-click demo (ms02 shipped; ds1 = pipelines/ds1.yaml)
+    pdemo.add_argument("--dataset", default="ms02", choices=["ms02", "ds1"],
+                       help="ms02 = shipped bundle (offline); ds1 = pipelines/ds1.yaml (bundle or MLflow)")
+    pdemo.add_argument("--resolve-every", type=int, default=None, help="periodic resolve every N tracklets (default ds1=500, ms02=100)")
     pdemo.add_argument("--submit", default=None, help="also write a TA1 submission zip here")
+    pdemo.add_argument("--cannot-link", dest="cannot_link", action="store_true", default=None,
+                       help="force vetoes ON (overrides the dataset yaml)")
     pdemo.add_argument("--no-cannot-link", dest="cannot_link", action="store_false",
-                       help="disable the same_frame/simultaneity/travel vetoes (appearance-only; vetoes are ON by default)")
+                       help="force vetoes OFF / appearance-only (overrides the dataset yaml; DS1's yaml already sets this)")
     ps = sub.add_parser("submit")
     ps.add_argument("--dataset", required=True, choices=list(CARDDIRS))
     ps.add_argument("--out", default="submission.zip")

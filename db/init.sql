@@ -1,4 +1,4 @@
--- vlincs_gallery system-of-record schema (PROTOCOL.md §6).
+-- vlincs_gallery system-of-record schema.
 -- One DATABASE PER DATASET (gallery_ms02 / gallery_ds1 / gallery_ds2 / gallery_ds3) so ingestion
 -- runs are isolated and truncate-before-ingest gives clean, uncontaminated performance numbers.
 -- The DB is the durable record AND the cannot-link / time-window / geo query layer; the reduced
@@ -20,11 +20,13 @@ CREATE TABLE IF NOT EXISTS models (
     created_at TIMESTAMPTZ NOT NULL DEFAULT now(),
     UNIQUE (role, name, weights, params)
 );
+-- Embedder/reducer rows also record their output dim + how DB-side ANN indexes them (see `embeddings`).
+ALTER TABLE models ADD COLUMN IF NOT EXISTS emb_dim  INTEGER;   -- embedding dimensionality
+ALTER TABLE models ADD COLUMN IF NOT EXISTS emb_type TEXT;      -- DB-ANN cast: 'vector' (≤2000) | 'halfvec' (≤4000) | NULL (no DB ANN)
 
 -- Camera parameters per video (static pose from *_camera_extrinsics_*.parquet for all datasets;
 -- full intrinsics K/D/R/t/ENU from MCAMxxx_camera_params.json on MS02). Enables geo filters:
--- camera-to-camera distance + travel-time cannot-link now, per-detection ground projection (filling
--- detections.lat/lon) next. start_ms here is the absolute clock epoch used for that video.
+-- camera-to-camera distance + travel-time cannot-link. start_ms here is the absolute clock epoch used for that video.
 CREATE TABLE IF NOT EXISTS cameras (
     video      TEXT PRIMARY KEY,
     camera     TEXT NOT NULL,
@@ -49,23 +51,21 @@ CREATE TABLE IF NOT EXISTS detections (
     box_hash      TEXT,
     conf          REAL,
     object_type   SMALLINT,                   -- 0=person, 3=vehicle
-    lat DOUBLE PRECISION, lon DOUBLE PRECISION, alt DOUBLE PRECISION,  -- NULL => geo unavailable => veto inactive (per-detection ground projection is a follow-on)
+    lat DOUBLE PRECISION, lon DOUBLE PRECISION, alt DOUBLE PRECISION,  -- NULL => geo unavailable => veto inactive
     triage_score  REAL,                        -- NULL until the triage pass runs
     detector_id   BIGINT REFERENCES models(model_id),
     embedder_id   BIGINT REFERENCES models(model_id),
-    reducer_id    BIGINT REFERENCES models(model_id),
-    embedding     vector(1024),                -- raw embedder output (audit/replay)
-    embedding_red vector(64)                   -- reduced (warmup-PCA) matching space; threshold + ANN operate here
+    reducer_id    BIGINT REFERENCES models(model_id)
+    -- embeddings live in the polymorphic `embeddings` table (any dim, multi-model), NOT inline here
 );
 CREATE INDEX IF NOT EXISTS det_cam_frame ON detections (camera, frame_idx);
 CREATE INDEX IF NOT EXISTS det_cam_wall  ON detections (camera, wall_clock_ms);
 CREATE INDEX IF NOT EXISTS det_abs_ms    ON detections (abs_ms);
 
--- Identities (galleries). centroid = confidence-adaptive EMA of member exemplars.
+-- Identities (galleries). The exemplar bank lives as role='rep' rows in `embeddings`; identity vectors
+-- (centroids) are held in the in-memory matcher, not persisted.
 CREATE TABLE IF NOT EXISTS identities (
     gid           BIGINT PRIMARY KEY,
-    centroid      vector(1024),
-    centroid_red  vector(64),
     n_members     INTEGER NOT NULL DEFAULT 0,
     cameras       TEXT[]  NOT NULL DEFAULT '{}',
     first_wall_ms BIGINT,
@@ -75,16 +75,43 @@ CREATE TABLE IF NOT EXISTS identities (
     updated_seq   BIGINT
 );
 
--- The exemplar bank. Diversity-gated admission; cap=16. embedding_red is the cosine-ANN match space.
-CREATE TABLE IF NOT EXISTS identity_reps (
-    rep_id        BIGINT PRIMARY KEY,         -- stable; never reused within a run (replay safety)
-    gid           BIGINT NOT NULL REFERENCES identities(gid),
-    det_id        TEXT   NOT NULL REFERENCES detections(det_id),
-    embedding     vector(1024),
-    embedding_red vector(64) NOT NULL
+-- ── Polymorphic embedding store: variable-dim, multi-model ──────────────────────────
+-- ONE table for every embedding of every entity, at ANY dim, from ANY model. The `vec` column is
+-- UNCONSTRAINED (`vector`, no typmod) so a 64-, 1024-, or 2048-d embedder all just store — nothing is
+-- enforced upfront. DB-side ANN is opt-in PER MODEL via a PARTIAL CAST-EXPRESSION HNSW index (see
+-- db.enable_ann), which pins the dim ONLY inside that index — reconciling "no dim upfront" with pgvector's
+-- fixed-dim index requirement. FAISS (the live matcher) reads the same `vec`. Multi-model = >1 row per
+-- entity (different model_id). role: 'match' (the scored vector) | 'rep' (exemplar bank) | 'raw' | 'centroid'.
+-- ann_search() is the ONLY place ANN queries are built — a cast/predicate that doesn't EXACTLY match the
+-- index silently falls back to a seq-scan. pgvector HNSW dim ceilings are hard: vector ≤2000, halfvec ≤4000.
+-- The gallery's UNIT OF WORK is the TRACKLET (one pooled match vector per tracklet) — so there is ONE
+-- 'match' row per tracklet (NOT one per detection; detections + assignments stay per-detection for scoring).
+-- `is_rep` marks the subset admitted to the live exemplar bank. entity_id = the tracklet's representative
+-- det_id (joins to detections for camera/abs_ms); seq = the tracklet's decision seq (its id + the replay key).
+CREATE TABLE IF NOT EXISTS embeddings (
+    entity_kind TEXT    NOT NULL,                   -- 'tracklet' (the gallery unit) | 'detection' | 'identity'
+    entity_id   TEXT    NOT NULL,                   -- the tracklet's representative det_id
+    model_id    BIGINT  NOT NULL REFERENCES models(model_id),
+    role        TEXT    NOT NULL DEFAULT 'match',    -- 'match' (the scored vector) | 'raw' | 'centroid'
+    dim         INTEGER NOT NULL,                    -- == vector_dims(vec) (denormalized for the index cast)
+    vec         vector  NOT NULL,                    -- UNCONSTRAINED: any dim
+    gid         BIGINT,                              -- the identity it was assigned to at birth (pre-merge)
+    seq         BIGINT,                              -- the tracklet's decision seq (id + as-of-step replay key)
+    is_rep      BOOLEAN NOT NULL DEFAULT false,      -- admitted to the live exemplar bank (the viz "bank" subset)
+    PRIMARY KEY (entity_kind, entity_id, model_id, role)
 );
-CREATE INDEX IF NOT EXISTS rep_gid ON identity_reps (gid);
-CREATE INDEX IF NOT EXISTS rep_red_hnsw ON identity_reps USING hnsw (embedding_red vector_cosine_ops);
+ALTER TABLE embeddings ADD COLUMN IF NOT EXISTS is_rep BOOLEAN NOT NULL DEFAULT false;
+CREATE INDEX IF NOT EXISTS emb_model_role ON embeddings (model_id, role);
+CREATE INDEX IF NOT EXISTS emb_entity     ON embeddings (entity_id);
+CREATE INDEX IF NOT EXISTS emb_rep        ON embeddings (model_id, seq) WHERE is_rep;
+
+-- Drop dead fixed-dim embedding columns / table / hnsw index from older per-dataset DBs (no-op on fresh
+-- DBs). Run AFTER the `embeddings` CREATE.
+ALTER TABLE detections DROP COLUMN IF EXISTS embedding;
+ALTER TABLE detections DROP COLUMN IF EXISTS embedding_red;
+ALTER TABLE identities DROP COLUMN IF EXISTS centroid;
+ALTER TABLE identities DROP COLUMN IF EXISTS centroid_red;
+DROP TABLE IF EXISTS identity_reps;
 
 -- The committed per-detection assignment (det_id -> gid).
 CREATE TABLE IF NOT EXISTS assignments (
@@ -97,7 +124,6 @@ CREATE TABLE IF NOT EXISTS assignments (
 );
 CREATE INDEX IF NOT EXISTS asn_gid ON assignments (gid);
 -- seq is filtered per-tracklet by the viz (/identity counts dets per tracklet; /tracklet joins on seq).
--- Without this every such query full-scans assignments -> /identity for a 561-tracklet id took 65s.
 CREATE INDEX IF NOT EXISTS asn_seq ON assignments (seq);
 
 -- Append-only event record -> the gallery state is a deterministic fold over this log (replay).
@@ -124,9 +150,7 @@ CREATE TABLE IF NOT EXISTS decision_log (
 );
 CREATE INDEX IF NOT EXISTS dlog_chosen ON decision_log (chosen_gid);
 
--- CREATE TABLE IF NOT EXISTS above is a no-op against an ALREADY-created decision_log (e.g. an existing
--- gallery_ms02 from a prior `up`), so it would NOT add the diversity-gate diagnostic columns. These
--- idempotent ALTERs backfill them so the viz picks them up WITHOUT a `down -v` / volume wipe.
+-- Backfill the diversity-gate diagnostic columns into decision_log on already-created DBs.
 ALTER TABLE decision_log ADD COLUMN IF NOT EXISTS admit_reason    TEXT;
 ALTER TABLE decision_log ADD COLUMN IF NOT EXISTS admit_sim       REAL;
 ALTER TABLE decision_log ADD COLUMN IF NOT EXISTS admit_min       REAL;
@@ -147,7 +171,7 @@ CREATE TABLE IF NOT EXISTS merges (
     score     REAL                             -- exemplar-centroid cosine that triggered it (>= merge_tau) — the WHY
 );
 CREATE INDEX IF NOT EXISTS merges_at_seq ON merges (at_seq);
-ALTER TABLE merges ADD COLUMN IF NOT EXISTS score REAL;     -- backfill for an already-created merges table
+ALTER TABLE merges ADD COLUMN IF NOT EXISTS score REAL;
 
 -- Haversine metres for the geo cannot-link veto. NULL-propagating: if either point lacks geo the
 -- result is NULL, so a `haversine_m(...) > X` predicate is FALSE/UNKNOWN and never blocks a match.

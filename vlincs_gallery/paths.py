@@ -33,6 +33,17 @@ HAS_GT = {"ms02": True, "ds1": True, "ds2": False}
 MS02_GT_DIR = f"{MS02_DATA}/MS02/MC0002/2018-03-Tc85"
 DS1_GT_DIRS = {"Tc6": f"{DATA}/MS01/MC0001/2024-03-Tc6", "Tc8": f"{DATA}/MS01/MC0001/2024-03-Tc8"}
 
+# Camera extrinsics / absolute-clock sources (SEPARATE from the video+GT card dirs above). DS1/DS2's NEW
+# per-frame `_camera_extrinsics_v2.0.3.parquet` (video_time + per-frame absolute time) live under the Box
+# export's OPAQUE dataset dirs — sample/ = DS1, self/ = DS2 (NOT DS0001/DS0002, which hold an older copy;
+# see the box-export-dataset-dirs memory). MS02 ships no extrinsics parquet, so its dir is the card dir
+# (camera_params.json + .mp4) and it keeps the old epoch + frame/fps clock.
+EXTRINSICS_DIRS = {
+    "ms02": list(CARDDIRS["ms02"]),
+    "ds1": [f"{DATA}/sample/input_extrinsics"],
+    "ds2": [f"{DATA}/self/input_extrinsics"],
+}
+
 
 def root_for_site(site: str) -> str:
     """The dataset-tree root for a SITE token: 'MS02' -> the -selected tree; everything else -> Box."""

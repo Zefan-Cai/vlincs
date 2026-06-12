@@ -13,7 +13,7 @@ dependencies = [
     "pgvector",
     "geoalchemy2",
     "sqlalchemy>=2",
-    "reid-hota",
+    "reid-hota>=0.3.5",   # the §13.3 / PROTOCOL scorer version (DS1 IDF1 numbers are reid_hota 0.3.5)
     "vlincs-sdk[harness]",
     "torch",
     "timm",

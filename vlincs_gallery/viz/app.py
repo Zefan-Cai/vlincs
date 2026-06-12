@@ -17,6 +17,7 @@ Endpoints (all read live from gallery_<dataset>):
 """
 from __future__ import annotations
 import glob
+import math
 import os, threading
 from collections import OrderedDict
 import cv2
@@ -28,16 +29,55 @@ from fastapi.middleware.cors import CORSMiddleware
 from vlincs_gallery import db as gdb
 from vlincs_gallery import paths
 
-DATASET = os.environ.get("GALLERY_DATASET", "ds1")
+DATASET = os.environ.get("GALLERY_DATASET", "ds1")     # the startup DEFAULT dataset (used when no ?dataset=…)
 DSN = gdb.dsn(DATASET)
 
-app = FastAPI(title=f"VLINCS Gallery viz — {gdb.dataset_db(DATASET)}")
+# Per-request dataset switch: the UI sends ?dataset=<key> on EVERY call (incl. <img src> crops), so one viz
+# process serves every gallery_<key> DB without a restart. The validated key is stashed in a contextvar set by
+# a pure-ASGI middleware (pure ASGI sets it in the request's context, which anyio copies into the
+# sync-endpoint threadpool).
+import contextvars
+import re as _re
+from urllib.parse import parse_qs as _parse_qs
+
+_REQ_DATASET = contextvars.ContextVar("gallery_dataset", default=DATASET)
+_DS_RE = _re.compile(r"^[a-z0-9_-]{1,32}$")             # sanitize: the key lands in a dbname (gallery_<key>)
+
+
+def _active_dataset() -> str:
+    return _REQ_DATASET.get()
+
+
+def _dsn() -> str:                                     # the DSN for THIS request's dataset
+    return gdb.dsn(_active_dataset())
+
+
+def _db_to_key(db: str) -> str:                        # gallery_ms02 -> ms02 (inverse of gdb.dataset_db)
+    return db[len("gallery_"):] if db.startswith("gallery_") else db
+
+
+class _DatasetMiddleware:
+    def __init__(self, app):
+        self.app = app
+
+    async def __call__(self, scope, receive, send):
+        if scope["type"] != "http":
+            return await self.app(scope, receive, send)
+        ds = _parse_qs(scope.get("query_string", b"").decode()).get("dataset", [None])[0]
+        token = _REQ_DATASET.set(ds if (ds and _DS_RE.match(ds)) else DATASET)
+        try:
+            await self.app(scope, receive, send)
+        finally:
+            _REQ_DATASET.reset(token)
+
+
+app = FastAPI(title="VLINCS Gallery viz")
 app.add_middleware(CORSMiddleware, allow_origins=["*"], allow_methods=["*"], allow_headers=["*"])
+app.add_middleware(_DatasetMiddleware)
 
 # Crop serving: cv2.VideoCapture is NOT thread-safe, so hold a PER-VIDEO lock (so different videos —
 # a bank's exemplars usually span several cameras — decode in parallel) and cache encoded JPEGs (crops
-# are immutable, so re-opening an identity is instant). Previously one global lock serialized every crop
-# AND every camera-frame background behind a single seek+decode, which is why the bank felt frozen.
+# are immutable, so re-opening an identity is instant).
 _caps: dict[str, cv2.VideoCapture] = {}
 _caps_lock = threading.Lock()
 _vlocks: dict[str, threading.Lock] = {}
@@ -57,9 +97,8 @@ def _vlock(video: str) -> threading.Lock:
 
 def _read_frame(video: str, frame_idx: int):
     """Decode one BGR frame from video at frame_idx (per-video locked — cap is not thread-safe).
-    frame_idx is CLAMPED to [0, frame_count-1]: an out-of-range seek (e.g. the no-detections-at-t branch's
-    30fps/start_ms estimate overshooting the video end) would otherwise return None -> 404 -> the canvas
-    background never paints. Clamping makes it degrade to the last real frame instead."""
+    frame_idx is CLAMPED to [0, frame_count-1]: an out-of-range seek otherwise returns None -> 404 and the
+    canvas background never paints. Clamping makes it degrade to the last real frame instead."""
     with _vlock(video):
         cp = _caps.get(video)
         if cp is None:
@@ -74,10 +113,8 @@ def _read_frame(video: str, frame_idx: int):
 
 
 def _video_dims(video: str):
-    """Real (width, height) of the source video, for correct canvas aspect + box scaling. The old estimate
-    (max(x2)/max(y2) of detections) is wrong whenever detections don't span the full frame — e.g. MS02's
-    2560x1920 with people only in part of the frame -> wrong aspect, frame stretched, boxes float to the
-    wrong vertical position. Reuses the per-video cap (cached). Returns None if the video can't be opened."""
+    """Real (width, height) of the source video, for correct canvas aspect + box scaling. Reuses the
+    per-video cap (cached). Returns None if the video can't be opened."""
     try:
         with _vlock(video):
             cp = _caps.get(video)
@@ -115,7 +152,7 @@ def _encode(img, max_w, q):
 
 
 def _q(sql, args=(), one=False):
-    with psycopg.connect(DSN) as c, c.cursor() as cur:
+    with psycopg.connect(_dsn()) as c, c.cursor() as cur:
         cur.execute(sql, args)
         cols = [d[0] for d in cur.description] if cur.description else []
         rows = cur.fetchall()
@@ -125,7 +162,7 @@ def _q(sql, args=(), one=False):
 
 def _vecq(sql, args=()):
     """Like _q but with pgvector registered, so vector() columns return numpy arrays (not strings)."""
-    with psycopg.connect(DSN) as c:
+    with psycopg.connect(_dsn()) as c:
         register_vector(c)
         with c.cursor() as cur:
             cur.execute(sql, args)
@@ -146,7 +183,7 @@ def _project_2d(mat):
         out = np.zeros((n, 2), np.float64)
         out[:, :min(2, d)] = mat[:, :min(2, d)]
         return out
-    try:                                   # UMAP gives nicer separation but is optional — never required
+    try:                                   # UMAP gives nicer separation but is optional
         import umap
         return umap.UMAP(n_components=2, random_state=42).fit_transform(mat)
     except Exception:
@@ -157,7 +194,7 @@ def _project_2d(mat):
 def _video_path(stem: str) -> str:
     # The card SUBDIR isn't reliably encoded in the stem: DS1 stems end in the card (..._2024-03-Tc6),
     # but MS02 stems end in a timestamp (..._2018-03-15_15-00-06) while the real dir is 2018-03-Tc85.
-    # So glob for the (unique) stem under any card dir of this site/cluster; fall back to the old
+    # So glob for the (unique) stem under any card dir of this site/cluster; fall back to the
     # card-from-stem guess only if the glob misses (e.g. an unusual mount layout).
     p = stem.split("_")            # vlincs_<SITE>_<CLUSTER>_<MCAMxx>_<...>
     site, cluster = p[1], p[2]
@@ -195,15 +232,39 @@ def _card_filter(card: str, col: str = "d.video"):
     return (f" AND {col} LIKE %s", (f"%{card}",)) if card else ("", ())
 
 
+@app.get("/datasets")
+def datasets():
+    """List the gallery_<key> databases that exist (with identity counts) so the UI can offer a switch.
+    `current` is the dataset THIS request resolved to (from ?dataset=…, else the startup default)."""
+    try:
+        with psycopg.connect(gdb.ADMIN_DSN) as c, c.cursor() as cur:
+            cur.execute("SELECT datname FROM pg_database WHERE datname LIKE %s AND datname <> 'gallery' ORDER BY datname",
+                        ("gallery\\_%",))
+            dbs = [r[0] for r in cur.fetchall()]
+    except Exception:
+        dbs = [gdb.dataset_db(DATASET)]                  # fall back to at least the default DB
+    out = []
+    for db in dbs:
+        key = _db_to_key(db)
+        n = -1
+        try:
+            with psycopg.connect(gdb.dsn(key)) as c2, c2.cursor() as cur2:
+                cur2.execute("SELECT count(*) FROM identities WHERE n_members > 0")
+                n = int(cur2.fetchone()[0])
+        except Exception:
+            n = -1                                       # DB present but unreadable / no schema yet
+        out.append({"key": key, "db": db, "n_identities": n})
+    return {"datasets": out, "current": _active_dataset(), "default": DATASET}
+
+
 @app.get("/meta")
 def meta(card: str = ""):
     card_clause, card_params = _card_filter(card, "video")   # restrict everything to one card when the toggle is set
     card_clause_d, _ = _card_filter(card, "d.video")         # same filter, for the detections-aliased canvas query
     # One canvas per VIDEO (DS1 reuses camera names across Tc6/Tc8). Derive the canvas list from the
     # DETECTIONS (the videos that actually have data), LEFT JOIN the cameras table for geo — so canvases
-    # render even when no camera-geo metadata was loaded. MS02 ships camera_params.json (not the extrinsics
-    # parquet camera_geo() reads), so its cameras table is empty; without this fallback the canvases — and
-    # thus all video — vanish even though the gallery ran fine and the detections carry camera+video.
+    # render even when no camera-geo metadata was loaded (e.g. MS02 ships camera_params.json, not the
+    # extrinsics parquet camera_geo() reads, so its cameras table is empty).
     cams = _q(f"""SELECT DISTINCT d.camera, d.video, c.lat, c.lon, c.start_ms
                   FROM detections d LEFT JOIN cameras c ON c.video = d.video
                   WHERE TRUE{card_clause_d} ORDER BY d.camera, d.video""", card_params)
@@ -237,7 +298,7 @@ def meta(card: str = ""):
                      (SELECT count(*) FROM decision_log) tracklets,
                      (SELECT count(*) FROM identities WHERE array_length(cameras,1)>1) cross_cam""", one=True)
     models = _q("SELECT role, name, params FROM models ORDER BY model_id")
-    return {"dataset": gdb.dataset_db(DATASET), "cameras": cams, "t0": span.get("t0"), "t1": span.get("t1"),
+    return {"dataset": gdb.dataset_db(_active_dataset()), "cameras": cams, "t0": span.get("t0"), "t1": span.get("t1"),
             "t_quantiles": t_quantiles, "seq_quantiles": seq_quantiles,
             "seq0": seqspan.get("s0"), "seq1": seqspan.get("s1"), "n_decisions": seqspan.get("n"),
             "cards": cards, "card": card,
@@ -284,8 +345,8 @@ def state(t: int = -1, card: str = "", by: str = "wall", step: int = -1):
               f"WHERE a.gid=i.gid{card_clause})") if card else ""
     ids = _q(f"""SELECT i.gid, i.first_wall_ms, i.last_wall_ms, i.cameras, i.n_members AS total
                  FROM identities i WHERE i.first_wall_ms<=%s{exists} ORDER BY i.first_wall_ms""", (t, *card_params))
-    # ONE grouped pass for "seen so far" — the old per-identity correlated subquery (71 counts, each a
-    # full scan of 1.7M assignments) took ~39s per scrub; this is a single indexed pass over dets<=t.
+    # ONE grouped pass for "seen so far": a single indexed pass over dets<=t, instead of a per-identity
+    # correlated subquery that full-scans assignments once per identity.
     seen = {r["gid"]: r["seen"] for r in _q(
         f"""SELECT a.gid, count(*) AS seen FROM assignments a JOIN detections d ON d.det_id=a.det_id
             WHERE d.abs_ms<=%s{card_clause} GROUP BY a.gid""", (t, *card_params))}
@@ -337,6 +398,141 @@ def merges():
     return _q("SELECT merge_id, at_seq, old_gid, new_gid, score FROM merges ORDER BY merge_id")
 
 
+# Frozen-policy thresholds the cannot-link vetoes use (gallery.IdentityGallery defaults — same_box_iou=0.35,
+# max_speed=3.0). The viz is read-only; it does NOT recompute the veto, only the supporting numbers that
+# explain one the matcher ALREADY made, so surfacing the deciding thresholds next to them is enough.
+_SAME_BOX_IOU = 0.35
+_MAX_SPEED_MS = 3.0
+
+
+def _veto_explain(seq: int):
+    """For a decision `seq`, compute ON-DEMAND the supporting numbers behind each VETOED candidate gid.
+
+    Read-only: the matcher already recorded which candidates were vetoed (decision_log.veto_reasons,
+    aligned with candidate_gids/scores); this reconstructs the evidence from the live tables so a vetoed
+    line in the UI is self-explanatory instead of just "same_frame" / "travel:CAM". A candidate is VETOED
+    when its veto_reason is non-empty and not 'below_tau' (below_tau is a threshold miss, not a veto).
+
+      same_frame: n_shared (video,frame_idx) between THIS seq's tracklet and gid G's occupancy; the MEDIAN
+        box-IoU over those shared frames (< same_box_iou => spatially distinct => two people); plus G's
+        ATTRACTOR profile (distinct tracklet/seq count, frame_idx span, distinct camera count) so an
+        over-merged "matches-everything" id is visible.
+      travel: G's LAST detection on the candidate's OTHER camera(s) before this track, the haversine
+        distance between the two cameras (cameras.lat/lon), the time gap, and the implied speed vs max_speed.
+    """
+    dec = _q("""SELECT seq, det_id, chosen_gid, decision_type, candidate_gids, scores, veto_reasons
+                FROM decision_log WHERE seq=%s""", (seq,), one=True)
+    if not dec:
+        return []
+    cand = list(dec.get("candidate_gids") or [])
+    scores = list(dec.get("scores") or [])
+    vetoes = list(dec.get("veto_reasons") or [])
+    # this tracklet's own dets (the within-camera unit being decided): frame count + the camera(s) it spans
+    track = _q("""SELECT d.video, d.camera, d.frame_idx, d.abs_ms, d.x1,d.y1,d.x2,d.y2
+                  FROM assignments a JOIN detections d ON d.det_id=a.det_id WHERE a.seq=%s""", (seq,))
+    n_track = len(track)
+    track_cams = sorted({r["camera"] for r in track})
+    out = []
+    for i, g in enumerate(cand):
+        reason = vetoes[i] if i < len(vetoes) else ""
+        if not reason or reason == "below_tau":
+            continue
+        g = int(g)
+        score = scores[i] if i < len(scores) else None
+        kind = reason.split(":", 1)[0]
+        item = {"gid": g, "veto_reason": reason, "kind": kind, "score": score,
+                "n_track": n_track, "track_cameras": track_cams}
+        if kind == "same_frame":
+            # n_shared + median box-IoU over (video,frame_idx) this track shares with gid G's occupancy.
+            # IoU computed in SQL: intersection / union over x1,y1,x2,y2; ::numeric so round() applies.
+            # One box per (video,frame_idx) per side (DISTINCT ON) so a frame contributes exactly one IoU —
+            # matching the matcher, whose occ[(video,frame)] holds a single box. Median over the shared frames.
+            ov = _q("""
+                WITH tk AS (
+                  SELECT DISTINCT ON (d.video, d.frame_idx) d.video, d.frame_idx, d.x1,d.y1,d.x2,d.y2
+                  FROM detections d JOIN assignments a ON a.det_id=d.det_id AND a.seq=%s
+                  ORDER BY d.video, d.frame_idx, d.det_id
+                ),
+                gd AS (
+                  SELECT DISTINCT ON (d.video, d.frame_idx) d.video, d.frame_idx, d.x1,d.y1,d.x2,d.y2
+                  FROM detections d JOIN assignments a ON a.det_id=d.det_id AND a.gid=%s
+                  ORDER BY d.video, d.frame_idx, d.det_id
+                )
+                SELECT count(*) AS n_shared, percentile_cont(0.5) WITHIN GROUP (ORDER BY iou) AS median_iou
+                FROM (
+                  SELECT (CASE WHEN inter <= 0 THEN 0.0
+                               ELSE inter / NULLIF(ta + ga - inter, 0)::numeric END) AS iou
+                  FROM (
+                    SELECT GREATEST(0, LEAST(tk.x2,gd.x2)-GREATEST(tk.x1,gd.x1))
+                         * GREATEST(0, LEAST(tk.y2,gd.y2)-GREATEST(tk.y1,gd.y1)) AS inter,
+                           (tk.x2-tk.x1)*(tk.y2-tk.y1) AS ta, (gd.x2-gd.x1)*(gd.y2-gd.y1) AS ga
+                    FROM tk JOIN gd ON gd.video=tk.video AND gd.frame_idx=tk.frame_idx
+                  ) p
+                ) q""", (seq, g), one=True) or {}
+            # G's attractor profile: how many distinct tracklets, what frame span, how many cameras it owns
+            prof = _q("""SELECT count(DISTINCT a.seq) AS n_seq, min(d.frame_idx) AS f0, max(d.frame_idx) AS f1,
+                                count(DISTINCT d.camera) AS n_cam
+                         FROM assignments a JOIN detections d ON d.det_id=a.det_id WHERE a.gid=%s""",
+                      (g,), one=True) or {}
+            med = ov.get("median_iou")
+            item.update({"n_shared": int(ov.get("n_shared") or 0),
+                         "median_box_iou": (round(float(med), 4) if med is not None else None),
+                         "same_box_iou": _SAME_BOX_IOU,
+                         "gid_n_tracklets": int(prof.get("n_seq") or 0),
+                         "gid_frame_min": prof.get("f0"), "gid_frame_max": prof.get("f1"),
+                         "gid_n_cameras": int(prof.get("n_cam") or 0)})
+        elif kind == "travel":
+            # the OTHER camera the veto named (travel:<CAM>); fall back to any non-track camera if unparsed
+            other_cam = reason.split(":", 1)[1] if ":" in reason else None
+            t0 = min((r["abs_ms"] for r in track if r["abs_ms"] is not None), default=None)
+            # G's LAST detection on that other camera BEFORE this track started (the position it must travel from)
+            last = _q("""SELECT d.camera, d.frame_idx, d.abs_ms
+                         FROM assignments a JOIN detections d ON d.det_id=a.det_id
+                         WHERE a.gid=%s AND d.camera=%s AND (%s IS NULL OR d.abs_ms <= %s)
+                         ORDER BY d.abs_ms DESC LIMIT 1""", (g, other_cam, t0, t0), one=True)
+            cam_geo = {r["camera"]: r for r in _q(
+                "SELECT DISTINCT camera, lat, lon FROM cameras WHERE camera = ANY(%s)",
+                ([other_cam] + track_cams,))} if other_cam else {}
+            this_cam = track_cams[0] if track_cams else None
+            dist = dt = speed = None
+            a = cam_geo.get(other_cam) if other_cam else None
+            b = cam_geo.get(this_cam) if this_cam else None
+            if a and b and a.get("lat") is not None and b.get("lat") is not None:
+                dist = _haversine_m((float(a["lat"]), float(a["lon"])),
+                                    (float(b["lat"]), float(b["lon"])))
+            if last and last.get("abs_ms") is not None and t0 is not None:
+                dt = abs(t0 - last["abs_ms"]) / 1000.0
+            if dist is not None and dt is not None and dt > 0:
+                speed = dist / dt
+            item.update({
+                "from_camera": other_cam, "to_camera": this_cam,
+                "from_frame": (last or {}).get("frame_idx"), "to_frame":
+                    (min((r["frame_idx"] for r in track), default=None)),
+                "dist_m": (round(dist, 2) if dist is not None else None),
+                "dt_s": (round(dt, 2) if dt is not None else None),
+                "speed_ms": (round(speed, 2) if speed is not None else None),
+                "max_speed": _MAX_SPEED_MS})
+        out.append(item)
+    return out
+
+
+def _haversine_m(a, b):
+    """Great-circle metres between (lat, lon) a and b — same formula as gallery._haversine_m, duplicated
+    here so the read-only viz has no import dependency on the matcher module."""
+    R = 6371000.0
+    la1, lo1 = math.radians(a[0]), math.radians(a[1])
+    la2, lo2 = math.radians(b[0]), math.radians(b[1])
+    h = math.sin((la2 - la1) / 2) ** 2 + math.cos(la1) * math.cos(la2) * math.sin((lo2 - lo1) / 2) ** 2
+    return R * 2 * math.asin(math.sqrt(h))
+
+
+@app.get("/veto_explain/{seq}")
+def veto_explain(seq: int):
+    """Standalone access to the per-vetoed-candidate supporting numbers for a decision (also embedded on
+    /tracklet/{seq} as `veto_explain`)."""
+    return {"seq": seq, "veto_explain": _veto_explain(seq)}
+
+
 @app.get("/tracklet/{seq}")
 def tracklet(seq: int, n: int = 12):
     dec = _q("SELECT * FROM decision_log WHERE seq=%s", (seq,), one=True)
@@ -345,7 +541,8 @@ def tracklet(seq: int, n: int = 12):
                  ORDER BY d.frame_idx""", (seq,))
     # evenly subsample n det_ids for display (this is "what we'd subsample")
     strip = [dets[i] for i in (sorted({int(k*(len(dets)-1)/max(1, n-1)) for k in range(min(n, len(dets)))}))] if dets else []
-    return {"seq": seq, "decision": dec, "n_dets": len(dets), "strip": strip, "dets": dets}
+    return {"seq": seq, "decision": dec, "n_dets": len(dets), "strip": strip, "dets": dets,
+            "veto_explain": _veto_explain(seq)}
 
 
 @app.get("/identity/{gid}")
@@ -380,59 +577,71 @@ def identity(gid: int, by: str = "wall", step: int = -1, t: int = -1):
             "tracklets": tracks}
 
 
+def _active_model(model: int) -> int:
+    """Resolve the embedder model_id the projection reads. <0 -> the model with the most stored vectors
+    (the single embedder of a run; under multi-model the caller passes an explicit model_id). -1 if empty."""
+    if model >= 0:
+        return model
+    row = _q("""SELECT model_id FROM embeddings WHERE role='match'
+                GROUP BY model_id ORDER BY count(*) DESC, model_id DESC LIMIT 1""", one=True)
+    return int(row["model_id"]) if row else -1
+
+
 @app.get("/embedding_projection")
 def embedding_projection(card: str = "", mode: str = "bank", limit: int = 4000, t: int = -1,
-                         by: str = "wall", step: int = -1):
+                         by: str = "wall", step: int = -1, model: int = -1):
     """The matcher's match space, projected to 2D — "what the index/matcher actually sees".
 
-    mode=bank (default): one point per LIVE exemplar in identity_reps (embedding_red, the 64-d cosine ANN
-      space). Points are coloured by gid; this IS the FAISS/hnsw bank the matcher scores against.
-    mode=det: one point per DETECTION (detections.embedding_red) coloured by its assigned gid — a denser
-      cloud showing how the committed assignments sit in the same space (subsampled to `limit`).
+    Reads the polymorphic `embeddings` table for one embedder `model` (default: the run's only embedder),
+    so it works at ANY dim (64/1024/2048/…) — the PCA/UMAP projects whatever D it gets.
+    mode=bank (default): one point per LIVE exemplar (embeddings role='rep') — the bank the matcher scores
+      against. mode=det: one point per DETECTION (role='match') coloured by assigned gid (subsampled to `limit`).
 
-    `t` (abs_ms; <0 or absent = full/final state): when t>=0, only rows committed by t are RETURNED
-    (bank: exemplars whose source det's abs_ms<=t; det: detections with abs_ms<=t). The PCA is always FIT
-    on the FULL set (every row, ignoring t) and only the t-filtered subset is returned — so as the scrubber
-    advances the 2D layout stays fixed and points accumulate (you watch the identity space grow) instead of
-    the whole cloud re-jumping each scrub.
+    `t` (abs_ms; <0 or absent = full/final state): when t>=0, only rows committed by t are RETURNED. The
+    PCA is always FIT on the FULL set so the 2D layout stays fixed and points accumulate as the scrubber moves.
 
     Returns {mode, n, dim, t, points:[{x,y,gid,n_exemplars,cameras,rep_det_id,det_id}]}. Empty (n=0) when no
-    embeddings were persisted (e.g. a non-64-d embedder — see OnlineGallery._vec_if_dim)."""
+    embeddings are stored for this model yet."""
     card_clause, card_params = _card_filter(card, "d.video")
-    # by=decision colours each point by its identity AS OF `step` (canonical birth gid after merges<=step),
-    # not its final gid; by=wall colours by the final assignment. (Bank rep_id == the admitting decision seq.)
+    m = _active_model(model)
+    if m < 0:
+        return {"mode": mode, "n": 0, "dim": 0, "t": t, "points": []}
+    # by=decision colours each point by its identity AS OF `step` (canonical birth gid after merges<=step);
+    # by=wall colours by birth gid. (Bank seq == the admitting decision seq; e.gid == the birth gid.)
     if mode == "det" and by == "decision":
         rows = _vecq(
             f"""{_CANON_CTE}
-                SELECT d.det_id, _canon.cur AS gid, a.seq, d.camera, d.abs_ms, d.embedding_red AS v
-                FROM detections d JOIN assignments a ON a.det_id=d.det_id
+                SELECT d.det_id, _canon.cur AS gid, a.seq, d.camera, d.abs_ms, e.vec AS v
+                FROM embeddings e JOIN detections d ON d.det_id=e.entity_id
+                JOIN assignments a ON a.det_id=d.det_id
                 JOIN decision_log dl ON dl.seq = a.seq
                 JOIN _canon ON _canon.orig = dl.chosen_gid
-                WHERE d.embedding_red IS NOT NULL{card_clause}
-                ORDER BY a.seq LIMIT %s""", (step, *card_params, max(1, limit)))
+                WHERE e.entity_kind='tracklet' AND e.role='match' AND e.model_id=%s{card_clause}
+                ORDER BY a.seq LIMIT %s""", (step, m, *card_params, max(1, limit)))
     elif mode == "det":
         rows = _vecq(
-            f"""SELECT d.det_id, a.gid, a.seq, d.camera, d.abs_ms, d.embedding_red AS v
-                FROM detections d JOIN assignments a ON a.det_id=d.det_id
-                WHERE d.embedding_red IS NOT NULL{card_clause}
-                ORDER BY d.abs_ms LIMIT %s""", (*card_params, max(1, limit)))
+            f"""SELECT d.det_id, a.gid, a.seq, d.camera, d.abs_ms, e.vec AS v
+                FROM embeddings e JOIN detections d ON d.det_id=e.entity_id
+                JOIN assignments a ON a.det_id=d.det_id
+                WHERE e.entity_kind='tracklet' AND e.role='match' AND e.model_id=%s{card_clause}
+                ORDER BY d.abs_ms LIMIT %s""", (m, *card_params, max(1, limit)))
     elif by == "decision":
         rows = _vecq(
             f"""{_CANON_CTE}
-                SELECT r.rep_id, _canon.cur AS gid, r.det_id, d.camera, d.abs_ms, r.embedding_red AS v
-                FROM identity_reps r JOIN detections d ON d.det_id=r.det_id
-                JOIN decision_log dl ON dl.seq = r.rep_id
-                JOIN _canon ON _canon.orig = dl.chosen_gid
-                WHERE r.embedding_red IS NOT NULL{card_clause}
-                ORDER BY r.gid, r.rep_id""", (step, *card_params))
+                SELECT e.seq AS rep_id, _canon.cur AS gid, e.entity_id AS det_id, d.camera, d.abs_ms, e.vec AS v
+                FROM embeddings e JOIN detections d ON d.det_id=e.entity_id
+                JOIN _canon ON _canon.orig = e.gid
+                WHERE e.entity_kind='tracklet' AND e.is_rep AND e.model_id=%s{card_clause}
+                ORDER BY e.gid, e.seq""", (step, m, *card_params))
     else:
-        # join identity_reps.det_id -> detections.abs_ms so the exemplar can be time-gated by when its
-        # source detection was committed. rep_id == the decision seq that admitted it (set in OnlineGallery).
+        # wall: colour reps by their FINAL (post-merge) gid — the rep's det carries the live assignment
+        # (assignments.gid is moved to the survivor on merge). Its abs_ms also time-gates the exemplar.
         rows = _vecq(
-            f"""SELECT r.rep_id, r.gid, r.det_id, d.camera, d.abs_ms, r.embedding_red AS v
-                FROM identity_reps r JOIN detections d ON d.det_id=r.det_id
-                WHERE r.embedding_red IS NOT NULL{card_clause}
-                ORDER BY r.gid, r.rep_id""", card_params)
+            f"""SELECT e.seq AS rep_id, a.gid, e.entity_id AS det_id, d.camera, d.abs_ms, e.vec AS v
+                FROM embeddings e JOIN detections d ON d.det_id=e.entity_id
+                JOIN assignments a ON a.det_id=e.entity_id
+                WHERE e.entity_kind='tracklet' AND e.is_rep AND e.model_id=%s{card_clause}
+                ORDER BY a.gid, e.seq""", (m, *card_params))
     if not rows:
         return {"mode": mode, "n": 0, "dim": 0, "t": t, "points": []}
     # FIT PCA on the FULL set so coords are stable across scrubs, then keep only rows committed by the cursor.
@@ -474,7 +683,11 @@ def decision_geometry(det_id: str):
     dec = _q("""SELECT dl.seq, dl.chosen_gid, dl.decision_type, dl.threshold, dl.candidate_gids,
                        dl.scores, dl.veto_reasons, dl.admitted
                 FROM decision_log dl WHERE dl.det_id=%s ORDER BY dl.seq DESC LIMIT 1""", (det_id,), one=True)
-    qrow = _vecq("SELECT det_id, embedding_red AS v, camera FROM detections WHERE det_id=%s", (det_id,))
+    m = _active_model(-1)
+    qrow = _vecq("""SELECT e.entity_id AS det_id, e.vec AS v, d.camera
+                    FROM embeddings e JOIN detections d ON d.det_id=e.entity_id
+                    WHERE e.entity_kind='tracklet' AND e.role='match' AND e.model_id=%s AND e.entity_id=%s""",
+                 (m, det_id)) if m >= 0 else []
     if not qrow or qrow[0]["v"] is None:
         return {"det_id": det_id, "tau": (dec or {}).get("threshold"), "decision": dec,
                 "query": None, "candidates": [], "exemplars": [], "note": "no persisted embedding for this det"}
@@ -485,9 +698,10 @@ def decision_geometry(det_id: str):
     # was computed against) — co-projected with the query so distances/threshold are spatially meaningful
     exrows = []
     if cand_gids:
-        exrows = _vecq("""SELECT r.rep_id, r.gid, r.det_id, d.camera, r.embedding_red AS v
-                          FROM identity_reps r JOIN detections d ON d.det_id=r.det_id
-                          WHERE r.gid = ANY(%s) AND r.embedding_red IS NOT NULL""", (cand_gids,))
+        exrows = _vecq("""SELECT e.seq AS rep_id, e.gid, e.entity_id AS det_id, d.camera, e.vec AS v
+                          FROM embeddings e JOIN detections d ON d.det_id=e.entity_id
+                          WHERE e.entity_kind='tracklet' AND e.is_rep AND e.model_id=%s AND e.gid = ANY(%s)""",
+                       (m, cand_gids))
     mats = [qrow[0]["v"]] + [r["v"] for r in exrows]
     xy = _project_2d(np.stack(mats))
     query = {"x": float(xy[0][0]), "y": float(xy[0][1]), "det_id": det_id, "camera": qrow[0]["camera"]}
@@ -502,9 +716,8 @@ def decision_geometry(det_id: str):
 
 
 # no-store: crops/frames are keyed by det_id/frame but the DB behind them is re-ingestable (truncate +
-# re-run), so a 24h browser cache can pin a STALE image next to a correct det_id caption — which read as a
-# "wrong crop" during debugging. The server keeps its own in-process cache, so this only costs a re-request,
-# not a re-decode.
+# re-run), so a browser cache could pin a STALE image next to a correct det_id caption. The server keeps
+# its own in-process cache, so this only costs a re-request, not a re-decode.
 _JPEG_HDR = {"Cache-Control": "no-store"}
 
 

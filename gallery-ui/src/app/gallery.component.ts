@@ -24,6 +24,7 @@ export class GalleryComponent implements OnInit, AfterViewInit {
   dets: any[] = []; identities: any[] = []; decisions: any[] = []; allDecisions: any[] = []; allMerges: any[] = [];
   kpis: any[] = [];
   card = ''; cards: string[] = [];   // per-card toggle ('' = all cards; un-conflates Tc6/Tc8 in space & time)
+  dataset = ''; datasetList: any[] = [];   // which gallery_<key> DB to view (the dataset switch); '' = backend default
   selGid: number | null = null; identityDetail: any = null;
   selSeq: number | null = null; trackletDetail: any = null; stripN = 12;   // how many tracklet crops to show
   // embedding-space panel: the 2D projection of the matcher's match space ("what the index sees")
@@ -41,7 +42,13 @@ export class GalleryComponent implements OnInit, AfterViewInit {
 
   constructor(public api: GalleryService, private zone: NgZone) {}
 
-  ngOnInit() { this.loadMeta(); }
+  ngOnInit() {
+    // pick the DB switch list first, then load. /datasets' `current` is the backend's default dataset.
+    this.api.datasets().subscribe(
+      (r) => { this.datasetList = r.datasets || []; this.dataset = r.current || r.default || ''; this.api.dataset = this.dataset; this.loadMeta(); },
+      () => this.loadMeta(),                            // /datasets unavailable -> just load the default
+    );
+  }
   loadMeta() {
     this.api.meta(this.card).subscribe((m) => {
       this.meta = m; this.cams = m.cameras || []; this.t0 = m.t0; this.t1 = m.t1;
@@ -141,6 +148,15 @@ export class GalleryComponent implements OnInit, AfterViewInit {
     this.frameImgs = {}; this.reqFrameIdx = {};   // canvases change with the card -> reset the double-buffer
     this.loadMeta();
   }
+  // Switch which gallery_<key> DB we view. Resets card/selection (cards + ids differ per dataset) and reloads.
+  selectDataset(d: string) {
+    if (!d || this.dataset === d) return;
+    this.dataset = d; this.api.dataset = d;
+    this.card = ''; this.playing = false;
+    this.selGid = null; this.identityDetail = null; this.selSeq = null; this.trackletDetail = null;
+    this.frameImgs = {}; this.reqFrameIdx = {};   // canvases change with the dataset -> reset the double-buffer
+    this.loadMeta();
+  }
   trackSeq(_i: number, d: any) { return d.isMerge ? 'm' + d.merge_id : 'd' + d.seq; }   // merges + decisions can share a seq
   selectMerge(d: any) { this.selSeq = null; this.trackletDetail = null; this.selectGid(d.new_gid); }   // inspect the survivor
   ngAfterViewInit() { this.viewReady = true; }
@@ -218,7 +234,7 @@ export class GalleryComponent implements OnInit, AfterViewInit {
         this.reqFrameIdx[v] = fidx;
         const img = new Image();
         img.onload = () => { this.frameImgs[v] = img; this.paintCam(cv, cam); };  // swap in only when loaded
-        img.src = `/api/frame/${encodeURIComponent(v)}?frame=${fidx}&w=${cv.width}`;
+        img.src = `/api/frame/${encodeURIComponent(v)}?frame=${fidx}&w=${cv.width}${this.api.dataset ? '&dataset=' + encodeURIComponent(this.api.dataset) : ''}`;
       }
       this.paintCam(cv, cam);   // draw immediately with the last loaded frame (no black flash) + current boxes
     });
@@ -462,6 +478,29 @@ export class GalleryComponent implements OnInit, AfterViewInit {
   addedTracklets() { return (this.identityDetail?.tracklets || []).filter((t: any) => t.admitted); }
   rejectedTracklets() { return (this.identityDetail?.tracklets || []).filter((t: any) => !t.admitted); }
 
+  // The vetoed candidates for the open tracklet, each with the on-demand supporting numbers the backend
+  // computed (n_shared, median IoU, attractor profile / travel dist+dt+speed). One self-explanatory line each.
+  vetoLines(): any[] { return this.trackletDetail?.veto_explain || []; }
+  fmtVeto(v: any): string {
+    const s = (v.score != null) ? (+v.score).toFixed(3) : '?';
+    if (v.kind === 'same_frame') {
+      const med = (v.median_box_iou != null) ? (+v.median_box_iou).toFixed(2) : '?';
+      return `Blocked from id ${v.gid} (cosine ${s}): shares ${v.n_shared}/${v.n_track} of this track's frames`
+        + ` at median box-IoU ${med} → spatially distinct. id ${v.gid} = ${v.gid_n_tracklets} tracklets`
+        + ` across frames ${v.gid_frame_min}–${v.gid_frame_max} / ${v.gid_n_cameras} cam(s)`
+        + ` — likely over-merged.`;
+    }
+    if (v.kind === 'travel') {
+      const dist = (v.dist_m != null) ? (+v.dist_m).toFixed(0) : '?';
+      const dt = (v.dt_s != null) ? (+v.dt_s).toFixed(1) : '?';
+      const sp = (v.speed_ms != null) ? (+v.speed_ms).toFixed(1) : '?';
+      return `Blocked from id ${v.gid} (travel): id ${v.gid} last on ${v.from_camera} @f${v.from_frame};`
+        + ` this track on ${v.to_camera} @f${v.to_frame} — ${dist} m in ${dt} s = ${sp} m/s`
+        + ` > ${v.max_speed} m/s.`;
+    }
+    // simultaneity (or any other physical veto) — fall back to the raw reason + cosine
+    return `Blocked from id ${v.gid} (${v.veto_reason}) at cosine ${s}.`;
+  }
   whyText(dc: any): string {
     if (!dc) return '';
     if (dc.decision_type === 'merged') {

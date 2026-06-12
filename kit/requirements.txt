@@ -12,6 +12,6 @@ fastapi
 uvicorn[standard]
 # reid_hota = the canonical TA1 scorer (IDF1/HOTA). PUBLIC NIST package on PyPI — no internal index needed:
 #   https://github.com/usnistgov/reid_hota
-reid_hota
+reid_hota>=0.3.5   # pin >=0.3.5 — the PROTOCOL §13 / DS1 IDF1 numbers are reid_hota 0.3.5
 # scipy is used (lazily) by the matcher and comes transitively with scikit-learn; listed implicitly there.
 # Optional, not pinned: `umap-learn` — if installed, the embedding-projection viz uses UMAP; else PCA.

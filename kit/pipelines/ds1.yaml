@@ -1,0 +1,43 @@
+# DS1 demo recipe — ONE portable source: every input is a registered MLflow run, joined per tracklet by
+# `tracklet_key`. Nothing local is read or shipped. The gallery streams the registered pipeline:
+#   track (boxes)  ->  greedy-embed (SOLIDER emb_red, 64-d, the MATCH space)
+#                  +   resolve-embed (osnet-xcam, 512-d, the RESOLVE space; stored in the gallery, re-clustered)
+#
+#   export MLFLOW_TRACKING_URI=http://maxwell.novateur.com:9091
+#   ./demo.sh ds1            # or: docker compose run --rm app demo --dataset ds1
+#
+# (Offline dev only: adding a local `bundle: <path.pkl>` switches the source to that pickle.)
+
+pipeline_id: "gallery_ds1"
+dataset:     "vlincs-ds0001"
+split:       "test"
+
+# All three are registered MLflow runs. embed/resolve_embed share `track`'s tracklet_keys (1:1 join).
+inputs:
+  track:                                            # tracker output (boxes) — DS0001 plain-kalman
+    mlflow_run: "9beb745eb7cd42c48d5d650b65fd189e"
+  embed:                                            # GREEDY match space — FT-SOLIDER emb_red, already 64-d
+    mlflow_run: "e7d2e65726be4faf8e6520cf041f1713"
+  resolve_embed:                                    # RESOLVE space — osnet-xcam 512-d (the global-agglom re-cluster)
+    mlflow_run: "7e223a7b1fd64455852cc9506a5b7415"
+
+reduce:
+  method: none          # the greedy embed is already 64-d (FT emb_red) -> push as-is (pca/umap for raw 1024-d)
+
+gallery:
+  cannot_link:     false        # DS1 cameras overlap -> appearance-only (the simultaneity veto would mis-block)
+  match_mode:      centroid
+  tau:             0.60
+  merge_tau:       0.35
+  coherence_floor: 0.40
+  max_reps:        16
+  # RESOLVE — stream greedy match-or-expand (SOLIDER), then ONE global average-linkage re-cluster on the
+  # gallery's STORED osnet-xcam resolve vectors (read back from the DB) — recovers greedy over-split AND
+  # over-merge (vlincs_gallery/resolve.py). Per-tracklet, top_k=15, theta=0.02, min_dets=20 (only tracklets
+  # with >=20 dets are re-partitioned; shorter ones keep a singleton id). Alternatives still in code:
+  # auto (greedy consolidate) / on / off.
+  resolve:         global_agglom
+  resolve_theta:   0.02         # merge AFFINITY (agglom distance_threshold = 1 - theta)
+  resolve_top_k:   15           # kNN-sparse cross-camera neighbours per item
+  resolve_min_dets: 20          # only re-partition tracklets with >= this many dets; shorter -> singleton
+  xcam_gate:       1.2          # (only resolve:auto) mean_cams/gid gate for the greedy-consolidate path

@@ -2,6 +2,9 @@
 /* full-bleed: do NOT inherit Novular .container's 1400px cap — the videos column owns the width */
 .page { width: 100%; max-width: none; }
 .page-header { text-align: center; }
+.hdr-top { display: flex; align-items: center; justify-content: center; gap: 14px; flex-wrap: wrap; }
+.dsswitch { display: inline-flex; align-items: center; gap: 6px; font-size: 11px; text-transform: uppercase; letter-spacing: .5px; opacity: .7; }
+.dsswitch select { font: inherit; text-transform: none; letter-spacing: 0; padding: 3px 6px; border-radius: 6px; border: 1px solid rgba(255,255,255,.25); background: rgba(255,255,255,.06); color: inherit; cursor: pointer; }
 .cfg { display: flex; flex-wrap: wrap; gap: 6px; justify-content: center; align-items: center; margin-top: 8px; }
 .cfg .cfglbl { font-size: 11px; text-transform: uppercase; letter-spacing: .5px; opacity: .5; margin-right: 2px; }
 .cfgchip { font-size: 11px; padding: 2px 8px; border-radius: 10px; background: rgba(127,127,127,.14); opacity: .85; }
@@ -76,6 +79,7 @@ nv-kpi-strip { display: block; }
 h3 { font-size: 15px; margin: 0 0 10px; }
 .mut { opacity: .6; font-size: 13px; }
 .veto { color: #e0794e; font-size: 13px; }
+.vetoexpl { display: block; margin-top: 6px; line-height: 1.5; border-left: 2px solid #e0794e; padding-left: 8px; }
 .vetoicon { color: #e0794e; cursor: help; font-size: 14px; margin-left: auto; padding-left: 6px; }
 .sw { display: inline-block; width: 14px; height: 14px; border-radius: 3px; vertical-align: middle; margin-right: 6px; }
 .tag { font-size: 11px; padding: 1px 7px; border-radius: 8px; border: 1px solid currentColor; }

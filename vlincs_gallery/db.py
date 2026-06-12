@@ -53,3 +53,74 @@ def upsert_model(cur, role: str, name: str, weights: str | None = None, params: 
            RETURNING model_id""",
         (role, name, weights or "", json.dumps(params or {}, sort_keys=True)))
     return int(cur.fetchone()[0])
+
+
+# ── Polymorphic embeddings: registry + per-model DB-side ANN (pgvector) alongside FAISS ──────────────
+# The `embeddings` table stores any-dim vectors from any model (see db/init.sql). DB-side ANN is opt-in
+# per model via a PARTIAL CAST-EXPRESSION HNSW index, which pins the dim only inside the index — so
+# variable-dim storage and a real (Index Scan) pgvector ANN coexist. The dim ceilings are hard pgvector
+# limits: HNSW supports vector ≤2000 dims, halfvec ≤4000; a >4000-d model gets storage + FAISS + viz but
+# no DB-side index. `ann_search` MUST be the only place ANN queries are built — a cast/predicate that
+# doesn't EXACTLY match the index silently falls back to a seq-scan with no error.
+
+def emb_index_type(dim: int) -> str | None:
+    """The pgvector index cast for a given dim: 'vector' (≤2000) | 'halfvec' (≤4000) | None (no DB ANN)."""
+    return "vector" if dim <= 2000 else "halfvec" if dim <= 4000 else None
+
+
+def register_embedder(cur, name: str, dim: int, *, weights: str | None = None, params: dict | None = None):
+    """Upsert an 'embedder' model row carrying its output dim + DB-ANN index type. Returns (model_id, emb_type)."""
+    emb_type = emb_index_type(int(dim))
+    cur.execute(
+        """INSERT INTO models (role, name, weights, params, emb_dim, emb_type)
+           VALUES ('embedder', %s, %s, %s, %s, %s)
+           ON CONFLICT (role, name, weights, params)
+           DO UPDATE SET emb_dim = EXCLUDED.emb_dim, emb_type = EXCLUDED.emb_type
+           RETURNING model_id""",
+        (name, weights or "", json.dumps(params or {}, sort_keys=True), int(dim), emb_type))
+    return int(cur.fetchone()[0]), emb_type
+
+
+def enable_ann(dataset: str, model_id: int, dim: int, emb_type: str | None, role: str = "match") -> bool:
+    """Create this model's partial cast-expression HNSW index so DB-side ANN works for its `role` vectors.
+    Runs in its OWN autocommit connection — CREATE INDEX takes locks and must not sit inside the per-row
+    ingest txn. dim>4000 (emb_type None) -> no DB ANN; returns whether an index was built."""
+    if not emb_type:
+        return False
+    rlit = "'" + str(role).replace("'", "''") + "'"
+    opclass = "vector_cosine_ops" if emb_type == "vector" else "halfvec_cosine_ops"
+    sql = (f"CREATE INDEX IF NOT EXISTS emb_ann_{int(model_id)} ON embeddings "
+           f"USING hnsw ((vec::{emb_type}({int(dim)})) {opclass}) "
+           f"WHERE model_id = {int(model_id)} AND role = {rlit}")
+    with psycopg.connect(dsn(dataset), autocommit=True) as c, c.cursor() as cur:
+        cur.execute(sql)
+    return True
+
+
+def ann_search(con, model_id: int, q, k: int = 10, role: str = "match"):
+    """DB-side ANN over a model's `role` vectors via its partial HNSW index. Reads the model's emb_dim/
+    emb_type so the cast+predicate EXACTLY match the index (a mismatch silently falls back to seq-scan).
+    `con` must have pgvector.register_vector applied. Returns [(entity_id, cosine_distance), ...].
+    FAISS stays the live matcher's hot path; this is the DB path for replay / large-K / ad-hoc queries."""
+    cur = con.cursor()
+    cur.execute("SELECT emb_dim, emb_type FROM models WHERE model_id=%s", (model_id,))
+    row = cur.fetchone()
+    if not row or not row[1]:
+        return []                         # no DB-side ANN for this model (dim>4000 or unregistered)
+    dim, etype = int(row[0]), row[1]
+    cast = f"::{etype}({dim})"
+    cur.execute(
+        f"""SELECT entity_id, (vec{cast} <=> %s{cast}) AS dist
+            FROM embeddings WHERE model_id=%s AND role=%s
+            ORDER BY vec{cast} <=> %s{cast} LIMIT %s""",
+        (q, model_id, role, q, k))
+    return [(r[0], float(r[1])) for r in cur.fetchall()]
+
+
+def active_emb_model(cur, role: str = "match"):
+    """The model_id whose `role` embeddings the viz reads by default — the embedder with the most rows
+    (the single embedder of a run; under multi-model the caller passes an explicit model_id). None if empty."""
+    cur.execute("""SELECT model_id FROM embeddings WHERE role=%s
+                   GROUP BY model_id ORDER BY count(*) DESC, model_id DESC LIMIT 1""", (role,))
+    row = cur.fetchone()
+    return int(row[0]) if row else None
