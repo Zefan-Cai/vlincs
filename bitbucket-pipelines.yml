@@ -1,36 +1,64 @@
-# VLINCS gallery — self-hosted CI on maxwell. Runs on a Linux SHELL runner (runs-on self.hosted), so the
-# script executes directly on maxwell: it uses the host Docker + Compose and can see the datastore mount
-# (/mnt/datastore2_videolincs/data — needed for GT + camera geo). That host access is exactly what a Docker
-# runner's DinD sandbox could NOT provide, which is why this is a shell runner.
+# VLINCS gallery — self-hosted CI on maxwell (Linux SHELL runner; runs-on self.hosted,linux.shell).
+# Runs the gallery demos ON the host (host docker + Compose + the /mnt datastore mount), scores them with
+# the canonical reid_hota, and publishes the per-dataset scores back into the repo (SCORES.md + badges).
+# Background + every gotcha: memory note `gallery-ci-maxwell-runner`. Script lines are unquoted YAML
+# scalars, so keep them free of a colon-space ': '.
 #
-# No top-level `image:` and no `services: docker` — both are container-runner concepts the shell runner
-# ignores. Script lines are unquoted YAML scalars, so keep them free of a colon-space ': '.
-#
-# Iteration config on branch ci/gallery-scores; promoted to `main` once green.
+# Triggers on main (the live scoreboard) and ci/gallery-scores (iteration). The decision config is PINNED
+# (--no-cannot-link) so a score change tracks code, not a yaml-default drift. The publish step commits the
+# scores back with [skip ci]; it needs a secured repo variable BADGE_PUSH_TOKEN (a Repository Access Token
+# with repository:write). Without that variable it still produces the files as artifacts, just no push.
 
 pipelines:
   branches:
-    'ci/gallery-scores':
+    '{main,ci/gallery-scores}':
       - step:
-          name: MS02 gallery demo (offline) + score
+          name: MS02 demo (offline) + score
           runs-on:
             - self.hosted
             - linux.shell
-          script:
-            - set -x
-            # The shell runner points DOCKER_HOST at a DinD service (tcp://localhost:2375) that does not exist
-            # here. Unset it so the docker CLI uses maxwell's host daemon at /var/run/docker.sock (the runner
-            # user is in the docker group). This is what lets the demo see the /mnt datastore mount.
-            - unset DOCKER_HOST
-            - docker version | head -5
-            # the datastore mount must be visible to host-launched containers (it is, on the shell runner)
-            - docker run --rm -v /mnt/datastore2_videolincs/data:/x:ro alpine sh -c "echo PROBE_MOUNT_OK && ls /x | head" || echo "PROBE HOST-BIND-MOUNT FAILED"
-            - cd kit
-            - export DATA_ROOT=/mnt/datastore2_videolincs/data
-            - export COMPOSE_PROJECT_NAME=gallery_ci
-            - docker compose down -v || true
-            - docker compose build app
-            - docker compose run --rm app demo --dataset ms02 2>&1 | tee ../ms02_score.txt
-            - docker compose down -v || true
           artifacts:
             - ms02_score.txt
+          script:
+            - set -x
+            - unset DOCKER_HOST                              # use maxwell's host daemon, not the absent DinD
+            - cd kit
+            - export DATA_ROOT=/mnt/datastore2_videolincs/data
+            - export COMPOSE_PROJECT_NAME=gallery_ci_ms02
+            - export GALLERY_CODE_SHA="$BITBUCKET_COMMIT"    # -> decision_log.code_sha (DB reflects the commit)
+            - docker compose down -v || true
+            - docker compose build app
+            - docker compose run --rm app demo --dataset ms02 --no-cannot-link 2>&1 | tee ../ms02_score.txt
+            - docker compose down -v || true
+      - step:
+          name: DS1 demo (offline LFS) + score
+          runs-on:
+            - self.hosted
+            - linux.shell
+          clone:
+            lfs: true                                        # pull the ~103MB DS1 bundle (git-lfs is on maxwell)
+          artifacts:
+            - ds1_score.txt
+          script:
+            - set -x
+            - unset DOCKER_HOST
+            - cd kit
+            - export DATA_ROOT=/mnt/datastore2_videolincs/data
+            - export COMPOSE_PROJECT_NAME=gallery_ci_ds1
+            - export GALLERY_CODE_SHA="$BITBUCKET_COMMIT"
+            - docker compose down -v || true
+            - docker compose build app
+            - docker compose run --rm app demo --dataset ds1 --no-cannot-link 2>&1 | tee ../ds1_score.txt
+            - docker compose down -v || true
+      - step:
+          name: Publish scores (SCORES.md + badges)
+          runs-on:
+            - self.hosted
+            - linux.shell
+          artifacts:
+            - SCORES.md
+            - badges/**
+          script:
+            - set -x
+            - python3 ci/render_scores.py --sha "$BITBUCKET_COMMIT" ms02_score.txt ds1_score.txt
+            - sh ci/publish_scores.sh

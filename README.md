@@ -1,5 +1,9 @@
 # vlincs_gallery
 
+[![MS02 AssA](badges/ms02_assa.svg)](SCORES.md) [![MS02 IDF1](badges/ms02_idf1.svg)](SCORES.md) [![DS1 IDF1](badges/ds1_idf1.svg)](SCORES.md) [![DS1 AssA](badges/ds1_assa.svg)](SCORES.md)
+
+> Live CI scores from the self-hosted maxwell runner (canonical `reid_hota`) — full per-dataset table in [`SCORES.md`](SCORES.md), refreshed on every commit. MS02 GT is sparse → lead with AssA; DS1 is dense → IDF1.
+
 ![ingest · decide · store · resolve](assets/architecture.svg)
 
 Online, revisable, **retrieval-based** identity assignment ("tracking-by-retrieval" / online MTMC) for

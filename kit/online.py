@@ -21,6 +21,7 @@ supplying timing).
 """
 from __future__ import annotations
 import json
+import os
 import subprocess
 import sys
 from pathlib import Path
@@ -31,8 +32,14 @@ _HERE = Path(__file__).resolve().parent
 
 
 def _code_sha() -> str:
-    """Short git sha of the gallery checkout - run provenance stamped onto every decision_log row. Empty
-    string if this isn't a git checkout (e.g. an installed wheel)."""
+    """Short git sha of the gallery checkout - run provenance stamped onto every decision_log row. Prefers
+    an injected sha ($GALLERY_CODE_SHA / Bitbucket's $BITBUCKET_COMMIT) so a CONTAINERIZED run records the
+    real commit: the kit image copies `kit/` but not `.git`, so `git rev-parse` finds nothing inside the
+    container - without the env the DB would silently log an empty sha. Falls back to `git rev-parse` for a
+    bare checkout, then "" (e.g. an installed wheel)."""
+    env_sha = os.environ.get("GALLERY_CODE_SHA") or os.environ.get("BITBUCKET_COMMIT")
+    if env_sha:
+        return env_sha.strip()[:12]
     try:
         r = subprocess.run(["git", "-C", str(_HERE), "rev-parse", "--short", "HEAD"],
                            capture_output=True, text=True, timeout=5)
