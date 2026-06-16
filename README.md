@@ -5,9 +5,33 @@
 > Best online IDF1 per dataset (canonical `reid_hota`), with the commit that achieved it. Full per-dataset history — score, author, date, commit — in [`SCORES.md`](SCORES.md), refreshed on every commit by the self-hosted maxwell runner.
 
 <!-- CI-SCORES:START -->
-**Best IDF1:** **MS02** 0.722 @ `399db5f` · **DS1** 0.600 @ `399db5f`
+**Best IDF1:** **MS02** 0.722 @ `fe3c56b` · **DS1** 0.600 @ `399db5f`
 
-_Per-video scores populate here on the next CI run — full history in [`SCORES.md`](SCORES.md)._
+**Per-video — latest run @ `fe3c56b`** (global-aligned, worst first — where we fail):
+
+_MS02_
+
+| Video | IDF1 | AssA | DetRe |
+|---|---|---|---|
+| MCAM310 | 0.539 | 0.398 | 0.621 |
+| MCAM318 | 0.852 | 0.955 | 0.787 |
+
+_DS1_
+
+| Video | IDF1 | AssA | DetRe |
+|---|---|---|---|
+| vlincs_MS01_MC0001_MCAM05_2024-03-Tc6 | 0.239 | 0.402 | 0.566 |
+| vlincs_MS01_MC0001_MCAM04_2024-03-Tc6 | 0.511 | 0.438 | 0.414 |
+| vlincs_MS01_MC0001_MCAM06_2024-03-Tc6 | 0.592 | 0.565 | 0.472 |
+| vlincs_MS01_MC0001_MCAM03_2024-03-Tc8 | 0.625 | 0.547 | 0.537 |
+| vlincs_MS01_MC0001_MCAM03_2024-03-Tc6 | 0.653 | 0.572 | 0.555 |
+| vlincs_MS01_MC0001_MCAM06_2024-03-Tc8 | 0.707 | 0.616 | 0.648 |
+| vlincs_MS01_MC0001_MCAM08_2024-03-Tc6 | 0.721 | 0.630 | 0.652 |
+| vlincs_MS01_MC0001_MCAM00_2024-03-Tc8 | 0.737 | 0.723 | 0.642 |
+| vlincs_MS01_MC0001_MCAM00_2024-03-Tc6 | 0.775 | 0.731 | 0.698 |
+| vlincs_MS01_MC0001_MCAM05_2024-03-Tc8 | 0.804 | 0.718 | 0.754 |
+
+Full history → [`SCORES.md`](SCORES.md).
 <!-- CI-SCORES:END -->
 
 ![ingest · decide · store · resolve](assets/architecture.svg)
