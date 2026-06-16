@@ -1,7 +1,7 @@
 """Tracklet-level gallery: cross-camera / cross-time identity association over within-camera tracklets.
 
 The dual of IdentityGallery, one level up: the entry unit is a motion-linked tracklet (already
-internally consistent), so the gallery only has to make CROSS-tracklet decisions — far fewer, each on
+internally consistent), so the gallery only has to make CROSS-tracklet decisions - far fewer, each on
 a pooled (stable) appearance, and the cannot-link is now the correct tracklet-level one: two tracklets
 that temporally OVERLAP in the same camera are different people and may not merge. Cross-camera
 same-instant tracklets may merge (that is cross-camera ReID). Append-only, deterministic.

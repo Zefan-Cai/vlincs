@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-"""Kit CLI — the few commands a colleague runs around their own pipeline.
+"""Kit CLI - the few commands a colleague runs around their own pipeline.
 
   list-videos --dataset ds1   the video stems + camera names to run YOUR pipeline on (+ GT availability)
   demo                        one-click REAL end-to-end run on MS02 (shipped real tracklets+embeddings)
@@ -7,7 +7,7 @@
   submit      --dataset ds1 --out out.zip    export a TA1 submission from the DB (the only file the kit writes)
   selftest    --dataset ms02  wiring check on RANDOM embeddings (proves the pipeline runs; not a real score)
 
-The real work — pushing your tracklets/embeddings — is the Gallery API (see example.py), driven from
+The real work - pushing your tracklets/embeddings - is the Gallery API (see example.py), driven from
 your own environment on your own cadence. This CLI is just the bookends.
 """
 from __future__ import annotations
@@ -21,13 +21,21 @@ from online import OnlineGallery, CARDDIRS, HAS_GT, DATA   # kit-local
 # Reference scores for context, NOT a hard target. The online ref is what this kit's reference config
 # scores online (no prior knowledge); the supervised ceiling (ds1) is the batch funnel trained on DS1 GT.
 ONLINE_REF = {
-    "ms02": "AssA ~0.70 (lead AssA — sparse GT)",
+    "ms02": "AssA ~0.70 (lead AssA - sparse GT)",
     "ds1": "IDF1 ~0.53 online ref (supervised ceiling 0.69)",
     "ds2": "0.49 (leaderboard)",
 }
 
 
 def _videos(dataset: str):
+    """Enumerate a dataset's videos from its card directories.
+
+    Args:
+        dataset: Dataset key (e.g. ``"ds1"``, ``"ms02"``); indexes into ``CARDDIRS``.
+
+    Returns:
+        list[tuple[str, str, str]]: ``(video_stem, camera, mp4_path)`` per ``.mp4``, sorted by path.
+    """
     out = []
     for d in CARDDIRS.get(dataset, []):
         for mp4 in sorted(glob.glob(os.path.join(d, "*.mp4"))):
@@ -38,8 +46,13 @@ def _videos(dataset: str):
 
 
 def cmd_list_videos(a):
+    """List a dataset's video stems, cameras, and GT availability.
+
+    These are the inputs to run your own detector/tracker/embedder on before pushing results
+    through the Gallery API (see ``example.py``).
+    """
     vids = _videos(a.dataset)
-    gt = "yes (local IDF1)" if HAS_GT.get(a.dataset) else "NONE (leaderboard only — no local IDF1)"
+    gt = "yes (local IDF1)" if HAS_GT.get(a.dataset) else "NONE (leaderboard only - no local IDF1)"
     print(f"[{a.dataset}] {len(vids)} videos  |  ground truth: {gt}  |  data root: {DATA}")
     print(f"{'video stem':52} {'camera':8} path")
     for stem, cam, mp4 in vids:
@@ -48,13 +61,16 @@ def cmd_list_videos(a):
 
 
 def cmd_score(a):
+    """Print the canonical reid_hota score for whatever identities are currently in the gallery DB."""
     g = OnlineGallery(a.dataset, truncate=False)
     print(f"[score] {g.score()}   (this kit's online ref: {ONLINE_REF.get(a.dataset, '?')})")
     g.close()
 
 
 def cmd_demo(a):
-    # the REAL one-click demo: MS02 from the shipped bundle, or DS1 from pipelines/ds1.yaml.
+    """Run the one-click end-to-end demo: MS02 from the shipped bundle, or DS1 from pipelines/ds1.yaml."""
+    # CLI flags (resolve_every / cannot_link) default to None so the dataset yaml decides; they
+    # override only when explicitly passed.
     from demo import run_demo
     # resolve_every + cannot_link default to None so run_demo / the dataset yaml decide (DS1's yaml sets
     # cannot_link=false); the CLI flags below override only when explicitly passed.
@@ -62,7 +78,10 @@ def cmd_demo(a):
 
 
 def cmd_selftest(a):
-    # wiring check only — RANDOM embeddings, not a real number (use `demo` for the real MS02 run).
+    """Wiring check on RANDOM embeddings: proves the pipeline runs end-to-end.
+
+    Not a real score - the embeddings are synthetic Gaussian clusters. Use ``demo`` for a real run.
+    """
     import numpy as np
     g = OnlineGallery(a.dataset, truncate=True)
     vids = _videos(a.dataset)[:4] or [("demo_MCAM00", "MCAM00", ""), ("demo_MCAM01", "MCAM01", "")]
@@ -76,17 +95,19 @@ def cmd_selftest(a):
             n += 1
     g.resolve()
     print(f"[selftest] pushed {n} RANDOM tracklets across {len(vids)} videos -> {g.score()}")
-    print("[selftest] (random embeddings — proves the pipeline runs end-to-end, not a real number; use `demo`)")
+    print("[selftest] (random embeddings - proves the pipeline runs end-to-end, not a real number; use `demo`)")
     g.close()
 
 
 def cmd_submit(a):
+    """Export a TA1 submission zip from the current gallery DB to ``a.out``."""
     g = OnlineGallery(a.dataset, truncate=False)
     g.export_submission(a.out)
     g.close()
 
 
 def main():
+    """Parse argv and dispatch to the selected subcommand."""
     ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     sub = ap.add_subparsers(dest="cmd", required=True)
     for name in ("list-videos", "score", "selftest"):

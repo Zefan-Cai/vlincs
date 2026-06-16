@@ -6,7 +6,7 @@ IDF1/HOTA number cited for the PoC must come through this module (or the canonic
 create_submission.py CLI, which is bit-identical). See PROTOCOL.md section 8.
 
 reid_hota note: the source tree at ~/git/reid_hota is 0.3.2; the working-venv wheel is 0.3.5.
-The (HOTAReIDEvaluator, HOTAConfig, get_global_hota_data) API is stable across them — but pin
+The (HOTAReIDEvaluator, HOTAConfig, get_global_hota_data) API is stable across them - but pin
 whichever you import in any provenance log.
 
 MS02 metric trap (empirically confirmed, see _selftest): MS02 GT is sparse hand-curated

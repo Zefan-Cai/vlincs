@@ -118,13 +118,23 @@ CREATE TABLE IF NOT EXISTS assignments (
     det_id        TEXT PRIMARY KEY REFERENCES detections(det_id),
     gid           BIGINT NOT NULL REFERENCES identities(gid),
     score         REAL,
-    decision_type TEXT   NOT NULL CHECK (decision_type IN ('match','expand','revised')),
-    disc_ratio    REAL,
+    decision_type TEXT   NOT NULL CHECK (decision_type IN ('match','expand','quarantine','revised')),
     seq           BIGINT NOT NULL
 );
 CREATE INDEX IF NOT EXISTS asn_gid ON assignments (gid);
 -- seq is filtered per-tracklet by the viz (/identity counts dets per tracklet; /tracklet joins on seq).
 CREATE INDEX IF NOT EXISTS asn_seq ON assignments (seq);
+-- Migration (idempotent, re-applied on every ensure_db): widen the decision_type CHECK to allow
+-- 'quarantine' (match_or_expand emits match/expand/quarantine; decision_log.decision_type is free-text
+-- and already stores the raw value). Self-heals DBs created before 'quarantine' was allowed. 'revised'
+-- is retained for forward-compat (currently unused).
+ALTER TABLE assignments DROP CONSTRAINT IF EXISTS assignments_decision_type_check;
+ALTER TABLE assignments ADD CONSTRAINT assignments_decision_type_check
+    CHECK (decision_type IN ('match','expand','quarantine','revised'));
+-- disc_ratio is a WHOLE-GALLERY scalar (mean kNN centroid separation), so a per-detection column was the
+-- wrong grain - every det of a tracklet shared one gid and so one value. The decision-time snapshot lives
+-- on decision_log.disc_ratio (one row per decision = a real time-series); drop the dead per-det column.
+ALTER TABLE assignments DROP COLUMN IF EXISTS disc_ratio;
 
 -- Append-only event record -> the gallery state is a deterministic fold over this log (replay).
 CREATE TABLE IF NOT EXISTS decision_log (

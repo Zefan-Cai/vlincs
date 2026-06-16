@@ -1,8 +1,8 @@
-"""Within-camera motion (IoU) tracklet linker — the gallery's tracklet entry unit (option a).
+"""Within-camera motion (IoU) tracklet linker - the gallery's tracklet entry unit (option a).
 
 Greedy per-frame IoU association turns the hot per-detection stream into short within-camera tracks
 (a person's consecutive-frame boxes), internally consistent by MOTION. The gallery then associates
-these tracklets cross-camera/cross-time by appearance — restoring the within-camera continuity the
+these tracklets cross-camera/cross-time by appearance - restoring the within-camera continuity the
 pure per-detection appearance matcher lacked (MCAM00: 0.48 vs 0.94 oracle ceiling). Cheap, CPU-only,
 deterministic; reuses the detections we already have (no re-detect, no Kalman for the first cut).
 """

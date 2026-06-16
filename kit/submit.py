@@ -1,4 +1,4 @@
-"""Export a TA1 submission from the live gallery DB — the ONLY file the kit ever writes.
+"""Export a TA1 submission from the live gallery DB - the ONLY file the kit ever writes.
 
 One parquet per video in the canonical takehome schema (the exact columns the leaderboard scorer
 expects), zipped. box_hash is recomputed per row from the bbox (the documented formula), so the zip is
@@ -17,11 +17,25 @@ import pandas as pd
 
 
 def _box_hash(x1: float, y1: float, x2: float, y2: float) -> str:
+    """SHA-256 of the bbox corners rounded to 6 dp - the documented takehome ``box_hash`` formula."""
     return hashlib.sha256(json.dumps((round(x1, 6), round(y1, 6), round(x2, 6), round(y2, 6))).encode()).hexdigest()
 
 
 def export(con, dataset: str, out_zip: str) -> str:
-    """Write <out_zip>: one <video>.parquet per video, canonical TA1 schema, from detections+assignments."""
+    """Write a TA1 submission zip from the live gallery DB.
+
+    Joins ``detections`` to ``assignments`` (unassigned detections get id 0), groups by video, and
+    writes one ``<video>.parquet`` per video in the canonical takehome schema (with a freshly
+    recomputed ``box_hash`` per row), then zips them.
+
+    Args:
+        con: An open psycopg connection to the dataset's gallery DB.
+        dataset: Dataset key, recorded for context; the rows come from ``con``.
+        out_zip: Path to write the ``.zip`` to.
+
+    Returns:
+        str: The ``out_zip`` path written.
+    """
     with con.cursor() as cur:
         cur.execute("""SELECT d.video, d.frame_idx, COALESCE(a.gid, 0) AS id, d.x1, d.y1, d.x2, d.y2,
                               d.object_type, d.conf

@@ -13,7 +13,7 @@ from dataclasses import dataclass
 
 @dataclass(frozen=True)
 class PolicyConfig:
-    embedder: str = "ft"        # "ft" (SOLIDER DS1-FT) | "base" (SOLIDER MSMT17) — we compare both
+    embedder: str = "ft"        # "ft" (SOLIDER DS1-FT) | "base" (SOLIDER MSMT17) - we compare both
     match_tau: float = 0.55     # cosine match threshold; MVP=fixed, final=disc-ratio-keyed
     admit_tau: float = 0.85     # diversity-gated exemplar admission (admit if max-cos to bank < this)
     max_reps: int = 16          # exemplar-bank cap (backstop; bank self-sizes via admit_tau)

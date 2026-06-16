@@ -1,4 +1,4 @@
-"""FastAPI backend over the per-dataset gallery DB — see how/when/why the gallery is what it is at
+"""FastAPI backend over the per-dataset gallery DB - see how/when/why the gallery is what it is at
 time t, with detection crops served on demand.
 
 Run:  GALLERY_DATASET=ds1 uvicorn vlincs_gallery.viz.app:app --port 8077 --reload
@@ -75,8 +75,8 @@ app = FastAPI(title="VLINCS Gallery viz")
 app.add_middleware(CORSMiddleware, allow_origins=["*"], allow_methods=["*"], allow_headers=["*"])
 app.add_middleware(_DatasetMiddleware)
 
-# Crop serving: cv2.VideoCapture is NOT thread-safe, so hold a PER-VIDEO lock (so different videos —
-# a bank's exemplars usually span several cameras — decode in parallel) and cache encoded JPEGs (crops
+# Crop serving: cv2.VideoCapture is NOT thread-safe, so hold a PER-VIDEO lock (so different videos -
+# a bank's exemplars usually span several cameras - decode in parallel) and cache encoded JPEGs (crops
 # are immutable, so re-opening an identity is instant).
 _caps: dict[str, cv2.VideoCapture] = {}
 _caps_lock = threading.Lock()
@@ -96,7 +96,7 @@ def _vlock(video: str) -> threading.Lock:
 
 
 def _read_frame(video: str, frame_idx: int):
-    """Decode one BGR frame from video at frame_idx (per-video locked — cap is not thread-safe).
+    """Decode one BGR frame from video at frame_idx (per-video locked - cap is not thread-safe).
     frame_idx is CLAMPED to [0, frame_count-1]: an out-of-range seek otherwise returns None -> 404 and the
     canvas background never paints. Clamping makes it degrade to the last real frame instead."""
     with _vlock(video):
@@ -172,7 +172,7 @@ def _vecq(sql, args=()):
 
 
 def _project_2d(mat):
-    """Deterministic 2D projection of an (n, d) float matrix. PCA (sklearn, already a dep) — seeded,
+    """Deterministic 2D projection of an (n, d) float matrix. PCA (sklearn, already a dep) - seeded,
     no heavy extra dep. UMAP only if it happens to be installed (better cluster separation when present).
     Returns (n, 2) float array; for n<3 falls back to the raw first two dims (PCA needs >=2 samples)."""
     mat = np.asarray(mat, dtype=np.float64)
@@ -207,7 +207,7 @@ def _video_path(stem: str) -> str:
 
 # Recursive CTE: for each birth gid (decision_log.chosen_gid) compute its CANONICAL gid after applying every
 # merge in effect by a given step (merges.at_seq <= %s). This lets decision-order queries reconstruct the
-# identity a detection had AS OF that step — not its final post-merge gid — so stepping replays the gallery's
+# identity a detection had AS OF that step - not its final post-merge gid - so stepping replays the gallery's
 # true state (no "future" merges leaking in). Splice _CANON_CTE before the SELECT; its single %s is the step,
 # and join `_canon ON _canon.orig = <birth gid>` (decision_log.chosen_gid of the placing decision).
 _CANON_CTE = """
@@ -262,7 +262,7 @@ def meta(card: str = ""):
     card_clause, card_params = _card_filter(card, "video")   # restrict everything to one card when the toggle is set
     card_clause_d, _ = _card_filter(card, "d.video")         # same filter, for the detections-aliased canvas query
     # One canvas per VIDEO (DS1 reuses camera names across Tc6/Tc8). Derive the canvas list from the
-    # DETECTIONS (the videos that actually have data), LEFT JOIN the cameras table for geo — so canvases
+    # DETECTIONS (the videos that actually have data), LEFT JOIN the cameras table for geo - so canvases
     # render even when no camera-geo metadata was loaded (e.g. MS02 ships camera_params.json, not the
     # extrinsics parquet camera_geo() reads, so its cameras table is empty).
     cams = _q(f"""SELECT DISTINCT d.camera, d.video, c.lat, c.lon, c.start_ms
@@ -283,7 +283,7 @@ def meta(card: str = ""):
             ([i / 200 for i in range(201)], *card_params), one=True)
     t_quantiles = [int(x) for x in (qr.get("q") or [])] if qr else []
     # seq quantiles + range so the scrubber can also map over INGEST/DECISION order (one step per tracklet
-    # decision), not just wall-clock — the timeline the online gallery was actually built on.
+    # decision), not just wall-clock - the timeline the online gallery was actually built on.
     sq = _q(f"""SELECT percentile_cont(%s) WITHIN GROUP (ORDER BY dl.seq) AS q
                 FROM decision_log dl JOIN detections d ON d.det_id=dl.det_id WHERE TRUE{card_clause_d}""",
             ([i / 200 for i in range(201)], *card_params), one=True)
@@ -307,7 +307,7 @@ def meta(card: str = ""):
 
 @app.get("/next")
 def next_decision(t: int, dir: int = 1, card: str = ""):
-    """The next (dir>=0) or previous (dir<0) decision relative to time t — for stepping decision-by-decision."""
+    """The next (dir>=0) or previous (dir<0) decision relative to time t - for stepping decision-by-decision."""
     card_clause, card_params = _card_filter(card, "d.video")
     op, order = (">", "ORDER BY d.abs_ms") if dir >= 0 else ("<", "ORDER BY d.abs_ms DESC")
     r = _q(f"""SELECT dl.seq, d.abs_ms, dl.chosen_gid, dl.decision_type FROM decision_log dl
@@ -319,8 +319,8 @@ def next_decision(t: int, dir: int = 1, card: str = ""):
 @app.get("/state")
 def state(t: int = -1, card: str = "", by: str = "wall", step: int = -1):
     """The gallery AS OF a point on the timeline, in one of two senses:
-      by=wall (default): AS OF wall-clock time t — identities with a detection by t (a PLAYBACK view).
-      by=decision: AS OF ingest/decision step — identities decided by step, "seen" = dets committed by step.
+      by=wall (default): AS OF wall-clock time t - identities with a detection by t (a PLAYBACK view).
+      by=decision: AS OF ingest/decision step - identities decided by step, "seen" = dets committed by step.
         This is the timeline the online gallery was actually built on (one step per tracklet decision).
     Returns identities + per-point "seen so far" + decision tallies so far."""
     card_clause, card_params = _card_filter(card, "d.video")
@@ -360,12 +360,12 @@ def state(t: int = -1, card: str = "", by: str = "wall", step: int = -1):
 @app.get("/detections")
 def detections(t: int = -1, window: int = 400, card: str = "", by: str = "wall", step: int = -1):
     """Boxes to draw on the camera canvases. by=wall: dets in the trail window before t (playback).
-    by=decision: the boxes of the tracklet decided at `step` (the current decision) — its full path in its
+    by=decision: the boxes of the tracklet decided at `step` (the current decision) - its full path in its
     camera, so you see WHAT was just matched/expanded rather than a wall-clock frame."""
     card_clause, card_params = _card_filter(card, "d.video")
     if by == "decision":
         # the tracklet decided at `step`, coloured by the identity it had AS OF this step (canonical birth gid
-        # after merges<=step) — NOT its final gid, so the box colour matches the decision being made.
+        # after merges<=step) - NOT its final gid, so the box colour matches the decision being made.
         rows = _q(f"""{_CANON_CTE}
                       SELECT d.det_id, d.camera, d.video, d.frame_idx, d.abs_ms, d.x1,d.y1,d.x2,d.y2, _canon.cur AS gid
                       FROM detections d JOIN assignments a ON a.det_id=d.det_id
@@ -393,12 +393,12 @@ def decisions(frm: int = Query(0, alias="from"), to: int = Query(2**62), limit: 
 @app.get("/merges")
 def merges():
     """All consolidation merge events for the decision-order feed: at_seq (the ingest step the merge takes
-    effect), old_gid merged into new_gid. Decision-order only — a merge has no detection/wall-clock time.
+    effect), old_gid merged into new_gid. Decision-order only - a merge has no detection/wall-clock time.
     Card-agnostic (gids are global); the frontend filters by at_seq<=step alongside the decisions."""
     return _q("SELECT merge_id, at_seq, old_gid, new_gid, score FROM merges ORDER BY merge_id")
 
 
-# Frozen-policy thresholds the cannot-link vetoes use (gallery.IdentityGallery defaults — same_box_iou=0.35,
+# Frozen-policy thresholds the cannot-link vetoes use (gallery.IdentityGallery defaults - same_box_iou=0.35,
 # max_speed=3.0). The viz is read-only; it does NOT recompute the veto, only the supporting numbers that
 # explain one the matcher ALREADY made, so surfacing the deciding thresholds next to them is enough.
 _SAME_BOX_IOU = 0.35
@@ -445,7 +445,7 @@ def _veto_explain(seq: int):
         if kind == "same_frame":
             # n_shared + median box-IoU over (video,frame_idx) this track shares with gid G's occupancy.
             # IoU computed in SQL: intersection / union over x1,y1,x2,y2; ::numeric so round() applies.
-            # One box per (video,frame_idx) per side (DISTINCT ON) so a frame contributes exactly one IoU —
+            # One box per (video,frame_idx) per side (DISTINCT ON) so a frame contributes exactly one IoU -
             # matching the matcher, whose occ[(video,frame)] holds a single box. Median over the shared frames.
             ov = _q("""
                 WITH tk AS (
@@ -517,7 +517,7 @@ def _veto_explain(seq: int):
 
 
 def _haversine_m(a, b):
-    """Great-circle metres between (lat, lon) a and b — same formula as gallery._haversine_m, duplicated
+    """Great-circle metres between (lat, lon) a and b - same formula as gallery._haversine_m, duplicated
     here so the read-only viz has no import dependency on the matcher module."""
     R = 6371000.0
     la1, lo1 = math.radians(a[0]), math.radians(a[1])
@@ -590,11 +590,11 @@ def _active_model(model: int) -> int:
 @app.get("/embedding_projection")
 def embedding_projection(card: str = "", mode: str = "bank", limit: int = 4000, t: int = -1,
                          by: str = "wall", step: int = -1, model: int = -1):
-    """The matcher's match space, projected to 2D — "what the index/matcher actually sees".
+    """The matcher's match space, projected to 2D - "what the index/matcher actually sees".
 
     Reads the polymorphic `embeddings` table for one embedder `model` (default: the run's only embedder),
-    so it works at ANY dim (64/1024/2048/…) — the PCA/UMAP projects whatever D it gets.
-    mode=bank (default): one point per LIVE exemplar (embeddings role='rep') — the bank the matcher scores
+    so it works at ANY dim (64/1024/2048/…) - the PCA/UMAP projects whatever D it gets.
+    mode=bank (default): one point per LIVE exemplar (embeddings role='rep') - the bank the matcher scores
       against. mode=det: one point per DETECTION (role='match') coloured by assigned gid (subsampled to `limit`).
 
     `t` (abs_ms; <0 or absent = full/final state): when t>=0, only rows committed by t are RETURNED. The
@@ -634,7 +634,7 @@ def embedding_projection(card: str = "", mode: str = "bank", limit: int = 4000, 
                 WHERE e.entity_kind='tracklet' AND e.is_rep AND e.model_id=%s{card_clause}
                 ORDER BY e.gid, e.seq""", (step, m, *card_params))
     else:
-        # wall: colour reps by their FINAL (post-merge) gid — the rep's det carries the live assignment
+        # wall: colour reps by their FINAL (post-merge) gid - the rep's det carries the live assignment
         # (assignments.gid is moved to the survivor on merge). Its abs_ms also time-gates the exemplar.
         rows = _vecq(
             f"""SELECT e.seq AS rep_id, a.gid, e.entity_id AS det_id, d.camera, d.abs_ms, e.vec AS v
@@ -658,7 +658,7 @@ def embedding_projection(card: str = "", mode: str = "bank", limit: int = 4000, 
     sub = [rows[i] for i in keep]
     xy = [xy_all[i] for i in keep]
     # per-gid aggregates (exemplar count + camera span + a representative det_id for a crop) so a hovered
-    # point can show identity info without a second round-trip — computed over the RETURNED (t-filtered) set
+    # point can show identity info without a second round-trip - computed over the RETURNED (t-filtered) set
     per_gid = {}
     for r in sub:
         g = per_gid.setdefault(int(r["gid"]), {"n": 0, "cams": set(), "rep_det": r["det_id"]})
@@ -677,7 +677,7 @@ def embedding_projection(card: str = "", mode: str = "bank", limit: int = 4000, 
 def decision_geometry(det_id: str):
     """The why-it-matched-vs-expanded picture for one tracklet decision, as 2D geometry: the query
     detection's embedding + the candidate exemplars it scored against (the candidate gids' live bank
-    exemplars) + tau — all co-projected so the threshold circle / nearest-candidate is visible.
+    exemplars) + tau - all co-projected so the threshold circle / nearest-candidate is visible.
 
     Returns {det_id, tau, decision_type, chosen_gid, query:{x,y}, candidates:[...], exemplars:[...]}."""
     dec = _q("""SELECT dl.seq, dl.chosen_gid, dl.decision_type, dl.threshold, dl.candidate_gids,
@@ -695,7 +695,7 @@ def decision_geometry(det_id: str):
     scores = list((dec or {}).get("scores") or [])
     vetoes = list((dec or {}).get("veto_reasons") or [])
     # the live bank exemplars of every candidate gid the matcher scored (these are the vectors the cosine
-    # was computed against) — co-projected with the query so distances/threshold are spatially meaningful
+    # was computed against) - co-projected with the query so distances/threshold are spatially meaningful
     exrows = []
     if cand_gids:
         exrows = _vecq("""SELECT e.seq AS rep_id, e.gid, e.entity_id AS det_id, d.camera, e.vec AS v
@@ -746,7 +746,7 @@ def crop(det_id: str, max_w: int = 160):
 
 @app.get("/frame/{video}")
 def frame(video: str, frame: int, w: int = 420):
-    """Full source video frame at frame_idx, downscaled — the canvas background. Keyed by VIDEO (not the
+    """Full source video frame at frame_idx, downscaled - the canvas background. Keyed by VIDEO (not the
     camera name) so same-named cameras across test cards (Tc6/Tc8) show their OWN footage, not a collision."""
     key = f"{video}:{int(frame)}:{w}"
     b = _cache_get(_frame_cache, key)

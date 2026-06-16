@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-"""One-click REAL demo of the online gallery — streams a tracker's output through the live gallery + scores.
+"""One-click REAL demo of the online gallery - streams a tracker's output through the live gallery + scores.
 
 Unlike `example.py` (a fill-in-the-blank template you complete with your own pipeline), this runs the WHOLE
 thing end to end on real data, drives the live `OnlineGallery` (DB + the in-process FAISS-equivalent index),
@@ -11,8 +11,8 @@ shows real decisions / identities / crops immediately.
     python demo.py --dataset ds1                            # ...or from your env (kit on PYTHONPATH, DB reachable)
 
 Datasets:
-  ms02 — a shipped tracklet+embedding bundle (demo_data/ms02/), fast, offline. Sparse GT -> LEAD WITH AssA.
-  ds1  — DS0001 (dense GT -> IDF1 trustworthy). The inputs come from pipelines/ds1.yaml, which selects EITHER
+  ms02 - a shipped tracklet+embedding bundle (demo_data/ms02/), fast, offline. Sparse GT -> LEAD WITH AssA.
+  ds1  - DS0001 (dense GT -> IDF1 trustworthy). The inputs come from pipelines/ds1.yaml, which selects EITHER
          a local `bundle:` OR MLflow `inputs:` (fetched, base SOLIDER).
          The yaml also carries the `gallery:` config (e.g. cannot_link) so a run is fully reproducible.
 
@@ -39,6 +39,7 @@ _T0 = [time.time()]
 
 
 def _log(msg: str) -> None:
+    """Print ``msg`` prefixed with elapsed time since run start (so the slow DS1 ingest is observable)."""
     el = time.time() - _T0[0]
     print(f"[demo +{int(el) // 60:02d}:{int(el) % 60:02d}] {msg}", flush=True)
 
@@ -50,11 +51,11 @@ def _resolve_path(p: str) -> Path:
 
 
 # --------------------------------------------------------------------------------------------------------
-# Sources — each returns a LIST of 8-tuples (video, camera, frames, boxes, pooled_emb, confs, object_type,
+# Sources - each returns a LIST of 8-tuples (video, camera, frames, boxes, pooled_emb, confs, object_type,
 # det_ids), so run_demo knows the total up front and can show progress + ETA.
 # --------------------------------------------------------------------------------------------------------
 def _ms02_tracklets(data_dir: str):
-    """The shipped MS02 bundle — one pooled embedding per within-camera track (exactly the shape your own
+    """The shipped MS02 bundle - one pooled embedding per within-camera track (exactly the shape your own
     `your_tracker()` (example.py) would yield)."""
     d = Path(data_dir)
     trk = pd.read_parquet(d / "tracklets.parquet")
@@ -67,8 +68,9 @@ def _ms02_tracklets(data_dir: str):
         camera = g["camera"].iloc[0]
         frames = g["frame"].astype(int).tolist()
         boxes = g[["x1", "y1", "x2", "y2"]].to_numpy().tolist()
+        confs = g["score"].astype(float).tolist()           # real detector conf (joined from the inputs meta)
         det_ids = g["det_id"].tolist()                      # the bundle's globally-unique ids (pass them so
-        out.append((video, camera, frames, boxes, emb_of[int(seq)], None, 0, det_ids))  # same-frame dets don't collide)
+        out.append((video, camera, frames, boxes, emb_of[int(seq)], confs, 0, det_ids))  # same-frame dets don't collide)
     return out
 
 
@@ -81,7 +83,7 @@ def _load_resolve_emb(local_path: str | None, mlflow_run: str | None):
         if p.exists():
             _log(f"DS1: resolve emb from local {p}")
             return np.load(p)
-        _log(f"DS1: resolve emb local {p} missing — falling back to MLflow")
+        _log(f"DS1: resolve emb local {p} missing - falling back to MLflow")
     if mlflow_run:
         import mlflow
         _log(f"DS1: pulling resolve emb from MLflow run {mlflow_run[:12]} "
@@ -98,10 +100,10 @@ def _ds1_from_bundle(pkl: str, resolve_emb_path: str | None = None, resolve_emb_
 
     If `resolve_emb_path` is given, ALSO load a per-tracklet resolve embedding (osnet-xcam 512-d, index-aligned
     to the bundle's pre-sort order: emb[i] == tracklet i) and carry it through the sort so it stays aligned to
-    the streamed order — the global-agglom resolve re-clusters on THESE (not the greedy SOLIDER match space)."""
+    the streamed order - the global-agglom resolve re-clusters on THESE (not the greedy SOLIDER match space)."""
     import pickle
     p = _resolve_path(pkl)
-    _log(f"DS1: loading baseline bundle {p}  (plain-kalman tracklets + FT emb_red — the 0.531 reference)")
+    _log(f"DS1: loading baseline bundle {p}  (plain-kalman tracklets + FT emb_red - the 0.531 reference)")
     with open(p, "rb") as f:
         tks = pickle.load(f)
     osn = _load_resolve_emb(resolve_emb_path, resolve_emb_mlflow)
@@ -140,7 +142,7 @@ def _ds1_input_dir(sub: str, run: str, mlflow_path: str):
     except ImportError as e:
         raise SystemExit(
             f"[demo] DS1 inputs: the local LFS bundle (kit/demo_data/ds1/) isn't pulled and MLflow isn't "
-            f"available — either `git lfs pull`, or install the DS1 extras (`pip install -r requirements-ds1.txt`) "
+            f"available - either `git lfs pull`, or install the DS1 extras (`pip install -r requirements-ds1.txt`) "
             f"+ set MLFLOW_TRACKING_URI. ({e})")
     return Path(mlflow.artifacts.download_artifacts(run_id=run, artifact_path=mlflow_path)), "MLflow"
 
@@ -163,7 +165,7 @@ def _ds1_from_mlflow(spec: dict):
         rroot, s_res = _ds1_input_dir("resolve/embeddings", resolve_run, "embeddings")
         for vd in sorted(p for p in rroot.iterdir() if p.is_dir()):
             rz = np.load(vd / "embeddings.npz", allow_pickle=True)
-            rvecs, rtids = rz["vectors"], rz["track_ids"]   # read each array ONCE — z[...] re-decodes the WHOLE
+            rvecs, rtids = rz["vectors"], rz["track_ids"]   # read each array ONCE - z[...] re-decodes the WHOLE
             for i, t in enumerate(rtids):                    # array per access; indexing it in-loop is quadratic
                 resolve_vec_of[str(t)] = rvecs[i]
         _log(f"DS1: resolve-embed from {s_res} ({len(resolve_vec_of)} tracklets, osnet-xcam 512-d)")
@@ -192,13 +194,13 @@ def _ds1_from_mlflow(spec: dict):
             otype = 0 if cls == 0 else 3                    # coco 0=person -> 0; else -> vehicle(3)
             det_ids = [f"{stem}::{camera}:{int(fr)}:{ltid}:{cls}" for fr in frames]
             rows.append((stem, camera, frames, boxes, confs, otype, det_ids, v, resolve_vec_of.get(str(tkey))))
-        _log(f"DS1: read {vi}/{len(vdirs)} videos ({stem.split('_')[3]}: {len(df)} dets) — {len(rows)} tracklets so far")
+        _log(f"DS1: read {vi}/{len(vdirs)} videos ({stem.split('_')[3]}: {len(df)} dets) - {len(rows)} tracklets so far")
     if not rows:
-        raise SystemExit("[demo] DS1: no tracklets joined — check the track/embed run ids in the YAML.")
+        raise SystemExit("[demo] DS1: no tracklets joined - check the track/embed run ids in the YAML.")
     embs = np.stack([r[7] for r in rows]).astype(np.float32)
     method = (rc.get("method") or "none").lower()
     if method == "none":                                    # embed is already at the match dim (FT emb_red)
-        _log(f"DS1: reduce=none — embeddings already {embs.shape[1]}-d; pushing as-is")
+        _log(f"DS1: reduce=none - embeddings already {embs.shape[1]}-d; pushing as-is")
         reduced = embs
     else:
         from vlincs_sdk.harness.matching.clustering import reduce_embeddings   # only when actually reducing
@@ -213,7 +215,7 @@ def _ds1_from_mlflow(spec: dict):
         if any(r[8] is None for r in rows):
             n_missing = sum(r[8] is None for r in rows)
             raise SystemExit(f"[demo] resolve embed {resolve_run[:12]} is missing {n_missing}/{len(rows)} "
-                             f"tracklet_keys — the resolve embed run must cover every joined tracklet")
+                             f"tracklet_keys - the resolve embed run must cover every joined tracklet")
         resolve_arr = np.stack([r[8] for r in rows]).astype(np.float32)
         _log(f"DS1: resolve embeddings aligned to stream order -> {resolve_arr.shape}")
     tracklets = [(r[0], r[1], r[2], r[3], red, r[4], r[5], r[6]) for r, red in zip(rows, reduced)]
@@ -242,11 +244,22 @@ _GALLERY_KEYS = ("tau", "merge_tau", "match_mode", "max_reps", "coherence_floor"
 
 def run_demo(dataset: str = "ms02", resolve_every: int | None = None, submit: str | None = None,
              data_dir: str = DEMO_DATA, cannot_link: bool | None = None) -> dict:
-    """Stream a tracker's output through the live OnlineGallery, resolve, score. Returns g.score().
+    """Stream a tracker's output through the live OnlineGallery end to end, resolve, and score.
 
-    cannot_link enforces the physical vetoes (same_frame intra-camera, simultaneity/travel cross-camera).
-    Precedence: explicit arg/CLI > the dataset yaml's `gallery.cannot_link` > default True. DS1 runs
-    cannot_link=False (appearance-only — its cameras have overlapping FOVs)."""
+    Args:
+        dataset: ``"ms02"`` (shipped bundle, fast, offline) or ``"ds1"`` (from pipelines/ds1.yaml -
+            local LFS bundle or MLflow).
+        resolve_every: Periodic-resolve cadence (tracklets between consolidations). Default ds1=500,
+            ms02=100.
+        submit: If set, also export a TA1 submission zip to this path when done.
+        data_dir: MS02 bundle directory (ignored for ds1).
+        cannot_link: Force the physical vetoes (same-frame intra-camera, simultaneity/travel
+            cross-camera) on/off. Precedence: this arg > the dataset yaml's ``gallery.cannot_link`` >
+            default True. DS1 runs False (appearance-only - its cameras have overlapping FOVs).
+
+    Returns:
+        dict: ``g.score()`` - the IDF1/AssA result dict (see ``OnlineGallery.score``).
+    """
     _T0[0] = time.time()
     gcfg: dict = {}
     resolve_emb = None
@@ -264,9 +277,7 @@ def run_demo(dataset: str = "ms02", resolve_every: int | None = None, submit: st
     cl = cannot_link if cannot_link is not None else bool(gcfg.get("cannot_link", True))
     re_every = resolve_every if resolve_every is not None else (500 if dataset == "ds1" else 100)
     # resolve GATE: 'on' (always) | 'off' (never) | 'auto' (only when the gallery has cross-camera structure
-    # to merge, i.e. mean_cams/gid >= xcam_gate). Global resolve() HELPS cross-camera fragmentation but HURTS a
-    # within-camera set — MS02 sits at mean_cams/gid=1.0, so a merge can only collapse two distinct people. DS1
-    # pins resolve:on in its yaml (its early resolves run below xcam_gate); MS02 (no yaml) defaults to 'auto'.
+    # to merge, i.e. mean_cams/gid >= xcam_gate)
     _rv = gcfg.get("resolve", "auto")            # YAML parses `on`/`off` as booleans -> normalize them
     resolve_mode = {True: "on", False: "off"}.get(_rv, str(_rv).lower())
     xcam_gate = float(gcfg.get("xcam_gate", 1.2))
@@ -301,7 +312,7 @@ def run_demo(dataset: str = "ms02", resolve_every: int | None = None, submit: st
         theta = float(gcfg.get("resolve_theta", 0.02))
         top_k = int(gcfg.get("resolve_top_k", 15)); min_dets = int(gcfg.get("resolve_min_dets", 20))
         _log(f"global-agglom resolve (PROTOCOL §13.3): re-cluster the gallery's STORED role='resolve' vecs from the "
-             f"DB (theta={theta}, top_k={top_k}, min_dets={min_dets}) — recovers greedy over-split AND over-merge...")
+             f"DB (theta={theta}, top_k={top_k}, min_dets={min_dets}) - recovers greedy over-split AND over-merge...")
         info = g.resolve_global(theta, top_k=top_k, min_dets=min_dets)
         _log(f"global-agglom: {info['n_clustered']}/{info['n_tracklets']} tracklets re-partitioned into "
              f"{info['clusters']} identities (+{info['n_singleton']} short-tracklet singletons); scoring (reid_hota)...")
@@ -327,6 +338,7 @@ def run_demo(dataset: str = "ms02", resolve_every: int | None = None, submit: st
 
 
 def main():
+    """Parse argv and run the one-click demo for the chosen dataset."""
     ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     ap.add_argument("--dataset", default="ms02", choices=["ms02", "ds1"],
                     help="ms02 = shipped bundle (fast, offline); ds1 = pipelines/ds1.yaml (bundle or MLflow)")

@@ -22,7 +22,16 @@ case "$selected" in
   "ds1"|"ds0001")
     selected="ds1"
     selected_desc="DS0001 (36 IDs w/GT)"
-    DS1_flag=1
+    # The DS1 (MLflow) extras only PULL inputs from MLflow. If the offline Git LFS bundle is pulled
+    # (demo_data/ds1/ holds real files, not LFS pointers), the base kit + pyyaml runs DS1 with no
+    # MLflow / SDK / devpi. Otherwise build the MLflow extras to fetch the inputs.
+    if find demo_data/ds1 -name '*.parquet' -size +100k 2>/dev/null | grep -q .; then
+      DS1_flag=0
+      echo "[demo.sh] DS1 offline bundle present -> base-kit build (no MLflow/SDK/devpi)"
+    else
+      DS1_flag=1
+      echo "[demo.sh] DS1 offline bundle not pulled -> MLflow build ('git lfs pull' for offline)"
+    fi
     ;;
   *)
     selected=$default

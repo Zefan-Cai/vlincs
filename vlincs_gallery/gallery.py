@@ -1,4 +1,4 @@
-"""IdentityGallery — the canonical online match-or-expand matcher (in-memory core).
+"""IdentityGallery - the canonical online match-or-expand matcher (in-memory core).
 
 This is the single source of truth for the gallery's match/expand/consolidate logic. The matcher
 core is tracklet-level: ``match_mode`` ∈ {max, centroid, retrieval}, ``coherence_floor``, a
@@ -7,7 +7,7 @@ tracklet-level ``match_or_expand(video, cam, frames, boxes, t0, t1, pooled, ...)
 (``split_low_coherence`` / ``revise`` / ``camera_span_stats``) is expressed against this core's
 ``rep_mat`` / ``rep_gid`` state.
 
-DB / pgvector backing is NOT baked in here — this class is pure, in-memory, and depends only on numpy
+DB / pgvector backing is NOT baked in here - this class is pure, in-memory, and depends only on numpy
 (+ FAISS only when ``match_mode="retrieval"``). The durable pgvector system-of-record the kit needs
 sits ON TOP of this matcher (``kit/online.py`` persists boxes/ids/decisions to Postgres while driving
 this same matcher), so the matcher stays embedder-agnostic and easy to unit-test.
@@ -73,10 +73,11 @@ def _iou_pairwise(A, B):
 
 def _fast_consolidate(g, merge_tau, return_events=True):
     """Fast equivalent of IdentityGallery._consolidate_ref. Returns the same `remap` and `events`
-    for every input."""
+    for every input. Merge -only consolidation of live entities. """
     rep_mat = g.rep_mat
     rep_gid = g.rep_gid
     groups = {}
+    # Get the exemplars for each group
     for gid in sorted(set(rep_gid.tolist())):
         groups[gid] = dict(
             gids={gid},
@@ -89,36 +90,66 @@ def _fast_consolidate(g, merge_tau, return_events=True):
     same_box_iou = g.same_box_iou; geo_max_m = g.geo_max_m; merge_free_xcam = g.merge_free_xcam
     sw = g.sw; overlaps = g.overlaps; dist = g.dist; max_speed = g.max_speed
 
-    def cannot_merge(a, b):
-        oa, ob = groups[a]["occ"], groups[b]["occ"]
-        shared = oa.keys() & ob.keys()
-        if shared:
-            keys = list(shared)        # vectorized same-frame occ IoU (one numpy op, not S separate iou1 calls)
-            A = np.array([oa[k] for k in keys], float)
-            B = np.array([ob[k] for k in keys], float)
-            if float(np.median(_iou_pairwise(A, B))) < same_box_iou:
+    def cannot_merge(gid_a, gid_b):
+        """Decide whether two gallery groups are provably different identities.
+
+        Vetoes a merge - regardless of appearance similarity - when any of three hard structural
+        constraints is violated. The checks run in order and short-circuit:
+
+        1. Co-visibility: at any ``(video, frame)`` where both groups have a box, boxes that barely
+           overlap (median same-frame IoU < ``same_box_iou``) are two distinct people, not one
+           person's duplicate track.
+        2. Geo (only when ``geo_max_m`` > 0): at any shared second, flat-ground world positions more
+           than ``geo_max_m`` metres apart put one body in two places at once.
+        3. Cross-camera travel feasibility (skipped when ``merge_free_xcam``): for every pair of
+           per-camera presence intervals in different cameras, a transition is impossible if the
+           intervals are near-simultaneous (gap <= ``sw`` ms) without the cameras sharing a field of
+           view, or if covering the inter-camera distance in that time would exceed ``max_speed`` m/s.
+
+        Args:
+            gid_a: Root gid of the first group (keys into the enclosing ``groups`` dict).
+            gid_b: Root gid of the second group.
+
+        Returns:
+            ``True`` if the two groups must never be merged (a hard veto fired); ``False`` if the
+            merge is structurally allowed, leaving appearance vs ``merge_tau`` to decide. Mirrors
+            ``IdentityGallery._consolidate_ref`` exactly.
+        """
+        # 1. co-visibility: spatially distinct boxes in a shared frame => two people
+        occ_a, occ_b = groups[gid_a]["occ"], groups[gid_b]["occ"]
+        shared_frames = list(occ_a.keys() & occ_b.keys())
+        if shared_frames:
+            # one vectorized same-frame IoU over all shared frames (not len() separate iou1 calls)
+            boxes_a = np.array([occ_a[fr] for fr in shared_frames], float)
+            boxes_b = np.array([occ_b[fr] for fr in shared_frames], float)
+            if float(np.median(_iou_pairwise(boxes_a, boxes_b))) < same_box_iou:
                 return True
+
+        # 2. geo: same second, far apart on the ground => one identity can't be in both places
         if geo_max_m > 0:
-            wa, wb = groups[a]["world"], groups[b]["world"]
-            sh = set(wa) & set(wb)
-            if sh:
-                ds = [geo.meters(wa[s][0], wa[s][1], wb[s][0], wb[s][1]) for s in sh]
-                if float(np.median(ds)) > geo_max_m:
+            world_a, world_b = groups[gid_a]["world"], groups[gid_b]["world"]
+            shared_secs = set(world_a) & set(world_b)
+            if shared_secs:
+                sep_m = [geo.meters(world_a[sec][0], world_a[sec][1], world_b[sec][0], world_b[sec][1])
+                         for sec in shared_secs]
+                if float(np.median(sep_m)) > geo_max_m:
                     return True
+
+        # 3. cross-camera travel feasibility
         if merge_free_xcam:
             return False
-        for ca, (la, ha) in groups[a]["crange"].items():
-            for cb, (lb, hb) in groups[b]["crange"].items():
-                if ca == cb:
+        for cam_a, (lo_a, hi_a) in groups[gid_a]["crange"].items():
+            for cam_b, (lo_b, hi_b) in groups[gid_b]["crange"].items():
+                if cam_a == cam_b:
                     continue
-                gap = max(0, lb - ha, la - hb)
-                if gap <= sw:
-                    if frozenset((ca, cb)) not in overlaps:
+                gap_ms = max(0, lo_b - hi_a, lo_a - hi_b)           # 0 if the two intervals overlap in time
+                if gap_ms <= sw:                                    # near-simultaneous (within the slop window)
+                    if frozenset((cam_a, cam_b)) not in overlaps:  # ...but the cameras don't share a FOV
                         return True
                 else:
-                    d = dist.get(frozenset((ca, cb)))
-                    if d is not None and d / (gap / 1000.0) > max_speed:
-                        return True
+                    cam_dist_m = dist.get(frozenset((cam_a, cam_b)))
+                    if cam_dist_m is not None and cam_dist_m / (gap_ms / 1000.0) > max_speed:
+                        return True                                # would have to move faster than max_speed
         return False
 
     events = []
@@ -142,6 +173,7 @@ def _fast_consolidate(g, merge_tau, return_events=True):
         cos_flat = cosM[iu]; veto_flat = vetoM[iu]
         valid = (~veto_flat) & (cos_flat >= merge_tau)
         if not valid.any():
+            # No valid merge candidates
             break
         cmax = cos_flat[valid].max()
         eq = valid & (cos_flat == cmax)                   # exact-float equality to the max
@@ -205,7 +237,7 @@ def kalman_app_tracklets(vr, *, window, iou_gate, high_conf, max_age, app_weight
     (high/low conf) association, with OUR max-length cap (split a track into <=window-frame
     tracklets, keeping Kalman/appearance state across the cut). Input vr = [(did, frame, abs_ms,
     box4, red64, conf), ...] for ONE video, frame-sorted. Returns [dict(dids, reds, frames, boxes,
-    t0, t1)] capped tracklets that feed the cross-camera gallery."""
+    confs, t0, t1)] capped tracklets that feed the cross-camera gallery (confs = per-det detector conf)."""
     try:
         from scipy.optimize import linear_sum_assignment
     except Exception:                              # pragma: no cover
@@ -219,17 +251,20 @@ def kalman_app_tracklets(vr, *, window, iou_gate, high_conf, max_age, app_weight
 
     def emit(t):
         if t["dids"]:
-            out.append(dict(dids=t["dids"], reds=t["reds"], frames=t["frames"], boxes=t["boxes"], t0=t["t0"], t1=t["t1"]))
+            out.append(dict(dids=t["dids"], reds=t["reds"], frames=t["frames"], boxes=t["boxes"],
+                            confs=t["confs"], t0=t["t0"], t1=t["t1"]))
 
     def fresh(t):
-        t["dids"], t["reds"], t["frames"], t["boxes"], t["t0"], t["t1"], t["sf"] = [], [], [], [], None, None, None
+        t["dids"], t["reds"], t["frames"], t["boxes"], t["confs"], t["t0"], t["t1"], t["sf"] = \
+            [], [], [], [], [], None, None, None
 
     def extend(t, d):
         t["kbox"].update(d[3])
         t["app"] = ema * t["app"] + (1 - ema) * d[4]; t["app"] /= (np.linalg.norm(t["app"]) + 1e-9)
         if not t["dids"]:
             t["t0"], t["sf"] = d[2], d[1]
-        t["dids"].append(d[0]); t["reds"].append(d[4]); t["frames"].append(d[1]); t["boxes"].append(d[3]); t["t1"] = d[2]; t["age"] = 0
+        t["dids"].append(d[0]); t["reds"].append(d[4]); t["frames"].append(d[1]); t["boxes"].append(d[3])
+        t["confs"].append(d[5]); t["t1"] = d[2]; t["age"] = 0
 
     for f in sorted(frames):
         dets = frames[f]
@@ -266,7 +301,8 @@ def kalman_app_tracklets(vr, *, window, iou_gate, high_conf, max_age, app_weight
         for j, d in enumerate(hi):             # birth on unmatched high-conf
             if j not in md:
                 t = dict(kbox=KalmanBox(d[3]), app=d[4] / (np.linalg.norm(d[4]) + 1e-9), age=0,
-                         dids=[d[0]], reds=[d[4]], frames=[d[1]], boxes=[d[3]], t0=d[2], t1=d[2], sf=d[1])
+                         dids=[d[0]], reds=[d[4]], frames=[d[1]], boxes=[d[3]], confs=[d[5]],
+                         t0=d[2], t1=d[2], sf=d[1])
                 tracks.append(t)
         keep = []                              # death
         for t in tracks:
@@ -367,7 +403,7 @@ class IdentityGallery:
     # --------------------------------------------------------------------------------------------
     def _bank_sig(self) -> tuple:
         """Cheap signature of the exemplar bank, used to detect out-of-band mutation of the centroid cache.
-        Catches the realistic mistakes — reassigning rep_mat/rep_gid (object id changes), growing/shrinking
+        Catches the realistic mistakes - reassigning rep_mat/rep_gid (object id changes), growing/shrinking
         the bank (length changes), or relabeling gids in place (rep_gid sum changes). It does NOT detect an
         in-place edit of an existing exemplar's VECTOR (same id/len/gids); call `invalidate_centroid_cache()`
         after any such edit."""
@@ -376,14 +412,14 @@ class IdentityGallery:
 
     def invalidate_centroid_cache(self) -> None:
         """Drop the centroid cache. Call this if you mutate rep_mat/rep_gid directly (outside
-        match_or_expand / apply_remap) — otherwise centroid-mode matching may use stale centroids."""
+        match_or_expand / apply_remap) - otherwise centroid-mode matching may use stale centroids."""
         self._cent = None
 
     def _candidates(self, v):
         if self.rep_mat.shape[0] == 0:
             return []
         if self.match_mode == "centroid":
-            # score by id centroid — a spread/garbage bank has a blurred centroid that attracts less.
+            # score by id centroid - a spread/garbage bank has a blurred centroid that attracts less.
             # Centroids are cached (see self._cent): rebuilt from rep_mat only when invalid, then one dot per
             # gid.
             sig = self._bank_sig()
@@ -406,7 +442,7 @@ class IdentityGallery:
             best = {g: float(self._cent[g] @ v) for g in sorted(self._cent)}
             return sorted(best.items(), key=lambda kv: -kv[1])
         if self.match_mode == "retrieval":
-            # RETRIEVAL-STYLE: FAISS k-NN over ALL gallery exemplars, then VOTE — a gid's score is the
+            # RETRIEVAL-STYLE: FAISS k-NN over ALL gallery exemplars, then VOTE - a gid's score is the
             # mean cosine of its neighbors within the query's top-k (so an id with several close exemplars
             # beats one with a single lucky exemplar). The IndexFlatIP is rebuilt lazily when the bank grew.
             import faiss
@@ -462,7 +498,7 @@ class IdentityGallery:
         For a per-detection call, pass a one-element tracklet:
         ``match_or_expand(video, camera, [frame], [box], t, t, vec)``.
         """
-        # "do nothing" guard: a low-self-coherence (mixed-person / messy) tracklet is QUARANTINED — it
+        # "do nothing" guard: a low-self-coherence (mixed-person / messy) tracklet is QUARANTINED - it
         # gets its own id but is NEVER admitted to the matchable bank, so it can neither seed nor
         # pollute an identity. force_expand (warmup batch-seed) skips matching but DOES admit.
         quarantine = self_coh < self.tracklet_coh_min
@@ -476,7 +512,7 @@ class IdentityGallery:
                 cands.append((g, round(float(s), 4), cl))
                 if cl:
                     pruned.append(g); continue
-                # consistency gate: close to ONE exemplar (max>=tau) is not enough — require closeness
+                # consistency gate: close to ONE exemplar (max>=tau) is not enough - require closeness
                 # to the WHOLE bank, else it's likely a different person resembling one exemplar.
                 if self.match_min_floor > 0:
                     same = self.rep_mat[self.rep_gid == g]
@@ -506,7 +542,7 @@ class IdentityGallery:
                 w.setdefault(s, []).append(ll)
         # exemplar admission keeps banks COHERENT (the anti-accretion gate). Reject if the new exemplar
         # is (a) a near-duplicate of an existing one (diversity gate, admit_tau) or (b) too FAR from the
-        # bank (coherence_floor) — (b) is what stops an id from accreting other people into a spread,
+        # bank (coherence_floor) - (b) is what stops an id from accreting other people into a spread,
         # "matches-everything" attractor. Quarantined tracklets never admit.
         admit = not quarantine
         # diagnostics: capture WHICH gate decided + the deciding cosine numbers.
@@ -558,7 +594,7 @@ class IdentityGallery:
     def assign_det(self, video, cam, frame, box, red, t, floor):
         """Per-DETECTION assignment against the (already-ripe) gallery: return (gid, True) for the nearest
         non-cannot-link identity whose cosine clears `floor`, else (-1, False). Does NOT admit or extend
-        the gallery — used to decompose a low-coherence tracklet into detections that each find their own
+        the gallery - used to decompose a low-coherence tracklet into detections that each find their own
         home (recovers within-tracklet ID-switches that pooling blends away). floor<=0 => nearest-always
         (no junk, no fragmentation). Banks stay frozen (clean pass-1)."""
         for g, s in self._candidates(red):
@@ -577,7 +613,7 @@ class IdentityGallery:
         """Deferred revision (merge side): agglomeratively merge over-split gids by exemplar-centroid
         cosine in the reduced space, but NEVER merge a pair that violates cannot-link (same
         (video,frame), cross-camera simultaneity in non-overlapping FOVs, an impossible travel-time,
-        or — if ``geo_max_m`` — a flat-ground world-track disagreement).
+        or - if ``geo_max_m`` - a flat-ground world-track disagreement).
 
         Returns ``(remap, events)`` where ``remap`` is ``{old_gid -> surviving_gid}`` and ``events`` is
         the per-merge ``(survivor, absorbed, centroid_cosine)`` trail. Pass ``return_events=False`` to
@@ -603,7 +639,7 @@ class IdentityGallery:
                 if float(np.median(ov)) < self.same_box_iou:        # spatially distinct => two people
                     return True
             # GEO GATE: two ids can't be one person if their flat-ground world tracks disagree at
-            # shared seconds (independent of appearance — prunes the far-apart look-alikes cosine can't).
+            # shared seconds (independent of appearance - prunes the far-apart look-alikes cosine can't).
             if self.geo_max_m > 0:
                 wa, wb = groups[a]["world"], groups[b]["world"]
                 sh = set(wa) & set(wb)
@@ -632,7 +668,7 @@ class IdentityGallery:
             return False
 
         changed = True
-        events = []   # (survivor_gid, absorbed_gid, centroid_cosine) — for the merge decision trail
+        events = []   # (survivor_gid, absorbed_gid, centroid_cosine) - for the merge decision trail
         while changed and len(groups) > 1:
             changed = False
             roots = list(groups); cents = {r: cent(groups[r]) for r in roots}
@@ -793,13 +829,13 @@ class IdentityGallery:
         (``avg``/``min``/``p25`` of upper-triangle pairwise cosine). If
         ``coherence < coherence_threshold`` the gid is over-merged: cut its exemplar bank in two via
         the SDK's ``_spectral_2way`` and reassign every owned DETECTION to the nearest resulting
-        sub-centroid (MAX-cosine — the matcher's own rule). Iterates up to ``max_passes`` so a gid
+        sub-centroid (MAX-cosine - the matcher's own rule). Iterates up to ``max_passes`` so a gid
         welded from >2 prototypes peels apart one cut per pass.
 
         **TODO(unify):** lift a ``split_assignment_low_coherence(assign, embeddings, ...)`` primitive
         into ``vlincs_sdk.clustering`` so both this gallery and the batch pipeline share it.
 
-        Returns ``{det_id -> new_gid}`` — detections of unsplit gids keep their gid; detections of
+        Returns ``{det_id -> new_gid}`` - detections of unsplit gids keep their gid; detections of
         split gids are routed to a fresh sub-gid by nearest sub-centroid.
         """
         from vlincs_sdk.clustering import (  # SDK helpers (lazy)

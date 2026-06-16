@@ -7,7 +7,7 @@ the GPU via NVIDIA NVDEC and returns frames row-aligned to requested frame indic
 
 Primary backend: PyNvVideoCodec.SimpleDecoder (NVIDIA official, NVDEC -> CUDA frames -> RGB).
 Designed for the embed_t02_boxes.py access pattern: "give me frames at this set of indices, in
-order, decoded once." Returns HxWx3 uint8 RGB numpy arrays (RGB, NOT BGR — callers that cropped
+order, decoded once." Returns HxWx3 uint8 RGB numpy arrays (RGB, NOT BGR - callers that cropped
 from cv2 BGR should account for this; embed_t02 fed PIL RGB anyway via frame[...,::-1]).
 
 Guarded against the known NVDEC-segfault history: a one-call self-test (`gpu_decode_available`)
@@ -94,7 +94,7 @@ def gpu_decode_available(probe_video: str, gpu_id: int = 0) -> tuple[bool, str]:
     """Self-test the NVDEC path on a real video; guards the NVDEC-segfault history.
 
     Decodes the first few frames + a mid frame and verifies non-degenerate (nonzero, correct ndim)
-    output. Returns (ok, detail). Never raises — any failure (ImportError, CUDA error, bad frame)
+    output. Returns (ok, detail). Never raises - any failure (ImportError, CUDA error, bad frame)
     returns (False, reason) so the caller can fall back to CPU.
     """
     try:

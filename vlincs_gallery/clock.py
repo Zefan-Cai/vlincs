@@ -1,6 +1,6 @@
 """Common absolute clock for multi-camera / multi-card reasoning.
 
-`build_inputs` stores `wall_clock_ms = frame_idx/fps*1000` — RELATIVE to each video's own frame 0,
+`build_inputs` stores `wall_clock_ms = frame_idx/fps*1000` - RELATIVE to each video's own frame 0,
 so every video starts at t=0 and cross-camera time is meaningless. Each shipped per-video
 `*_camera_extrinsics_*.parquet` carries the absolute start time (its single `time` row = absolute
 time of frame 0) plus the static camera geo-pose (lat/lon/alt/roll/pitch/yaw).
@@ -24,7 +24,7 @@ _M_PER_DEG = 111320.0                                       # local flat-earth l
 
 
 def _ms_since_midnight(t) -> float:
-    """Absolute ms-since-midnight from an extrinsics `time` value — a "HH:MM:SS.fff" string (v1.1.x,
+    """Absolute ms-since-midnight from an extrinsics `time` value - a "HH:MM:SS.fff" string (v1.1.x,
     single-row) OR a pandas Timestamp / datetime64 (v2.0.x, full date+time)."""
     if isinstance(t, str):
         h, m, s = t.split(":")
@@ -47,7 +47,7 @@ def _version(name: str) -> tuple:
 
 
 def _extrinsics_by_stem(dirs) -> dict[str, str]:
-    """Best (highest-version) `*_camera_extrinsics_*.parquet` per video stem across dirs — so the newer
+    """Best (highest-version) `*_camera_extrinsics_*.parquet` per video stem across dirs - so the newer
     PER-FRAME v2.0.x wins over the single-row v1.1.x when both sit in input_extrinsics/."""
     best: dict[str, tuple] = {}
     for d in dirs:
@@ -80,7 +80,7 @@ def _mp4_epochs(card_dir: Path) -> dict[str, float]:
 def _params_latlon(j: dict) -> dict:
     """Camera lat/lon/alt from an MS02 *_camera_params.json: the camera CENTRE is C = -Rᵀ·t in the ENU
     frame (metres from enu_extrinsics.enu), converted to geodetic by a local flat-earth offset from that
-    origin. (enu lat/lon alone is the ORIGIN, not the camera — the two MS02 cameras share one origin.)"""
+    origin. (enu lat/lon alone is the ORIGIN, not the camera - the two MS02 cameras share one origin.)"""
     R = np.asarray(j["extrinsics"]["R"], dtype=float)
     t = np.asarray(j["extrinsics"]["t"], dtype=float)
     enu = j["enu_extrinsics"]["enu"]
@@ -98,7 +98,12 @@ def _params_geo(card_dir: Path) -> dict[str, dict]:
     for f in sorted(glob.glob(str(card_dir / "*_camera_params.json"))):
         cam = Path(f).name.split("_camera_params")[0]       # MCAM310
         with open(f) as fh:
-            params[cam] = _params_latlon(json.load(fh))
+            j = json.load(fh)
+        # full CV intrinsics/extrinsics ship only on MS02 -> persisted to cameras.intrinsics (NULL elsewhere)
+        intr = {"K": j["intrinsics"]["K"], "D": j["intrinsics"]["D"],
+                "R": j["extrinsics"]["R"], "t": j["extrinsics"]["t"],
+                "enu_origin": j["enu_extrinsics"]["enu"]}
+        params[cam] = {**_params_latlon(j), "intrinsics": intr}
     out: dict[str, dict] = {}
     if not params:
         return out
@@ -115,7 +120,7 @@ def load_clock(*dirs: str):
 
       epochs[stem]    -> absolute frame-0 ms-since-midnight (captures the cross-camera START offset, e.g.
                          DS1 Tc6 cameras start ~0.64s apart).
-      geo[stem]       -> {lat,lon,alt,roll,pitch,yaw,camera} static pose (frame 0) — the geo-veto basis.
+      geo[stem]       -> {lat,lon,alt,roll,pitch,yaw,camera} static pose (frame 0) - the geo-veto basis.
       frame_abs[stem] -> np.ndarray indexed by frame_idx of absolute ms, ONLY for PER-FRAME (v2.0.x)
                          extrinsics. The frame intervals are NON-uniform, so this is the EXACT clock; videos
                          with single-row (v1.1.x) extrinsics or MS02 (camera_params.json + .mp4, no parquet)
@@ -132,6 +137,9 @@ def load_clock(*dirs: str):
         e = pd.read_parquet(f)
         epochs[stem] = _ms_since_midnight(e["time"].iloc[0])
         g = {c: float(e[c].iloc[0]) for c in pose_cols if c in e.columns}
+        mver = re.search(r"_v(\d+(?:\.\d+)*)", Path(f).name)   # the extrinsics file version (cameras.extrinsics_version)
+        if mver:
+            g["extrinsics_version"] = "v" + mver.group(1)
         cam = _cam_token(stem)
         if cam:
             g["camera"] = cam

@@ -14,10 +14,10 @@ split:       "test"
 
 # All three are registered MLflow runs. embed/resolve_embed share `track`'s tracklet_keys (1:1 join).
 inputs:
-  track:                                            # tracker output (boxes) — DS0001 plain-kalman
-    mlflow_run: "9beb745eb7cd42c48d5d650b65fd189e"
+  track:                                            # tracker output (boxes) — DS0001 plain-kalman (REAL detector conf + source det_id)
+    mlflow_run: "cca5461892654a67aa5300b35675a265"
   embed:                                            # GREEDY match space — FT-SOLIDER emb_red, already 64-d
-    mlflow_run: "e7d2e65726be4faf8e6520cf041f1713"
+    mlflow_run: "962466d763654f608fd9db7e59cfdd8d"
   resolve_embed:                                    # RESOLVE space — osnet-xcam 512-d (the global-agglom re-cluster)
     mlflow_run: "7e223a7b1fd64455852cc9506a5b7415"
 

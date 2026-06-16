@@ -13,12 +13,10 @@ RUN pip install --no-cache-dir -r kit/requirements.txt
 # default image stays public/MS02-only; build with `--build-arg WITH_DS1=1` for the on-network DS1 demo.
 ARG WITH_DS1=0
 COPY kit/requirements-ds1.txt kit/requirements-ds1.txt
-RUN if [ "$WITH_DS1" = "1" ]; then \
-      pip install --no-cache-dir \
+RUN pip install --no-cache-dir \
         --extra-index-url http://euclid.novateur.com:48731/novateur/dev/+simple/ \
         --trusted-host euclid.novateur.com \
-        -r kit/requirements-ds1.txt; \
-    fi
+        -r kit/requirements-ds1.txt;
 COPY vlincs_gallery/ vlincs_gallery/
 COPY db/ db/
 COPY kit/ kit/

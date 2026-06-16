@@ -252,5 +252,5 @@ if __name__ == "__main__":
     sys.exit(0 if ok else 1)
 
 def test_consolidate_bit_identical():
-    # consolidate (fast) must be bit-identical to _consolidate_ref (original) — same remap AND events.
+    # consolidate (fast) must be bit-identical to _consolidate_ref (original) - same remap AND events.
     assert main(), "fast consolidate diverged from _consolidate_ref"

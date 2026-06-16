@@ -12,7 +12,7 @@ Verifies the container brought up from db/docker-compose.yml is usable end-to-en
     asserts the great-circle distance matches the analytic value within tolerance
 
 The test cleans up the rows it inserts (idempotent: safe to re-run). It does NOT
-query embeddings on the hot path in production (FAISS does) — this only exercises
+query embeddings on the hot path in production (FAISS does) - this only exercises
 the durable system-of-record so we know the container + schema + adapter all work.
 
 Run with the dedicated venv:
@@ -163,7 +163,7 @@ def main() -> int:
             (hav_null,) = cur.fetchone()
             assert hav_null is None, f"NULL geo should propagate NULL, got {hav_null}"
             # A `> X` predicate over NULL must be NULL (treated as not-true) so it
-            # never blocks a match — the documented NaN-safe veto behavior.
+            # never blocks a match - the documented NaN-safe veto behavior.
             cur.execute("SELECT (haversine_m(%s, %s, NULL, NULL) > 50.0)", (lat1, lon1))
             (pred,) = cur.fetchone()
             assert pred is None, f"veto predicate over NULL should be NULL, got {pred}"

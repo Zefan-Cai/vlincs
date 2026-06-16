@@ -1,4 +1,4 @@
-"""Global-agglomerative resolve() for the online gallery — the training-free re-partition.
+"""Global-agglomerative resolve() for the online gallery - the training-free re-partition.
 
 After the online match-or-expand pass has produced a (fragmented / greedy) partition, ``resolve()``
 re-clusters ALL items from scratch over their pooled per-item embeddings. It does NOT merge
@@ -17,7 +17,7 @@ Mechanism:
      single GLOBAL theta. Non-neighbour pairs get affinity 0 (distance 1) so they only merge
      transitively through the linkage, never directly.
   4. (optional) cannot-link: forbid two items in the same (video, frame) whose boxes are spatially
-     distinct from landing in one cluster — wired as a flag.
+     distinct from landing in one cluster - wired as a flag.
   5. Relabel the agglomerative clusters to contiguous integer gids.
 
 The function is pure (numpy + sklearn) and dataset-agnostic; the gallery wires it as
@@ -100,7 +100,7 @@ def global_agglom_resolve(
 
     ``theta`` is the merge affinity threshold (cosine); the agglomerative distance_threshold is
     ``1 - theta``. ``cannot_link_pairs`` (optional) is a list of (i, j) item pairs that must NOT
-    share a cluster — enforced by setting their pairwise distance to +inf before linkage.
+    share a cluster - enforced by setting their pairwise distance to +inf before linkage.
     """
     K = emb.shape[0]
     if K == 0:
