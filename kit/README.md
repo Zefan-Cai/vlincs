@@ -21,13 +21,6 @@ cosine index over *your* embeddings + the decision rules, so there's nothing to 
 ## What we give you
 
 1. **A dataset** (videos + ground truth, on the datastore mount) - run *your* pipeline on these videos:
-
-   | pick | videos | GT | local score? | this kit's online ref                          | supervised ceiling |
-   |---|---|---|---|------------------------------------------------|---|
-   | `ms02` | 2 | yes (sparse) | ✓ | **IDF1 ≈ 0.44** *(reference config, this kit)*                               | - |
-   | `ds1`  | 10 (Tc6+Tc8) | yes (dense) | ✓ | **IDF1 ≈ 0.53** *(reference config, this kit)* | |
-   | `ds2`  | 30 (Tc1–Tc8) | none | ✗ (viz only) | -                                              | |
-
    > **Two different regimes, worth keeping separate.** The **online ref** is what *this kit's* reference
    > config scores online (no per-dataset training, no prior knowledge of these identities) - a fair bar
    > for a streaming gallery. The **supervised ceiling** (DS1 0.69) is our *batch* funnel with a
