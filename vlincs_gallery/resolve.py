@@ -87,6 +87,115 @@ def build_knn_cosine_affinity(
     return A, Ix, Jx
 
 
+def _knn_sparse_affinity(S: np.ndarray, top_k: int) -> tuple[np.ndarray, int]:
+    """kNN-sparsify a precomputed similarity matrix ``S`` into a dense symmetric affinity ``A``.
+
+    ``S`` must already have forbidden entries (same-group, self/diagonal) masked to <= -1.5. Keeps each
+    row's top-k neighbours, symmetrizes, clips to [0, 1], and sets the diagonal to 1. Returns
+    ``(A, n_cand_edges)``. This is the S->A step shared by the per-item (centroid) and per-bank resolves.
+    """
+    K = S.shape[0]
+    k = min(top_k, max(1, K - 1))
+    topidx = np.argpartition(-S, k - 1, axis=1)[:, :k]
+    pair_set = set()
+    for i in range(K):
+        for j in topidx[i]:
+            j = int(j)
+            if S[i, j] <= -1.5:
+                continue
+            pair_set.add((i, j) if i < j else (j, i))
+    A = np.zeros((K, K), np.float32)
+    if pair_set:
+        pairs = np.array(sorted(pair_set), dtype=np.int64)
+        Ix, Jx = pairs[:, 0], pairs[:, 1]
+        a = np.clip(S[Ix, Jx], 0.0, 1.0).astype(np.float32)
+        A[Ix, Jx] = a
+        A[Jx, Ix] = a
+    np.fill_diagonal(A, 1.0)
+    return A, len(pair_set)
+
+
+def _bank_max_cosine(banks: list[np.ndarray], group_codes: np.ndarray) -> np.ndarray:
+    """``L x L`` cross-bank MAX cosine: ``S[i, j] = max`` over (a in bank_i, b in bank_j) of cos(a, b).
+
+    Same-group pairs (``group_codes[i] == group_codes[j]``) and the diagonal are masked to -2.0
+    (forbidden / self). Vectorized via two segment-max (``np.maximum.reduceat``) passes over the full
+    exemplar Gram matrix, so it is O(T^2) in the total exemplar count T = sum of bank sizes, not the
+    O(L^2 * bank^2) of a naive per-pair loop.
+    """
+    normed = [_l2n(b.astype(np.float32)) for b in banks]
+    sizes = [len(b) for b in normed]
+    E = np.concatenate(normed, axis=0)                       # (T, D)
+    offsets = np.cumsum([0] + sizes)[:-1]                    # per-local segment starts
+    G = E @ E.T                                              # (T, T) exemplar Gram
+    R = np.maximum.reduceat(G, offsets, axis=0)             # (L, T) max over each local's rows
+    S = np.maximum.reduceat(R, offsets, axis=1).astype(np.float32)   # (L, L) then over its cols
+    same = group_codes[:, None] == group_codes[None, :]
+    S[same] = -2.0
+    np.fill_diagonal(S, -2.0)
+    return S
+
+
+def two_tier_resolve(
+    banks: list[np.ndarray],
+    video_codes: np.ndarray,
+    theta: float,
+    *,
+    mode: str = "bank",
+    top_k: int = 30,
+    link: str = "average",
+) -> ResolveResult:
+    """Cross-video agglomerative resolve over PER-LOCAL exemplar banks - the two-tier global step.
+
+    Each local identity (the output of a per-video gallery, after within-video consolidation) carries
+    its diversity-gated exemplar bank. Locals from the SAME video are forbidden to merge: within one
+    camera they are already-distinct people. The clustering re-partitions the locals across videos.
+
+    Args:
+        banks: one ``(n_i, D)`` exemplar-bank array per local identity.
+        video_codes: ``(L,)`` int source-video code per local (same-code pairs cannot merge).
+        theta: merge-affinity (cosine) threshold; agglomerative ``distance_threshold = 1 - theta``.
+        mode: ``"bank"`` -> local<->local affinity is the MAX cosine over exemplar pairs (multi-modal
+            appearance preserved - the lever that avoids the single-centroid blur that cost ~0.03 IDF1
+            in the offline path-C test). ``"centroid"`` -> reduce each bank to its L2-normed mean, then
+            the standard per-item kNN cosine resolve.
+        top_k: kNN shortlist size per local.
+        link: agglomerative linkage (``"average"`` default, ``"complete"`` for a stricter join).
+
+    Returns:
+        ResolveResult: ``labels`` are per-LOCAL global cluster ids (0..n_clusters-1).
+    """
+    L = len(banks)
+    if L == 0:
+        return ResolveResult(np.zeros((0,), np.int64), 0, theta, 0, 0)
+    if L == 1:
+        return ResolveResult(np.zeros((1,), np.int64), 1, theta, 0, 1)
+    video_codes = np.asarray(video_codes)
+    if mode == "centroid":
+        cents = np.stack([_l2n(b.astype(np.float32).mean(0)) for b in banks])
+        return global_agglom_resolve(cents, video_codes, theta, top_k=top_k, exclude_same_cam=True)
+    if mode != "bank":
+        raise ValueError(f"unknown mode: {mode!r} (expected 'bank' or 'centroid')")
+    S = _bank_max_cosine(banks, video_codes)
+    A, n_edges = _knn_sparse_affinity(S, top_k)
+    D = 1.0 - A
+    np.clip(D, 0.0, None, out=D)
+    lab = AgglomerativeClustering(
+        n_clusters=None,
+        distance_threshold=float(1.0 - theta),
+        metric="precomputed",
+        linkage=link,
+    ).fit_predict(D)
+    _, lab = np.unique(lab, return_inverse=True)
+    return ResolveResult(
+        labels=lab.astype(np.int64),
+        n_clusters=int(lab.max()) + 1 if lab.size else 0,
+        theta=float(theta),
+        n_cand_edges=int(n_edges),
+        n_items=int(L),
+    )
+
+
 def global_agglom_resolve(
     emb: np.ndarray,
     cam_codes: np.ndarray,
