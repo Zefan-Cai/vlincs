@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="229" height="20" role="img" aria-label="MS02 best IDF1: 0.722 @ 399db5f">
+  <linearGradient id="s" x2="0" y2="100%"><stop offset="0" stop-color="#bbb" stop-opacity=".1"/><stop offset="1" stop-opacity=".1"/></linearGradient>
+  <clipPath id="r"><rect width="229" height="20" rx="3" fill="#fff"/></clipPath>
+  <g clip-path="url(#r)">
+    <rect width="111" height="20" fill="#555"/>
+    <rect x="111" width="118" height="20" fill="#4c1"/>
+    <rect width="229" height="20" fill="url(#s)"/>
+  </g>
+  <g fill="#fff" text-anchor="middle" font-family="DejaVu Sans,Verdana,Geneva,sans-serif" font-size="11">
+    <text x="56" y="15" fill="#010101" fill-opacity=".3">MS02 best IDF1</text>
+    <text x="56" y="14">MS02 best IDF1</text>
+    <text x="170" y="15" fill="#010101" fill-opacity=".3">0.722 @ 399db5f</text>
+    <text x="170" y="14">0.722 @ 399db5f</text>
+  </g>
+</svg>

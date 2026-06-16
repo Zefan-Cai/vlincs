@@ -1,34 +1,36 @@
 #!/usr/bin/env python3
-"""Render gallery CI demo output into a SCORES.md table + headline SVG badges.
+"""Render gallery CI demo output into per-dataset SCORES.md history tables + best-IDF1 SVG badges.
 
-Stdlib only, fully internal (no external badge service). Reads each dataset's raw demo stdout (the file the
-pipeline `tee`s), extracts the final `DONE: <dataset> -> {dict}` line, and writes:
-  - SCORES.md           : full per-dataset table (IDF1 / AssA / DetRe / IDs) + commit + timestamp
-  - badges/<ds>_<m>.svg : one flat badge per headline metric (always emitted; grey n/a when missing)
+Maintains an append-only history at ci/scores_history.csv: one row per (dataset, commit) carrying who
+checked it in, when, the commit hash, and the metrics. Each CI run parses the demo stdout, upserts the
+current commit's row for each dataset that scored, then regenerates:
+  - ci/scores_history.csv          : the durable history (source of truth)
+  - SCORES.md                      : a "best so far" highlight + one history table per dataset
+                                     (Checked in | Author | Commit | IDF1 | AssA | DetRe | IDs)
+  - badges/<ds>_best_idf1.svg      : the BEST-ever IDF1 per dataset, value "<idf1> @ <commit>"
+Stdlib only, fully internal (no external badge service).
 
-Usage: render_scores.py --sha <commit> [ms02_score.txt ds1_score.txt ...]
-Missing/incomplete inputs degrade gracefully to "n/a" so the README never shows a broken image.
+Usage: render_scores.py --sha <commit> --author <name> --date <iso> [ms02_score.txt ds1_score.txt ...]
 """
 from __future__ import annotations
 
 import argparse
 import ast
-import datetime
+import csv
 import re
 from html import escape
 from pathlib import Path
 
 DONE_RE = re.compile(r"DONE:\s*([A-Za-z0-9_]+)\s*->\s*(\{.*\})")
-
-# Datasets and the metrics shown in the table, in order.
-DATASETS = [("ms02", "MS02"), ("ds1", "DS1")]
-TABLE_METRICS = [("idf1", "IDF1"), ("assa", "AssA"), ("detre", "DetRe"), ("n_ids", "IDs")]
-# Headline badges: (dataset_key, metric_key) — MS02 leads with AssA (sparse GT), DS1 with IDF1 (dense GT).
-HEADLINE = [("ms02", "assa"), ("ms02", "idf1"), ("ds1", "idf1"), ("ds1", "assa")]
+DATASETS = [("ms02", "MS02"), ("ds1", "DS1")]           # key -> display label
+HISTORY = Path("ci/scores_history.csv")
+FIELDS = ["dataset", "commit", "commit_short", "author", "date", "idf1", "assa", "detre", "n_ids"]
+METRICS = [("idf1", "IDF1"), ("assa", "AssA"), ("detre", "DetRe"), ("n_ids", "IDs")]
+MAX_ROWS = 30                                           # newest N shown per table (full history kept in CSV)
 
 
 def parse_demo_output(path: str) -> dict | None:
-    """Return the score dict from the LAST `DONE: <ds> -> {...}` line, or None if absent/unreadable."""
+    """Score dict from the LAST `DONE: <ds> -> {...}` line in a demo log; None if absent/unreadable."""
     try:
         text = Path(path).read_text(errors="replace")
     except OSError:
@@ -41,40 +43,62 @@ def parse_demo_output(path: str) -> dict | None:
     if last is None:
         return None
     try:
-        return ast.literal_eval(last.group(2))
+        d = ast.literal_eval(last.group(2))
+        return d if isinstance(d, dict) else None
     except (ValueError, SyntaxError):
         return None
 
 
-def metric_color(metric: str, v) -> str:
-    if v is None:
-        return "#9f9f9f"               # grey — no data
-    if metric == "n_ids":
-        return "#007ec6"               # blue — informational count
-    if v >= 0.70:
-        return "#4c1"                  # bright green
-    if v >= 0.55:
-        return "#97ca00"               # green
-    if v >= 0.40:
-        return "#dfb317"               # yellow
-    if v >= 0.25:
-        return "#fe7d37"               # orange
-    return "#e05d44"                   # red
+def load_history() -> list[dict]:
+    if not HISTORY.exists():
+        return []
+    with HISTORY.open(newline="") as fh:
+        return [row for row in csv.DictReader(fh)]
 
 
-def fmt(metric: str, v) -> str:
-    if v is None:
+def save_history(rows: list[dict]) -> None:
+    HISTORY.parent.mkdir(parents=True, exist_ok=True)
+    with HISTORY.open("w", newline="") as fh:
+        w = csv.DictWriter(fh, fieldnames=FIELDS)
+        w.writeheader()
+        for r in rows:
+            w.writerow({k: r.get(k, "") for k in FIELDS})
+
+
+def fnum(metric: str, v) -> str:
+    try:
+        f = float(v)
+    except (TypeError, ValueError):
         return "n/a"
-    return str(int(v)) if metric == "n_ids" else f"{v:.3f}"
+    return str(int(round(f))) if metric == "n_ids" else f"{f:.3f}"
+
+
+def idf1_color(v) -> str:
+    try:
+        f = float(v)
+    except (TypeError, ValueError):
+        return "#9f9f9f"
+    if f >= 0.70:
+        return "#4c1"
+    if f >= 0.55:
+        return "#97ca00"
+    if f >= 0.40:
+        return "#dfb317"
+    if f >= 0.25:
+        return "#fe7d37"
+    return "#e05d44"
+
+
+def short_date(iso: str) -> str:
+    return (iso or "")[:16].replace("T", " ")
 
 
 def badge_svg(label: str, value: str, color: str) -> str:
-    """A self-contained flat badge (shields-style), stdlib-only. Char width is approximated for DejaVu 11px."""
+    """Self-contained flat badge (shields-style); char width approximated for DejaVu 11px."""
     cw, pad = 6.7, 9.0
     lw = int(len(label) * cw + 2 * pad)
     vw = int(len(value) * cw + 2 * pad)
-    total = lw + vw
-    lc, vc = lw / 2.0, lw + vw / 2.0
+    total, lc, vc = lw + vw, lw / 2.0, lw + vw / 2.0
     lab, val = escape(label), escape(value)
     return (
         f'<svg xmlns="http://www.w3.org/2000/svg" width="{total}" height="20" role="img" '
@@ -98,54 +122,118 @@ def badge_svg(label: str, value: str, color: str) -> str:
     )
 
 
+def best_row(rows: list[dict], ds_key: str) -> dict | None:
+    cand = []
+    for r in rows:
+        if r.get("dataset") != ds_key:
+            continue
+        try:
+            cand.append((float(r["idf1"]), r))
+        except (TypeError, ValueError, KeyError):
+            continue
+    if not cand:
+        return None
+    # max IDF1; tie-break to the most recent date
+    cand.sort(key=lambda t: (t[0], t[1].get("date", "")))
+    return cand[-1][1]
+
+
 def main() -> None:
     ap = argparse.ArgumentParser()
-    ap.add_argument("--sha", default="", help="commit sha to stamp (full or short)")
+    ap.add_argument("--sha", default="", help="full commit sha of the run")
+    ap.add_argument("--author", default="(unknown)", help="commit author name")
+    ap.add_argument("--date", default="", help="commit date (ISO 8601)")
     ap.add_argument("inputs", nargs="*", help="demo stdout files (the *_score.txt the pipeline tee's)")
     args = ap.parse_args()
 
-    # Collect scores by dataset from whichever input files parsed.
-    scores: dict[str, dict] = {}
+    sha = (args.sha or "").strip()
+    short = sha[:7] if sha else "(unknown)"
+
+    rows = load_history()
+
+    # Upsert this run's entries (one per dataset that produced a DONE line); replace any prior row for the
+    # same (dataset, commit) so a re-run on the same commit refreshes rather than duplicates.
     for path in args.inputs:
         d = parse_demo_output(path)
-        if d and isinstance(d, dict) and d.get("dataset"):
-            scores[str(d["dataset"])] = d
+        if not d or not d.get("dataset"):
+            continue
+        ds = str(d["dataset"])
+        rows = [r for r in rows if not (r.get("dataset") == ds and r.get("commit") == sha)]
+        rows.append({
+            "dataset": ds, "commit": sha, "commit_short": short,
+            "author": args.author, "date": args.date,
+            "idf1": d.get("idf1", ""), "assa": d.get("assa", ""),
+            "detre": d.get("detre", ""), "n_ids": d.get("n_ids", ""),
+        })
+
+    save_history(rows)
 
     out = Path.cwd()
     badges = out / "badges"
     badges.mkdir(exist_ok=True)
 
-    # Badges (always emit all headline badges so README references never 404).
-    for ds_key, metric in HEADLINE:
-        v = scores.get(ds_key, {}).get(metric)
-        label = f"{dict(DATASETS).get(ds_key, ds_key.upper())} {dict(TABLE_METRICS)[metric]}"
-        (badges / f"{ds_key}_{metric}.svg").write_text(
-            badge_svg(label, fmt(metric, v), metric_color(metric, v))
-        )
-
-    # Table.
-    short = (args.sha or "")[:12] or "(unknown)"
-    now = datetime.datetime.now(datetime.timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ")
-    rows = []
-    header = "| Dataset | " + " | ".join(lbl for _, lbl in TABLE_METRICS) + " |"
-    sep = "|" + "---|" * (len(TABLE_METRICS) + 1)
+    # Best-IDF1 badge per dataset, with the winning commit baked into the value.
+    bests = {}
     for ds_key, ds_lbl in DATASETS:
-        d = scores.get(ds_key)
-        cells = [fmt(m, (d or {}).get(m)) for m, _ in TABLE_METRICS]
-        rows.append(f"| {ds_lbl} | " + " | ".join(cells) + " |")
-    md = (
-        "# Latest CI scores\n\n"
-        "_Auto-generated by the self-hosted maxwell CI on each commit, via the canonical `reid_hota` "
-        "scorer (global ID alignment, IoU — the takehome leaderboard metric). Do not edit by hand._\n\n"
-        f"{header}\n{sep}\n" + "\n".join(rows) + "\n\n"
-        f"Commit `{short}` · {now}\n\n"
-        "> **MS02 GT is sparse** (~1.5 det/frame) → lead with **AssA**; IDF1 is deflated by real-but-"
-        "unannotated people.\n"
-        "> **DS1 GT is dense** → **IDF1** is the trustworthy number. Config: appearance-only "
-        "(`--no-cannot-link`), the kit's reference config.\n"
-    )
-    (out / "SCORES.md").write_text(md)
-    print(f"[render] wrote SCORES.md + {len(HEADLINE)} badges; datasets parsed: {sorted(scores)}")
+        b = best_row(rows, ds_key)
+        bests[ds_key] = b
+        if b is None:
+            svg = badge_svg(f"{ds_lbl} best IDF1", "n/a", "#9f9f9f")
+        else:
+            svg = badge_svg(f"{ds_lbl} best IDF1",
+                            f"{float(b['idf1']):.3f} @ {b.get('commit_short', '')}",
+                            idf1_color(b["idf1"]))
+        (badges / f"{ds_key}_best_idf1.svg").write_text(svg)
+
+    # SCORES.md: best-so-far highlight (prominent commit hash) + one history table per dataset.
+    lines = [
+        "# Gallery CI scores",
+        "",
+        "_Auto-generated by the self-hosted maxwell CI on each commit via the canonical `reid_hota` scorer "
+        "(global ID alignment, IoU — the takehome leaderboard metric). Source of truth: "
+        "`ci/scores_history.csv`. Do not edit by hand._",
+        "",
+        "## 🏆 Best so far (by IDF1)",
+        "",
+        "| Dataset | Best IDF1 | Commit | Author | Checked in |",
+        "|---|---|---|---|---|",
+    ]
+    for ds_key, ds_lbl in DATASETS:
+        b = bests[ds_key]
+        if b is None:
+            lines.append(f"| {ds_lbl} | n/a | — | — | — |")
+        else:
+            lines.append(
+                f"| {ds_lbl} | **{fnum('idf1', b['idf1'])}** | `{b.get('commit_short', '')}` | "
+                f"{b.get('author', '')} | {short_date(b.get('date', ''))} |"
+            )
+    lines += [
+        "",
+        "> Config pinned `--no-cannot-link` (appearance-only).",
+        "",
+    ]
+
+    for ds_key, ds_lbl in DATASETS:
+        hist = sorted((r for r in rows if r.get("dataset") == ds_key),
+                      key=lambda r: r.get("date", ""), reverse=True)
+        lines.append(f"## {ds_lbl} — history")
+        lines.append("")
+        lines.append("| Checked in | Author | Commit | " + " | ".join(l for _, l in METRICS) + " |")
+        lines.append("|" + "---|" * (3 + len(METRICS)))
+        for r in hist[:MAX_ROWS]:
+            cells = " | ".join(fnum(m, r.get(m)) for m, _ in METRICS)
+            lines.append(f"| {short_date(r.get('date', ''))} | {r.get('author', '')} | "
+                         f"`{r.get('commit_short', '')}` | {cells} |")
+        if not hist:
+            lines.append("| — | — | — | n/a | n/a | n/a | n/a |")
+        if len(hist) > MAX_ROWS:
+            lines.append(f"\n_…showing the {MAX_ROWS} most recent of {len(hist)} runs "
+                         f"(full history in `ci/scores_history.csv`)._")
+        lines.append("")
+
+    (out / "SCORES.md").write_text("\n".join(lines) + "\n")
+    print(f"[render] history rows: {len(rows)} | best IDF1: " + ", ".join(
+        f"{lbl}={fnum('idf1', (bests[k] or {}).get('idf1'))}" for k, lbl in DATASETS))
 
 
 if __name__ == "__main__":

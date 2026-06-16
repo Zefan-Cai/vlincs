@@ -1,8 +1,8 @@
 # vlincs_gallery
 
-[![MS02 AssA](badges/ms02_assa.svg)](SCORES.md) [![MS02 IDF1](badges/ms02_idf1.svg)](SCORES.md) [![DS1 IDF1](badges/ds1_idf1.svg)](SCORES.md) [![DS1 AssA](badges/ds1_assa.svg)](SCORES.md)
+[![MS02 best IDF1](badges/ms02_best_idf1.svg)](SCORES.md) [![DS1 best IDF1](badges/ds1_best_idf1.svg)](SCORES.md)
 
-> Live CI scores from the self-hosted maxwell runner (canonical `reid_hota`) — full per-dataset table in [`SCORES.md`](SCORES.md), refreshed on every commit.
+> Best online IDF1 per dataset (canonical `reid_hota`), with the commit that achieved it. Full per-dataset history — score, author, date, commit — in [`SCORES.md`](SCORES.md), refreshed on every commit by the self-hosted maxwell runner.
 
 ![ingest · decide · store · resolve](assets/architecture.svg)
 

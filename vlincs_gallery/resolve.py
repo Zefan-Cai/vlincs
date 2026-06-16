@@ -241,3 +241,61 @@ def global_agglom_resolve(
         n_cand_edges=int(len(Ix)),
         n_items=int(K),
     )
+
+
+def mustlink_resolve(
+    emb: np.ndarray,
+    cam_codes: np.ndarray,
+    local_ids: np.ndarray,
+    theta: float,
+    *,
+    top_k: int = 30,
+) -> ResolveResult:
+    """Global resolve over ALL raw items (tracklets, NOT summarized banks) with per-video MUST-LINK.
+
+    The two-tier alternative to summarizing each per-video local into one bank vector: keep every tracklet
+    as its own node so the cross-video linkage has the full redundant kNN edge set (the thing that makes
+    the flat resolve robust), but FORCE tracklets sharing a ``local_id`` into the same cluster. Concretely:
+    build the standard kNN-sparse cross-camera cosine affinity, then set every same-local pair's affinity
+    to 1 (distance 0) so average-linkage merges those blocks first; cross-video merges still come from the
+    kNN edges at ``distance_threshold = 1 - theta``. Recovers the per-video grouping (the DS2 lever) without
+    the bank-summarization information loss that capped two_tier_resolve.
+
+    Args:
+        emb: ``(K, D)`` per-item (per-tracklet) embeddings in the resolve space.
+        cam_codes: ``(K,)`` int camera/video code per item (same-cam kNN neighbours excluded).
+        local_ids: ``(K,)`` int per-video local-identity id per item (same id => must-link).
+        theta: cross-video merge threshold; ``distance_threshold = 1 - theta``.
+        top_k: kNN shortlist size.
+
+    Returns:
+        ResolveResult: ``labels`` are per-ITEM global cluster ids.
+    """
+    K = emb.shape[0]
+    if K == 0:
+        return ResolveResult(np.zeros((0,), np.int64), 0, theta, 0, 0)
+    if K == 1:
+        return ResolveResult(np.zeros((1,), np.int64), 1, theta, 0, 1)
+    A, Ix, Jx = build_knn_cosine_affinity(emb, cam_codes, top_k=top_k, exclude_same_cam=True)
+    local_ids = np.asarray(local_ids)
+    for lg in np.unique(local_ids):                         # must-link: same local -> affinity 1 (dist 0)
+        idx = np.where(local_ids == lg)[0]
+        if idx.size > 1:
+            A[np.ix_(idx, idx)] = 1.0
+    np.fill_diagonal(A, 1.0)
+    D = 1.0 - A
+    np.clip(D, 0.0, None, out=D)
+    lab = AgglomerativeClustering(
+        n_clusters=None,
+        distance_threshold=float(1.0 - theta),
+        metric="precomputed",
+        linkage="average",
+    ).fit_predict(D)
+    _, lab = np.unique(lab, return_inverse=True)
+    return ResolveResult(
+        labels=lab.astype(np.int64),
+        n_clusters=int(lab.max()) + 1 if lab.size else 0,
+        theta=float(theta),
+        n_cand_edges=int(len(Ix)),
+        n_items=int(K),
+    )

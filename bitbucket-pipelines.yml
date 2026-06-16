@@ -58,7 +58,16 @@ pipelines:
           artifacts:
             - SCORES.md
             - badges/**
+            - ci/scores_history.csv
           script:
             - set -x
-            - python3 ci/render_scores.py --sha "$BITBUCKET_COMMIT" ms02_score.txt ds1_score.txt
+            # who/when come from the commit itself (the author who checked it in + the commit date)
+            - export SHA="$BITBUCKET_COMMIT"
+            - export AUTHOR="$(git show -s --format='%an' "$SHA")"
+            - export CDATE="$(git show -s --format='%cI' "$SHA")"
+            # sync the score history from the branch tip (prior runs' [skip ci] commits live there, ahead of
+            # this build's commit) and base our commit on it so the push fast-forwards and history is preserved
+            - git fetch -q origin "$BITBUCKET_BRANCH" || true
+            - git checkout -q -B "$BITBUCKET_BRANCH" "origin/$BITBUCKET_BRANCH" || true
+            - python3 ci/render_scores.py --sha "$SHA" --author "$AUTHOR" --date "$CDATE" ms02_score.txt ds1_score.txt
             - sh ci/publish_scores.sh
