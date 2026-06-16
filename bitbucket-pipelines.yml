@@ -18,6 +18,10 @@ pipelines:
             - linux.shell
           script:
             - set -x
+            # The shell runner points DOCKER_HOST at a DinD service (tcp://localhost:2375) that does not exist
+            # here. Unset it so the docker CLI uses maxwell's host daemon at /var/run/docker.sock (the runner
+            # user is in the docker group). This is what lets the demo see the /mnt datastore mount.
+            - unset DOCKER_HOST
             - docker version | head -5
             # the datastore mount must be visible to host-launched containers (it is, on the shell runner)
             - docker run --rm -v /mnt/datastore2_videolincs/data:/x:ro alpine sh -c "echo PROBE_MOUNT_OK && ls /x | head" || echo "PROBE HOST-BIND-MOUNT FAILED"
