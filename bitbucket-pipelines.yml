@@ -1,0 +1,43 @@
+# VLINCS gallery — self-hosted CI on maxwell (runner: maxwell-gallery, runs-on self.hosted).
+# Runs the online-gallery demos and prints the IDF1/AssA scores. CPU-only, no GPU.
+# Needs maxwell's datastore mount (/mnt/datastore2_videolincs/data) for GT + camera geo — that's why
+# this only runs on the self-hosted runner, never on Bitbucket's cloud runners.
+#
+# NOTE: this is the iteration config (branch ci/gallery-scores). Once green it gets promoted to `main`.
+
+image: atlassian/default-image:4
+
+definitions:
+  services:
+    docker:
+      memory: 4096
+
+pipelines:
+  branches:
+    'ci/gallery-scores':
+      - step:
+          name: Probe + MS02 demo
+          runs-on:
+            - self.hosted
+            - linux
+          services:
+            - docker
+          script:
+            - set -x
+            # --- environment probe: which docker daemon are step containers talking to? ---
+            - docker version
+            - docker info 2>/dev/null | grep -iE "server version|root dir|operating system" || true
+            # If we're on maxwell's HOST daemon (sibling model) we'll see the runner container here:
+            - docker ps --format '{{.Names}}' | grep -i runner && echo "PROBE: host daemon (sibling model)" || echo "PROBE: NOT host daemon (likely DinD)"
+            # The decisive test: does a host bind-mount resolve to the real datastore?
+            - docker run --rm -v /mnt/datastore2_videolincs/data:/x:ro alpine sh -c "echo PROBE_MOUNT_OK; ls /x | head" || echo "PROBE: HOST BIND MOUNT FAILED (DinD can't see /mnt)"
+            # --- MS02 demo (fully offline: shipped demo_data/ms02, no LFS, no MLflow) ---
+            - cd kit
+            - export DATA_ROOT=/mnt/datastore2_videolincs/data
+            - export COMPOSE_PROJECT_NAME=gallery_ci
+            - docker compose down -v || true
+            - docker compose build app
+            - docker compose run --rm app demo --dataset ms02 2>&1 | tee ../ms02_score.txt
+            - docker compose down -v || true
+          artifacts:
+            - ms02_score.txt
