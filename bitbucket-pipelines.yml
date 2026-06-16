@@ -1,29 +1,25 @@
-# VLINCS gallery — self-hosted CI on maxwell (runner: maxwell-gallery, runs-on self.hosted).
-# Runs the online-gallery demos and prints the IDF1/AssA scores. CPU-only, no GPU.
-# Needs maxwell's datastore mount (/mnt/datastore2_videolincs/data) for GT + camera geo — that's why
-# this only runs on the self-hosted runner, never on Bitbucket's cloud runners.
+# VLINCS gallery — self-hosted CI on maxwell. Runs on a Linux SHELL runner (runs-on self.hosted), so the
+# script executes directly on maxwell: it uses the host Docker + Compose and can see the datastore mount
+# (/mnt/datastore2_videolincs/data — needed for GT + camera geo). That host access is exactly what a Docker
+# runner's DinD sandbox could NOT provide, which is why this is a shell runner.
 #
-# NOTE: this is the iteration config (branch ci/gallery-scores). Once green it gets promoted to main.
-# Script lines are unquoted YAML scalars, so they must NOT contain a colon-space ': ' (YAML reads it as a
-# mapping). Keep echo strings colon-free.
-
-image: atlassian/default-image:4
+# No top-level `image:` and no `services: docker` — both are container-runner concepts the shell runner
+# ignores. Script lines are unquoted YAML scalars, so keep them free of a colon-space ': '.
+#
+# Iteration config on branch ci/gallery-scores; promoted to `main` once green.
 
 pipelines:
   branches:
     'ci/gallery-scores':
       - step:
-          name: Probe + MS02 demo
+          name: MS02 gallery demo (offline) + score
           runs-on:
             - self.hosted
             - linux
-          services:
-            - docker
           script:
             - set -x
-            - docker version
-            - docker info 2>/dev/null | grep -iE "server version|root dir" || true
-            - docker ps --format '{{.Names}}' | grep -i runner && echo "PROBE host-daemon sibling model" || echo "PROBE not-host-daemon likely DinD"
+            - docker version | head -5
+            # the datastore mount must be visible to host-launched containers (it is, on the shell runner)
             - docker run --rm -v /mnt/datastore2_videolincs/data:/x:ro alpine sh -c "echo PROBE_MOUNT_OK && ls /x | head" || echo "PROBE HOST-BIND-MOUNT FAILED"
             - cd kit
             - export DATA_ROOT=/mnt/datastore2_videolincs/data
