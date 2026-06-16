@@ -15,7 +15,7 @@ pipelines:
           name: MS02 gallery demo (offline) + score
           runs-on:
             - self.hosted
-            - linux
+            - linux.shell
           script:
             - set -x
             - docker version | head -5
