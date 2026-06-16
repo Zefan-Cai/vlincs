@@ -3,7 +3,9 @@
 # Needs maxwell's datastore mount (/mnt/datastore2_videolincs/data) for GT + camera geo — that's why
 # this only runs on the self-hosted runner, never on Bitbucket's cloud runners.
 #
-# NOTE: this is the iteration config (branch ci/gallery-scores). Once green it gets promoted to `main`.
+# NOTE: this is the iteration config (branch ci/gallery-scores). Once green it gets promoted to main.
+# Script lines are unquoted YAML scalars, so they must NOT contain a colon-space ': ' (YAML reads it as a
+# mapping). Keep echo strings colon-free.
 
 image: atlassian/default-image:4
 
@@ -24,14 +26,10 @@ pipelines:
             - docker
           script:
             - set -x
-            # --- environment probe: which docker daemon are step containers talking to? ---
             - docker version
-            - docker info 2>/dev/null | grep -iE "server version|root dir|operating system" || true
-            # If we're on maxwell's HOST daemon (sibling model) we'll see the runner container here:
-            - docker ps --format '{{.Names}}' | grep -i runner && echo "PROBE: host daemon (sibling model)" || echo "PROBE: NOT host daemon (likely DinD)"
-            # The decisive test: does a host bind-mount resolve to the real datastore?
-            - docker run --rm -v /mnt/datastore2_videolincs/data:/x:ro alpine sh -c "echo PROBE_MOUNT_OK; ls /x | head" || echo "PROBE: HOST BIND MOUNT FAILED (DinD can't see /mnt)"
-            # --- MS02 demo (fully offline: shipped demo_data/ms02, no LFS, no MLflow) ---
+            - docker info 2>/dev/null | grep -iE "server version|root dir" || true
+            - docker ps --format '{{.Names}}' | grep -i runner && echo "PROBE host-daemon sibling model" || echo "PROBE not-host-daemon likely DinD"
+            - docker run --rm -v /mnt/datastore2_videolincs/data:/x:ro alpine sh -c "echo PROBE_MOUNT_OK && ls /x | head" || echo "PROBE HOST-BIND-MOUNT FAILED"
             - cd kit
             - export DATA_ROOT=/mnt/datastore2_videolincs/data
             - export COMPOSE_PROJECT_NAME=gallery_ci
