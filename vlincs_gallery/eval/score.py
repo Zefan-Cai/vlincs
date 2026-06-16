@@ -65,6 +65,10 @@ class Metrics:
     detpr: float
     unmatched_fp: int
     raw: dict
+    # Per-video sub-scores computed under the SAME global ID alignment (NOT per-video alignment, which the
+    # canonical_config forbids). dict[video_key -> {idf1, hota, assa, deta, detre, detpr}]. Decomposes the
+    # headline by video to show where we fail, without changing the metric.
+    per_video: dict
 
     def headline(self, dataset: DatasetKind) -> str:
         if dataset == "ms02":
@@ -105,19 +109,27 @@ def evaluate(
     ev.evaluate(ref, comp)
     d = ev.get_global_hota_data()
 
-    def mean(key: str) -> float:
-        v = d[key]
-        return float(np.mean(v)) if hasattr(v, "__len__") else float(v)
+    def reduce(dd: dict) -> dict:
+        """Threshold-average the HOTA vectors of one hota_data dict into scalar metrics."""
+        def m(key: str) -> float:
+            v = dd.get(key)
+            if v is None:
+                return 0.0
+            return float(np.mean(v)) if hasattr(v, "__len__") else float(v)
+        return {"idf1": m("IDF1"), "hota": m("HOTA"), "assa": m("AssA"),
+                "deta": m("DetA"), "detre": m("DetRe"), "detpr": m("DetPr")}
+
+    g = reduce(d)
+    # Per-video sub-scores under the SAME global alignment (cfg.id_alignment_method='global'): reid_hota
+    # builds each video's HOTAData from the global ref2comp_id_map, so these decompose the headline honestly.
+    per_video = {vid: reduce(dd) for vid, dd in ev.get_per_video_hota_data().items()}
 
     return Metrics(
-        idf1=mean("IDF1"),
-        hota=mean("HOTA"),
-        assa=mean("AssA"),
-        deta=mean("DetA"),
-        detre=mean("DetRe"),
-        detpr=mean("DetPr"),
+        idf1=g["idf1"], hota=g["hota"], assa=g["assa"], deta=g["deta"],
+        detre=g["detre"], detpr=g["detpr"],
         unmatched_fp=int(d.get("UnmatchedFP", 0)),
         raw={k: (v.tolist() if hasattr(v, "tolist") else v) for k, v in d.items()},
+        per_video=per_video,
     )
 
 

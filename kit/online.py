@@ -609,8 +609,13 @@ class OnlineGallery:
         # and not submission-honest (you can't drop detections at submission time). idf1 here is the honest number.
         metrics = evaluate(gt, {key: pred_by_key[key] for key in gt}, dense=False, n_workers=1)
         n_ids = len({gid for df in pred_by_key.values() for gid in df["id"]})
+        # Per-video sub-scores under the SAME global alignment (not per-video alignment) - shows which
+        # video(s) drag the headline down. Keys are video stems (DS1) / cameras (MS02).
+        per_video = {key: {"idf1": round(m["idf1"], 4), "assa": round(m["assa"], 4),
+                           "detre": round(m["detre"], 4)}
+                     for key, m in sorted(metrics.per_video.items()) if key in gt}
         return {"dataset": self.dataset, "idf1": round(metrics.idf1, 4), "assa": round(metrics.assa, 4),
-                "detre": round(metrics.detre, 4), "n_ids": n_ids}
+                "detre": round(metrics.detre, 4), "n_ids": n_ids, "per_video": per_video}
 
     def export_submission(self, path: str) -> str:
         """The ONLY file this kit writes: a canonical TA1 submission from the live DB assignments."""

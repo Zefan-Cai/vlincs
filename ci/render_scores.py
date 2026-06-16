@@ -26,7 +26,11 @@ DATASETS = [("ms02", "MS02"), ("ds1", "DS1")]           # key -> display label
 HISTORY = Path("ci/scores_history.csv")
 FIELDS = ["dataset", "commit", "commit_short", "author", "date", "idf1", "assa", "detre", "n_ids"]
 METRICS = [("idf1", "IDF1"), ("assa", "AssA"), ("detre", "DetRe"), ("n_ids", "IDs")]
+PV_METRICS = [("idf1", "IDF1"), ("assa", "AssA"), ("detre", "DetRe")]   # per-video columns (no per-video n_ids)
 MAX_ROWS = 30                                           # newest N shown per table (full history kept in CSV)
+README = Path("README.md")
+README_START = "<!-- CI-SCORES:START -->"
+README_END = "<!-- CI-SCORES:END -->"
 
 
 def parse_demo_output(path: str) -> dict | None:
@@ -138,6 +142,37 @@ def best_row(rows: list[dict], ds_key: str) -> dict | None:
     return cand[-1][1]
 
 
+def per_video_table(pv: dict) -> list[str]:
+    """Markdown for one dataset's per-video sub-scores (worst IDF1 first — where we failed).
+
+    pv: {video_key -> {idf1, assa, detre}}, all computed under the GLOBAL alignment.
+    """
+    out = ["| Video | " + " | ".join(l for _, l in PV_METRICS) + " |",
+           "|" + "---|" * (1 + len(PV_METRICS))]
+
+    def worst_first(item):
+        try:
+            return float(item[1].get("idf1"))
+        except (TypeError, ValueError):
+            return 1e9
+    for vid, m in sorted(pv.items(), key=worst_first):
+        out.append(f"| {vid} | " + " | ".join(fnum(k, m.get(k)) for k, _ in PV_METRICS) + " |")
+    return out
+
+
+def update_readme_block(body: str) -> bool:
+    """Replace the text between the CI-SCORES sentinels in README.md. False if README/sentinels absent."""
+    if not README.exists():
+        return False
+    text = README.read_text()
+    if README_START not in text or README_END not in text:
+        return False
+    pre, rest = text.split(README_START, 1)
+    _, post = rest.split(README_END, 1)
+    README.write_text(f"{pre}{README_START}\n{body}\n{README_END}{post}")
+    return True
+
+
 def main() -> None:
     ap = argparse.ArgumentParser()
     ap.add_argument("--sha", default="", help="full commit sha of the run")
@@ -152,7 +187,9 @@ def main() -> None:
     rows = load_history()
 
     # Upsert this run's entries (one per dataset that produced a DONE line); replace any prior row for the
-    # same (dataset, commit) so a re-run on the same commit refreshes rather than duplicates.
+    # same (dataset, commit) so a re-run on the same commit refreshes rather than duplicates. Also capture
+    # this run's per-video sub-scores (current commit only; not historized — they show where we fail NOW).
+    pv_by_ds: dict[str, dict] = {}
     for path in args.inputs:
         d = parse_demo_output(path)
         if not d or not d.get("dataset"):
@@ -165,6 +202,8 @@ def main() -> None:
             "idf1": d.get("idf1", ""), "assa": d.get("assa", ""),
             "detre": d.get("detre", ""), "n_ids": d.get("n_ids", ""),
         })
+        if isinstance(d.get("per_video"), dict) and d["per_video"]:
+            pv_by_ds[ds] = d["per_video"]
 
     save_history(rows)
 
@@ -230,10 +269,37 @@ def main() -> None:
             lines.append(f"\n_…showing the {MAX_ROWS} most recent of {len(hist)} runs "
                          f"(full history in `ci/scores_history.csv`)._")
         lines.append("")
+        # Per-video sub-scores for THIS run (global-aligned; worst IDF1 first → where the score breaks down).
+        lines.append(f"### {ds_lbl} — per-video (latest run @ `{short}`, global-aligned)")
+        lines.append("")
+        lines += per_video_table(pv_by_ds[ds_key]) if pv_by_ds.get(ds_key) \
+            else ["_Per-video populated on the next CI run._"]
+        lines.append("")
 
     (out / "SCORES.md").write_text("\n".join(lines) + "\n")
-    print(f"[render] history rows: {len(rows)} | best IDF1: " + ", ".join(
-        f"{lbl}={fnum('idf1', (bests[k] or {}).get('idf1'))}" for k, lbl in DATASETS))
+
+    # Mirror the latest-run per-video into the README's CI-managed block, so it's visible without opening
+    # SCORES.md: a best-IDF1 one-liner + a per-video table per dataset.
+    best_bits = [
+        (f"**{ds_lbl}** {fnum('idf1', bests[ds_key]['idf1'])} @ `{bests[ds_key].get('commit_short', '—')}`"
+         if bests[ds_key] else f"**{ds_lbl}** n/a")
+        for ds_key, ds_lbl in DATASETS
+    ]
+    block = [f"**Best IDF1:** {' · '.join(best_bits)}", ""]
+    if pv_by_ds:
+        block.append(f"**Per-video — latest run @ `{short}`** (global-aligned, worst first — where we fail):")
+        for ds_key, ds_lbl in DATASETS:
+            if pv_by_ds.get(ds_key):
+                block += ["", f"_{ds_lbl}_", ""] + per_video_table(pv_by_ds[ds_key])
+        block += ["", "Full history → [`SCORES.md`](SCORES.md)."]
+    else:
+        block.append("_Per-video scores populate here on the next CI run — full history in "
+                     "[`SCORES.md`](SCORES.md)._")
+    wrote_readme = update_readme_block("\n".join(block))
+
+    print(f"[render] history rows: {len(rows)} | per-video datasets: {sorted(pv_by_ds)} | "
+          f"README block: {'updated' if wrote_readme else 'SKIPPED (no sentinels)'} | best IDF1: "
+          + ", ".join(f"{lbl}={fnum('idf1', (bests[k] or {}).get('idf1'))}" for k, lbl in DATASETS))
 
 
 if __name__ == "__main__":

@@ -4,6 +4,12 @@
 
 > Best online IDF1 per dataset (canonical `reid_hota`), with the commit that achieved it. Full per-dataset history — score, author, date, commit — in [`SCORES.md`](SCORES.md), refreshed on every commit by the self-hosted maxwell runner.
 
+<!-- CI-SCORES:START -->
+**Best IDF1:** **MS02** 0.722 @ `399db5f` · **DS1** 0.600 @ `399db5f`
+
+_Per-video scores populate here on the next CI run — full history in [`SCORES.md`](SCORES.md)._
+<!-- CI-SCORES:END -->
+
 ![ingest · decide · store · resolve](assets/architecture.svg)
 
 Online, revisable, **retrieval-based** identity assignment ("tracking-by-retrieval" / online MTMC) for

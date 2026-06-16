@@ -7,7 +7,7 @@
 # BADGE_PUSH_TOKEN must be a secured repo variable holding a Repository Access Token with repository:write.
 set -eu
 
-git add SCORES.md badges ci/scores_history.csv 2>/dev/null || true
+git add SCORES.md README.md badges ci/scores_history.csv 2>/dev/null || true
 
 if git diff --cached --quiet 2>/dev/null; then
   echo "[publish] scores unchanged - nothing to commit"
