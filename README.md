@@ -7,7 +7,7 @@
 <!-- CI-SCORES:START -->
 **Best IDF1:** **MS02** 0.754 @ `28397b4` · **DS1** 0.624 @ `28397b4`
 
-**Per-video — latest run @ `28397b4`** (global-aligned, worst first — where we fail):
+**Per-video — latest run @ `34103bd`** (global-aligned, worst first — where we fail):
 
 _MS02_
 
