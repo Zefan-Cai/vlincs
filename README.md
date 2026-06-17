@@ -5,31 +5,31 @@
 > Best online IDF1 per dataset (canonical `reid_hota`), with the commit that achieved it. Full per-dataset history — score, author, date, commit — in [`SCORES.md`](SCORES.md), refreshed on every commit by the self-hosted maxwell runner.
 
 <!-- CI-SCORES:START -->
-**Best IDF1:** **MS02** 0.722 @ `fe3c56b` · **DS1** 0.600 @ `399db5f`
+**Best IDF1:** **MS02** 0.754 @ `28397b4` · **DS1** 0.624 @ `28397b4`
 
-**Per-video — latest run @ `fe3c56b`** (global-aligned, worst first — where we fail):
+**Per-video — latest run @ `28397b4`** (global-aligned, worst first — where we fail):
 
 _MS02_
 
 | Video | IDF1 | AssA | DetRe |
 |---|---|---|---|
-| MCAM310 | 0.539 | 0.398 | 0.621 |
-| MCAM318 | 0.852 | 0.955 | 0.787 |
+| MCAM310 | 0.445 | 0.438 | 0.333 |
+| MCAM318 | 0.887 | 0.933 | 0.866 |
 
 _DS1_
 
 | Video | IDF1 | AssA | DetRe |
 |---|---|---|---|
-| vlincs_MS01_MC0001_MCAM05_2024-03-Tc6 | 0.239 | 0.402 | 0.566 |
-| vlincs_MS01_MC0001_MCAM04_2024-03-Tc6 | 0.511 | 0.438 | 0.414 |
-| vlincs_MS01_MC0001_MCAM06_2024-03-Tc6 | 0.592 | 0.565 | 0.472 |
-| vlincs_MS01_MC0001_MCAM03_2024-03-Tc8 | 0.625 | 0.547 | 0.537 |
-| vlincs_MS01_MC0001_MCAM03_2024-03-Tc6 | 0.653 | 0.572 | 0.555 |
-| vlincs_MS01_MC0001_MCAM06_2024-03-Tc8 | 0.707 | 0.616 | 0.648 |
-| vlincs_MS01_MC0001_MCAM08_2024-03-Tc6 | 0.721 | 0.630 | 0.652 |
-| vlincs_MS01_MC0001_MCAM00_2024-03-Tc8 | 0.737 | 0.723 | 0.642 |
-| vlincs_MS01_MC0001_MCAM00_2024-03-Tc6 | 0.775 | 0.731 | 0.698 |
-| vlincs_MS01_MC0001_MCAM05_2024-03-Tc8 | 0.804 | 0.718 | 0.754 |
+| vlincs_MS01_MC0001_MCAM05_2024-03-Tc6 | 0.331 | 0.530 | 0.527 |
+| vlincs_MS01_MC0001_MCAM06_2024-03-Tc6 | 0.523 | 0.577 | 0.393 |
+| vlincs_MS01_MC0001_MCAM04_2024-03-Tc6 | 0.552 | 0.476 | 0.457 |
+| vlincs_MS01_MC0001_MCAM06_2024-03-Tc8 | 0.578 | 0.565 | 0.502 |
+| vlincs_MS01_MC0001_MCAM03_2024-03-Tc8 | 0.580 | 0.519 | 0.472 |
+| vlincs_MS01_MC0001_MCAM03_2024-03-Tc6 | 0.670 | 0.603 | 0.572 |
+| vlincs_MS01_MC0001_MCAM05_2024-03-Tc8 | 0.699 | 0.690 | 0.610 |
+| vlincs_MS01_MC0001_MCAM00_2024-03-Tc8 | 0.724 | 0.729 | 0.647 |
+| vlincs_MS01_MC0001_MCAM08_2024-03-Tc6 | 0.759 | 0.671 | 0.697 |
+| vlincs_MS01_MC0001_MCAM00_2024-03-Tc6 | 0.815 | 0.840 | 0.740 |
 
 Full history → [`SCORES.md`](SCORES.md).
 <!-- CI-SCORES:END -->
