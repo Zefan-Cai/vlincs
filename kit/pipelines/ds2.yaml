@@ -1,0 +1,45 @@
+# DS2 (MS01/MC0001; 30 videos across 9 cameras incl. the DS2-only MCAM01/02/07; Tc1-Tc8 + 2024-04-Tc4) demo
+# recipe + config-of-record. This is a RECORD-WITH-OPEN-QUESTIONS, not a tuned recipe.
+#
+# GOTCHAS (keep these in mind):
+#  - NO GT shipped to performers -> the demo can INGEST / REPLAY / VISUALIZE but score() returns None
+#    (leaderboard scoring only). Validate via the takehome leaderboard, not in-demo.
+#  - 30 videos over ~2 days WITH CLOTHES CHANGES across cards -> a person's appearance differs by card. The
+#    per-video (per-card) structure is exactly what this method is for: within-card locals isolate one outfit;
+#    the cross-video resolve links across cards. The known DS2 failure mode is OVER-FRAGMENTATION (a ~36-person
+#    pool scored globally across cards).
+#  - NO osnet-xcam resolve embedding exists for DS2 (the bundle is FT-SOLIDER PCA-64 only) -> the cross-video
+#    resolve is SINGLE-SPACE on FT-SOLIDER (run_demo reuses the match emb). *** OPEN QUESTION ***: a dedicated
+#    cross-camera resolve embedding (osnet-xcam, like DS1's) would likely help - generate one for DS2 before
+#    judging the cross-video lever here. Until then treat the cross-video result as provisional.
+#
+# INPUTS: the DS1-IDENTICAL bundle (yolo26x@1536 detector + kalman_app_tracklets at the locked DS1 cfg +
+# per-tracklet FT-SOLIDER PCA-64), registered 2026-06 with REAL detector conf + source det_id.
+# See memory/project_per_video_gallery and CLAUDE.md (DS2 section).
+
+pipeline_id: "gallery_ds2"
+dataset:     "vlincs-ds0002"
+split:       "test"
+
+inputs:
+  track:                                            # DS0002 kalman_app_tracklets (real detector conf + det_id)
+    mlflow_run: "2dd5e80b62ee43b98703852e396e82da"
+  embed:                                            # per-tracklet FT-SOLIDER PCA-64 (the match space)
+    mlflow_run: "a815d6225822439ca8de5ced00891a64"
+  # resolve_embed: none shipped for DS2 -> SINGLE-SPACE resolve on the match emb (see GOTCHAS).
+
+reduce:
+  method: none          # FT-SOLIDER emb is already 64-d -> push as-is
+
+gallery:
+  per_video:       true         # per-card matchers -> within-card locals (the clothes-change isolation)
+  cannot_link:     false        # DS2 cameras overlap within a card -> appearance-only
+  match_mode:      centroid
+  tau:             0.75         # the DS1 high-purity sweet spot (FT-SOLIDER scale); re-tune if DS2 differs
+  coherence_floor: 0.40
+  max_reps:        16
+  resolve:         two_tier     # must-link cross-video resolve; SINGLE-SPACE on FT-SOLIDER (no osnet - see GOTCHAS)
+  resolve_theta:   auto         # GT-free theta (co-visibility violations). 9 cameras -> should be decisive (DS1-like).
+  resolve_theta_grid: [0.02, 0.04, 0.05, 0.08, 0.10]   # FT-SOLIDER scale (low; matches DS1)
+  resolve_top_k:   30
+  resolve_min_dets: 1

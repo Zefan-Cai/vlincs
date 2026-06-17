@@ -1,0 +1,37 @@
+# MS02 (MS02/MC0002, 2 cameras MCAM310 + MCAM318) demo recipe + config-of-record.
+#
+# SOURCE: the SHIPPED bundle kit/demo_data/ms02/ (tracklets.parquet + pooled_emb.npy + seqs.npy), read by the
+# kit's own loader (_ms02_tracklets). NO MLflow inputs. ONE embedding space only: SOLIDER-PCA64 64-d - there is
+# NO separate osnet-xcam resolve embedding, so the cross-video resolve is SINGLE-SPACE (run_demo reuses the
+# match emb as the resolve vec).
+#
+# GOTCHAS (the eval firewall - keep these in mind):
+#  - GT is SPARSE (~1.5 dets/frame) -> score dense=False and LEAD WITH AssA. reid_hota IDF1 wobbles +/-0.02 with
+#    predicted-id label numbering (Hungarian tie-break on sparse GT) -> treat small MS02 IDF1 deltas as noise;
+#    AssA is label-invariant and is the honest signal.
+#  - EMBEDDING-LIMITED: SOLIDER-PCA64 same-vs-diff-person cosine gap is only ~0.073 (near-degenerate) -> cross-
+#    camera matching is weak. The cross-video resolve neither helps much nor (at conservative theta) hurts.
+#    MS02 is a SANITY CHECK, not a performance gate; DS1 (dense GT) is the real test.
+#  - tau is on the SOLIDER-PCA64 cosine scale (~0.85-0.88), NOT DS1's 0.60. Aggressive cross-video merging
+#    (low resolve_theta) HURTS here - keep it conservative.
+#
+# Per-video result (high-purity, no mid-stream consolidate): AssA 0.768 -> 0.814 vs the old consolidated config.
+# See memory/project_per_video_gallery + reference_ms02_eval_firewall + reference_reid_hota_idf1_label_sensitivity.
+
+pipeline_id: "gallery_ms02"
+dataset:     "ms02"
+
+gallery:
+  per_video:       true         # per-camera matchers -> high-purity within-camera locals (the AssA win)
+  cannot_link:     false        # appearance-only (2 cameras; the geo/simultaneity veto is marginal here)
+  match_mode:      centroid
+  tau:             0.88         # high-purity within-camera match (SOLIDER-PCA64 scale; do NOT use DS1's 0.60)
+  coherence_floor: 0.40
+  max_reps:        16
+  resolve:         two_tier     # must-link cross-video resolve; SINGLE-SPACE (reuses the match emb; no osnet)
+  resolve_theta:   auto         # GT-free theta (co-visibility violations). 2-camera co-visibility signal is
+                                # WEAK -> defaults conservative; harmless because MS02 AssA is ~flat across theta.
+                                # Pin a float (e.g. 0.80) for a deterministic demo.
+  resolve_theta_grid: [0.5, 0.6, 0.7, 0.78, 0.85, 0.9]   # SOLIDER-PCA64 scale (high; unlike DS1's ~0.05)
+  resolve_top_k:   30
+  resolve_min_dets: 1

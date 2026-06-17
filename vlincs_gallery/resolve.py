@@ -299,3 +299,56 @@ def mustlink_resolve(
         n_cand_edges=int(len(Ix)),
         n_items=int(K),
     )
+
+
+def estimate_theta_by_violations(
+    resolve_fn,
+    theta_grid,
+    cannot_link_pairs,
+    *,
+    budget: float = 0.01,
+    rel_margin: float = 0.35,
+):
+    """GT-FREE op-point picker for the cross-video resolve.
+
+    theta is not a universal constant - its scale depends on the embedding (DS1 osnet-xcam peaks ~0.04,
+    MS02 SOLIDER-PCA64 ~0.78), so it must be calibrated per embedding. This does it with NO ground truth,
+    using the one hard physical fact we always have: two tracklets co-visible in the same frame with
+    distinct boxes are DEFINITELY different people (a ``cannot_link`` pair). A clustering that puts such a
+    pair in one cluster commits a definite error. Lower theta merges more -> more violations; we pick the
+    MOST-merging theta whose violation rate stays within tolerance (the TA1 asymmetry: a wrong merge
+    costs far more than leaving an identity fragmented, so stay conservative).
+
+    The tolerance is RELATIVE to the curve's own violation FLOOR (the min over the grid - the irreducible
+    co-visibility merges this embedding always makes), not a fixed absolute number: ``thresh = max(budget,
+    floor * (1 + rel_margin))``. The floor differs per embedding (DS1 ~0.012, others differ), so an absolute
+    budget that's too tight for one dataset over-conservatively falls back to the no-merge end; the
+    relative margin self-calibrates. On DS1 this lands on theta=0.04 (the IDF1/AssA peak).
+
+    Args:
+        resolve_fn: callable(theta) -> ResolveResult (e.g. ``lambda t: mustlink_resolve(emb, cc, local, t)``).
+            Only clusters; does NOT score - so the sweep is cheap (no GT, no reid_hota).
+        theta_grid: thetas to try.
+        cannot_link_pairs: iterable of (i, j) item-index pairs known to be different entities.
+        budget: absolute floor on the tolerance (a hard min so a near-zero violation floor doesn't pin theta).
+        rel_margin: tolerance above the violation floor, as a fraction of the floor.
+
+    Returns:
+        (best_theta, curve) where curve = list of (theta, n_clusters, violation_rate), theta-ascending.
+    """
+    pairs = np.array(sorted({(int(a), int(b)) for a, b in cannot_link_pairs}), dtype=np.int64) \
+        if cannot_link_pairs else np.zeros((0, 2), np.int64)
+    curve = []
+    for theta in sorted(theta_grid):              # ascending: fewer merges (more clusters) as theta rises
+        res = resolve_fn(float(theta))
+        if len(pairs):
+            lab = res.labels
+            vrate = float((lab[pairs[:, 0]] == lab[pairs[:, 1]]).mean())
+        else:
+            vrate = 0.0
+        curve.append((float(theta), int(res.n_clusters), vrate))
+    floor = min((c[2] for c in curve), default=0.0)
+    thresh = max(budget, floor * (1.0 + rel_margin))
+    ok = [c for c in curve if c[2] <= thresh]
+    best = min(ok, key=lambda c: c[0])[0] if ok else max(curve, key=lambda c: c[0])[0]
+    return best, curve
