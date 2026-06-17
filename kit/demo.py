@@ -382,8 +382,9 @@ def run_demo(dataset: str = "ms02", resolve_every: int | None = None, submit: st
 def main():
     """Parse argv and run the one-click demo for the chosen dataset."""
     ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
-    ap.add_argument("--dataset", default="ms02", choices=["ms02", "ds1"],
-                    help="ms02 = shipped bundle (fast, offline); ds1 = pipelines/ds1.yaml (bundle or MLflow)")
+    ap.add_argument("--dataset", default="ms02", choices=["ms02", "ds1", "ds2"],
+                    help="ms02 = shipped bundle (fast, offline); ds1/ds2 = pipelines/<ds>.yaml (bundle or MLflow). "
+                         "ds2 has no GT -> ingest/replay only (score is None)")
     ap.add_argument("--resolve-every", type=int, default=None, help="periodic resolve every N tracklets (default ds1=500, ms02=100)")
     ap.add_argument("--submit", default=None, help="also write a TA1 submission zip here")
     ap.add_argument("--cannot-link", dest="cannot_link", action="store_true", default=None,

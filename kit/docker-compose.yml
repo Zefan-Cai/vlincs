@@ -8,7 +8,7 @@ services:
       POSTGRES_USER: gallery
       POSTGRES_PASSWORD: gallery
       POSTGRES_DB: gallery
-    ports: ["55433:5432"]                  # YOUR pipeline connects here: PGHOST=localhost PGPORT=55433
+    ports: ["${GALLERY_DB_HOST_PORT:-55433}:5432"]   # dev: localhost:55433. CI sets =0 (ephemeral) so concurrent same-host builds don't clash on the port
     volumes: ["pgdata:/var/lib/postgresql/data"]
     healthcheck:
       test: ["CMD-SHELL", "pg_isready -U gallery"]

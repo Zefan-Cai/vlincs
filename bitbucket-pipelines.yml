@@ -4,52 +4,64 @@
 # Background + every gotcha: memory note `gallery-ci-maxwell-runner`. Script lines are unquoted YAML
 # scalars, so keep them free of a colon-space ': '.
 #
-# Triggers on main (the live scoreboard) and ci/gallery-scores (iteration). The decision config is PINNED
+# Triggers on EVERY branch ('**'); scores are computed + reported PER-BRANCH - the publish step renders +
+# commits to $BITBUCKET_BRANCH, and ci/scores_history.csv is keyed by (dataset, commit) on that branch, so a
+# feature branch gets its own scoreboard/badges independent of main. The decision config is PINNED
 # (--no-cannot-link) so a score change tracks code, not a yaml-default drift. The publish step commits the
 # scores back with [skip ci]; it needs a secured repo variable BADGE_PUSH_TOKEN (a Repository Access Token
 # with repository:write). Without that variable it still produces the files as artifacts, just no push.
+# Cross-branch parallelism comes from extra self-hosted runners (label self.hosted,linux.shell): each
+# branch's pipeline runs on its own runner concurrently.
 
 pipelines:
   branches:
-    '{main,ci/gallery-scores}':
-      - step:
-          name: MS02 demo (offline) + score
-          runs-on:
-            - self.hosted
-            - linux.shell
-          artifacts:
-            - ms02_score.txt
-          script:
-            - set -x
-            - unset DOCKER_HOST                              # use maxwell's host daemon, not the absent DinD
-            - cd kit
-            - export DATA_ROOT=/mnt/datastore2_videolincs/data
-            - export COMPOSE_PROJECT_NAME=gallery_ci_ms02
-            - export GALLERY_CODE_SHA="$BITBUCKET_COMMIT"    # -> decision_log.code_sha (DB reflects the commit)
-            - docker compose down -v || true
-            - docker compose build app
-            - docker compose run --rm app demo --dataset ms02 --no-cannot-link 2>&1 | tee ../ms02_score.txt
-            - docker compose down -v || true
-      - step:
-          name: DS1 demo (offline LFS) + score
-          runs-on:
-            - self.hosted
-            - linux.shell
-          clone:
-            lfs: true                                        # pull the ~103MB DS1 bundle (git-lfs is on maxwell)
-          artifacts:
-            - ds1_score.txt
-          script:
-            - set -x
-            - unset DOCKER_HOST
-            - cd kit
-            - export DATA_ROOT=/mnt/datastore2_videolincs/data
-            - export COMPOSE_PROJECT_NAME=gallery_ci_ds1
-            - export GALLERY_CODE_SHA="$BITBUCKET_COMMIT"
-            - docker compose down -v || true
-            - docker compose build app
-            - docker compose run --rm app demo --dataset ds1 --no-cannot-link 2>&1 | tee ../ds1_score.txt
-            - docker compose down -v || true
+    '**':
+      # MS02 + DS1 run in PARALLEL (two runners); their score artifacts both flow to the Publish step. Each
+      # uses a unique COMPOSE_PROJECT_NAME + ephemeral db port, so concurrent builds on the same host don't
+      # collide. A `trap ... EXIT` guarantees `docker compose down -v` on success/failure/stop (SIGTERM), so
+      # no volume orphans - no cron/manual prune. (Only a hard kill -9 could leak, and even then the unique
+      # project name means it never blocks another build.)
+      - parallel:
+          - step:
+              name: MS02 demo (offline) + score
+              runs-on:
+                - self.hosted
+                - linux.shell
+              artifacts:
+                - ms02_score.txt
+              script:
+                - set -x
+                - unset DOCKER_HOST                          # use maxwell's host daemon, not the absent DinD
+                - cd kit
+                - export DATA_ROOT=/mnt/datastore2_videolincs/data
+                - export COMPOSE_PROJECT_NAME=gallery_ci_ms02_$BITBUCKET_BUILD_NUMBER
+                - export GALLERY_DB_HOST_PORT=0
+                - export GALLERY_CODE_SHA="$BITBUCKET_COMMIT"
+                - |
+                  trap 'docker compose down -v || true' EXIT
+                  docker compose build app
+                  docker compose run --rm app demo --dataset ms02 --no-cannot-link 2>&1 | tee ../ms02_score.txt
+          - step:
+              name: DS1 demo (offline LFS) + score
+              runs-on:
+                - self.hosted
+                - linux.shell
+              clone:
+                lfs: true                                    # pull the ~103MB DS1 bundle (git-lfs is on maxwell)
+              artifacts:
+                - ds1_score.txt
+              script:
+                - set -x
+                - unset DOCKER_HOST
+                - cd kit
+                - export DATA_ROOT=/mnt/datastore2_videolincs/data
+                - export COMPOSE_PROJECT_NAME=gallery_ci_ds1_$BITBUCKET_BUILD_NUMBER
+                - export GALLERY_DB_HOST_PORT=0
+                - export GALLERY_CODE_SHA="$BITBUCKET_COMMIT"
+                - |
+                  trap 'docker compose down -v || true' EXIT
+                  docker compose build app
+                  docker compose run --rm app demo --dataset ds1 --no-cannot-link 2>&1 | tee ../ds1_score.txt
       - step:
           name: Publish scores (SCORES.md + badges)
           runs-on:
