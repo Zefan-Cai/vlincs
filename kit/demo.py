@@ -130,10 +130,11 @@ def _ds1_from_bundle(pkl: str, resolve_emb_path: str | None = None, resolve_emb_
 _DS1_BUNDLE = _HERE / "demo_data" / "ds1"     # optional offline (Git LFS) bundle; `git lfs pull` to populate
 
 
-def _ds1_input_dir(sub: str, run: str, mlflow_path: str):
-    """An offline-first DS1 input dir: use the local Git LFS bundle (`kit/demo_data/ds1/<sub>`) if its files are
-    really present (not LFS pointers), else download `mlflow_path` from the MLflow `run`. Returns (dir, source)."""
-    p = _DS1_BUNDLE / sub
+def _ds1_input_dir(sub: str, run: str, mlflow_path: str, bundle_root: Path = _DS1_BUNDLE):
+    """An offline-first input dir: use the local Git LFS bundle (`kit/demo_data/<ds>/<sub>`) if its files are
+    really present (not LFS pointers), else download `mlflow_path` from the MLflow `run`. Returns (dir, source).
+    `bundle_root` selects the dataset's bundle (default DS1)."""
+    p = bundle_root / sub
     real = [f for f in p.rglob("*") if f.suffix in (".parquet", ".npz")] if p.is_dir() else []
     if real and all(f.stat().st_size > 4096 for f in real):     # LFS pointers are ~130 B; real artifacts are MB
         return p, "local LFS bundle"
@@ -141,28 +142,27 @@ def _ds1_input_dir(sub: str, run: str, mlflow_path: str):
         import mlflow
     except ImportError as e:
         raise SystemExit(
-            f"[demo] DS1 inputs: the local LFS bundle (kit/demo_data/ds1/) isn't pulled and MLflow isn't "
-            f"available - either `git lfs pull`, or install the DS1 extras (`pip install -r requirements-ds1.txt`) "
-            f"+ set MLFLOW_TRACKING_URI. ({e})")
+            f"[demo] inputs: the local LFS bundle ({bundle_root}/) isn't pulled and MLflow isn't available - "
+            f"either `git lfs pull`, or install the extras + set MLFLOW_TRACKING_URI. ({e})")
     return Path(mlflow.artifacts.download_artifacts(run_id=run, artifact_path=mlflow_path)), "MLflow"
 
 
-def _ds1_from_mlflow(spec: dict):
-    """Load the DS1 track + per-tracklet embed inputs, join 1:1 on tracklet_key, and reduce to the 64-d match
-    space the yaml declares. Inputs come from the local Git LFS bundle if pulled, else from MLflow (needs
-    MLFLOW_TRACKING_URI + the DS1 extras, kit/requirements-ds1.txt)."""
+def _ds1_from_mlflow(spec: dict, bundle_root: Path = _DS1_BUNDLE):
+    """Load the track + per-tracklet embed inputs, join 1:1 on tracklet_key, and reduce to the match space the
+    yaml declares. Inputs come from the local Git LFS bundle if pulled, else from MLflow. Dataset-agnostic:
+    `bundle_root` selects the bundle (DS1 default; DS2 has track+embed but no resolve_embed -> resolve_arr None)."""
     track_run = spec["inputs"]["track"]["mlflow_run"]
     embed_run = spec["inputs"]["embed"]["mlflow_run"]
     rc = spec.get("reduce", {})
-    trk_root, s_trk = _ds1_input_dir("tracklets", track_run, "tracklets")
-    emb_root, s_emb = _ds1_input_dir("embeddings", embed_run, "embeddings")
+    trk_root, s_trk = _ds1_input_dir("tracklets", track_run, "tracklets", bundle_root)
+    emb_root, s_emb = _ds1_input_dir("embeddings", embed_run, "embeddings", bundle_root)
     _log(f"DS1: track from {s_trk}, greedy-embed from {s_emb}")
     # RESOLVE-space embed (osnet-xcam 512-d): a SECOND per-tracklet vector joined by the SAME tracklet_key,
     # stored in the gallery (role='resolve') and re-clustered by resolve_global(). Used as-is (no reduce).
     resolve_run = (spec.get("inputs", {}).get("resolve_embed") or {}).get("mlflow_run")
     resolve_vec_of: dict = {}
     if resolve_run:
-        rroot, s_res = _ds1_input_dir("resolve/embeddings", resolve_run, "embeddings")
+        rroot, s_res = _ds1_input_dir("resolve/embeddings", resolve_run, "embeddings", bundle_root)
         for vd in sorted(p for p in rroot.iterdir() if p.is_dir()):
             rz = np.load(vd / "embeddings.npz", allow_pickle=True)
             rvecs, rtids = rz["vectors"], rz["track_ids"]   # read each array ONCE - z[...] re-decodes the WHOLE
@@ -237,9 +237,29 @@ def _ds1_source(pipeline_yaml: str = DS1_PIPELINE):
     return trk, gcfg, remb
 
 
+def _load_pipeline(dataset: str) -> dict:
+    """Load pipelines/<dataset>.yaml - the per-dataset demo config-of-record (gallery knobs + the inline
+    rationale/gotchas). Env override <DS>_PIPELINE; {} if the file is absent."""
+    import yaml
+    p = os.environ.get(f"{dataset.upper()}_PIPELINE", str(_HERE / "pipelines" / f"{dataset}.yaml"))
+    return yaml.safe_load(Path(p).read_text()) if Path(p).exists() else {}
+
+
+def _ds2_source():
+    """(tracklets, gallery_cfg, resolve_emb=None) for DS2 from pipelines/ds2.yaml `inputs:` (MLflow track+embed;
+    local bundle kit/demo_data/ds2 if pulled). DS2 ships NO osnet-xcam resolve embed and NO GT -> the resolve is
+    SINGLE-SPACE (run_demo reuses the match emb) and score() returns None (leaderboard only)."""
+    spec = _load_pipeline("ds2")
+    if not spec.get("inputs"):
+        raise SystemExit("[demo] DS2: pipelines/ds2.yaml has no inputs: block (track/embed MLflow runs).")
+    gcfg = spec.get("gallery", {}) or {}
+    trk, remb = _ds1_from_mlflow(spec, bundle_root=_HERE / "demo_data" / "ds2")
+    return trk, gcfg, remb
+
+
 # --------------------------------------------------------------------------------------------------------
 _GALLERY_KEYS = ("tau", "merge_tau", "match_mode", "max_reps", "coherence_floor", "admit_tau",
-                 "tracklet_coh_min", "max_speed", "sim_window_ms", "same_box_iou")
+                 "tracklet_coh_min", "max_speed", "sim_window_ms", "same_box_iou", "per_video")
 
 
 def run_demo(dataset: str = "ms02", resolve_every: int | None = None, submit: str | None = None,
@@ -266,13 +286,20 @@ def run_demo(dataset: str = "ms02", resolve_every: int | None = None, submit: st
     if dataset == "ds1":
         tracklets, gcfg, resolve_emb = _ds1_source()
         src_desc = f"{len(tracklets)} DS1 tracklets"
+    elif dataset == "ds2":
+        tracklets, gcfg, resolve_emb = _ds2_source()
+        src_desc = f"{len(tracklets)} DS2 tracklets (no GT -> ingest/replay only)"
     else:
         tracklets = _ms02_tracklets(data_dir)
-        # MS02 config: tau=0.85 (the SOLIDER-PCA64 same-person cosine scale), cannot_link=False
-        # (appearance-only; marginal on a within-camera set), resolve=auto (mean_cams/gid=1.0 -> the
-        # global merge is SKIPPED; it would only collapse distinct people).
-        gcfg = {"tau": 0.85, "cannot_link": False, "resolve": "auto"}
+        # MS02 config now lives in pipelines/ms02.yaml (the config-of-record + firewall gotchas); the dict is
+        # only a fallback if the yaml is absent. Shipped bundle is the source (no MLflow inputs for MS02).
+        gcfg = _load_pipeline("ms02").get("gallery") or {"tau": 0.85, "cannot_link": False, "resolve": "auto"}
         src_desc = f"{len(tracklets)} MS02 tracklets (shipped bundle)"
+    # SINGLE-SPACE resolve: MS02/DS2 ship no dedicated cross-camera resolve embedding, so two_tier/global_agglom
+    # reuse the per-tracklet MATCH embedding as the resolve vec (stored role='resolve' too). DS1 has osnet-xcam.
+    if resolve_emb is None and str(gcfg.get("resolve")) in ("two_tier", "global_agglom"):
+        resolve_emb = np.stack([np.asarray(t[4], np.float32) for t in tracklets])
+        _log(f"{dataset}: no dedicated resolve embed -> SINGLE-SPACE resolve (reusing the match emb)")
 
     cl = cannot_link if cannot_link is not None else bool(gcfg.get("cannot_link", True))
     re_every = resolve_every if resolve_every is not None else (500 if dataset == "ds1" else 100)
@@ -289,7 +316,7 @@ def run_demo(dataset: str = "ms02", resolve_every: int | None = None, submit: st
     def _should_resolve():                                                # the cross-cam-gap gate
         if resolve_mode in ("on", "off"):
             return resolve_mode == "on"
-        if resolve_mode == "global_agglom":
+        if resolve_mode in ("global_agglom", "two_tier"):
             return False                                                  # global re-cluster is a FINAL step, not periodic
         return g.m.camera_span_stats().get("mean_cameras_per_gid", 1.0) >= xcam_gate   # 'auto'
     total = len(tracklets)
@@ -305,7 +332,22 @@ def run_demo(dataset: str = "ms02", resolve_every: int | None = None, submit: st
             eta = (total - n) / rate if rate else 0
             _log(f"ingest {n}/{total} ({100 * n // total}%) | {rate:.1f} trk/s | ETA {int(eta)}s "
                  f"| live identities ~{g.m.next_gid - 1}")
-    if resolve_mode == "global_agglom":
+    if resolve_mode == "two_tier":
+        if resolve_emb is None:
+            raise SystemExit("[demo] resolve=two_tier needs a resolve embed (inputs.resolve_embed in the yaml)")
+        top_k = int(gcfg.get("resolve_top_k", 30)); min_dets = int(gcfg.get("resolve_min_dets", 1))
+        rt = gcfg.get("resolve_theta", 0.04)
+        if str(rt) == "auto":                                            # GT-free theta (co-visibility violations)
+            grid = gcfg.get("resolve_theta_grid", [0.02, 0.04, 0.05, 0.08, 0.10])
+            theta, curve = g.estimate_two_tier_theta(grid, top_k=top_k, min_dets=min_dets)
+            _log(f"two-tier: GT-free theta estimate -> {theta} (curve {[(t, round(v, 4)) for t, _, v in curve]})")
+        else:
+            theta = float(rt)
+        _log(f"two-tier resolve (per-video must-link, theta={theta}, top_k={top_k}): cross-video links from the "
+             f"kNN graph with same-local tracklets forced together...")
+        info = g.resolve_two_tier(theta, top_k=top_k, min_dets=min_dets)
+        _log(f"two-tier: {info['n_locals']} per-video locals -> {info['clusters']} identities; scoring (reid_hota)...")
+    elif resolve_mode == "global_agglom":
         if resolve_emb is None:
             raise SystemExit("[demo] resolve=global_agglom needs a resolve embed (inputs.resolve_embed in the yaml); "
                              "the gallery stores it per tracklet (role='resolve') and re-clusters on it")
