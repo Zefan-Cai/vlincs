@@ -24,9 +24,14 @@ services:
       PGPORT: "5432"
       DATA_ROOT: /data
       GALLERY_DATASET: "${DATASET:-ds1}"   # which dataset's gallery the viz shows
-    volumes: ["${DATA_ROOT:-/mnt/datastore2_videolincs/data}:/data:ro"]   # videos (for crops) + GT, read-only
+    volumes:
+      - "${DATA_ROOT:-/mnt/datastore2_videolincs/data}:/data:ro"   # videos (for crops) + GT, read-only
+      - ../vlincs_gallery:/app/vlincs_gallery                      # LIVE viz API source: uvicorn --reload picks
+                                                                   # up viz/app.py edits with NO `docker compose build viz`
     ports: ["8077:8077"]
-    command: ["serve"]
+    # --reload + the live mount above hot-reload the viz API on edit. Routed through entrypoint.sh's `exec "$@"`
+    # passthrough; PYTHONPATH=/app:/app/kit is baked in the image so the module import resolves unchanged.
+    command: ["uvicorn", "vlincs_gallery.viz.app:app", "--host", "0.0.0.0", "--port", "8077", "--reload", "--reload-dir", "/app/vlincs_gallery"]
 
   ui:                                      # http://localhost:4200 — the existing Angular frontend, proxied to viz
     image: node:20-slim

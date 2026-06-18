@@ -580,6 +580,33 @@ class OnlineGallery:
         self.con.commit()
         return {"merges": len(real), "events": len(events) if events else 0}
 
+    def _record_resolve_merges(self, cur, rows, gid_of_seq, seqs, score):
+        """Record the resolve as a TERMINAL merge wave so the viz reflects it.
+
+        The viz replays identities by walking the `merges` table (at_seq <= step) from each detection's
+        birth gid (decision_log.chosen_gid). The bulk resolve UPDATEs assignments.gid but writes no
+        merges, so a decision-order replay never sees the collapse and the timeline ends on the
+        pre-resolve local gids ("loads of IDs"). Here we record, at at_seq = max(seq)+1 (one step past
+        the last decision), a merge for every pre-resolve local gid (rows[i][4] = MIN(gid) per seq) into
+        its final resolved gid. Scrubbing to that terminal step then "pops" the locals into the resolved
+        identities, reusing the viz's existing _CANON merge-replay. Idempotent: clears any prior resolve
+        wave (at_seq past the last decision) first. resolve_two_tier is must-link so local->resolved is
+        1:1; resolve_global can split a local across clusters (captured best-effort, first resolved seen).
+        """
+        if not seqs:
+            return
+        last = max(seqs)
+        cur.execute("DELETE FROM merges WHERE at_seq > %s", (last,))   # clear any prior resolve wave
+        term = last + 1
+        birth = {int(r[0]): int(r[4]) for r in rows}                   # seq -> pre-resolve (canonical local) gid
+        loc2res: dict[int, int] = {}
+        for s in seqs:
+            old, new = birth.get(s, s), int(gid_of_seq[s])
+            if old != new:
+                loc2res.setdefault(old, new)
+        if loc2res:
+            cur.executemany(_INSERT_MERGE, [(term, old, new, float(score)) for old, new in loc2res.items()])
+
     def resolve_global(self, theta: float, *, top_k: int = 15, min_dets: int = 20) -> dict:
         """GLOBAL re-partition from the gallery's OWN stored resolve embeddings (role='resolve', pushed per
         tracklet during the stream - the gallery is the system of record). Reads them back seq-ordered + each
@@ -592,9 +619,9 @@ class OnlineGallery:
         preceded the re-partition). New gids are OFFSET clear of the greedy ones."""
         from vlincs_gallery.resolve import global_agglom_resolve
         cur = self.con.cursor()
-        cur.execute("SELECT e.seq, d.camera, e.vec, n.cnt FROM embeddings e "
+        cur.execute("SELECT e.seq, d.camera, e.vec, n.cnt, n.lid FROM embeddings e "
                     "JOIN detections d ON e.entity_id = d.det_id "
-                    "JOIN (SELECT seq, COUNT(*) cnt FROM assignments GROUP BY seq) n ON n.seq = e.seq "
+                    "JOIN (SELECT seq, COUNT(*) cnt, MIN(gid) lid FROM assignments GROUP BY seq) n ON n.seq = e.seq "
                     "WHERE e.role = 'resolve' ORDER BY e.seq")
         rows = cur.fetchall()
         if not rows:
@@ -634,6 +661,7 @@ class OnlineGallery:
                              int(lbl) + OFFSET))
         if coh_rows:
             cur.executemany("UPDATE identities SET coherence=%s WHERE gid=%s", coh_rows)
+        self._record_resolve_merges(cur, rows, gid_of_seq, seqs, theta)
         self.con.commit()
         self._global_resolved = True    # the matcher bank now keys the stale pre-resolve gids (see close())
         return {"clusters": int(res.n_clusters), "theta": float(theta), "min_dets": min_dets,
@@ -723,6 +751,7 @@ class OnlineGallery:
                     for lbl in np.unique(res.labels)]
         if coh_rows:
             cur.executemany("UPDATE identities SET coherence=%s WHERE gid=%s", coh_rows)
+        self._record_resolve_merges(cur, rows, gid_of_seq, seqs, theta)
         self.con.commit()
         self._global_resolved = True
         return {"clusters": int(res.n_clusters), "theta": float(theta), "min_dets": min_dets,
