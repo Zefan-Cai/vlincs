@@ -30,6 +30,11 @@ import numpy as np
 
 _HERE = Path(__file__).resolve().parent
 
+# Above this many tracklets the dense two-tier resolve (N^2 cosine Gram + N^2 precomputed agglomerative)
+# OOMs - DS1 is ~9.7k (dense, the validated path), DS2 is ~232k (scalable). The faiss-kNN + must-link
+# contraction path is the exact UPGMA-contraction equivalent, so the switch is purely a scale guard.
+_RESOLVE_DENSE_MAX = 40_000
+
 
 def _iou_mat(B):
     """Pairwise IoU of an (n,4) box array -> (n,n)."""
@@ -653,7 +658,8 @@ class OnlineGallery:
         Returns:
             dict: ``{clusters, theta, n_tracklets, n_clustered, n_locals}``.
         """
-        from vlincs_gallery.resolve import mustlink_resolve
+        from vlincs_gallery.resolve import (mustlink_resolve, mustlink_resolve_scalable,
+                                            prepare_mustlink_scalable, cluster_prepared)
         cur = self.con.cursor()
         # n.lid = the tracklet's per-video LOCAL gid (its streamed assignment gid; all the tracklet's dets
         # share it) -> the must-link key. n.cnt = its detection count (the min_dets gate). The exclude-same
@@ -672,7 +678,26 @@ class OnlineGallery:
         cam_codes = np.array([ccode[rows[i][1]] for i in keep], np.int64)
         local_ids = np.array([int(rows[i][4]) for i in keep], np.int64)
         emb = np.stack([np.asarray(rows[i][2], np.float32) for i in keep])
-        res = mustlink_resolve(emb, cam_codes, local_ids, theta=theta, top_k=top_k)
+        # Above _RESOLVE_DENSE_MAX tracklets the dense N^2 affinity + precomputed agglomerative OOM (DS2:
+        # ~232k -> 200 GiB). The scalable path (faiss cross-cam kNN + must-link contraction to L locals +
+        # L x L average-linkage) is the exact UPGMA-contraction equivalent (validated == dense on DS1).
+        if len(keep) > _RESOLVE_DENSE_MAX:
+            # Reuse the faiss-kNN + contracted affinity built by a preceding estimate_two_tier_theta on the
+            # SAME (kept) tracklets - the DB is unchanged between estimate and resolve, so rebuilding it
+            # (another ~400s faiss pass at DS2 scale) is pure waste.
+            sig = (min_dets, top_k, len(keep), seqs[keep[0]] if keep else -1,
+                   seqs[keep[-1]] if keep else -1)
+            cached = getattr(self, "_tt_prep", None)
+            if cached is not None and cached[0] == sig:
+                print(f"[online] resolve_two_tier: reusing cached affinity from estimate ({len(keep)} tracklets)",
+                      flush=True)
+                res = cluster_prepared(cached[1], theta)
+            else:
+                print(f"[online] resolve_two_tier: {len(keep)} tracklets > {_RESOLVE_DENSE_MAX} -> scalable "
+                      "(faiss kNN + contracted UPGMA)", flush=True)
+                res = mustlink_resolve_scalable(emb, cam_codes, local_ids, theta=theta, top_k=top_k)
+        else:
+            res = mustlink_resolve(emb, cam_codes, local_ids, theta=theta, top_k=top_k)
         OFFSET = 100_000_000     # clear of the greedy per-video locals (vidx*VID_OFFSET, <= n_videos*1M) AND
         gid_of_seq = {seqs[i]: int(res.labels[k]) + OFFSET for k, i in enumerate(keep)}   # resolve_global's 10M
         sing = OFFSET + int(res.n_clusters) + 1
@@ -712,7 +737,9 @@ class OnlineGallery:
         whose violation rate stays within rel_margin of its floor (estimate_theta_by_violations). Returns
         (theta, curve). Strong on multi-camera/dense co-visibility (DS1); weak (defaults conservative) where
         co-visibility is sparse (e.g. 2-camera MS02)."""
-        from vlincs_gallery.resolve import mustlink_resolve, estimate_theta_by_violations
+        from vlincs_gallery.resolve import (mustlink_resolve, mustlink_resolve_scalable,
+                                            prepare_mustlink_scalable, cluster_prepared,
+                                            estimate_theta_by_violations)
         from collections import defaultdict
         cur = self.con.cursor()
         cur.execute("SELECT e.seq, d.video, e.vec, n.cnt, n.lid FROM embeddings e "
@@ -745,9 +772,20 @@ class OnlineGallery:
             ai, bi = np.where(np.triu(_iou_mat(B) < sbi, 1))
             for a, b in zip(idxs[ai], idxs[bi]):
                 cl.add((int(a), int(b)) if a < b else (int(b), int(a)))
+        # Build the faiss-kNN + contracted affinity ONCE for the whole theta sweep when large (the dense
+        # path would recompute the N^2 work per grid point and OOM at DS2 scale); else dense per-theta.
+        if len(keep) > _RESOLVE_DENSE_MAX:
+            print(f"[online] estimate_two_tier_theta: {len(keep)} tracklets > {_RESOLVE_DENSE_MAX} -> scalable "
+                  "(prepare affinity once, re-cut per theta)", flush=True)
+            prep = prepare_mustlink_scalable(emb, cam_codes, local_ids, top_k=top_k)
+            resolve_fn = lambda t: cluster_prepared(prep, t)
+            # stash for resolve_two_tier so it reuses this affinity instead of rebuilding (same DB state)
+            sig = (min_dets, top_k, len(keep), seqs[keep[0]] if keep else -1, seqs[keep[-1]] if keep else -1)
+            self._tt_prep = (sig, prep)
+        else:
+            resolve_fn = lambda t: mustlink_resolve(emb, cam_codes, local_ids, theta=t, top_k=top_k)
         return estimate_theta_by_violations(
-            lambda t: mustlink_resolve(emb, cam_codes, local_ids, theta=t, top_k=top_k),
-            theta_grid, cl, budget=budget, rel_margin=rel_margin)
+            resolve_fn, theta_grid, cl, budget=budget, rel_margin=rel_margin)
 
     def score(self) -> dict:
         """IDF1 from the live DB via the canonical reid_hota scorer (leaderboard config, dense=False).
