@@ -1919,5 +1919,13 @@
     "next_direction": "train_subpart_side_effect_referee_and_search_new_high_recall_false_split_repairs",
     "status": "refuted_no_new_best",
     "ts": "2026-06-22"
+  },
+  {
+    "artifacts": [
+      "reports/no_anchor_filter_sweep_currentbest_20260622.md"
+    ],
+    "direction": "currentbest_detection_filter_local_sweep",
+    "finding": "Six corrected h100-test-3 filter variants confirmed canonical p005_area as the local best around current best IDF1 0.657653; relaxed policies lost precision, strict policies lost recall, and MCAM04 q05 area was harmful.",
+    "status": "closed"
   }
 ]

@@ -107,9 +107,31 @@ The two combinations containing selection rank `3`, corresponding to `19 -> 11`,
 
 This converts `19 -> 11` from a suspicious near-negative into a confirmed hard-negative side-effect label. The next branch should train/calibrate a side-effect referee and search new high-recall false-split repair sources instead of blindly composing tie edits.
 
+## Latest Detection Filter Refutation
+
+A corrected h100-test-3 sweep tested six no-anchor detection/admission filters
+around the current best assignment.  The first remote wrapper attempt omitted
+`DATA_ROOT`, produced empty cost matrices, and is recorded as a runner bug; the
+authoritative rerun used `DATA_ROOT=/mnt/localssd/vlincs_reid_data`.
+
+Result: no new best.  Canonical `p005_area` remains the local best:
+
+`IDF1 / HOTA / AssA = 0.657653 / 0.520723 / 0.535819`
+
+Relaxing the area filter improved recall but lost enough precision to lower
+IDF1.  Tightening the filter improved precision but lost recall.  The
+MCAM04-only strict `q05_area` variant was harmful, dropping to:
+
+`IDF1 / HOTA / AssA = 0.656550 / 0.519248 / 0.534720`
+
+This closes the immediate detection/filter neighborhood and sends the next
+research branch back to side-effect-aware no-anchor identity evidence.
+
 Additional S3 pointers:
 
 ```text
 s3://dit-scale-up/zcai/vlincs/vlincs_reid_runs_h100-test-3_current/
 s3://dit-scale-up/zcai/vlincs/remote_runs_h100-test-3_20260622/no_anchor_currentbest_subpart_multiview_combo_20260622/
+s3://dit-scale-up/zcai/vlincs/remote_runs_h100-test-3_20260622/no_anchor_filter_sweep_currentbest_20260622_env/
+s3://dit-scale-up/zcai/vlincs/research_snapshot_current/
 ```
