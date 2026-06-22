@@ -8,7 +8,7 @@ Date: 2026-06-22
 - Global-id pair model: F1 / precision / recall =
   `0.775234 / 0.820504 / 0.734698`.
 - End-to-end best: IDF1 / HOTA / AssA =
-  `0.656563 / 0.520067 / 0.535717`.
+  `0.657475 / 0.520599 / 0.535769`.
 - Goal remains open: end-to-end IDF1 is still below `0.70`.
 
 ## Main Recent Promotions
@@ -27,6 +27,16 @@ Then a subpart combo ablation promoted the IDF1 best again.  Combining
 `rank01 + rank02 + rank04` moved 11 tracklets and reached:
 
 `IDF1 / HOTA / AssA = 0.656563 / 0.520067 / 0.535717`
+
+The latest targeted MCAM04 subpart rerun generated candidates from that combo
+best and promoted balanced rank01 `35 -> 60`, moving 14 MCAM04 Tc6 tracklets:
+
+`IDF1 / HOTA / AssA = 0.657475 / 0.520599 / 0.535769`
+
+This improved MCAM04 Tc6 IDF1 from `0.563103` to `0.565121`.  The same
+experiment produced useful hard negatives: `55 -> 58` variants and broad
+`2329 -> 40` hurt the full score, so the next branch should learn a
+subpart-specific side-effect referee before expanding more candidates.
 
 ## Publish Scope
 
