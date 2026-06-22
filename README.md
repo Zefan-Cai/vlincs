@@ -5,9 +5,9 @@
 > Best online IDF1 per dataset (canonical `reid_hota`), with the commit that achieved it. Full per-dataset history — score, author, date, commit — in [`SCORES.md`](SCORES.md), refreshed on every commit by the self-hosted maxwell runner.
 
 <!-- CI-SCORES:START -->
-**Best IDF1:** **MS02** 0.754 @ `9f134b6` · **DS1** 0.624 @ `9f134b6`
+**Best IDF1:** **MS02** 0.754 @ `fb8a7a7` · **DS1** 0.624 @ `fb8a7a7`
 
-**Per-video — latest run @ `9f134b6`** (global-aligned, worst first — where we fail):
+**Per-video — latest run @ `fb8a7a7`** (global-aligned, worst first — where we fail):
 
 _MS02_
 
