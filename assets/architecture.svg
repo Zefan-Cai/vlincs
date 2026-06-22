@@ -1,0 +1,109 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1400" height="472" viewBox="0 0 1400 472" font-family="-apple-system, Segoe UI, Roboto, Helvetica, Arial, sans-serif">
+  <defs>
+    <marker id="arr" markerWidth="9" markerHeight="9" refX="7" refY="4.5" orient="auto"><path d="M0 0L9 4.5L0 9z" fill="#334155"/></marker>
+    <marker id="arrG" markerWidth="9" markerHeight="9" refX="7" refY="4.5" orient="auto"><path d="M0 0L9 4.5L0 9z" fill="#16a34a"/></marker>
+    <marker id="arrB" markerWidth="9" markerHeight="9" refX="7" refY="4.5" orient="auto"><path d="M0 0L9 4.5L0 9z" fill="#2563eb"/></marker>
+    <marker id="arrO" markerWidth="9" markerHeight="9" refX="7" refY="4.5" orient="auto"><path d="M0 0L9 4.5L0 9z" fill="#d97706"/></marker>
+    <marker id="arrP" markerWidth="9" markerHeight="9" refX="7" refY="4.5" orient="auto"><path d="M0 0L9 4.5L0 9z" fill="#9333ea"/></marker>
+  </defs>
+  <rect width="1400" height="472" fill="#ffffff"/>
+  <text x="700" y="26" text-anchor="middle" font-size="18" font-weight="700" fill="#0f172a">vlincs_gallery — ingest · decide · store · resolve</text>
+  <text x="700" y="44" text-anchor="middle" font-size="11.5" fill="#64748b">online match-or-expand against a live, revisable identity gallery (pgvector + in-process exemplar index)</text>
+
+  <!-- ===== TIER 1 : happy path (ingest → match space → score) ===== -->
+  <!-- A: your pipeline -->
+  <rect x="28" y="86" width="178" height="54" rx="9" fill="#eff4ff" stroke="#2563eb" stroke-width="1.5"/>
+  <text x="117" y="108" text-anchor="middle" font-size="13" font-weight="700" fill="#1e3a8a">Your pipeline</text>
+  <text x="117" y="125" text-anchor="middle" font-size="10" fill="#475569">detector → tracker → embedder</text>
+  <!-- tracklet label sits ABOVE the boxes in the gap, so nothing overlaps -->
+  <text x="295" y="70" text-anchor="middle" font-size="10.5" font-weight="600" fill="#334155">tracklet</text>
+  <text x="295" y="82" text-anchor="middle" font-size="9.5" fill="#94a3b8">frames · boxes · match emb (D) · resolve emb</text>
+  <line x1="206" y1="113" x2="384" y2="113" stroke="#334155" stroke-width="1.5" marker-end="url(#arr)"/>
+  <!-- B: add_tracklet -->
+  <rect x="384" y="86" width="186" height="54" rx="9" fill="#f1f5f9" stroke="#0f172a" stroke-width="1.5"/>
+  <text x="477" y="107" text-anchor="middle" font-size="11.5" font-weight="700" fill="#0f172a">OnlineGallery.add_tracklet()</text>
+  <text x="477" y="125" text-anchor="middle" font-size="10" fill="#475569">kit ingest · 1 decision per call</text>
+  <text x="603" y="79" text-anchor="middle" font-size="9.5" fill="#94a3b8">pool → L2</text>
+  <line x1="570" y1="113" x2="636" y2="113" stroke="#334155" stroke-width="1.5" marker-end="url(#arr)"/>
+  <!-- C: reduce -->
+  <rect x="636" y="86" width="156" height="54" rx="9" fill="#f8fafc" stroke="#475569" stroke-width="1.3"/>
+  <text x="714" y="107" text-anchor="middle" font-size="12" font-weight="600" fill="#0f172a">reduce → 64-d</text>
+  <text x="714" y="125" text-anchor="middle" font-size="9.5" fill="#64748b">warmup-PCA match space</text>
+  <text x="819" y="79" text-anchor="middle" font-size="9.5" fill="#94a3b8">cosine</text>
+  <line x1="792" y1="113" x2="846" y2="113" stroke="#334155" stroke-width="1.5" marker-end="url(#arr)"/>
+  <!-- D: score -->
+  <rect x="846" y="86" width="200" height="54" rx="9" fill="#f8fafc" stroke="#475569" stroke-width="1.3"/>
+  <text x="946" y="107" text-anchor="middle" font-size="12" font-weight="600" fill="#0f172a">score vs identity bank</text>
+  <text x="946" y="125" text-anchor="middle" font-size="9.5" fill="#64748b">centroid cosine → best id + score</text>
+
+  <!-- vetoes (top-right) -->
+  <rect x="1150" y="86" width="222" height="96" rx="9" fill="#fffbeb" stroke="#d97706" stroke-width="1.4" stroke-dasharray="4 3"/>
+  <text x="1261" y="106" text-anchor="middle" font-size="11.5" font-weight="700" fill="#b45309">cannot-link vetoes</text>
+  <text x="1261" y="124" text-anchor="middle" font-size="9.8" fill="#9a6a1f">same_frame  (same_box_iou)</text>
+  <text x="1261" y="138" text-anchor="middle" font-size="9.8" fill="#9a6a1f">simultaneity  (sim_window_ms)</text>
+  <text x="1261" y="152" text-anchor="middle" font-size="9.8" fill="#9a6a1f">travel  (max_speed)</text>
+  <text x="1261" y="170" text-anchor="middle" font-size="9" fill="#bda06a">cannot_link=True · from camera geo + clock</text>
+
+  <!-- ===== TIER 2 : the 3-way decision ===== -->
+  <!-- branch labels (above the outcome boxes) -->
+  <text x="724" y="158" text-anchor="middle" font-size="9.5" fill="#b45309">self-coh &lt; tracklet_coh_min</text>
+  <text x="912" y="158" text-anchor="middle" font-size="9.5" fill="#15803d">best ≥ tau &amp; vetoes ok</text>
+  <text x="1066" y="158" text-anchor="middle" font-size="9.5" fill="#1d4ed8">best &lt; tau</text>
+  <line x1="946" y1="140" x2="700" y2="174" stroke="#d97706" stroke-width="1.3" marker-end="url(#arrO)"/>
+  <line x1="946" y1="140" x2="912" y2="174" stroke="#16a34a" stroke-width="1.6" marker-end="url(#arrG)"/>
+  <line x1="970" y1="140" x2="1066" y2="174" stroke="#2563eb" stroke-width="1.3" marker-end="url(#arrB)"/>
+  <!-- DO-NOTHING -->
+  <rect x="560" y="176" width="216" height="60" rx="9" fill="#fff7ed" stroke="#d97706" stroke-width="1.7"/>
+  <text x="668" y="198" text-anchor="middle" font-size="12.5" font-weight="700" fill="#b45309">DO-NOTHING (quarantine)</text>
+  <text x="668" y="215" text-anchor="middle" font-size="9.8" fill="#9a6a1f">solo id · never admitted to a bank</text>
+  <text x="668" y="228" text-anchor="middle" font-size="9.8" fill="#9a6a1f">(can't seed or poison an identity)</text>
+  <!-- MATCH -->
+  <rect x="846" y="176" width="128" height="60" rx="9" fill="#f0fdf4" stroke="#16a34a" stroke-width="1.9"/>
+  <text x="910" y="201" text-anchor="middle" font-size="13.5" font-weight="700" fill="#15803d">MATCH</text>
+  <text x="910" y="220" text-anchor="middle" font-size="9.8" fill="#3f8f57">join existing id</text>
+  <!-- EXPAND -->
+  <rect x="1000" y="176" width="128" height="60" rx="9" fill="#eff6ff" stroke="#2563eb" stroke-width="1.9"/>
+  <text x="1064" y="201" text-anchor="middle" font-size="13.5" font-weight="700" fill="#1d4ed8">EXPAND</text>
+  <text x="1064" y="220" text-anchor="middle" font-size="9.8" fill="#3b6cb5">spawn a new id</text>
+  <!-- vetoes gate match -->
+  <path d="M1150 150 L 1010 168 L 976 184" fill="none" stroke="#d97706" stroke-width="1.2" stroke-dasharray="4 3" marker-end="url(#arrO)"/>
+  <text x="1086" y="146" text-anchor="middle" font-size="9" fill="#b45309">gate the match</text>
+
+  <!-- bank admission -->
+  <line x1="910" y1="236" x2="950" y2="268" stroke="#16a34a" stroke-width="1.4" marker-end="url(#arrG)"/>
+  <line x1="1064" y1="236" x2="1024" y2="268" stroke="#2563eb" stroke-width="1.4" marker-end="url(#arrB)"/>
+  <rect x="816" y="270" width="346" height="52" rx="9" fill="#f8fafc" stroke="#16a34a" stroke-width="1.5"/>
+  <text x="989" y="291" text-anchor="middle" font-size="12" font-weight="700" fill="#166534">bank admission gate (diversity)</text>
+  <text x="989" y="308" text-anchor="middle" font-size="9.6" fill="#475569">admit a new exemplar iff ≤ admit_tau-sim &amp; ≥ coherence_floor &amp; bank &lt; max_reps · centroid = EMA</text>
+
+  <!-- ===== TIER 3 : store → resolve → out ===== -->
+  <!-- admission -> store (elbow above the resolve box) -->
+  <path d="M989 322 L 989 346 L 263 346 L 263 358" fill="none" stroke="#334155" stroke-width="1.4" marker-end="url(#arr)"/>
+  <text x="600" y="340" text-anchor="middle" font-size="9.5" fill="#64748b">writes live</text>
+  <!-- STORE -->
+  <rect x="28" y="358" width="470" height="86" rx="9" fill="#f0fdfa" stroke="#0d9488" stroke-width="1.6"/>
+  <text x="263" y="379" text-anchor="middle" font-size="12.5" font-weight="700" fill="#0f766e">STORE — pgvector + in-process index (live)</text>
+  <text x="263" y="398" text-anchor="middle" font-size="9.6" fill="#475569">gallery_&lt;ds&gt; tables:  detections · identities · assignments · embeddings (role=match + role=resolve)</text>
+  <text x="263" y="413" text-anchor="middle" font-size="9.6" fill="#475569">match: in-process FAISS (hot path) + opt-in per-model pgvector HNSW (vector ≤2000 / halfvec ≤4000)</text>
+  <text x="263" y="428" text-anchor="middle" font-size="9.6" fill="#475569">event log:  decision_log + merges  →  a pure replayable fold</text>
+  <!-- STORE -> RESOLVE -->
+  <text x="519" y="395" text-anchor="middle" font-size="9" fill="#9333ea">g.resolve()</text>
+  <line x1="498" y1="401" x2="540" y2="401" stroke="#9333ea" stroke-width="1.5" marker-end="url(#arrP)"/>
+  <!-- RESOLVE -->
+  <rect x="540" y="358" width="386" height="86" rx="9" fill="#faf5ff" stroke="#9333ea" stroke-width="1.7"/>
+  <text x="733" y="379" text-anchor="middle" font-size="12.5" font-weight="700" fill="#7e22ce">resolve() — periodic GLOBAL re-cluster</text>
+  <text x="733" y="399" text-anchor="middle" font-size="9.8" fill="#475569">re-partition ALL tracklets on the stored resolve emb (role=resolve)</text>
+  <text x="733" y="414" text-anchor="middle" font-size="9.8" fill="#475569">avg-linkage agglom / kNN x-cam cosine · recovers over-split AND over-merge</text>
+  <text x="733" y="429" text-anchor="middle" font-size="9.4" fill="#9333ea">→ relabel to new global ids in place · merge-only consolidate = alt mode</text>
+  <!-- RESOLVE -> OUT -->
+  <text x="943" y="395" text-anchor="middle" font-size="9" fill="#334155">global IDs</text>
+  <line x1="926" y1="401" x2="962" y2="401" stroke="#334155" stroke-width="1.5" marker-end="url(#arr)"/>
+  <!-- OUT -->
+  <rect x="962" y="358" width="410" height="86" rx="9" fill="#f1f5f9" stroke="#334155" stroke-width="1.5"/>
+  <text x="1167" y="379" text-anchor="middle" font-size="12.5" font-weight="700" fill="#0f172a">global IDs → score · submit · viz</text>
+  <text x="1167" y="398" text-anchor="middle" font-size="9.6" fill="#475569">g.score() = reid_hota (global align · IoU · dense=False)</text>
+  <text x="1167" y="413" text-anchor="middle" font-size="9.6" fill="#475569">g.export_submission() = canonical TA1 zip (only file written)</text>
+  <text x="1167" y="428" text-anchor="middle" font-size="9.6" fill="#475569">viz = decision-order replay · embedding space · identity banks</text>
+
+  <text x="700" y="462" text-anchor="middle" font-size="10" fill="#94a3b8">Defaults: tau 0.60 · match_mode centroid · merge_tau 0.35 · admit_tau 0.9 · coherence_floor 0.4 · max_reps 16 · cannot_link on (max_speed 3 m/s · sim_window 200 ms · same_box_iou 0.35) · resolve theta 0.02 / top_k 15 / min_dets 20 · one pgvector DB per dataset</text>
+</svg>

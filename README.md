@@ -1,173 +1,227 @@
-# VLINCS Tracking And Global-ID Experiments
+# vlincs_gallery
 
-This repository contains the code, logs, and lightweight evaluation artifacts needed to reproduce the VLINCS recall-improvement experiments.
+[![MS02 best IDF1](badges/ms02_best_idf1.svg)](SCORES.md) [![DS1 best IDF1](badges/ds1_best_idf1.svg)](SCORES.md)
 
-Large assets are intentionally not committed:
+> Best online IDF1 per dataset (canonical `reid_hota`), with the commit that achieved it. Full per-dataset history — score, author, date, commit — in [`SCORES.md`](SCORES.md), refreshed on every commit by the self-hosted maxwell runner.
 
-- Raw VLINCS data
-- model weights such as `yolo11x.pt`
-- large parquet tracklet dumps
-- large diagnostic CSVs
+<!-- CI-SCORES:START -->
+**Best IDF1:** **MS02** 0.722 @ `fe3c56b` · **DS1** 0.600 @ `399db5f`
 
-Those files were synchronized separately to:
+**Per-video — latest run @ `fe3c56b`** (global-aligned, worst first — where we fail):
 
-```text
-s3://dit-scale-up/zcai/vlincs/
+_MS02_
+
+| Video | IDF1 | AssA | DetRe |
+|---|---|---|---|
+| MCAM310 | 0.539 | 0.398 | 0.621 |
+| MCAM318 | 0.852 | 0.955 | 0.787 |
+
+_DS1_
+
+| Video | IDF1 | AssA | DetRe |
+|---|---|---|---|
+| vlincs_MS01_MC0001_MCAM05_2024-03-Tc6 | 0.239 | 0.402 | 0.566 |
+| vlincs_MS01_MC0001_MCAM04_2024-03-Tc6 | 0.511 | 0.438 | 0.414 |
+| vlincs_MS01_MC0001_MCAM06_2024-03-Tc6 | 0.592 | 0.565 | 0.472 |
+| vlincs_MS01_MC0001_MCAM03_2024-03-Tc8 | 0.625 | 0.547 | 0.537 |
+| vlincs_MS01_MC0001_MCAM03_2024-03-Tc6 | 0.653 | 0.572 | 0.555 |
+| vlincs_MS01_MC0001_MCAM06_2024-03-Tc8 | 0.707 | 0.616 | 0.648 |
+| vlincs_MS01_MC0001_MCAM08_2024-03-Tc6 | 0.721 | 0.630 | 0.652 |
+| vlincs_MS01_MC0001_MCAM00_2024-03-Tc8 | 0.737 | 0.723 | 0.642 |
+| vlincs_MS01_MC0001_MCAM00_2024-03-Tc6 | 0.775 | 0.731 | 0.698 |
+| vlincs_MS01_MC0001_MCAM05_2024-03-Tc8 | 0.804 | 0.718 | 0.754 |
+
+Full history → [`SCORES.md`](SCORES.md).
+<!-- CI-SCORES:END -->
+
+![ingest · decide · store · resolve](assets/architecture.svg)
+
+Online, revisable, **retrieval-based** identity assignment ("tracking-by-retrieval" / online MTMC) for
+VLINCS TA1. Instead of the lossy batch funnel (`detect → track → pool → UMAP → HDBSCAN → GNN → split →
+merge`, every stage an irreversible compression), each tracklet is matched **as it arrives** against a
+live, queryable, revisable gallery of identities backed by **pgvector** (durable system-of-record + ANN)
+and an in-process **FAISS-equivalent** exemplar index (the hot match space).
+
+You bring a detector + tracker + embedder; the gallery does the *cross-camera* identity assignment, with a
+visualization (`viz`) of how/when/why every identity is what it is.
+
+- **Run it / drive it from your pipeline** → [`kit/README.md`](kit/README.md) (the one-click Docker demo + the `OnlineGallery` API).
+- Deeper design notes (rationale, eval protocol, phased gates) live in `PROTOCOL.md` - an internal working doc, not committed to this repo.
+
+## How it works
+
+Your pipeline pushes tracklets (one pooled appearance embedding per within-camera track). For each, the
+gallery makes exactly one **decision**, and periodically **re-resolves** the whole set:
+
+```
+your detector+tracker+embedder ─► tracklets + match/resolve emb ─► [ match / expand / do-nothing ] ──┐
+                                                                                                     │ periodic
+                         global IDs + IDF1 + decision viz ◄── resolve() ┘  (global re-cluster on resolve emb)
 ```
 
-## Contents
+**Per-tracklet decision** (one per ingest):
 
-```text
-tools/
-  run_detector_model_sample.py
-  run_yolo_track_interval.py
-  run_tiled_yolo_detect_interval.py
-  run_recall_first_sample_all.py
-  *_tracker*.yaml
+| decision | when |
+|---|---|
+| **match** | cosine to an existing identity ≥ `tau` (and the vetoes allow it) → join that identity |
+| **expand** | best candidate `< tau` → spawn a new identity (seed its bank) |
+| **do-nothing** (quarantine) | the tracklet's own self-coherence `< tracklet_coh_min` → give it a solo id, never admit it to a matchable bank (an ID-switch / mixed-people tracklet can't seed or poison an identity) |
 
-log/
-  2026-05-25_tracker_recall_sweep.md
+**Bank admission** (the appearance "memory"): a matched tracklet's pooled vector is added to the identity's
+**exemplar bank** only if it adds diversity - at most `admit_tau`-similar to existing exemplars, not farther
+than `coherence_floor` from them, and the bank isn't at `max_reps`. The identity centroid is a
+confidence-weighted EMA of its exemplars.
 
-eval/
-  Lightweight CSV/JSON summaries used in the report.
+**Periodic resolve()** (re-resolution) has two modes. The default **global re-cluster** (`resolve_global`)
+re-partitions *all* tracklets from scratch on a second, stored **resolve embedding** (`role='resolve'` - e.g.
+a rank-strong cross-camera backbone, read back from the DB) via kNN-sparse cross-camera cosine + average-linkage
+agglomeration - recovering greedy **over-split AND over-merge**, then relabelling the live gallery in place.
+The lighter **merge-only `consolidate()`** instead just merges over-split identities whose exemplar-centroid
+cosine reached `merge_tau` (vetoes permitting), recording the cosine ("why"), ingest step ("when") and id pair
+("where") for the viz feed. Either way the resolve is a *revision* of the live gallery - not a batch export.
 
-kit/
-  No-anchor global-id model, candidate generation, assignment repair,
-  scoring, scheduler, and reporting utilities.
+**cannot-link vetoes** (`cannot_link=True` by default): block physically-impossible matches/merges -
+`same_frame` (two spatially-distinct boxes in one `(video,frame)` can't be one person), `simultaneity`
+(one person can't be in two non-overlapping cameras at the same instant), `travel` (a cross-camera jump
+faster than `max_speed`). Camera geo/time come from the dataset's shipped extrinsics.
 
-autoresearch_state/
-  Durable no-anchor global-id research loop state: progress, findings,
-  tried directions, and iteration logs.
+The gallery state is a **pure replayable fold** over an append-only event log (`decision_log` + `merges`),
+so the viz can reconstruct the exact identity state as of any ingest step.
 
-reports/
-  Human-readable experiment reports, publish manifests, and ablation notes.
-```
+## Storage
 
-## Current no-anchor global-id standing
+- **Postgres + pgvector** (`pgvector/pgvector:pg16`) - the durable system-of-record AND the cannot-link
+  query layer (haversine/time SQL). **One database per dataset** (`gallery_ms02` / `gallery_ds1` /
+  `gallery_ds2`) so runs are isolated; `truncate=True` wipes one for a clean number.
+  - **One polymorphic `embeddings` table** keyed by `(entity_kind, entity_id, model_id, role)` with an
+    **unconstrained `vector` column** - *any* dim (64/1024/2048/…), *multiple models* per entity (extra
+    rows), nothing enforced upfront. A small **`models`** registry records each embedder's `emb_dim`/`emb_type`.
+    The gallery stores **two vectors per tracklet**: `role='match'` (the scored match-space vector, the hot
+    path) and the optional `role='resolve'` (a second embedding the global re-cluster reads back from the DB).
+  - **DB-side ANN is opt-in per model**: a partial cast-expression HNSW index (`db.enable_ann`) created lazily
+    at first write - `vec::vector(N)` (≤2000 dims) or `vec::halfvec(N)` (≤4000). Query it through `db.ann_search`.
+- **In-process FAISS-equivalent** - exact inner-product cosine over the identity **exemplar bank**
+  (`rep_mat`). This is the live matcher's hot path; pgvector stores the same vectors for the viz, durability,
+  and the DB-side ANN path. Both back-ends are available and selectable per model.
 
-As of 2026-06-22:
+The embedder is **yours** and **any dimension** - registered on the first push; the gallery ships no weights
+and no models; it matches on whatever vectors you push. (>4000-dim backbones store + FAISS + viz fine but get
+no DB-side HNSW - pgvector's hard ceiling.)
 
-```text
-Global-id pair model F1 / precision / recall:
-  0.775234 / 0.820504 / 0.734698
+## Knobs (`OnlineGallery(...)` kwargs)
 
-Best end-to-end IDF1 / HOTA / AssA:
-  0.657624 / 0.520692 / 0.535785
-```
+Defaults are the validated config. Tune `tau` first (to your embedding's cosine scale).
 
-The global-id model target is passed, but the end-to-end pipeline target
-remains open because IDF1 is still below `0.70`.
+| knob | default | what it controls |
+|---|---|---|
+| `tau` | **0.60** | **match** threshold - cosine ≥ τ ⇒ match, else expand |
+| `match_mode` | `"centroid"` | how a candidate is scored: `centroid` (cosine to the whole-bank mean; +0.06 IDF1 over `max` on DS1) / `max` (nearest exemplar) / `retrieval` (FAISS k-NN, needs `faiss-cpu`) |
+| `merge_tau` | **0.35** | merge-only **`consolidate()`** threshold - identities whose exemplar centroids agree ≥ this merge (the default global re-cluster uses `resolve_global(theta, top_k, min_dets)` instead) |
+| `admit_tau` | **0.9** | bank redundancy cutoff - admit a new exemplar only if at most this similar to existing ones |
+| `coherence_floor` | **0.4** | anti-accretion - reject a would-be exemplar farther than this from its bank (kills "matches-everything" attractors) |
+| `tracklet_coh_min` | **0.0** | do-nothing/quarantine cutoff (off by default; only fires on per-detection input where self-coherence is computed) |
+| `max_reps` | **16** | exemplar-bank cap per identity (merges may push a survivor over this; not re-capped) |
+| `cannot_link` | **True** | enable the `same_frame` / `simultaneity` / `travel` vetoes (`False` = appearance-only, the old "best DS1 config") |
+| `max_speed` | **3.0** m/s | travel veto - a cross-camera match implying ground speed above this is blocked |
+| `sim_window_ms` | **200** | simultaneity slop - detections in two cameras within this window are "the same instant" |
+| `same_box_iou` | **0.35** | same-frame veto - two boxes in one frame below this IoU are different people |
+| `overlaps` | `None` | known overlapping-FOV camera pairs (suppress the simultaneity veto there) |
+| `fps` | **30.0** | frames→ms for the absolute clock |
+| `batch_commit` | **1** | DB commit cadence (tracklets) |
+| `truncate` | **True** | wipe this dataset's DB before ingest (clean run) |
 
-The latest promotion is documented in:
+## Magic numbers & strings (documented constants)
 
-```text
-reports/no_anchor_currentbest_subpart_repair_promotion_20260622.md
-reports/no_anchor_subpart_combo_repair_20260622.md
-reports/no_anchor_currentbest_subpart_next_promotion_20260622.md
-reports/no_anchor_currentbest_subpart_followup_combo_promotion_20260622.md
-reports/publish_manifest_20260622.md
-```
+- **Embeddings: any dim** (`db/init.sql:embeddings`, `db.py`). The pushed vector is stored in the polymorphic
+  `embeddings` table at whatever dim (unconstrained `vector` column) - no 64/1024 enforcement. **HNSW dim
+  ceilings are hard pgvector limits**: `vector` ≤ 2000, `halfvec` ≤ 4000; the registry's `emb_type` routes
+  the index cast, and a >4000-d model gets storage + FAISS + viz but no DB-side HNSW. The demo's 64-d is just
+  its reducer output (`pipelines/ds1.yaml:reduce.dim`), not a schema constraint.
+- **Resolve (demo)**: DS1 runs a single final **global re-cluster** - `resolve_global(theta=0.02, top_k=15,
+  min_dets=20)` on the stored osnet-xcam resolve embedding (`pipelines/ds1.yaml`); the merge-only
+  `consolidate()` path (MS02 / `resolve: auto`) runs every **100** tracklets. In a real stream, call resolve
+  on your own cadence.
+- **`det_id` format**: `"<video>::<camera>:<frame_idx>:<box_idx>"`, globally unique within a dataset DB.
+  Auto-generated ids append `:t<tracklet_seq>` so two tracklets with a detection in the same `(video,frame)`
+  never collide on the primary key.
+- **dataset → DB name**: `ms02→gallery_ms02`, `ds1→gallery_ds1`, `ds2→gallery_ds2` (`vlincs_gallery/db.py`).
+- **Scoring**: canonical `reid_hota` - **global ID alignment, IoU similarity, `dense=False`** (the takehome
+  leaderboard config), keyed by **video** for DS1 (Tc6/Tc8 reuse camera names), by **camera** for MS02.
+- **Ports** (`kit/docker-compose.yml`): db **55433**→5432, viz API **8077**, Angular UI **4200**, pgAdmin
+  **5050**. DB creds `gallery`/`gallery`.
+- **Data paths** - one place, [`vlincs_gallery/paths.py`](vlincs_gallery/paths.py). `DATA_ROOT` is the
+  datastore mount (host `/mnt/datastore2_videolincs/data`, container `/data`); under it,
+  `DATA = $DATA_ROOT/Box/VLINCS_Performer` (the canonical Box export - **the default data directory**) and
+  `MS02_DATA = $DATA_ROOT/VLINCS_Performer-selected` (where the MS02 debug set still lives - it's bound to
+  the `vlincs-baseline` repo, not in the Box export yet). `root_for_site('MS02')` → `-selected`, else Box.
+- **`reid_hota`** is the public NIST scorer ([github.com/usnistgov/reid_hota](https://github.com/usnistgov/reid_hota),
+  on PyPI) - the kit installs it straight from PyPI; no internal index, so a clean clone builds anywhere.
+- **MS02 demo data** is two 5-minute (9000-frame @ 30fps) videos (MCAM310 + MCAM318); its GT is sparse
+  (~1.5 det/frame), so on MS02 **lead with AssA**, not IDF1.
 
-Large run artifacts are S3-only under:
-
-```text
-s3://dit-scale-up/zcai/vlincs/
-```
-
-Latest S3 pointers:
-
-```text
-s3://dit-scale-up/zcai/vlincs/LATEST_NO_ANCHOR_PROGRESS.txt
-s3://dit-scale-up/zcai/vlincs/current_best_no_anchor/
-s3://dit-scale-up/zcai/vlincs/remote_runs_h100-test-3_20260622/no_anchor_currentbest_subpart_followup_20260622/
-s3://dit-scale-up/zcai/vlincs/core_snapshot_20260622/
-```
-
-## Key results
-
-Worst-region comparison on `vlincs_MS01_MC0001_MCAM04_2024-03-Tc6`, frames `42300-42900`:
-
-```text
-yolo11x + ByteTrack ultraloose:
-  pred boxes: 19,369
-  matched:    11,632 / 20,443 GT boxes
-  recall:     0.568997
-  precision:  0.600547
-
-recall-first tiled singleton:
-  pred boxes: 4,476,996
-  matched:    19,387 / 20,443 GT boxes
-  recall:     0.948344
-  precision:  0.004330
-
-recall-first scale+shift eval:
-  pred boxes: 134,309,880
-  matched:    20,245 / 20,443 GT boxes
-  recall:     0.990315
-  precision:  0.000151
-```
-
-All-frame per-video metrics for the earlier `yolo26x-botsort-loose-solider + gap<=60 interpolation` run are in:
-
-```text
-eval/sweep_existing/yolo26x-botsort-loose-solider_interp_gap60_per_video.csv
-```
-
-Aggregate over the 10 sample videos:
-
-```text
-GT boxes:        1,685,704
-pred boxes:      1,446,602
-matched boxes:   1,201,344
-overall recall:  0.712666
-overall precision: 0.830459
-```
-
-## Reproduction notes
-
-Expected local layout:
-
-```text
-/mnt/localssd/vlincs/
-  VLINCS_Performer/
-  yolo11x.pt
-  tools/
-```
-
-The recall-first interval run can be reproduced with:
+## Run it
 
 ```bash
-python tools/run_tiled_yolo_detect_interval.py \
-  --video /mnt/localssd/vlincs/VLINCS_Performer/sample/videos/vlincs_MS01_MC0001_MCAM04_2024-03-Tc6.mp4 \
-  --gt-parquet /mnt/localssd/vlincs/VLINCS_Performer/sample/reference_annotations/vlincs_MS01_MC0001_MCAM04_2024-03-Tc6_v1.7.2.parquet \
-  --model /mnt/localssd/vlincs/yolo11x.pt \
-  --output-dir /mnt/localssd/vlincs/eval/recall_first \
-  --start-frame 42300 \
-  --num-frames 600 \
-  --imgsz 1536 \
-  --conf 0.0001 \
-  --model-nms-iou 0.99 \
-  --global-nms-iou 1.0 \
-  --max-det 3000 \
-  --rows 2 \
-  --cols 2 \
-  --overlap 192 \
-  --include-full-frame \
-  --batch 5 \
-  --device 0 \
-  --half \
-  --link-mode singleton
+cd kit
+./demo.sh ms02      # MS02 (offline, shipped data) → AssA ≈ 0.70 - builds, brings up the stack, leaves it up
+./demo.sh ds1       # DS1 - pulls track + match-emb + resolve-emb from MLflow, runs the §13.3 global re-cluster → IDF1 ≈ 0.60
+#   then explore the gallery at http://localhost:4200   (ds1 needs MLFLOW_TRACKING_URI + the GT datastore mounted)
 ```
 
-For the maximum-recall proposal expansion, add:
+DS1 inputs default to MLflow (provenance-tracked, ~8 MB clone). For an **offline DS1** run (no MLflow), `git lfs
+pull` first to fetch the ~83 MB bundle into `kit/demo_data/ds1/`; the demo reads it locally and falls back to
+MLflow only if it isn't pulled. (Scoring still needs the GT datastore mounted, same as MS02.)
 
-```bash
---box-scale-variants 0.5,0.75,1.0,1.25,1.5,2.0 \
---box-shift-variants 0:0,0.25:0,-0.25:0,0:0.25,0:-0.25
+Drive it from your own pipeline with the tiny `OnlineGallery` API (no intermediate files):
+
+```python
+from online import OnlineGallery                          # PYTHONPATH the kit, or run inside the app container
+g = OnlineGallery("ds1")                                  # connects to the EMPTY per-dataset DB; loads camera geo
+for video, camera, frames, boxes, match_emb, resolve_emb in your_tracker():
+    gid = g.add_tracklet(video, camera, frames, boxes, match_emb,   # match / expand / do-nothing → gid, live
+                         resolve_emb=resolve_emb)         # stores a 2nd vec (role='resolve'); omit to skip
+g.resolve_global(theta=0.02)                              # periodic GLOBAL re-cluster on the stored resolve emb
+print(g.score())                                          # IDF1/AssA from the live DB (ms02/ds1; ds2 → None)
+g.export_submission("out.zip")                            # the ONLY file ever written (canonical TA1 zip)
 ```
 
-The full experiment narrative is in:
+Full usage, the Gallery-view walkthrough, and the deploy notes are in [`kit/README.md`](kit/README.md).
 
-```text
-log/2026-05-25_tracker_recall_sweep.md
-```
+## Status
+
+The online gallery is implemented end-to-end and **deployable** (clean clone → `cd kit && ./demo.sh ds1` →
+full pull from MLflow → `demo` → `viz`, verified through Docker). The MS02 shakeout works (demo: **AssA ≈ 0.70**,
+sparse-GT artifact on IDF1). **DS1 (dense GT) is the real test**: greedy online ≈ 0.53 IDF1, and the periodic
+**global re-cluster** on the osnet-xcam resolve embedding lifts it to **≈ 0.60** (`./demo.sh ds1` - track +
+both embeddings pulled entirely from MLflow, no local files). The batch funnel's GNN-on-DS1-GT supervised
+ceiling (0.69) is a different (DS1-trained, non-generalizing) regime the online kit isn't trying to match.
+
+## Modules / layout
+
+| path | role |
+|---|---|
+| `vlincs_gallery/gallery.py` | **the one canonical matcher** (`IdentityGallery`) - match/expand/do-nothing + `consolidate()`. Pure, in-memory, numpy (+FAISS for `retrieval`). |
+| `vlincs_gallery/resolve.py` | **global re-cluster** (`global_agglom_resolve`) - kNN-sparse cross-camera cosine + average-linkage; the periodic re-partition `OnlineGallery.resolve_global` applies to the live gallery. |
+| `vlincs_gallery/paths.py` | **single source of truth for data locations** (DATA_ROOT / DATA / MS02_DATA / CARDDIRS). |
+| `vlincs_gallery/db.py` · `db/init.sql` | pgvector system-of-record: schema, per-dataset DB, haversine veto fn. |
+| `vlincs_gallery/clock.py` · `geo.py` | absolute clock + camera geo from shipped extrinsics (drives the time/geo vetoes). |
+| `vlincs_gallery/eval/score.py` | canonical `reid_hota` scorer (`--selftest` confirms perfect input → IDF1 = 1.0). |
+| `vlincs_gallery/viz/app.py` | FastAPI read API over the live DB (crops, decisions, identities, embedding projection). |
+| `gallery-ui/` | the Angular **Gallery view** (decision feed, decision-order replay, embedding space, identity banks). |
+| `kit/` | the deployable kit: `OnlineGallery` ingest service (`online.py`), CLI (`cli.py`), one-click `demo.py`, Docker stack. |
+
+## Provenance
+
+The stateful gallery is a *pure replayable function* of (sorted inputs, config, seed, code-SHA) with an
+append-only decision event-log; output goes through the canonical `register_submission` + canary. One
+`vlincs_sdk.research.start_run` per replay - never per-mutation logging, never a hand-rolled submission
+parquet.
+
+## Env
+
+The **deployable kit** (`kit/requirements.txt`) is CPU-only and **public-PyPI-only** - no torch, no weights,
+no internal index (`reid_hota` is the public NIST package). `vlincs_sdk` is **not** needed by the kit: it's
+imported lazily only by two advanced gallery methods (`discriminability()` disc-ratio-keyed tau, and
+`split_low_coherence()` revise) - the core match/expand/resolve/score path is pure numpy. The **full
+dev/research** install is `pyproject.toml` (adds torch/ultralytics/sentence-transformers + `vlincs-sdk[harness]`
+from the internal devpi index); the dedicated venv lives at `.venv` (the system Python is ABI-broken).

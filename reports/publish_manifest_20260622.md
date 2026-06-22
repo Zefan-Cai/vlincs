@@ -8,7 +8,7 @@ Date: 2026-06-22
 - Global-id pair model: F1 / precision / recall =
   `0.775234 / 0.820504 / 0.734698`.
 - End-to-end best: IDF1 / HOTA / AssA =
-  `0.657624 / 0.520692 / 0.535785`.
+  `0.657653 / 0.520723 / 0.535819`.
 - Goal remains open: end-to-end IDF1 is still below `0.70`.
 
 ## Main Recent Promotions
@@ -49,6 +49,18 @@ It moved 17 MCAM04 Tc6 tracklets and improved MCAM04 Tc6 IDF1 to `0.565454`.
 Variants containing `r05` fell to `0.657441`, making them negative side-effect
 labels for the next no-anchor subpart referee.
 
+The latest multiview side-effect sweep generated candidates from DINO,
+DINO-heavy, SigLIP-fused, weakmetric, and OSNet-010 views, then full-scored 10
+diverse no-anchor subpart edits.  `weakmetric 10 -> 22` moved only 2 tracklets
+and promoted the current best:
+
+`IDF1 / HOTA / AssA = 0.657653 / 0.520723 / 0.535819`
+
+`weakmetric 10 -> 9` was a smaller positive at `0.657639`; several edits tied
+the previous best; `10 -> 15` and broad `11 -> 40` were clear negative
+side-effect labels.  This is still a micro-promotion, not the final 0.70 e2e
+target.
+
 ## Publish Scope
 
 S3 receives the full current progress snapshot, including:
@@ -74,7 +86,9 @@ Large `local_runs/` experiment artifacts are intentionally S3-only.
 
 ```text
 s3://dit-scale-up/zcai/vlincs/LATEST_NO_ANCHOR_PROGRESS.txt
+s3://dit-scale-up/zcai/vlincs/progress_snapshots/20260622_no_anchor_global_id_current/
 s3://dit-scale-up/zcai/vlincs/current_best_no_anchor/
+s3://dit-scale-up/zcai/vlincs/remote_runs_h100-test-3_20260622/no_anchor_currentbest_subpart_multiview_20260622/
 s3://dit-scale-up/zcai/vlincs/remote_runs_h100-test-3_20260622/no_anchor_currentbest_subpart_followup_20260622/
 s3://dit-scale-up/zcai/vlincs/core_snapshot_20260622/
 ```

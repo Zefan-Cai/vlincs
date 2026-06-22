@@ -1,0 +1,36 @@
+[project]
+name = "vlincs-gallery"
+version = "0.0.1"
+description = "Online revisable retrieval-based ReID (tracking-by-retrieval) PoC for VLINCS TA1"
+requires-python = ">=3.10"
+dependencies = [
+    "numpy",
+    "pandas",
+    "pyarrow",
+    "scikit-learn",
+    "faiss-cpu",
+    "psycopg[binary]",
+    "pgvector",
+    "geoalchemy2",
+    "sqlalchemy>=2",
+    "reid-hota>=0.3.5",   # the §13.3 / PROTOCOL scorer version (DS1 IDF1 numbers are reid_hota 0.3.5)
+    "vlincs-sdk[harness]",
+    "torch",
+    "timm",
+    "ultralytics",
+    "sentence-transformers",
+]
+
+# This is the FULL dev/research install (torch/ultralytics/timm/sentence-transformers for the experiment
+# scripts + vlincs-sdk for the advanced gallery methods). The deployable kit is the much smaller
+# kit/requirements.txt (CPU-only, public-PyPI-only). Only vlincs-sdk[harness] needs the internal devpi index:
+#   pip install --index-url http://euclid.novateur.com:48731/novateur/dev/+simple/ \
+#               --trusted-host euclid.novateur.com "vlincs-sdk[harness]"
+# reid-hota is public on PyPI (NIST: github.com/usnistgov/reid_hota) — no index needed.
+
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[tool.setuptools.packages.find]
+include = ["vlincs_gallery*"]

@@ -1535,5 +1535,133 @@
     "direction": "train_or_rank_no_anchor_subpart_side_effect_referee_from_positive_negative_combo_labels",
     "finding": "Use the positive/tied/negative labels from follow-up subpart combos to predict side effects before full official scoring.",
     "status": "open"
+  },
+  {
+    "anchor_use": "none",
+    "artifacts": [
+      "reports/no_anchor_currentbest_subpart_multiview_20260622.md",
+      "local_runs/remote_h100_test_3_20260622/no_anchor_currentbest_subpart_multiview_20260622/multiview_results_summary.json",
+      "local_runs/remote_h100_test_3_20260622/no_anchor_currentbest_subpart_multiview_20260622/multiview_results_summary.csv",
+      "local_runs/remote_h100_test_3_20260622/no_anchor_currentbest_subpart_multiview_20260622/multiview_side_effect_selected_candidates.json",
+      "local_runs/remote_h100_test_3_20260622/no_anchor_currentbest_subpart_multiview_20260622/rank29_subpart_s10_to22_2seq_assignments_density_p005_area.json",
+      "local_runs/remote_h100_test_3_20260622/no_anchor_currentbest_subpart_multiview_20260622/weakmetric_assignments/rank29_subpart_s10_to22_2seq_assignments.csv",
+      "/mnt/localssd/vlincs_reid_runs/no_anchor_currentbest_subpart_multiview_20260622"
+    ],
+    "date": "2026-06-22",
+    "direction": "multiview_subpart_side_effect_ranked_candidate_sweep",
+    "evidence": {
+      "gt_eval_only": true,
+      "near_positive_10_to9_idf1": 0.657639,
+      "new_best_assa": 0.535819,
+      "new_best_cfg": "weakmetric",
+      "new_best_detpr": 0.76562,
+      "new_best_detre": 0.576374,
+      "new_best_edit": "10->22",
+      "new_best_hota": 0.520723,
+      "new_best_idf1": 0.657653,
+      "new_best_mcam04_idf1": 0.565566,
+      "new_best_moved_tracklets": 2,
+      "previous_best_assa": 0.535785,
+      "previous_best_hota": 0.520692,
+      "previous_best_idf1": 0.657624,
+      "result_rows": [
+        {
+          "assa": 0.535819,
+          "cfg": "weakmetric",
+          "hota": 0.520723,
+          "idf1": 0.657653,
+          "mcam04_idf1": 0.565566,
+          "moved_tracklets": 2,
+          "source_target": "10->22"
+        },
+        {
+          "assa": 0.535804,
+          "cfg": "weakmetric",
+          "hota": 0.520707,
+          "idf1": 0.657639,
+          "mcam04_idf1": 0.565508,
+          "moved_tracklets": 2,
+          "source_target": "10->9"
+        },
+        {
+          "assa": 0.535785,
+          "cfg": "weakmetric",
+          "hota": 0.520692,
+          "idf1": 0.657624,
+          "mcam04_idf1": 0.565454,
+          "moved_tracklets": 6,
+          "source_target": "32->9"
+        },
+        {
+          "assa": 0.535785,
+          "cfg": "siglip_fused",
+          "hota": 0.520692,
+          "idf1": 0.657624,
+          "mcam04_idf1": 0.565454,
+          "moved_tracklets": 7,
+          "source_target": "24->41"
+        },
+        {
+          "assa": 0.535785,
+          "cfg": "weakmetric",
+          "hota": 0.520692,
+          "idf1": 0.657624,
+          "mcam04_idf1": 0.565454,
+          "moved_tracklets": 9,
+          "source_target": "9->19"
+        },
+        {
+          "assa": 0.535785,
+          "cfg": "osnet010",
+          "hota": 0.520692,
+          "idf1": 0.657624,
+          "mcam04_idf1": 0.565454,
+          "moved_tracklets": 9,
+          "source_target": "9->32"
+        },
+        {
+          "assa": 0.535664,
+          "cfg": "weakmetric",
+          "hota": 0.52059,
+          "idf1": 0.657541,
+          "mcam04_idf1": 0.565673,
+          "moved_tracklets": 7,
+          "source_target": "19->11"
+        },
+        {
+          "assa": 0.535721,
+          "cfg": "siglip_fused",
+          "hota": 0.520609,
+          "idf1": 0.65754,
+          "mcam04_idf1": 0.565424,
+          "moved_tracklets": 3,
+          "source_target": "31->25"
+        },
+        {
+          "assa": 0.534966,
+          "cfg": "siglip_fused",
+          "hota": 0.519885,
+          "idf1": 0.656956,
+          "mcam04_idf1": 0.565454,
+          "moved_tracklets": 8,
+          "source_target": "10->15"
+        },
+        {
+          "assa": 0.534675,
+          "cfg": "weakmetric",
+          "hota": 0.519236,
+          "idf1": 0.656102,
+          "mcam04_idf1": 0.565177,
+          "moved_tracklets": 16,
+          "source_target": "11->40"
+        }
+      ],
+      "strong_negative_11_to40_idf1": 0.656102,
+      "uses_anchors": false
+    },
+    "finding": "weakmetric 10->22 promoted p005 IDF1 to 0.657653; 10->9 was near-positive; 11->40 and 10->15 were negative side-effect labels; e2e remains below 0.70.",
+    "gt_use": "eval_only",
+    "next_direction": "train_or_calibrate_no_anchor_subpart_side_effect_referee_and_compose_low_risk_micro_positives",
+    "status": "promoted_not_complete"
   }
 ]

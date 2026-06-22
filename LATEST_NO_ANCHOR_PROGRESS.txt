@@ -1,0 +1,32 @@
+VLINCS no-anchor global ID progress
+Date: 2026-06-22
+
+Current best e2e:
+IDF1 / HOTA / AssA = 0.657653 / 0.520723 / 0.535819
+
+Current best model-side pair metrics:
+F1 / precision / recall = 0.775234 / 0.820504 / 0.734698
+
+Latest promoted edit:
+weakmetric 10 -> 22, moved 2 tracklets, from the multiview subpart side-effect sweep.
+
+Goal status:
+Global-id model target is above 0.70. End-to-end IDF1 remains below 0.70.
+
+Open first:
+reports/no_anchor_currentbest_subpart_multiview_20260622.md
+
+Key artifacts:
+reports/publish_manifest_20260622.md
+autoresearch_state/no_anchor_global_id/state/progress.json
+local_runs/remote_h100_test_3_20260622/no_anchor_currentbest_subpart_multiview_20260622/multiview_results_summary.json
+local_runs/remote_h100_test_3_20260622/no_anchor_currentbest_subpart_multiview_20260622/multiview_results_summary.csv
+local_runs/remote_h100_test_3_20260622/no_anchor_currentbest_subpart_multiview_20260622/rank29_subpart_s10_to22_2seq_assignments_density_p005_area.json
+local_runs/remote_h100_test_3_20260622/no_anchor_currentbest_subpart_multiview_20260622/weakmetric_assignments/rank29_subpart_s10_to22_2seq_assignments.csv
+
+S3:
+s3://dit-scale-up/zcai/vlincs/progress_snapshots/20260622_no_anchor_global_id_current/
+s3://dit-scale-up/zcai/vlincs/remote_runs_h100-test-3_20260622/no_anchor_currentbest_subpart_multiview_20260622/
+
+GitHub:
+https://github.com/Zefan-Cai/vlincs

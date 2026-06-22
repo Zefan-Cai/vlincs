@@ -1,0 +1,243 @@
+<div class="page" *ngIf="meta; else loading">
+  <div class="page-header">
+    <div class="hdr-top">
+      <h1>VLINCS Gallery — {{ meta.dataset }}</h1>
+      <label class="dsswitch" *ngIf="datasetList.length"
+             title="Switch which gallery_<key> database you are viewing — your Postgres holds one DB per ingested dataset/run.">
+        dataset
+        <select [ngModel]="dataset" (ngModelChange)="selectDataset($event)">
+          <option *ngFor="let d of datasetList" [value]="d.key">{{ d.key }}{{ d.n_identities >= 0 ? ' · ' + d.n_identities + ' ids' : '' }}</option>
+        </select>
+      </label>
+    </div>
+    <p>how / when / why the gallery is what it is at time <b>t</b> · {{ cams.length }} videos / {{ distinctCams().length }} cameras · colour = global id (same colour across cameras = a cross-camera match)</p>
+    <div class="cfg" *ngIf="galleryConfig()">
+      <span class="cfglbl" title="The decision config this DB state was built with, persisted with the run. Hover a chip for what it does.">config</span>
+      <span class="cfgchip" *ngFor="let e of configEntries()" [title]="cfgTip(e.k)"
+            [class.veto]="e.k === 'cannot_link'" [class.on]="e.k === 'cannot_link' && e.v === 'on'" [class.off]="e.k === 'cannot_link' && e.v === 'off'">
+        {{ e.label }} <b>{{ e.v }}</b></span>
+    </div>
+  </div>
+
+  <div class="grid">
+    <div class="tracklet-col">
+      <div class="card" *ngIf="trackletDetail; else noTracklet">
+        <h3 *ngIf="trackletDetail.decision as dc">{{ dc.decision_type === 'merged' ? 'merge' : 'tracklet ' + trackletDetail.seq + ' — ' + trackletDetail.n_dets + ' dets' }}</h3>
+        <div class="why" *ngIf="trackletDetail.decision as dc">
+          <b class="dtype" [class.merged]="dc.decision_type==='merged'">{{ dc.decision_type }}</b>
+          <span class="tag" [class.added]="dc.admitted" [class.rej]="!dc.admitted" *ngIf="dc.decision_type!=='merged'">{{ dc.admitted ? 'added' : 'not-added' }}</span>
+          {{ whyText(dc) }}
+          <!-- per-vetoed-candidate explanation: the supporting numbers (computed on-demand from the DB) that
+               make "same_frame" / "travel:CAM" self-explanatory, one clear line per blocked candidate gid. -->
+          <div class="veto vetoexpl" *ngFor="let v of vetoLines()" [title]="v.veto_reason">{{ fmtVeto(v) }}</div>
+          <div class="mut" *ngIf="dc.candidate_gids?.length && dc.decision_type!=='merged'">candidates {{ dc.candidate_gids.join(',') }} · sims {{ dc.scores.join(',') }}</div>
+        </div>
+        <ng-container *ngIf="trackletDetail.n_dets > 0; else mergeNote">
+          <div class="banklbl">What — the tracklet's crops ({{ trackletStrip().length }} of {{ trackletDetail.n_dets }}):</div>
+          <div class="strip">
+            <figure class="cropfig" *ngFor="let s of trackletStrip(); trackBy: trackImg">
+              <img [src]="crop(s.det_id)" loading="lazy" decoding="async"
+                   (load)="onImg($event, true)" (error)="onImg($event, false)"
+                   [title]="s.det_id + '  ·  confidence ' + (s.conf | number:'1.2-2')" />
+              <figcaption [title]="s.det_id">{{ detLabel(s.det_id) }}</figcaption>
+            </figure>
+          </div>
+          <div class="loadmore" *ngIf="trackletStrip().length < trackletDetail.n_dets">
+            <button class="btn" (click)="loadMoreCrops()" title="Show more of this tracklet's crops (evenly sampled).">+ load more</button>
+            <button class="btn" (click)="loadMoreCrops(true)" [title]="'Show all ' + trackletDetail.n_dets + ' crops.'">show all ({{ trackletDetail.n_dets }})</button>
+          </div>
+        </ng-container>
+        <ng-template #mergeNote>
+          <div class="mut">This is a consolidation merge — click the two identities in the identities list to see their crops.</div>
+        </ng-template>
+      </div>
+      <ng-template #noTracklet>
+        <div class="card tracklet-empty mut">Click a decision in the feed (or a tracklet/exemplar crop) to inspect it here — its decision, the why, and its crops.</div>
+      </ng-template>
+    </div>
+    <div class="feed-col">
+      <div class="card feed">
+        <h3>Decision feed — decisions up to {{ mode === 'decision' ? 'step ' + step : 't' }} ({{ decisions.length }}), newest first</h3>
+        <div class="feedlegend mut">
+          <span title="Every ingested tracklet triggers exactly one decision: match an existing identity, expand a new one, or do-nothing (quarantine).">● a <b>decision</b> fires per ingested tracklet (match / expand / do-nothing)</span>
+          <span class="lg-merge" title="On a periodic cadence the gallery runs resolve() — it re-checks identities and MERGES any whose exemplar centroids now agree (≥ merge_tau). That's a re-resolution, not a per-tracklet decision.">● a <b>merge</b> fires when a periodic <b>resolve()</b> re-resolves identities</span>
+          <span *ngIf="selGid !== null" class="lg-inv" title="Rows touching the selected identity are highlighted.">● highlighted = involves id {{ selGid }}</span>
+        </div>
+        <ng-container *ngFor="let d of decisions; let i = index; trackBy: trackSeq">
+          <div class="tdiv" [class.nowdiv]="i === 0"><span>{{ mode === 'decision' ? 'step ' + d.seq : secs(d.abs_ms) + 's' }}{{ i === 0 ? ' · now' : '' }}</span></div>
+          <!-- consolidation merge event (decision-order feed only) -->
+          <div *ngIf="d.isMerge" class="dec merged mergerow" [class.now]="i === 0" [class.sel]="selGid === d.new_gid" [class.involved]="feedInvolved(d)" (click)="selectMerge(d)"
+               [title]="'Resolve at ingest step ' + d.seq + ': a periodic resolve() re-checked all identities and merged id ' + d.old_gid + ' into id ' + d.new_gid + ' because their exemplar-centroid cosine (' + (d.score | number:'1.3-3') + ') reached merge_tau (' + galleryConfig()?.merge_tau + '). Click to inspect the survivor.'">
+            <div class="dec-main">
+              <b class="dtype merged">⟳ merged</b>
+              <span class="sw" [style.background]="color(d.old_gid)"></span> id {{ d.old_gid }}
+              <span class="mergearrow">→</span>
+              <span class="sw" [style.background]="color(d.new_gid)"></span> id {{ d.new_gid }}
+            </div>
+            <div class="dec-sub mut">resolve at step {{ d.seq }} · centroid cosine <b>{{ d.score | number:'1.3-3' }}</b> ≥ merge_tau {{ galleryConfig()?.merge_tau }}</div>
+          </div>
+          <!-- match / expand / quarantine decision -->
+          <div *ngIf="!d.isMerge" class="dec" [class.expand]="d.decision_type === 'expand'"
+               [class.merged]="d.decision_type === 'merged'" [class.quar]="d.decision_type === 'quarantine'"
+               [class.now]="i === 0" [class.sel]="selSeq === d.seq" [class.involved]="feedInvolved(d)" (click)="selectTracklet(d.seq)"
+               title="Click to inspect this decision — its crops, candidate ids, cosine scores, and why it matched, expanded, or was vetoed.">
+            <div class="dec-main">
+              <span class="sw" [style.background]="color(d.chosen_gid)"></span>
+              <b class="dtype" [class.merged]="d.decision_type==='merged'">{{ d.decision_type }}</b> → id {{ d.chosen_gid }}
+              <span class="tag" [class.added]="d.admitted" [class.rej]="!d.admitted" *ngIf="d.decision_type!=='merged'">{{ d.admitted ? 'added' : 'not-added' }}</span>
+              <span class="vetoicon" *ngIf="filterVeto(d.veto_reasons).length"
+                    [title]="'Blocked by cannot-link veto: ' + filterVeto(d.veto_reasons).join(', ')">⊘</span>
+            </div>
+            <div class="dec-sub mut">{{ d.camera }}<span *ngIf="d.candidate_gids?.length"> · cand {{ d.candidate_gids.join(',') }} · sim {{ d.scores.join(',') }}</span></div>
+          </div>
+        </ng-container>
+      </div>
+    </div>
+
+    <div class="cams-col">
+      <nv-kpi-strip [items]="kpis"></nv-kpi-strip>
+      <div class="card controls">
+        <div class="ctrlrow">
+          <span class="cardtoggle" title="The timeline lens. Playback = wall-clock t (where boxes are on screen). Decision order = ingest step (the gallery as it was actually built, one step per tracklet decision — the lens for auditing decisions; no 'future' crops).">
+            <button class="btn" [class.on]="mode === 'wall'" (click)="setMode('wall')" title="Wall-clock playback — scrub over real detection time; boxes are where people are on screen at t.">Playback (t)</button>
+            <button class="btn" [class.on]="mode === 'decision'" (click)="setMode('decision')" title="Decision order — scrub over ingest step; the gallery grows one tracklet decision at a time, exactly as it was built.">Decision order</button>
+          </span>
+          <span class="cardtoggle" *ngIf="cards.length > 1" title="Show one recording session at a time — Tc6 and Tc8 reuse camera names and sit ~2.5h apart.">
+            <button class="btn" [class.on]="card === ''" (click)="selectCard('')" title="Show all sessions together (scrubber skips the empty gap between them)">All</button>
+            <button class="btn" *ngFor="let c of cards" [class.on]="card === c" (click)="selectCard(c)" [title]="'Show only session ' + shortCard(c) + ' at full time resolution'">{{ shortCard(c) }}</button>
+          </span>
+          <button class="btn" (click)="stepDecision(-1)" title="Step back one decision (←)">⏮</button>
+          <button class="btn" (click)="togglePlay()" [title]="(playing ? 'Pause' : 'Play') + ' — advance the timeline and watch identities form (space)'">{{ playing ? '⏸ Pause' : '▶ Play' }}</button>
+          <button class="btn" (click)="stepDecision(1)" title="Step forward one decision (→)">⏭ next decision</button>
+        </div>
+        <div class="ctrlrow">
+          <input class="scrub" type="range" min="0" max="1000" [(ngModel)]="scrubPos" (input)="onScrub()"
+                 [title]="mode === 'decision' ? 'Scrub over ingest step — each step is one tracklet decision, in the order they were made.' : 'Scrub the timeline — sets t over actual detection time (skips the Tc6/Tc8 dead gap).'" />
+          <span class="t" [title]="mode === 'decision' ? 'Current ingest step (decision number).' : 'Current timeline position t, in seconds from the first detection.'">{{ mode === 'decision' ? 'step ' + step + ' / ' + (nDecisions - 1) : 't = ' + ((t - t0) / 1000).toFixed(2) + 's' }}</span>
+          <label title="Playback speed — how much timeline advances per tick when playing.">speed
+            <select [(ngModel)]="speed"><option [ngValue]="4">4</option><option [ngValue]="16">16</option><option [ngValue]="64">64</option></select>×
+          </label>
+          <label title="Box-trail length — how many ms of recent detections to overlay on each camera, trailing back from t. This is a display window only, not the matcher's window.">box trail
+            <select [(ngModel)]="window" (change)="refresh()"><option [ngValue]="200">200</option><option [ngValue]="400">400</option><option [ngValue]="1000">1000</option></select>ms
+          </label>
+        </div>
+      </div>
+      <div class="cams">
+        <div class="cam card" *ngFor="let c of cams; trackBy: trackVid"
+             [title]="'Camera ' + c.camera + ' (' + shortCard(c.video) + ') — detection boxes within the box-trail window before t, coloured by global id. A box lights up when its identity is selected.'">
+          <div class="lab">{{ c.camera }} · <b>{{ shortCard(c.video) }}</b> · {{ c.w }}×{{ c.h }}</div>
+          <canvas #cam [attr.data-video]="c.video" width="1280" [attr.height]="1280 * (c.h || 1080) / (c.w || 1920)"></canvas>
+        </div>
+      </div>
+    </div>
+
+    <div class="ids-col">
+      <div class="card" *ngIf="hasGeo()">
+        <h3>Camera map — FOV overlap &amp; where the selected id appears</h3>
+        <svg class="cammap" [attr.viewBox]="'0 0 ' + MAP_W + ' ' + MAP_H" [attr.width]="MAP_W" [attr.height]="MAP_H">
+          <line *ngFor="let e of mapEdges()" [attr.x1]="e.x1" [attr.y1]="e.y1" [attr.x2]="e.x2" [attr.y2]="e.y2" class="ovl" />
+          <g *ngFor="let c of distinctCams()">
+            <circle [attr.cx]="camPt(c).x" [attr.cy]="camPt(c).y" [attr.r]="camSpansSel(c) ? 7 : 5"
+                    [attr.fill]="camSpansSel(c) ? color(selGid || 0) : '#5a6b7a'" [attr.stroke]="camSpansSel(c) ? '#fff' : 'none'" />
+            <text [attr.x]="camPt(c).x" [attr.y]="camPt(c).y - 9" class="caml">{{ c.camera.slice(4) }}</text>
+          </g>
+        </svg>
+        <div class="mut">dots = cameras at survey lat/lon · grey lines = overlapping FOV pairs · pick an identity to light its cameras · keys: ←/→ step, space play, [ / ] window</div>
+      </div>
+
+      <div class="card embcard">
+        <h3>Embedding space — what the matcher / index sees</h3>
+        <div class="embctl">
+          <button class="btn iconbtn" [class.on]="embMode === 'bank'" (click)="setEmbMode('bank')" title="Bank exemplars — one point per live bank exemplar (the vectors the matcher actually scores against, ≤ Bank cap per id).">
+            <svg viewBox="0 0 16 16" width="15" height="15" fill="currentColor" aria-hidden="true"><circle cx="4.5" cy="5" r="2.1"/><circle cx="11" cy="4.5" r="2.1"/><circle cx="8" cy="11" r="2.1"/></svg>
+          </button>
+          <button class="btn iconbtn" [class.on]="embMode === 'det'" (click)="setEmbMode('det')" title="Per-detection — one point per detection, coloured by its assigned id (a denser cloud of committed assignments).">
+            <svg viewBox="0 0 16 16" width="15" height="15" fill="currentColor" aria-hidden="true"><circle cx="3" cy="3" r="1.1"/><circle cx="6.3" cy="3" r="1.1"/><circle cx="9.6" cy="3" r="1.1"/><circle cx="13" cy="3" r="1.1"/><circle cx="3" cy="6.3" r="1.1"/><circle cx="6.3" cy="6.3" r="1.1"/><circle cx="9.6" cy="6.3" r="1.1"/><circle cx="13" cy="6.3" r="1.1"/><circle cx="3" cy="9.6" r="1.1"/><circle cx="6.3" cy="9.6" r="1.1"/><circle cx="9.6" cy="9.6" r="1.1"/><circle cx="13" cy="9.6" r="1.1"/><circle cx="3" cy="13" r="1.1"/><circle cx="6.3" cy="13" r="1.1"/><circle cx="9.6" cy="13" r="1.1"/><circle cx="13" cy="13" r="1.1"/></svg>
+          </button>
+        </div>
+        <div id="embplot" class="embplot" [class.hidden]="embEmpty" (dblclick)="openEmbDialog()" title="Double-click to enlarge"></div>
+        <div class="embfoot" *ngIf="!embEmpty">
+          <button class="btn iconbtn" (click)="openEmbDialog()" title="Enlarge — open a large, zoomable view (scroll to zoom, drag to pan).">
+            <svg viewBox="0 0 16 16" width="15" height="15" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2.5 6 V2.5 H6 M10 2.5 H13.5 V6 M13.5 10 V13.5 H10 M6 13.5 H2.5 V10"/></svg>
+          </button>
+          <button class="btn iconbtn" [class.on]="embLight" (click)="toggleEmbLight()" title="Toggle light / dark background for the embedding plot.">
+            <svg viewBox="0 0 16 16" width="15" height="15" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" aria-hidden="true"><circle cx="8" cy="8" r="3"/><path d="M8 1.5V3 M8 13V14.5 M1.5 8H3 M13 8H14.5 M3.3 3.3l1 1 M11.7 11.7l1 1 M12.7 3.3l-1 1 M4.3 11.7l-1 1"/></svg>
+          </button>
+          <span class="mut embmeta">{{ embN }} pts · {{ embDim }}-d → PCA 2D</span>
+        </div>
+        <div class="embempty mut" *ngIf="embEmpty">
+          No embeddings persisted for this card. The bank stores 64-d (vector(64)) match-space vectors;
+          a different-dimension embedder leaves these NULL (matcher + score are unaffected).
+        </div>
+        <div class="embhover" *ngIf="embHover && !embEmpty">
+          <img class="exq" [src]="crop(embHover.rep_det_id)" loading="lazy" decoding="async"
+               (load)="onImg($event, true)" (error)="onImg($event, false)" [title]="embHover.rep_det_id" />
+          <div>
+            <span class="sw" [style.background]="color(embHover.gid)"></span>
+            <b>id {{ embHover.gid }}</b> · {{ embHover.n_exemplars }} exemplar(s) · {{ (embHover.cameras || []).join(',') }}
+            <div class="mut" [title]="embHover.det_id">det {{ detLabel(embHover.det_id) }}</div>
+            <div class="mut">click a point to focus this identity</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <h3>Identities at t ({{ identities.length }})</h3>
+        <div class="idlist">
+          <div class="idrow" *ngFor="let it of identities" [class.sel]="selGid === it.gid" (click)="selectGid(it.gid)"
+               [title]="'id ' + it.gid + ' — ' + it.seen + ' of ' + it.total + ' detections seen by t, across ' + (it.cameras || []).join(', ') + '. Click to inspect its exemplar bank and light its cameras on the map.'">
+            <span class="sw" [style.background]="color(it.gid)"></span>
+            <span class="gid">id {{ it.gid }}</span>
+            <span class="xc" *ngIf="(it.cameras || []).length > 1"
+                  [title]="'Cross-camera identity — seen in ' + it.cameras.length + ' cameras: ' + it.cameras.join(', ')">⇄{{ it.cameras.length }}</span>
+            <span class="mut">{{ it.seen }}/{{ it.total }} · {{ (it.cameras || []).join(',') }}</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="card" *ngIf="identityDetail">
+        <h3>id {{ identityDetail.gid }} — exemplar bank ({{ identityDetail.exemplars_added }} of {{ identityDetail.n_tracklets }} tracklets added)</h3>
+        <div class="banklbl">Bank exemplars — the subsample that represents this id:</div>
+        <div class="strip">
+          <figure class="cropfig" *ngFor="let tk of addedTracklets(); trackBy: trackImg">
+            <img class="exq" [class.selimg]="selSeq === tk.seq" [src]="crop(tk.rep_det)" loading="lazy" decoding="async"
+                 (load)="onImg($event, true)" (error)="onImg($event, false)" (click)="selectTracklet(tk.seq)" [title]="exTitle(tk) + '  ·  ' + tk.rep_det" />
+            <figcaption [title]="tk.rep_det">{{ detLabel(tk.rep_det) }}</figcaption>
+          </figure>
+          <span class="mut" *ngIf="!addedTracklets().length">—</span>
+        </div>
+        <div class="banklbl rejlbl">Matched but rejected (diversity-gate — not added):</div>
+        <div class="mut gatespec">diversity gate: admit_tau 0.9 = redundancy cutoff · coherence_floor 0.4 = too-far cutoff · max_reps 16 = bank cap.</div>
+        <div class="strip">
+          <figure class="cropfig" *ngFor="let tk of rejectedTracklets(); trackBy: trackImg">
+            <img class="exq rejimg" [class.selimg]="selSeq === tk.seq" [src]="crop(tk.rep_det)" loading="lazy" decoding="async"
+                 (load)="onImg($event, true)" (error)="onImg($event, false)" (click)="selectTracklet(tk.seq)" [title]="rejTitle(tk) + '  ·  ' + tk.rep_det" />
+            <figcaption [title]="tk.rep_det">{{ detLabel(tk.rep_det) }}</figcaption>
+          </figure>
+          <span class="mut" *ngIf="!rejectedTracklets().length">—</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- enlarged, zoomable embedding-space dialog -->
+  <div class="embdialog" *ngIf="embExpanded" (click)="closeEmbDialog()">
+    <div class="embdialog-box" [class.light]="embLight" (click)="$event.stopPropagation()">
+      <div class="embdialog-head">
+        <b>Embedding space — {{ embMode === 'bank' ? 'bank exemplars' : 'per-detection' }}</b>
+        <span class="mut">{{ embN }} pts · {{ embDim }}-d → 2D · scroll to zoom · drag to pan · click a point to focus its id</span>
+        <span class="embdialog-hover" *ngIf="embHover">
+          <img class="exq" [src]="crop(embHover.rep_det_id)" loading="lazy" decoding="async"
+               (load)="onImg($event, true)" (error)="onImg($event, false)" [title]="embHover.rep_det_id" />
+          <span><span class="sw" [style.background]="color(embHover.gid)"></span> id {{ embHover.gid }} · {{ detLabel(embHover.det_id) }}</span>
+        </span>
+        <button class="btn iconbtn embdialog-light" [class.on]="embLight" (click)="toggleEmbLight()" title="Toggle light / dark background.">
+          <svg viewBox="0 0 16 16" width="15" height="15" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" aria-hidden="true"><circle cx="8" cy="8" r="3"/><path d="M8 1.5V3 M8 13V14.5 M1.5 8H3 M13 8H14.5 M3.3 3.3l1 1 M11.7 11.7l1 1 M12.7 3.3l-1 1 M4.3 11.7l-1 1"/></svg>
+        </button>
+        <button class="btn" (click)="closeEmbDialog()" title="Close (Esc)">✕ close</button>
+      </div>
+      <div id="embplotbig" class="embplotbig"></div>
+    </div>
+  </div>
+</div>
+<ng-template #loading><div class="page"><p>Loading from /api/meta … is the FastAPI up on :8077?</p></div></ng-template>

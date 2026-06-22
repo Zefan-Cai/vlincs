@@ -1,0 +1,73 @@
+# VLINCS gallery — self-hosted CI on maxwell (Linux SHELL runner; runs-on self.hosted,linux.shell).
+# Runs the gallery demos ON the host (host docker + Compose + the /mnt datastore mount), scores them with
+# the canonical reid_hota, and publishes the per-dataset scores back into the repo (SCORES.md + badges).
+# Background + every gotcha: memory note `gallery-ci-maxwell-runner`. Script lines are unquoted YAML
+# scalars, so keep them free of a colon-space ': '.
+#
+# Triggers on main (the live scoreboard) and ci/gallery-scores (iteration). The decision config is PINNED
+# (--no-cannot-link) so a score change tracks code, not a yaml-default drift. The publish step commits the
+# scores back with [skip ci]; it needs a secured repo variable BADGE_PUSH_TOKEN (a Repository Access Token
+# with repository:write). Without that variable it still produces the files as artifacts, just no push.
+
+pipelines:
+  branches:
+    '{main,ci/gallery-scores}':
+      - step:
+          name: MS02 demo (offline) + score
+          runs-on:
+            - self.hosted
+            - linux.shell
+          artifacts:
+            - ms02_score.txt
+          script:
+            - set -x
+            - unset DOCKER_HOST                              # use maxwell's host daemon, not the absent DinD
+            - cd kit
+            - export DATA_ROOT=/mnt/datastore2_videolincs/data
+            - export COMPOSE_PROJECT_NAME=gallery_ci_ms02
+            - export GALLERY_CODE_SHA="$BITBUCKET_COMMIT"    # -> decision_log.code_sha (DB reflects the commit)
+            - docker compose down -v || true
+            - docker compose build app
+            - docker compose run --rm app demo --dataset ms02 --no-cannot-link 2>&1 | tee ../ms02_score.txt
+            - docker compose down -v || true
+      - step:
+          name: DS1 demo (offline LFS) + score
+          runs-on:
+            - self.hosted
+            - linux.shell
+          clone:
+            lfs: true                                        # pull the ~103MB DS1 bundle (git-lfs is on maxwell)
+          artifacts:
+            - ds1_score.txt
+          script:
+            - set -x
+            - unset DOCKER_HOST
+            - cd kit
+            - export DATA_ROOT=/mnt/datastore2_videolincs/data
+            - export COMPOSE_PROJECT_NAME=gallery_ci_ds1
+            - export GALLERY_CODE_SHA="$BITBUCKET_COMMIT"
+            - docker compose down -v || true
+            - docker compose build app
+            - docker compose run --rm app demo --dataset ds1 --no-cannot-link 2>&1 | tee ../ds1_score.txt
+            - docker compose down -v || true
+      - step:
+          name: Publish scores (SCORES.md + badges)
+          runs-on:
+            - self.hosted
+            - linux.shell
+          artifacts:
+            - SCORES.md
+            - badges/**
+            - ci/scores_history.csv
+          script:
+            - set -x
+            # who/when come from the commit itself (the author who checked it in + the commit date)
+            - export SHA="$BITBUCKET_COMMIT"
+            - export AUTHOR="$(git show -s --format='%an' "$SHA")"
+            - export CDATE="$(git show -s --format='%cI' "$SHA")"
+            # sync the score history from the branch tip (prior runs' [skip ci] commits live there, ahead of
+            # this build's commit) and base our commit on it so the push fast-forwards and history is preserved
+            - git fetch -q origin "$BITBUCKET_BRANCH" || true
+            - git checkout -q -B "$BITBUCKET_BRANCH" "origin/$BITBUCKET_BRANCH" || true
+            - python3 ci/render_scores.py --sha "$SHA" --author "$AUTHOR" --date "$CDATE" ms02_score.txt ds1_score.txt
+            - sh ci/publish_scores.sh

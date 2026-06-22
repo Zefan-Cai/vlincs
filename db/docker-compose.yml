@@ -1,0 +1,27 @@
+# pgvector-backed system-of-record + cannot-link query layer for the gallery PoC.
+# FAISS (in the gallery process) holds the hot ANN over identity exemplars; this Postgres holds
+# every detection/identity/assignment + the decision event-log, and does cannot-link as SQL.
+# pgvector gives the vector(1024) column for the system-of-record (the hot path is FAISS, not pg).
+# Geo veto uses a plain haversine SQL function (init.sql) — no postgis dependency.
+services:
+  gallery-pg:
+    image: pgvector/pgvector:pg16
+    container_name: vlincs_gallery_pg
+    environment:
+      POSTGRES_USER: gallery
+      POSTGRES_PASSWORD: gallery
+      POSTGRES_DB: gallery
+    ports:
+      - "55433:5432"   # 55432 is taken by vlincs_debug
+    volumes:
+      - gallery_pgdata:/var/lib/postgresql/data
+      - ./init.sql:/docker-entrypoint-initdb.d/10_init.sql:ro
+    shm_size: "1g"
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U gallery -d gallery"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+volumes:
+  gallery_pgdata:
