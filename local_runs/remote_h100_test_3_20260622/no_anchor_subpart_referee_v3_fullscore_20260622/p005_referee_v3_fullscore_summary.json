@@ -1,0 +1,72 @@
+{
+  "results": [
+    {
+      "assa": 0.536014,
+      "detpr": 0.76591,
+      "detre": 0.576704,
+      "dropped_rows": 7603,
+      "hota": 0.521006,
+      "idf1": 0.657976,
+      "json": "/mnt/localssd/vlincs_reid_runs/no_anchor_subpart_referee_v3_fullscore_20260622/rank63_subpart_s21_to24_10seq_assignments_density_p005_area.json",
+      "moved_tracklets": 10,
+      "rank": 63,
+      "source_component": 21,
+      "source_target": "21->24",
+      "stem": "rank63_subpart_s21_to24_10seq_assignments",
+      "target_component": 24
+    },
+    {
+      "assa": 0.536014,
+      "detpr": 0.76591,
+      "detre": 0.576704,
+      "dropped_rows": 7603,
+      "hota": 0.521006,
+      "idf1": 0.657976,
+      "json": "/mnt/localssd/vlincs_reid_runs/no_anchor_subpart_referee_v3_fullscore_20260622/rank86_subpart_s21_to2330_10seq_assignments_density_p005_area.json",
+      "moved_tracklets": 10,
+      "rank": 86,
+      "source_component": 21,
+      "source_target": "21->2330",
+      "stem": "rank86_subpart_s21_to2330_10seq_assignments",
+      "target_component": 2330
+    },
+    {
+      "assa": 0.535891,
+      "detpr": 0.765827,
+      "detre": 0.576382,
+      "dropped_rows": 7603,
+      "hota": 0.520801,
+      "idf1": 0.657735,
+      "json": "/mnt/localssd/vlincs_reid_runs/no_anchor_subpart_referee_v3_fullscore_20260622/rank70_subpart_s21_to19_10seq_assignments_density_p005_area.json",
+      "moved_tracklets": 10,
+      "rank": 70,
+      "source_component": 21,
+      "source_target": "21->19",
+      "stem": "rank70_subpart_s21_to19_10seq_assignments",
+      "target_component": 19
+    },
+    {
+      "assa": 0.535898,
+      "detpr": 0.76582,
+      "detre": 0.576328,
+      "dropped_rows": 7603,
+      "hota": 0.520788,
+      "idf1": 0.657697,
+      "json": "/mnt/localssd/vlincs_reid_runs/no_anchor_subpart_referee_v3_fullscore_20260622/rank150_subpart_s21_to2330_10seq_assignments_density_p005_area.json",
+      "moved_tracklets": 10,
+      "rank": 150,
+      "source_component": 21,
+      "source_target": "21->2330",
+      "stem": "rank150_subpart_s21_to2330_10seq_assignments",
+      "target_component": 2330
+    }
+  ],
+  "standing_best": {
+    "assa": 0.536049,
+    "hota": 0.521057,
+    "idf1": 0.658025
+  },
+  "uses_anchors": false,
+  "uses_gt_for_evaluation_only": true,
+  "uses_gt_for_training_or_anchors": false
+}

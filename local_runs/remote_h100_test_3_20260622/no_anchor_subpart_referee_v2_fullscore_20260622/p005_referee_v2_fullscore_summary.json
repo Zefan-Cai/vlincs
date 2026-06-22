@@ -1,0 +1,92 @@
+{
+  "results": [
+    {
+      "assa": 0.536049,
+      "assignment_csv": null,
+      "detpr": 0.765911,
+      "detre": 0.576781,
+      "dropped_rows": 7603,
+      "hota": 0.521057,
+      "idf1": 0.658025,
+      "json": "/mnt/localssd/vlincs_reid_runs/no_anchor_subpart_referee_v2_fullscore_20260622/rank58_subpart_s21_to2330_10seq_assignments_density_p005_area.json",
+      "moved_tracklets": 10,
+      "rank": 58,
+      "source_component": 21,
+      "source_target": "21->2330",
+      "stem": "rank58_subpart_s21_to2330_10seq_assignments",
+      "target_component": 2330
+    },
+    {
+      "assa": 0.535983,
+      "assignment_csv": null,
+      "detpr": 0.765722,
+      "detre": 0.576675,
+      "dropped_rows": 7603,
+      "hota": 0.520944,
+      "idf1": 0.657887,
+      "json": "/mnt/localssd/vlincs_reid_runs/no_anchor_subpart_referee_v2_fullscore_20260622/rank158_subpart_s20_to2330_16seq_assignments_density_p005_area.json",
+      "moved_tracklets": 16,
+      "rank": 158,
+      "source_component": 20,
+      "source_target": "20->2330",
+      "stem": "rank158_subpart_s20_to2330_16seq_assignments",
+      "target_component": 2330
+    },
+    {
+      "assa": 0.535837,
+      "assignment_csv": null,
+      "detpr": 0.765977,
+      "detre": 0.576218,
+      "dropped_rows": 7603,
+      "hota": 0.520737,
+      "idf1": 0.657683,
+      "json": "/mnt/localssd/vlincs_reid_runs/no_anchor_subpart_referee_v2_fullscore_20260622/rank33_subpart_s22_to2330_8seq_assignments_density_p005_area.json",
+      "moved_tracklets": 8,
+      "rank": 33,
+      "source_component": 22,
+      "source_target": "22->2330",
+      "stem": "rank33_subpart_s22_to2330_8seq_assignments",
+      "target_component": 2330
+    },
+    {
+      "assa": 0.535785,
+      "assignment_csv": null,
+      "detpr": 0.765616,
+      "detre": 0.576331,
+      "dropped_rows": 7603,
+      "hota": 0.520692,
+      "idf1": 0.657624,
+      "json": "/mnt/localssd/vlincs_reid_runs/no_anchor_subpart_referee_v2_fullscore_20260622/rank37_subpart_s24_to41_7seq_assignments_density_p005_area.json",
+      "moved_tracklets": 7,
+      "rank": 37,
+      "source_component": 24,
+      "source_target": "24->41",
+      "stem": "rank37_subpart_s24_to41_7seq_assignments",
+      "target_component": 41
+    },
+    {
+      "assa": 0.535769,
+      "assignment_csv": null,
+      "detpr": 0.765435,
+      "detre": 0.576205,
+      "dropped_rows": 7603,
+      "hota": 0.520599,
+      "idf1": 0.657475,
+      "json": "/mnt/localssd/vlincs_reid_runs/no_anchor_subpart_referee_v2_fullscore_20260622/rank04_subpart_s9_to2330_2seq_assignments_density_p005_area.json",
+      "moved_tracklets": 2,
+      "rank": 4,
+      "source_component": 9,
+      "source_target": "9->2330",
+      "stem": "rank04_subpart_s9_to2330_2seq_assignments",
+      "target_component": 2330
+    }
+  ],
+  "standing_best": {
+    "assa": 0.535983,
+    "hota": 0.520944,
+    "idf1": 0.657887
+  },
+  "uses_anchors": false,
+  "uses_gt_for_evaluation_only": true,
+  "uses_gt_for_training_or_anchors": false
+}

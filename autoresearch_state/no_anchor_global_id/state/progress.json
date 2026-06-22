@@ -1,7 +1,8 @@
 {
-  "best_e2e_assa": 0.535983,
-  "best_e2e_hota": 0.520944,
-  "best_e2e_idf1": 0.657887,
+  "best_assignment_csv": "/mnt/localssd/vlincs_reid_runs/no_anchor_highmass_from_r47r49_20260622/peel21/size10_assignments/rank58_subpart_s21_to2330_10seq_assignments.csv",
+  "best_e2e_assa": 0.536049,
+  "best_e2e_hota": 0.521057,
+  "best_e2e_idf1": 0.658025,
   "best_model_pair_f1": 0.775234,
   "best_model_pair_precision": 0.820504,
   "best_model_pair_recall": 0.734698,
@@ -11,8 +12,18 @@
   "goal_global_id_pair_f1": 0.7,
   "goal_global_id_pair_precision": 0.7,
   "goal_global_id_pair_recall": 0.7,
-  "iteration": 91,
+  "iteration": 93,
   "last_artifacts": [
+    "reports/no_anchor_subpart_referee_selfplay_20260622.md",
+    "/mnt/localssd/vlincs_reid_runs/no_anchor_subpart_referee_v3_fullscore_20260622",
+    "local_runs/remote_h100_test_3_20260622/no_anchor_subpart_referee_v3_fullscore_20260622/p005_referee_v3_fullscore_summary.json",
+    "local_runs/remote_h100_test_3_20260622/no_anchor_subpart_referee_from_fullscore_labels_20260622/referee_ranked_candidates_v3_after_promotion.json",
+    "/mnt/localssd/vlincs_reid_runs/no_anchor_subpart_referee_v2_fullscore_20260622",
+    "/mnt/localssd/vlincs_reid_runs/no_anchor_subpart_referee_fullscore_20260622",
+    "local_runs/remote_h100_test_3_20260622/no_anchor_subpart_referee_v2_fullscore_20260622/p005_referee_v2_fullscore_summary.json",
+    "local_runs/remote_h100_test_3_20260622/no_anchor_subpart_referee_fullscore_20260622/p005_referee_fullscore_summary.json",
+    "local_runs/remote_h100_test_3_20260622/no_anchor_subpart_referee_from_fullscore_labels_20260622/referee_ranked_candidates_v2_after_batch.json",
+    "kit/rank_no_anchor_subpart_candidates_by_fullscore_labels.py",
     "reports/no_anchor_highmass_from_r47r49_refutation_20260622.md",
     "local_runs/remote_h100_test_3_20260622/no_anchor_highmass_from_r47r49_20260622/p005_fullscore_top6_summary.json",
     "local_runs/remote_h100_test_3_20260622/no_anchor_highmass_from_r47r49_20260622/p005_peel21_fullscore_summary.json",
@@ -20,10 +31,10 @@
     "local_runs/remote_h100_test_3_20260622/no_anchor_highmass_from_r47r49_20260622/no_anchor_highmass_from_r47r49_20260622_light.tgz",
     "/mnt/localssd/vlincs_reid_runs/no_anchor_highmass_from_r47r49_20260622"
   ],
-  "last_direction": "highmass_from_r47r49_and_peel21_refutation",
-  "last_result": "Generated high-mass no-anchor subpart candidates from the r47+r49 current best and full-scored top six plus 21->60 peel sizes 10/16/22. No new best: 32->41 tied the standing best, broad high-mass edits were negative, and the best 21->60 peel size16 reached IDF1/HOTA/AssA 0.657877/0.520918/0.535962, only 0.000010 below the current best. Treat these as side-effect labels and near-miss hard negatives; current best remains 0.657887/0.520944/0.535983.",
+  "last_direction": "subpart_referee_v3_local_alternative_refutation",
+  "last_result": "After promoting 21->2330 size10 rank58 to IDF1/HOTA/AssA 0.658025/0.521057/0.536049, retrained a strict exact-stem subpart referee and full-scored four local alternatives. None improved: 21->24 rank63 and 21->2330 rank86 both reached 0.657976, 21->19 rank70 reached 0.657735, and 21->2330 rank150 reached 0.657697. Current best remains rank58; the next useful move is to treat rank58 as the new base and regenerate residual candidates or compose non-conflicting moves on top of it.",
   "last_updated": "2026-06-22",
-  "next_direction": "train_highmass_subpart_side_effect_referee_from_positive_tie_negative_and_peel_labels",
+  "next_direction": "use_21_to2330_rank58_as_new_base_regenerate_residual_subpart_candidates_and_combo_nonconflicting_moves",
   "stale_count": 1,
-  "status": "active_no_anchor_highmass_refutation_best_e2e_0p657887_e2e_still_below_0p70"
+  "status": "active_no_anchor_referee_selfplay_best_e2e_0p658025_e2e_still_below_0p70"
 }
