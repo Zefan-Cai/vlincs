@@ -127,11 +127,37 @@ MCAM04-only strict `q05_area` variant was harmful, dropping to:
 This closes the immediate detection/filter neighborhood and sends the next
 research branch back to side-effect-aware no-anchor identity evidence.
 
+## Latest Side-Effect Blacklisted Subpart Promotion
+
+After closing the local filter neighborhood, the next no-anchor run generated
+three subpart-repair pools from the current best assignment and filtered them
+with the accumulated side-effect blacklist.  The production-side proposal stage
+used only assignment CSVs, tracklet features, temporal-overlap conflicts,
+component sizes, and focus-video bookkeeping; GT was used only for canonical
+full-score evaluation.
+
+Singles:
+
+- `32 -> 15` moved 7 tracklets and promoted IDF1 to `0.657860`.
+- `47 -> 2330` moved 7 tracklets and promoted IDF1 to `0.657680`.
+- `24 -> 31` and `31 -> 24` tied the standing best.
+- `11 -> 19` and `44 -> 29` were negatives.
+
+The compatible combo `32 -> 15 + 47 -> 2330` moved 14 tracklets and is the new
+current best:
+
+`IDF1 / HOTA / AssA = 0.657887 / 0.520944 / 0.535983`
+
+This is still well below the `0.70` e2e goal, but it adds two new positive
+side-effect labels, two tie labels, and two negatives for the next no-anchor
+referee/search iteration.
+
 Additional S3 pointers:
 
 ```text
 s3://dit-scale-up/zcai/vlincs/vlincs_reid_runs_h100-test-3_current/
 s3://dit-scale-up/zcai/vlincs/remote_runs_h100-test-3_20260622/no_anchor_currentbest_subpart_multiview_combo_20260622/
 s3://dit-scale-up/zcai/vlincs/remote_runs_h100-test-3_20260622/no_anchor_filter_sweep_currentbest_20260622_env/
+s3://dit-scale-up/zcai/vlincs/remote_runs_h100-test-3_20260622/no_anchor_sideeffect_blacklisted_subpart_search_20260622/
 s3://dit-scale-up/zcai/vlincs/research_snapshot_current/
 ```

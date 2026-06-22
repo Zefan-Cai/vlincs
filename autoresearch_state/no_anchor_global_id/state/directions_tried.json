@@ -1927,5 +1927,13 @@
     "direction": "currentbest_detection_filter_local_sweep",
     "finding": "Six corrected h100-test-3 filter variants confirmed canonical p005_area as the local best around current best IDF1 0.657653; relaxed policies lost precision, strict policies lost recall, and MCAM04 q05 area was harmful.",
     "status": "closed"
+  },
+  {
+    "artifacts": [
+      "reports/no_anchor_sideeffect_blacklisted_subpart_promotion_20260622.md"
+    ],
+    "direction": "side_effect_blacklisted_low_video_subpart_candidate_search",
+    "finding": "Blacklist-filtered no-anchor subpart search produced a micro-promotion: 32->15 plus 47->2330 moved 14 tracklets and scored e2e IDF1/HOTA/AssA 0.657887/0.520944/0.535983; still below 0.70, but it expands the side-effect label bank with positives, ties, and negatives.",
+    "status": "active"
   }
 ]

@@ -2,50 +2,46 @@ VLINCS no-anchor global ID progress
 Date: 2026-06-22
 
 Current best e2e:
-IDF1 / HOTA / AssA = 0.657653 / 0.520723 / 0.535819
+IDF1 / HOTA / AssA = 0.657887 / 0.520944 / 0.535983
 
 Current best model-side pair metrics:
 F1 / precision / recall = 0.775234 / 0.820504 / 0.734698
 
 Latest promoted edit:
-weakmetric 10 -> 22, moved 2 tracklets, from the multiview subpart side-effect sweep.
+side-effect blacklisted subpart combo: 32 -> 15 plus 47 -> 2330, moved 14 tracklets, from weakmetric+dino no-anchor candidate search.
 
 Latest ablation:
-Six corrected h100-test-3 detection/admission filter variants were full-scored around the current best. No new best: canonical p005_area stayed best at 0.657653 IDF1. Relaxed filters gained recall but lost precision, stricter filters gained precision but lost recall, and MCAM04 q05 area dropped to 0.656550 IDF1. Treat p005_area as a local optimum.
+Three no-anchor subpart pools were generated from the previous best assignment and filtered with accumulated side-effect blacklists. Six novel singles were full-scored: 32->15 promoted to 0.657860, 47->2330 promoted to 0.657680, 24->31 and 31->24 tied, while 11->19 and 44->29 were negative. Five combo ablations showed 32->15 + 47->2330 is compatible and promotes the e2e best to 0.657887; adding 24->31 or 31->24 ties the same score.
 
 Previous ablation:
-12 multiview subpart combo candidates were full-scored. No new best: 10 tied the current best, and the two combos containing 19 -> 11 dropped to IDF1 0.657570. This confirms 19 -> 11 as a hard negative/refutation label and says blind composition of tie edits is not enough.
+Six corrected h100-test-3 detection/admission filter variants were full-scored around the then-current best. No filter improved over canonical p005_area, so p005_area remains the local filter/admission setting.
 
 Goal status:
 Global-id model target is above 0.70. End-to-end IDF1 remains below 0.70.
 
 Open first:
-reports/no_anchor_filter_sweep_currentbest_20260622.md
+reports/no_anchor_sideeffect_blacklisted_subpart_promotion_20260622.md
 
 Current-best detail:
+reports/no_anchor_filter_sweep_currentbest_20260622.md
 reports/no_anchor_currentbest_subpart_multiview_combo_refutation_20260622.md
 reports/no_anchor_currentbest_subpart_multiview_20260622.md
 
 Key artifacts:
+reports/no_anchor_sideeffect_blacklisted_subpart_promotion_20260622.md
 reports/no_anchor_filter_sweep_currentbest_20260622.md
-reports/no_anchor_currentbest_subpart_multiview_combo_refutation_20260622.md
-reports/no_anchor_currentbest_subpart_multiview_20260622.md
 reports/publish_manifest_20260622.md
 autoresearch_state/no_anchor_global_id/state/progress.json
-local_runs/remote_h100_test_3_20260622/no_anchor_filter_sweep_currentbest_20260622_env/filter_sweep_summary.json
-local_runs/remote_h100_test_3_20260622/no_anchor_currentbest_subpart_multiview_combo_20260622/combo_results_summary.json
-local_runs/remote_h100_test_3_20260622/no_anchor_currentbest_subpart_multiview_combo_20260622/combo_results_summary.csv
-local_runs/remote_h100_test_3_20260622/no_anchor_currentbest_subpart_multiview_20260622/multiview_results_summary.json
-local_runs/remote_h100_test_3_20260622/no_anchor_currentbest_subpart_multiview_20260622/multiview_results_summary.csv
+local_runs/remote_h100_test_3_20260622/no_anchor_sideeffect_blacklisted_subpart_search_20260622/p005_combo_fullscore_summary.json
+local_runs/remote_h100_test_3_20260622/no_anchor_sideeffect_blacklisted_subpart_search_20260622/p005_fullscore_summary.json
+local_runs/remote_h100_test_3_20260622/no_anchor_sideeffect_blacklisted_subpart_search_20260622/blacklisted_novel_selection.json
 
 S3:
 s3://dit-scale-up/zcai/vlincs/LATEST_NO_ANCHOR_PROGRESS.txt
 s3://dit-scale-up/zcai/vlincs/core_snapshot_20260622/
 s3://dit-scale-up/zcai/vlincs/research_snapshot_current/
+s3://dit-scale-up/zcai/vlincs/remote_runs_h100-test-3_20260622/no_anchor_sideeffect_blacklisted_subpart_search_20260622/
 s3://dit-scale-up/zcai/vlincs/remote_runs_h100-test-3_20260622/no_anchor_filter_sweep_currentbest_20260622_env/
-s3://dit-scale-up/zcai/vlincs/vlincs_reid_runs_h100-test-3_current/
-s3://dit-scale-up/zcai/vlincs/remote_runs_h100-test-3_20260622/no_anchor_currentbest_subpart_multiview_combo_20260622/
-s3://dit-scale-up/zcai/vlincs/remote_runs_h100-test-3_20260622/no_anchor_currentbest_subpart_multiview_20260622/
 
 GitHub:
 https://github.com/Zefan-Cai/vlincs
