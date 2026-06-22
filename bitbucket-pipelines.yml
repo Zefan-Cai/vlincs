@@ -39,8 +39,7 @@ pipelines:
                 - export GALLERY_CODE_SHA="$BITBUCKET_COMMIT"
                 - |
                   trap 'docker compose down -v || true' EXIT
-                  docker compose build app
-                  docker compose run --rm app demo --dataset ms02 --no-cannot-link 2>&1 | tee ../ms02_score.txt
+                  DEMO_HEADLESS=1 DEMO_SCORE_FILE=../ms02_score.txt ./demo.sh ms02 --no-cannot-link
           - step:
               name: DS1 demo (offline LFS) + score
               runs-on:
@@ -60,8 +59,7 @@ pipelines:
                 - export GALLERY_CODE_SHA="$BITBUCKET_COMMIT"
                 - |
                   trap 'docker compose down -v || true' EXIT
-                  docker compose build app
-                  docker compose run --rm app demo --dataset ds1 --no-cannot-link 2>&1 | tee ../ds1_score.txt
+                  DEMO_HEADLESS=1 DEMO_SCORE_FILE=../ds1_score.txt ./demo.sh ds1 --no-cannot-link
       - step:
           name: Publish scores (SCORES.md + badges)
           runs-on:

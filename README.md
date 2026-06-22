@@ -80,6 +80,22 @@ export PYTHONPATH="$PWD:$PWD/kit"
 The DS1 scripts expect VLINCS data under `DATA_ROOT`.  Do not commit raw data,
 video frames, model checkpoints, or generated zip submissions into this repo.
 
+## Auto-Evaluation Entrypoint
+
+The branch-level auto-evaluation path is `kit/demo.sh`.  It wraps the Docker
+demo command, builds the right app image, starts the DB, and runs the same
+`kit/demo.py` path used by local demos.
+
+```bash
+cd kit
+DEMO_HEADLESS=1 DEMO_SCORE_FILE=../ds1_score.txt ./demo.sh ds1 --no-cannot-link
+```
+
+For DS1, `kit/demo.sh ds1` enables the UWISC no-anchor weak/global-ID resolve
+by default (`--weak-resolve --auto-weak-labels`, source `bbox-auto`).  Set
+`WEAK_RESOLVE=0` to run only the base gallery resolve, or pass explicit
+`demo.py` flags after the dataset name to override defaults.
+
 ## Main DS1 Pipeline
 
 The fixed DS1 reproduction entrypoint is:
