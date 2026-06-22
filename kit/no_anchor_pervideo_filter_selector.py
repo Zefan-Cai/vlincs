@@ -215,6 +215,11 @@ def main() -> None:
     ap.add_argument("--policies", default="density_oracle_lite")
     ap.add_argument("--json", required=True)
     ap.add_argument("--zip-out", default="", help="optional zip for the first policy, not metric-selected")
+    ap.add_argument(
+        "--skip-score",
+        action="store_true",
+        help="export policy outputs without the diagnostic GT score; final scorers can evaluate the zip later",
+    )
     args = ap.parse_args()
 
     if bool(args.source_zip) == bool(args.assignment_csv):
@@ -242,7 +247,7 @@ def main() -> None:
             assert pred_by_video is not None
             comp, info = _build_comp(pred_by_video, pred_by_seq, policy=policy)
         comp_by_policy[policy] = comp
-        scored = _score(comp)
+        scored = {"videos_scored": []} if args.skip_score else _score(comp)
         row = {
             **info,
             **scored,
@@ -260,7 +265,10 @@ def main() -> None:
             json.dumps(
                 {
                     "stage": "scored",
-                    **{key: row[key] for key in ["policy_name", "idf1", "hota", "assa", "detpr", "detre", "rows", "dropped_rows"]},
+                    **{
+                        key: row.get(key)
+                        for key in ["policy_name", "idf1", "hota", "assa", "detpr", "detre", "rows", "dropped_rows"]
+                    },
                 },
                 sort_keys=True,
             ),

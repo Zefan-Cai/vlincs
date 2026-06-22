@@ -1,7 +1,7 @@
 {
-  "best_e2e_assa": 0.535717,
-  "best_e2e_hota": 0.520067,
-  "best_e2e_idf1": 0.656563,
+  "best_e2e_assa": 0.535769,
+  "best_e2e_hota": 0.520599,
+  "best_e2e_idf1": 0.657475,
   "best_model_pair_f1": 0.775234,
   "best_model_pair_precision": 0.820504,
   "best_model_pair_recall": 0.734698,
@@ -11,20 +11,22 @@
   "goal_global_id_pair_f1": 0.7,
   "goal_global_id_pair_precision": 0.7,
   "goal_global_id_pair_recall": 0.7,
-  "iteration": 84,
+  "iteration": 85,
   "last_artifacts": [
-    "reports/no_anchor_subpart_combo_repair_20260622.md",
-    "kit/compose_no_anchor_subpart_repair_combos.py",
-    "local_runs/remote_h100_test_3_20260622/no_anchor_currentbest_subpart_combo_20260622/subpart_combo_manifest.json",
-    "local_runs/remote_h100_test_3_20260622/no_anchor_currentbest_subpart_combo_20260622/subpart_combo_r01_r02_8seq_assignments_density_p005_area.json",
-    "local_runs/remote_h100_test_3_20260622/no_anchor_currentbest_subpart_combo_20260622/subpart_combo_r01_r04_9seq_assignments_density_p005_area.json",
-    "local_runs/remote_h100_test_3_20260622/no_anchor_currentbest_subpart_combo_20260622/subpart_combo_r01_r02_r04_11seq_assignments_density_p005_area.json",
-    "/mnt/localssd/vlincs_reid_runs/no_anchor_currentbest_subpart_combo_20260622"
+    "reports/no_anchor_currentbest_subpart_next_promotion_20260622.md",
+    "kit/no_anchor_pervideo_filter_selector.py",
+    "kit/run_no_anchor_density_area_pipeline.sh",
+    "local_runs/remote_h100_test_3_20260622/no_anchor_currentbest_subpart_next_20260622/balanced_manifest.json",
+    "local_runs/remote_h100_test_3_20260622/no_anchor_currentbest_subpart_next_20260622/weakvideo_manifest.json",
+    "local_runs/remote_h100_test_3_20260622/no_anchor_currentbest_subpart_next_20260622/rank01_subpart_s35_to60_14seq_assignments_density_p005_area.json",
+    "local_runs/remote_h100_test_3_20260622/no_anchor_currentbest_subpart_next_20260622/rank02_subpart_s35_to60_14seq_assignments_density_p005_area.json",
+    "local_runs/remote_h100_test_3_20260622/no_anchor_currentbest_subpart_next_20260622/rank02_subpart_s35_to60_20seq_assignments_density_p005_area.json",
+    "/mnt/localssd/vlincs_reid_runs/no_anchor_currentbest_subpart_next_20260622"
   ],
-  "last_direction": "subpart_repair_combo_and_side_effect_label_bank",
-  "last_result": "Composed verified no-anchor subpart repairs from the current-best manifest and full-scored three canonical p005 combos. rank01+rank02 improved p005 IDF1/HOTA/AssA to 0.656548/0.520126/0.535863. rank01+rank04 was weaker at 0.656468/0.519934/0.535572, showing rank04 is association-risky. rank01+rank02+rank04 became the new IDF1 best at 0.656563/0.520067/0.535717, a +0.000110 IDF1 gain over the previous 0.656453. The result proves subpart repair is weakly compositional, but the gain remains far below the 0.70 e2e goal; next build a side-effect-aware subpart combo ranker/referee before spending on lower-margin rank05 candidates.",
+  "last_direction": "targeted_mcam04_subpart_repair_from_current_combo_best",
+  "last_result": "Generated two no-anchor subpart candidate queues from the current combo best and full-scored 10 canonical p005 candidates after fixing DATA_ROOT scorer hygiene and adding a skip-score filter export path. The best candidate, balanced rank01 35->60, moved 14 MCAM04 Tc6 tracklets and promoted IDF1/HOTA/AssA to 0.657475/0.520599/0.535769 from 0.656563/0.520067/0.535717. MCAM04 Tc6 IDF1 improved 0.563103->0.565121. The same source-target family with 20 moved tracklets stayed positive but lower (0.657029/0.657238), while 55->58 variants were clear negatives (0.656185/0.655481/0.655546), giving useful side-effect labels. E2E remains below 0.70.",
   "last_updated": "2026-06-22",
-  "next_direction": "subpart_repair_side_effect_ranker_and_targeted_new_subpart_candidates",
+  "next_direction": "compose_35_to60_positive_with_existing_subpart_combo_and_train_subpart_side_effect_referee",
   "stale_count": 0,
-  "status": "active_no_anchor_subpart_combo_promoted_best_e2e_0p656563_e2e_still_below_0p70"
+  "status": "active_no_anchor_targeted_mcam04_subpart_promoted_best_e2e_0p657475_e2e_still_below_0p70"
 }

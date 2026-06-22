@@ -13,6 +13,7 @@ shift 2
 REPO_ROOT="${REPO_ROOT:-$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)}"
 PYTHON_BIN="${PYTHON_BIN:-python}"
 export PYTHONPATH="${REPO_ROOT}${PYTHONPATH:+:${PYTHONPATH}}"
+export DATA_ROOT="${DATA_ROOT:-/mnt/localssd/vlincs_reid_data}"
 
 mkdir -p "${RUN_DIR}"
 
@@ -43,11 +44,16 @@ for ASSIGNMENT_CSV in "$@"; do
     --zip-out "${FULL_ZIP}"
 
   echo "STAGE ${STEM} density_simple_sourcezip"
+  FILTER_SKIP_SCORE_ARGS=()
+  if [[ "${NO_ANCHOR_FILTER_SKIP_SCORE:-0}" == "1" ]]; then
+    FILTER_SKIP_SCORE_ARGS+=(--skip-score)
+  fi
   "${PYTHON_BIN}" "${REPO_ROOT}/kit/no_anchor_pervideo_filter_selector.py" \
     --source-zip "${FULL_ZIP}" \
     --policies density_simple \
     --json "${DENSITY_JSON}" \
-    --zip-out "${DENSITY_ZIP}"
+    --zip-out "${DENSITY_ZIP}" \
+    "${FILTER_SKIP_SCORE_ARGS[@]}"
 
   echo "STAGE ${STEM} p005_area_on_density_zip"
   "${PYTHON_BIN}" "${REPO_ROOT}/kit/evaluate_submission_detection_filter.py" \
