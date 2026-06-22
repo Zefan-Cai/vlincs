@@ -235,3 +235,35 @@ s3://dit-scale-up/zcai/vlincs/reports/no_anchor_rank58_residual_refutation_20260
 s3://dit-scale-up/zcai/vlincs/research_snapshot_current/
 s3://dit-scale-up/zcai/vlincs/research_snapshot_current/local_runs/remote_h100_test_3_20260622/no_anchor_rank58_residual_fullscore_20260622/
 ```
+
+## Latest Teacher-Consensus Refutation
+
+The rank58 teacher-consensus experiment tested whether several no-anchor
+assignment families could safely propose new component merges.  Three teacher
+sets were evaluated: structural-policy assignments, subpart-promoted
+assignments, and time-agglomeration assignments.
+
+Result: no new best.  All canonical `density_simple + p005_area` delivery
+scores tied the current best exactly:
+
+`IDF1 / HOTA / AssA = 0.658025 / 0.521057 / 0.536049`
+
+No merge edge was accepted by any teacher set:
+
+- `subpart_promoted`: 3403 teacher edges, 0 accepted, all rejected by threshold.
+- `timeagglom_diverse`: 3321 teacher edges, 0 accepted, 3320 threshold
+  rejections and 1 cannot-link conflict rejection.
+- `structural_policy`: 3403 teacher edges, 0 accepted, 3402 threshold
+  rejections and 1 teacher-condition rejection.
+
+This refutes teacher-consensus merge as the next promotion mechanism in the
+current rank58 neighborhood.  The outputs remain useful as hard-negative and
+referee evidence for the next error-audit branch.
+
+Fresh sync pointers:
+
+```text
+s3://dit-scale-up/zcai/vlincs/reports/no_anchor_teacher_consensus_rank58_refutation_20260622.md
+s3://dit-scale-up/zcai/vlincs/remote_runs_h100-test-3_20260622/no_anchor_teacher_consensus_rank58_20260622/
+s3://dit-scale-up/zcai/vlincs/research_snapshot_current/local_runs/remote_h100_test_3_20260622/no_anchor_teacher_consensus_rank58_20260622/
+```

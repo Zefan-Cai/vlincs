@@ -4,7 +4,19 @@ Date: 2026-06-22
 Current best e2e:
 IDF1 / HOTA / AssA = 0.658025 / 0.521057 / 0.536049
 
-Latest structural run:
+Latest teacher-consensus run:
+h100-test-3 teacher-consensus rank58 tested three no-anchor teacher families:
+structural-policy variants, subpart-promoted variants, and time-agglomeration
+variants. All canonical density_simple + p005_area delivery scores tied the
+current best at 0.658025/0.521057/0.536049. No merge edge was accepted:
+subpart_promoted rejected 3403/3403 edges by threshold, timeagglom_diverse
+rejected 3320 by threshold and 1 by cannot-link conflict, and structural_policy
+rejected 3402 by threshold and 1 by teacher condition. This refutes
+teacher-consensus merge as a promotion source for the current rank58
+neighborhood; the teacher outputs are better used as hard-negative/referee
+signals.
+
+Previous structural run:
 h100-test-3 structural v2 tested rank58-base cannot-link split, cannot-link NMS singleton, and state-policy delivery variants. None improved the density_simple + p005_area delivery score. cannotlink_split and cannotlink_nms_singleton both tied the current best at 0.658025/0.521057/0.536049. state_policy improved the pair proxy to F1/precision/recall 0.775522/0.827771/0.729478, but p005 delivery still tied 0.658025/0.521057/0.536049. The conflict_subcluster_weakmetric_dino stage is still running remotely, so it is not yet a promotion.
 
 Current best model-side pair metrics:
@@ -30,11 +42,13 @@ Global-id model target is above 0.70. End-to-end IDF1 remains below 0.70.
 
 Open first:
 reports/no_anchor_publish_sync_20260622.md
+reports/no_anchor_teacher_consensus_rank58_refutation_20260622.md
 reports/no_anchor_rank58_structural_sync_20260622.md
 reports/no_anchor_rank58_residual_refutation_20260622.md
 
 Current-best detail:
 reports/no_anchor_publish_sync_20260622.md
+reports/no_anchor_teacher_consensus_rank58_refutation_20260622.md
 reports/no_anchor_rank58_structural_sync_20260622.md
 reports/no_anchor_rank58_residual_refutation_20260622.md
 reports/no_anchor_subpart_referee_selfplay_20260622.md
@@ -44,6 +58,12 @@ reports/no_anchor_currentbest_subpart_multiview_combo_refutation_20260622.md
 
 Key artifacts:
 reports/no_anchor_publish_sync_20260622.md
+reports/no_anchor_teacher_consensus_rank58_refutation_20260622.md
+local_runs/remote_h100_test_3_20260622/no_anchor_teacher_consensus_rank58_20260622/key_artifacts.tgz
+local_runs/remote_h100_test_3_20260622/no_anchor_teacher_consensus_rank58_20260622/p005_teacher_consensus_summary.json
+local_runs/remote_h100_test_3_20260622/no_anchor_teacher_consensus_rank58_20260622/subpart_promoted.json
+local_runs/remote_h100_test_3_20260622/no_anchor_teacher_consensus_rank58_20260622/timeagglom_diverse.json
+local_runs/remote_h100_test_3_20260622/no_anchor_teacher_consensus_rank58_20260622/structural_policy.json
 reports/no_anchor_rank58_structural_sync_20260622.md
 local_runs/remote_h100_test_3_20260622/no_anchor_rank58_structural_20260622_v2/key_artifacts_current.tgz
 local_runs/remote_h100_test_3_20260622/no_anchor_rank58_structural_20260622_v2/p005/state_policy_best_density_p005_area.json
@@ -69,6 +89,7 @@ S3:
 s3://dit-scale-up/zcai/vlincs/LATEST_NO_ANCHOR_PROGRESS.txt
 s3://dit-scale-up/zcai/vlincs/core_snapshot_20260622/
 s3://dit-scale-up/zcai/vlincs/research_snapshot_current/
+s3://dit-scale-up/zcai/vlincs/remote_runs_h100-test-3_20260622/no_anchor_teacher_consensus_rank58_20260622/
 s3://dit-scale-up/zcai/vlincs/remote_runs_h100-test-3_20260622/no_anchor_rank58_structural_20260622_v2/
 s3://dit-scale-up/zcai/vlincs/remote_runs_h100-test-3_20260622/no_anchor_subpart_referee_selfplay_20260622/
 s3://dit-scale-up/zcai/vlincs/remote_runs_h100-test-3_20260622/no_anchor_highmass_from_r47r49_20260622/
