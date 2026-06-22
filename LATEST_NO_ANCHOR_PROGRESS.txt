@@ -30,10 +30,11 @@ local_runs/remote_h100_test_3_20260622/no_anchor_currentbest_subpart_multiview_2
 local_runs/remote_h100_test_3_20260622/no_anchor_currentbest_subpart_multiview_20260622/multiview_results_summary.csv
 
 S3:
-s3://dit-scale-up/zcai/vlincs/local_snapshots/vlincs_reid_by_search_20260622_current.tgz
+s3://dit-scale-up/zcai/vlincs/LATEST_NO_ANCHOR_PROGRESS.txt
+s3://dit-scale-up/zcai/vlincs/core_snapshot_20260622/
+s3://dit-scale-up/zcai/vlincs/vlincs_reid_runs_h100-test-3_current/
 s3://dit-scale-up/zcai/vlincs/remote_runs_h100-test-3_20260622/no_anchor_currentbest_subpart_multiview_combo_20260622/
 s3://dit-scale-up/zcai/vlincs/remote_runs_h100-test-3_20260622/no_anchor_currentbest_subpart_multiview_20260622/
-s3://dit-scale-up/zcai/vlincs/core_snapshot_20260622/
 
 GitHub:
 https://github.com/Zefan-Cai/vlincs

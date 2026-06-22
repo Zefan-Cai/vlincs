@@ -110,7 +110,6 @@ This converts `19 -> 11` from a suspicious near-negative into a confirmed hard-n
 Additional S3 pointers:
 
 ```text
-s3://dit-scale-up/zcai/vlincs/local_snapshots/vlincs_reid_by_search_20260622_current.tgz
+s3://dit-scale-up/zcai/vlincs/vlincs_reid_runs_h100-test-3_current/
 s3://dit-scale-up/zcai/vlincs/remote_runs_h100-test-3_20260622/no_anchor_currentbest_subpart_multiview_combo_20260622/
 ```
-
