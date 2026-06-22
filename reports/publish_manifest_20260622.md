@@ -8,7 +8,7 @@ Date: 2026-06-22
 - Global-id pair model: F1 / precision / recall =
   `0.775234 / 0.820504 / 0.734698`.
 - End-to-end best: IDF1 / HOTA / AssA =
-  `0.657887 / 0.520944 / 0.535983`.
+  `0.658025 / 0.521057 / 0.536049`.
 - Goal remains open: end-to-end IDF1 is still below `0.70`.
 
 ## Main Recent Promotions
@@ -185,4 +185,53 @@ Additional S3 pointer:
 
 ```text
 s3://dit-scale-up/zcai/vlincs/remote_runs_h100-test-3_20260622/no_anchor_highmass_from_r47r49_20260622/
+```
+
+## Latest Subpart Referee Self-Play Promotion
+
+A strict no-anchor subpart side-effect referee was trained from accumulated
+full-score labels and used as a self-play scheduler.  The production proposal
+stage used assignment CSVs, feature-view agreement, component membership,
+temporal/co-camera conflict metadata, and side-effect label memory; GT remained
+offline-only for full-score evaluation.
+
+The promoted edit is:
+
+`21 -> 2330`, `rank58`, `size10`, moving 10 tracklets on top of the
+`32 -> 15 + 47 -> 2330` base.
+
+It is the current best:
+
+`IDF1 / HOTA / AssA = 0.658025 / 0.521057 / 0.536049`
+
+Old-base follow-up tests did not beat rank58; the closest alternatives
+`21 -> 24 rank63` and `21 -> 2330 rank86` reached `0.657976`.
+
+## Latest Rank58 Residual Refutation
+
+Starting from rank58 as the new base, the residual subpart sweep generated 253
+no-anchor candidates from three feature-view pools:
+
+- `weakmetric_dino`: 61 selected / 61 candidates;
+- `siglip_dino`: 72 selected / 72 candidates;
+- `dino_weak`: 120 selected / 3356 candidates.
+
+Sixteen p005-area full-score tests all failed to beat the current best.  The
+best residual candidate was `weakmetric_dino_r55_29_to2330`:
+
+`IDF1 / HOTA / AssA = 0.657971 / 0.521239 / 0.536131`
+
+Several small moves collapsed to the same `0.657938` plateau, while broader
+residual edits such as `21 -> 19`, `55 -> 58`, and `11 -> 40` were harmful.
+This closes the immediate residual-subpart branch and records those candidates
+as hard negatives for the next structure-level pivot.
+
+Fresh sync pointers for this state:
+
+```text
+s3://dit-scale-up/zcai/vlincs/LATEST_NO_ANCHOR_PROGRESS.txt
+s3://dit-scale-up/zcai/vlincs/reports/publish_manifest_20260622.md
+s3://dit-scale-up/zcai/vlincs/reports/no_anchor_rank58_residual_refutation_20260622.md
+s3://dit-scale-up/zcai/vlincs/research_snapshot_current/
+s3://dit-scale-up/zcai/vlincs/research_snapshot_current/local_runs/remote_h100_test_3_20260622/no_anchor_rank58_residual_fullscore_20260622/
 ```

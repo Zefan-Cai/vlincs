@@ -11,6 +11,9 @@ Latest promoted edit:
 subpart referee self-play peel: 21 -> 2330, rank58 size10, moved 10 tracklets, on top of the previous 32->15 + 47->2330 current best.
 
 Latest ablation:
+A rank58-base residual subpart sweep generated 253 no-anchor candidates from weakmetric+DINO, SigLIP+DINO, and DINO+weakmetric views. Sixteen p005-area full-score tests failed to beat the rank58 best. The best residual candidate was weakmetric 29->2330 with IDF1/HOTA/AssA 0.657971/0.521239/0.536131, still below 0.658025/0.521057/0.536049. Several candidates collapsed to the same 0.657938 plateau, and large residual moves such as 21->19 and 55->58 were harmful. This refutes continuing the same residual subpart branch; next direction is rank58-base component graph/admission/cannot-link structural repair.
+
+Previous ablation:
 A strict no-anchor subpart side-effect referee was trained from exact-stem full-score labels and used as a self-play scheduler. Batch 2 promoted 21->2330 rank58 size10 to 0.658025/0.521057/0.536049. Batch 3 tested nearby alternatives from the old base; none beat rank58: 21->24 rank63 and 21->2330 rank86 reached 0.657976, 21->19 rank70 reached 0.657735, and 21->2330 rank150 reached 0.657697. Next step is to treat rank58 as the new base and regenerate residual/compatible moves rather than keep testing old-base alternatives.
 
 Previous ablation:
@@ -23,15 +26,19 @@ Goal status:
 Global-id model target is above 0.70. End-to-end IDF1 remains below 0.70.
 
 Open first:
-reports/no_anchor_subpart_referee_selfplay_20260622.md
+reports/no_anchor_rank58_residual_refutation_20260622.md
 
 Current-best detail:
+reports/no_anchor_rank58_residual_refutation_20260622.md
 reports/no_anchor_subpart_referee_selfplay_20260622.md
 reports/no_anchor_sideeffect_blacklisted_subpart_promotion_20260622.md
 reports/no_anchor_filter_sweep_currentbest_20260622.md
 reports/no_anchor_currentbest_subpart_multiview_combo_refutation_20260622.md
 
 Key artifacts:
+reports/no_anchor_rank58_residual_refutation_20260622.md
+local_runs/remote_h100_test_3_20260622/no_anchor_rank58_residual_fullscore_20260622/p005_rank58_residual_summary_with_followup.json
+local_runs/remote_h100_test_3_20260622/no_anchor_rank58_residual_subpart_20260622/referee_ranked_rank58_residual_after_fullscore.json
 reports/no_anchor_subpart_referee_selfplay_20260622.md
 local_runs/remote_h100_test_3_20260622/no_anchor_subpart_referee_from_fullscore_labels_20260622/referee_ranked_candidates_v3_after_promotion.json
 local_runs/remote_h100_test_3_20260622/no_anchor_subpart_referee_v2_fullscore_20260622/p005_referee_v2_fullscore_summary.json

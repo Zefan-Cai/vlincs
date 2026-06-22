@@ -12,8 +12,14 @@
   "goal_global_id_pair_f1": 0.7,
   "goal_global_id_pair_precision": 0.7,
   "goal_global_id_pair_recall": 0.7,
-  "iteration": 93,
+  "iteration": 94,
   "last_artifacts": [
+    "reports/no_anchor_rank58_residual_refutation_20260622.md",
+    "local_runs/remote_h100_test_3_20260622/no_anchor_rank58_residual_fullscore_20260622/p005_rank58_residual_summary_with_followup.json",
+    "local_runs/remote_h100_test_3_20260622/no_anchor_rank58_residual_subpart_20260622/referee_ranked_rank58_residual_after_fullscore.json",
+    "local_runs/remote_h100_test_3_20260622/no_anchor_rank58_residual_subpart_20260622/referee_ranked_rank58_residual_after_fullscore.csv",
+    "local_runs/remote_h100_test_3_20260622/no_anchor_rank58_residual_subpart_20260622/run_parallel_rank58_residual.py",
+    "/mnt/localssd/vlincs_reid_runs/no_anchor_rank58_residual_fullscore_20260622",
     "reports/no_anchor_subpart_referee_selfplay_20260622.md",
     "/mnt/localssd/vlincs_reid_runs/no_anchor_subpart_referee_v3_fullscore_20260622",
     "local_runs/remote_h100_test_3_20260622/no_anchor_subpart_referee_v3_fullscore_20260622/p005_referee_v3_fullscore_summary.json",
@@ -23,18 +29,12 @@
     "local_runs/remote_h100_test_3_20260622/no_anchor_subpart_referee_v2_fullscore_20260622/p005_referee_v2_fullscore_summary.json",
     "local_runs/remote_h100_test_3_20260622/no_anchor_subpart_referee_fullscore_20260622/p005_referee_fullscore_summary.json",
     "local_runs/remote_h100_test_3_20260622/no_anchor_subpart_referee_from_fullscore_labels_20260622/referee_ranked_candidates_v2_after_batch.json",
-    "kit/rank_no_anchor_subpart_candidates_by_fullscore_labels.py",
-    "reports/no_anchor_highmass_from_r47r49_refutation_20260622.md",
-    "local_runs/remote_h100_test_3_20260622/no_anchor_highmass_from_r47r49_20260622/p005_fullscore_top6_summary.json",
-    "local_runs/remote_h100_test_3_20260622/no_anchor_highmass_from_r47r49_20260622/p005_peel21_fullscore_summary.json",
-    "local_runs/remote_h100_test_3_20260622/no_anchor_highmass_from_r47r49_20260622/highmass_blacklisted_selection.json",
-    "local_runs/remote_h100_test_3_20260622/no_anchor_highmass_from_r47r49_20260622/no_anchor_highmass_from_r47r49_20260622_light.tgz",
-    "/mnt/localssd/vlincs_reid_runs/no_anchor_highmass_from_r47r49_20260622"
+    "kit/rank_no_anchor_subpart_candidates_by_fullscore_labels.py"
   ],
-  "last_direction": "subpart_referee_v3_local_alternative_refutation",
-  "last_result": "After promoting 21->2330 size10 rank58 to IDF1/HOTA/AssA 0.658025/0.521057/0.536049, retrained a strict exact-stem subpart referee and full-scored four local alternatives. None improved: 21->24 rank63 and 21->2330 rank86 both reached 0.657976, 21->19 rank70 reached 0.657735, and 21->2330 rank150 reached 0.657697. Current best remains rank58; the next useful move is to treat rank58 as the new base and regenerate residual candidates or compose non-conflicting moves on top of it.",
+  "last_direction": "rank58_base_residual_subpart_refutation",
+  "last_result": "Generated 253 rank58-base residual no-anchor subpart candidates and full-scored 16 p005-area candidates. None beat the current rank58 best 0.658025/0.521057/0.536049. Best residual was weakmetric 29->2330 at 0.657971/0.521239/0.536131; multiple small moves plateaued at 0.657938; large 21->19, 55->58, and 11->40 moves were harmful. Residual subpart branch is refuted for now.",
   "last_updated": "2026-06-22",
-  "next_direction": "use_21_to2330_rank58_as_new_base_regenerate_residual_subpart_candidates_and_combo_nonconflicting_moves",
-  "stale_count": 1,
-  "status": "active_no_anchor_referee_selfplay_best_e2e_0p658025_e2e_still_below_0p70"
+  "next_direction": "pivot_to_rank58_component_graph_admission_cannotlink_structural_repair_using_residual_subpart_labels_as_hard_negatives",
+  "stale_count": 2,
+  "status": "active_no_anchor_rank58_residual_subpart_refuted_best_e2e_0p658025_e2e_still_below_0p70"
 }
