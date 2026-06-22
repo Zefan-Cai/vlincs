@@ -29,10 +29,12 @@ Goal status:
 Global-id model target is above 0.70. End-to-end IDF1 remains below 0.70.
 
 Open first:
+reports/no_anchor_publish_sync_20260622.md
 reports/no_anchor_rank58_structural_sync_20260622.md
 reports/no_anchor_rank58_residual_refutation_20260622.md
 
 Current-best detail:
+reports/no_anchor_publish_sync_20260622.md
 reports/no_anchor_rank58_structural_sync_20260622.md
 reports/no_anchor_rank58_residual_refutation_20260622.md
 reports/no_anchor_subpart_referee_selfplay_20260622.md
@@ -41,7 +43,9 @@ reports/no_anchor_filter_sweep_currentbest_20260622.md
 reports/no_anchor_currentbest_subpart_multiview_combo_refutation_20260622.md
 
 Key artifacts:
+reports/no_anchor_publish_sync_20260622.md
 reports/no_anchor_rank58_structural_sync_20260622.md
+local_runs/remote_h100_test_3_20260622/no_anchor_rank58_structural_20260622_v2/key_artifacts_current.tgz
 local_runs/remote_h100_test_3_20260622/no_anchor_rank58_structural_20260622_v2/p005/state_policy_best_density_p005_area.json
 local_runs/remote_h100_test_3_20260622/no_anchor_rank58_structural_20260622_v2/state_policy_sweep.json
 local_runs/remote_h100_test_3_20260622/no_anchor_rank58_structural_20260622_v2/p005/cannotlink_split_best_density_p005_area.json
