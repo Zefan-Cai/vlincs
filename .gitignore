@@ -19,6 +19,11 @@ __pycache__/
 # Local data mirrors
 VLINCS_Performer/
 videolincs/
+local_runs/
+
+# macOS sidecar files
+.DS_Store
+._*
 
 # Environment
 .env

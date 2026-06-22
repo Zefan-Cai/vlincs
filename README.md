@@ -52,7 +52,7 @@ Global-id pair model F1 / precision / recall:
   0.775234 / 0.820504 / 0.734698
 
 Best end-to-end IDF1 / HOTA / AssA:
-  0.657475 / 0.520599 / 0.535769
+  0.657624 / 0.520692 / 0.535785
 ```
 
 The global-id model target is passed, but the end-to-end pipeline target
@@ -64,6 +64,7 @@ The latest promotion is documented in:
 reports/no_anchor_currentbest_subpart_repair_promotion_20260622.md
 reports/no_anchor_subpart_combo_repair_20260622.md
 reports/no_anchor_currentbest_subpart_next_promotion_20260622.md
+reports/no_anchor_currentbest_subpart_followup_combo_promotion_20260622.md
 reports/publish_manifest_20260622.md
 ```
 
@@ -71,6 +72,15 @@ Large run artifacts are S3-only under:
 
 ```text
 s3://dit-scale-up/zcai/vlincs/
+```
+
+Latest S3 pointers:
+
+```text
+s3://dit-scale-up/zcai/vlincs/LATEST_NO_ANCHOR_PROGRESS.txt
+s3://dit-scale-up/zcai/vlincs/current_best_no_anchor/
+s3://dit-scale-up/zcai/vlincs/remote_runs_h100-test-3_20260622/no_anchor_currentbest_subpart_followup_20260622/
+s3://dit-scale-up/zcai/vlincs/core_snapshot_20260622/
 ```
 
 ## Key results

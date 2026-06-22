@@ -1432,7 +1432,108 @@
   },
   {
     "direction": "compose_35_to60_positive_with_existing_subpart_combo_and_train_subpart_side_effect_referee",
-    "finding": "Use the 35->60 positive and 55->58 negatives to compose compatible edits and learn a stricter subpart side-effect referee without anchors.",
+    "finding": "Seven follow-up combos were full-scored; r01+r02 promoted to IDF1 0.657624, r05 variants became negative side-effect labels; still below 0.70.",
+    "status": "promoted_not_complete"
+  },
+  {
+    "anchor_use": "none",
+    "artifacts": [
+      "reports/no_anchor_currentbest_subpart_followup_combo_promotion_20260622.md",
+      "kit/compose_no_anchor_subpart_repair_combos.py",
+      "local_runs/remote_h100_test_3_20260622/no_anchor_currentbest_subpart_followup_20260622/combo_results_summary.json",
+      "local_runs/remote_h100_test_3_20260622/no_anchor_currentbest_subpart_followup_20260622/combo_results_summary.csv",
+      "local_runs/remote_h100_test_3_20260622/no_anchor_currentbest_subpart_followup_20260622/subpart_combo_r01_r02_17seq_assignments_density_p005_area.json",
+      "local_runs/remote_h100_test_3_20260622/no_anchor_currentbest_subpart_followup_20260622/balanced_combos/assignments/subpart_combo_r01_r02_17seq_assignments.csv",
+      "/mnt/localssd/vlincs_reid_runs/no_anchor_currentbest_subpart_followup_20260622"
+    ],
+    "date": "2026-06-22",
+    "direction": "followup_35_to60_subpart_combo_ablation",
+    "evidence": {
+      "combo_rows": [
+        {
+          "assa": 0.535785,
+          "hota": 0.520692,
+          "idf1": 0.657624,
+          "mcam04_idf1": 0.565454,
+          "moved_tracklets": 17,
+          "name": "subpart_combo_r01_r02_17seq_assignments"
+        },
+        {
+          "assa": 0.535785,
+          "hota": 0.520692,
+          "idf1": 0.657624,
+          "mcam04_idf1": 0.565454,
+          "moved_tracklets": 17,
+          "name": "subpart_combo_r01_r02_r07_19seq_assignments"
+        },
+        {
+          "assa": 0.535748,
+          "hota": 0.520652,
+          "idf1": 0.65759,
+          "mcam04_idf1": 0.565454,
+          "moved_tracklets": 17,
+          "name": "subpart_combo_r01_r02_r05_19seq_assignments"
+        },
+        {
+          "assa": 0.535748,
+          "hota": 0.520652,
+          "idf1": 0.65759,
+          "mcam04_idf1": 0.565454,
+          "moved_tracklets": 17,
+          "name": "subpart_combo_r01_r02_r05_r07_21seq_assignments"
+        },
+        {
+          "assa": 0.535769,
+          "hota": 0.520599,
+          "idf1": 0.657475,
+          "mcam04_idf1": 0.565121,
+          "moved_tracklets": 17,
+          "name": "subpart_combo_r01_r07_16seq_assignments"
+        },
+        {
+          "assa": 0.535732,
+          "hota": 0.520559,
+          "idf1": 0.657441,
+          "mcam04_idf1": 0.565121,
+          "moved_tracklets": 17,
+          "name": "subpart_combo_r01_r05_16seq_assignments"
+        },
+        {
+          "assa": 0.535732,
+          "hota": 0.520559,
+          "idf1": 0.657441,
+          "mcam04_idf1": 0.565121,
+          "moved_tracklets": 17,
+          "name": "subpart_combo_r01_r05_r07_18seq_assignments"
+        }
+      ],
+      "gt_eval_only": true,
+      "mcam04_new_assa": 0.492028,
+      "mcam04_new_hota": 0.449375,
+      "mcam04_new_idf1": 0.565454,
+      "new_best_assa": 0.535785,
+      "new_best_detpr": 0.765616,
+      "new_best_detre": 0.576331,
+      "new_best_hota": 0.520692,
+      "new_best_idf1": 0.657624,
+      "previous_best_assa": 0.535769,
+      "previous_best_hota": 0.520599,
+      "previous_best_idf1": 0.657475,
+      "promoted_combo": "subpart_combo_r01_r02_17seq_assignments",
+      "promoted_moved_tracklets": 17,
+      "r05_negative_idf1": 0.657441,
+      "tied_combo": "subpart_combo_r01_r02_r07_19seq_assignments",
+      "uses_anchors": false
+    },
+    "finding": "r01+r02 and r01+r02+r07 tied at IDF1 0.657624; promoted smaller r01+r02. r05 variants dropped to 0.657441 and are side-effect negatives.",
+    "gt_use": "eval_only",
+    "next_direction": "train_or_rank_no_anchor_subpart_side_effect_referee_from_positive_negative_combo_labels",
+    "status": "promoted_not_complete"
+  },
+  {
+    "date": "2026-06-22",
+    "direction": "train_or_rank_no_anchor_subpart_side_effect_referee_from_positive_negative_combo_labels",
+    "finding": "Use the positive/tied/negative labels from follow-up subpart combos to predict side effects before full official scoring.",
     "status": "open"
   }
 ]
