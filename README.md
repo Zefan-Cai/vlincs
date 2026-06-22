@@ -52,7 +52,7 @@ Global-id pair model F1 / precision / recall:
   0.775234 / 0.820504 / 0.734698
 
 Best end-to-end IDF1 / HOTA / AssA:
-  0.656453 / 0.519993 / 0.535718
+  0.656563 / 0.520067 / 0.535717
 ```
 
 The global-id model target is passed, but the end-to-end pipeline target
@@ -62,6 +62,7 @@ The latest promotion is documented in:
 
 ```text
 reports/no_anchor_currentbest_subpart_repair_promotion_20260622.md
+reports/no_anchor_subpart_combo_repair_20260622.md
 reports/publish_manifest_20260622.md
 ```
 

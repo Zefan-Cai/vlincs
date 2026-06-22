@@ -1382,5 +1382,47 @@
     "gt_use": "eval_only",
     "anchor_use": "none",
     "next_direction": "subpart_repair_combo_and_side_effect_label_bank"
+  },
+  {
+    "date": "2026-06-22",
+    "direction": "subpart_repair_combo_and_side_effect_label_bank",
+    "status": "promoted",
+    "finding": "Composed verified no-anchor subpart repairs from the current-best manifest and full-scored three canonical p005 combos. rank01+rank02 improved p005 IDF1/HOTA/AssA to 0.656548/0.520126/0.535863. rank01+rank04 was weaker at 0.656468/0.519934/0.535572, showing rank04 is association-risky. rank01+rank02+rank04 became the new IDF1 best at 0.656563/0.520067/0.535717, a +0.000110 IDF1 gain over the previous 0.656453. The result proves subpart repair is weakly compositional, but the gain remains far below the 0.70 e2e goal; next build a side-effect-aware subpart combo ranker/referee before spending on lower-margin rank05 candidates.",
+    "evidence": {
+      "uses_anchors": false,
+      "gt_eval_only": true,
+      "previous_best_idf1": 0.656453,
+      "previous_best_hota": 0.519993,
+      "previous_best_assa": 0.535718,
+      "new_best_combo": "rank01+rank02+rank04",
+      "new_best_idf1": 0.656563,
+      "new_best_hota": 0.520067,
+      "new_best_assa": 0.535717,
+      "new_best_detpr": 0.764242,
+      "new_best_detre": 0.57548,
+      "rank01_rank02_idf1": 0.656548,
+      "rank01_rank02_hota": 0.520126,
+      "rank01_rank02_assa": 0.535863,
+      "rank01_rank04_idf1": 0.656468,
+      "rank01_rank04_hota": 0.519934,
+      "rank01_rank04_assa": 0.535572,
+      "mcam03_tc6_rank01_rank02_idf1": 0.692726,
+      "mcam04_tc6_rank01_rank02_rank04_idf1": 0.563103,
+      "mcam04_tc6_previous_best_idf1": 0.563063,
+      "rank05_combos_generated_not_scored": true,
+      "stopped_after_three_verified_combo_labels": true
+    },
+    "artifacts": [
+      "reports/no_anchor_subpart_combo_repair_20260622.md",
+      "kit/compose_no_anchor_subpart_repair_combos.py",
+      "local_runs/remote_h100_test_3_20260622/no_anchor_currentbest_subpart_combo_20260622/subpart_combo_manifest.json",
+      "local_runs/remote_h100_test_3_20260622/no_anchor_currentbest_subpart_combo_20260622/subpart_combo_r01_r02_8seq_assignments_density_p005_area.json",
+      "local_runs/remote_h100_test_3_20260622/no_anchor_currentbest_subpart_combo_20260622/subpart_combo_r01_r04_9seq_assignments_density_p005_area.json",
+      "local_runs/remote_h100_test_3_20260622/no_anchor_currentbest_subpart_combo_20260622/subpart_combo_r01_r02_r04_11seq_assignments_density_p005_area.json",
+      "/mnt/localssd/vlincs_reid_runs/no_anchor_currentbest_subpart_combo_20260622"
+    ],
+    "gt_use": "eval_only",
+    "anchor_use": "none",
+    "next_direction": "subpart_repair_side_effect_ranker_and_targeted_new_subpart_candidates"
   }
 ]
