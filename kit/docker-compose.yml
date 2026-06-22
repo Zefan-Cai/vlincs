@@ -1,0 +1,73 @@
+# VLINCS online-gallery kit. `docker compose up` -> empty Postgres + the viz; you drive the gallery from
+# YOUR pipeline (pip install ./kit in your env, connect to localhost:55433) or via `docker compose run app`.
+# Set DATA_ROOT to wherever the VLINCS datastore is mounted (videos + GT). No weights, no GPU here.
+services:
+  db:
+    image: pgvector/pgvector:pg16          # pgvector only (the schema needs the `vector` type; no postgis)
+    environment:
+      POSTGRES_USER: gallery
+      POSTGRES_PASSWORD: gallery
+      POSTGRES_DB: gallery
+    ports: ["55433:5432"]                  # YOUR pipeline connects here: PGHOST=localhost PGPORT=55433
+    volumes: ["pgdata:/var/lib/postgresql/data"]
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U gallery"]
+      interval: 3s
+      timeout: 3s
+      retries: 20
+
+  viz:                                     # the viz API (FastAPI) — crops/decisions/identities from the DB
+    build: { context: .., dockerfile: kit/Dockerfile }
+    depends_on: { db: { condition: service_healthy } }
+    environment:
+      PGHOST: db
+      PGPORT: "5432"
+      DATA_ROOT: /data
+      GALLERY_DATASET: "${DATASET:-ds1}"   # which dataset's gallery the viz shows
+    volumes: ["${DATA_ROOT:-/mnt/datastore2_videolincs/data}:/data:ro"]   # videos (for crops) + GT, read-only
+    ports: ["8077:8077"]
+    command: ["serve"]
+
+  ui:                                      # http://localhost:4200 — the existing Angular frontend, proxied to viz
+    image: node:20-slim
+    working_dir: /ui
+    depends_on: [viz]
+    volumes:
+      - ../gallery-ui:/ui
+      - ./proxy.docker.json:/ui/proxy.docker.json:ro
+    ports: ["4200:4200"]
+    command: sh -c "npm ci || npm install; npx ng serve --host 0.0.0.0 --port 4200 --proxy-config proxy.docker.json --disable-host-check"
+
+  pgadmin:                                 # http://localhost:5050 — inspect the DB visually; server + password pre-seeded
+    build: { context: ./pgadmin }          # bakes servers.json + pgpass at libpq-correct perms (see pgadmin/Dockerfile)
+    depends_on: { db: { condition: service_healthy } }
+    environment:
+      PGADMIN_DEFAULT_EMAIL: admin@vlincs.com    # pgAdmin rejects .local (and other special-use TLDs) — use a real TLD
+      PGADMIN_DEFAULT_PASSWORD: gallery
+      PGADMIN_CONFIG_SERVER_MODE: "False"              # desktop mode — no pgAdmin login wall
+      PGADMIN_CONFIG_MASTER_PASSWORD_REQUIRED: "False"
+      # Pin the session/CSRF secret so it survives container recreation. Without this pgAdmin generates a
+      # fresh key each start, which invalidates any existing browser cookie -> "CSRF token missing, refresh"
+      # with no way to recover in desktop mode. (PGADMIN_CONFIG_* values are eval'd as Python -> nested quotes.)
+      PGADMIN_CONFIG_SECRET_KEY: "'vlincs-gallery-pgadmin-secret'"
+      PGADMIN_CONFIG_CSRF_SESSION_KEY: "'vlincs-gallery-pgadmin-csrf'"
+      # Don't bind the session to the client IP: on localhost over Docker the perceived address flips
+      # between IPv4 and IPv6 (gunicorn binds [::]:80), which invalidates the session within seconds and
+      # spams the "CSRF token / refresh the page" prompt. Off = stable sessions for this local desktop use.
+      PGADMIN_CONFIG_ENHANCED_COOKIE_PROTECTION: "False"
+    ports: ["5050:80"]                       # open it, expand the tree -> gallery_ms02 / gallery_ds1 (pwd: gallery)
+
+  app:                                     # the CLI: docker compose run --rm app list-videos --dataset ds1
+    build:
+      context: ..
+      dockerfile: kit/Dockerfile
+      args: { WITH_DS1: "${WITH_DS1:-0}" }   # `WITH_DS1=1 docker compose build app` adds the DS1 (MLflow) extras
+    profiles: ["cli"]                        # a one-shot CLI, NOT a daemon — excluded from `docker compose up`
+    depends_on: { db: { condition: service_healthy } }   # `docker compose run --rm app <cmd>` still starts db first
+    # MLFLOW_TRACKING_URI is only needed for `demo --dataset ds1` (fetches inputs from MLflow); harmless otherwise.
+    environment: { PGHOST: db, PGPORT: "5432", DATA_ROOT: /data, MLFLOW_TRACKING_URI: "${MLFLOW_TRACKING_URI:-}", GALLERY_CODE_SHA: "${GALLERY_CODE_SHA:-}" }
+    volumes: ["${DATA_ROOT:-/mnt/datastore2_videolincs/data}:/data:ro"]
+    entrypoint: ["python", "cli.py"]
+
+volumes:
+  pgdata: {}

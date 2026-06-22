@@ -1,4 +1,4 @@
-# VLINCS recall-first tracking experiments
+# VLINCS Tracking And Global-ID Experiments
 
 This repository contains the code, logs, and lightweight evaluation artifacts needed to reproduce the VLINCS recall-improvement experiments.
 
@@ -30,6 +30,45 @@ log/
 
 eval/
   Lightweight CSV/JSON summaries used in the report.
+
+kit/
+  No-anchor global-id model, candidate generation, assignment repair,
+  scoring, scheduler, and reporting utilities.
+
+autoresearch_state/
+  Durable no-anchor global-id research loop state: progress, findings,
+  tried directions, and iteration logs.
+
+reports/
+  Human-readable experiment reports, publish manifests, and ablation notes.
+```
+
+## Current no-anchor global-id standing
+
+As of 2026-06-22:
+
+```text
+Global-id pair model F1 / precision / recall:
+  0.775234 / 0.820504 / 0.734698
+
+Best end-to-end IDF1 / HOTA / AssA:
+  0.656453 / 0.519993 / 0.535718
+```
+
+The global-id model target is passed, but the end-to-end pipeline target
+remains open because IDF1 is still below `0.70`.
+
+The latest promotion is documented in:
+
+```text
+reports/no_anchor_currentbest_subpart_repair_promotion_20260622.md
+reports/publish_manifest_20260622.md
+```
+
+Large run artifacts are S3-only under:
+
+```text
+s3://dit-scale-up/zcai/vlincs/
 ```
 
 ## Key results

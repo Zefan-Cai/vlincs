@@ -1,0 +1,1386 @@
+[
+  {
+    "direction": "quality_and_density_row_filters",
+    "finding": "No row-filter or target-quality gate exceeded the standing e2e IDF1 0.655240.",
+    "status": "closed"
+  },
+  {
+    "direction": "whole_video_submission_source_switching",
+    "finding": "Mixing submission zips by video broke global ID namespace consistency and dropped IDF1 to 0.497171.",
+    "status": "closed"
+  },
+  {
+    "direction": "small_identity_island_attachment",
+    "finding": "Aggressive island attachment gained recall but lost precision and stayed below the previous pair gate.",
+    "status": "closed"
+  },
+  {
+    "direction": "direct_dinov2_component_merge",
+    "finding": "DINO-only and fused-DINO direct component merge were no-op or negative under pair gate.",
+    "status": "closed"
+  },
+  {
+    "direction": "dino_edge_target_repair_challenger",
+    "finding": "Fused-DINO edge table preserved candidate evidence but no-GT target repair traded precision for recall and full IDF1 fell to 0.652948.",
+    "status": "closed"
+  },
+  {
+    "direction": "cached_incremental_pair_metric_or_repairability_proxy",
+    "finding": "Caching edit signatures reduced repeated pair-metric recomputation, but the wider fused-DINO target-repair grid still topped out at pair F1 0.769755, below the current model-side best 0.775234.",
+    "status": "closed"
+  },
+  {
+    "direction": "pose2id_nfc_feature_centralization",
+    "finding": "A training-free NFC/Pose2ID-style neighbor feature centralization branch was tested as a global resolver, a softcut primary replacement, and a softcut auxiliary view; all were negative, with best auxiliary pair F1 0.767759 below the base 0.768743.",
+    "status": "closed"
+  },
+  {
+    "direction": "siglip2_person_reid_feature_challenger",
+    "finding": "Extracted MarketaJu/siglip2-person-description-reid features for all 9734 tracklets. SigLIP2 alone reached only pair F1 0.574380, and 0.03/0.05 low-weight fusion into the current feature was a component-merge no-op at pair F1 0.769661.",
+    "status": "closed"
+  },
+  {
+    "direction": "repairability_proxy_delivery_aware_acceptor",
+    "finding": "Target-quality gates, row-filter policies, source-switch diagnostics, and weak-metric feature probes did not improve the standing e2e IDF1 0.655240. The next acceptor must model component/video side effects rather than local visual edit safety alone.",
+    "status": "closed"
+  },
+  {
+    "direction": "weak_metric_projection_challenger",
+    "finding": "A no-anchor weak metric projection trained on 17,555 positives and 18,000 cannot-link negatives learned a positive train margin, but w=0.02 and w=0.05 fused features were no-op under the G8 strict-target conflict-reassign pair gate at 0.775234 / 0.820504 / 0.734698.",
+    "status": "closed"
+  },
+  {
+    "direction": "large_false_split_identity_component_solver",
+    "finding": "Pure component merge from the current best assignment was a full-score no-op at IDF1 0.653541; bulk cannot-link conflict splitting cut 41 components and rewrote 2252 tracklets, but collapsed recall and full IDF1 to 0.602445. A no-GT full-side-effect proxy selected the conservative one-edit row and recovered IDF1 0.653823, slightly better than pair-top4 but still below 0.655240. A unique-signature rerun full-scored 1/2/3-edit rows at IDF1 0.653823 / 0.653823 / 0.653042, confirming this repair family is saturated. The first learned proxy over-ranked low-delivery state policies; the corrected delivery-aware proxy now includes low-coverage negatives and ranks the dangerous state-policy case at 0.08535-0.08592. A source-island acceptor audit showed direct source_rank_score AP 0.302423, while no-GT ridge-logit LOOCV AP reached 0.944124 and found 9/10 positives in top-10. The current softcut oracle repair decomposition shows base full IDF1 0.653071, oracle_all_gt_majority 0.706202, and split_top_40_then_merge_top_40 full IDF1 0.706008, so the next structural target is budgeted top-k false-split bridge repair. The solver now has candidate-skip-first-edge-family diversity, delivery-aware learned-proxy ranking, source-acceptor source ranking, and budgeted multiview false-split bridge merging. The conflict-reassign solver now also has rank-by committee_proxy, which uses the delivery-aware full proxy as the main ranking signal and adds a small source_acceptor_score bonus to choose better repair sources among similarly safe candidates. An offline full-score scheduler now filters already-full-scored losers, enforces delivery/pair guardrails, and de-duplicates coarse solver families; it selected 11 diverse unscored candidates from 150 raw candidate rows / 69 eligible rows. The multiview bridge solver now has a tiny-fragment cannot-link override grid: by default cannot-link stays active, but high-scoring large-to-small component bridges can be tested under small-side and size-ratio budgets. Both conflict-reassign and budgeted bridge solvers have direct --self-test preflights. Run the scheduler manifest plus both prepared launchers when Pluto connectivity recovers. A CSV-only target-fragment audit now shows the small-fragment hypothesis is not just anecdotal: softcut edges have a no-GT rule small_side<=2 and score>=0.75 with 13/13 true top false-split edges, while DINO-fused edges have small_side<=2 and max(source_rank,target_rank)<=3 with 17/17 true top false-split edges. The multiview bridge solver now exposes --edge-rank-maxes and the tiny_fragment_override launcher grid includes edge-rank and higher-score settings. The existing edge-table target-repair solver now also reads source_rank/target_rank, exposes --max-edge-ranks, and has a direct --self-test. A new run_no_anchor_edge_rank_target_fragment.sh launcher packages the table-driven solver and runs softcut plus DINO-fused edge-rank target-fragment sweeps with require_forbidden and full-top-12 when Pluto recovers.",
+    "status": "active"
+  },
+  {
+    "direction": "deli_selfplay_opponent_guard",
+    "finding": "Distilled the open Deli AutoResearch/self-play thread into an executable no-anchor opponent guard. kit/no_anchor_deli_opponent.py rejects pair-only winners when full DS1 IDF1/HOTA disagree, requires no-anchor metadata, and forces structural pivots when stale_count is high. Current verdict is pivot: the best pair/global candidate reaches pair F1 0.954691 but full IDF1 only 0.085412, and the best gated full IDF1 0.654009 remains below the standing 0.655240. This supports continuing with edge-rank target-fragment repair rather than more broad threshold sweeps.",
+    "status": "active"
+  },
+  {
+    "direction": "no_anchor_result_gate_parser_hardening",
+    "finding": "The result gate was under-reading production full-score artifacts and over-admitting oracle/audit diagnostics. It now reads rows/full_rows/top_full_rows, maps idf1/hota/assa to full metrics, and excludes uses_gt_for_analysis_only, uses_gt_for_filter_selection, selection_uses_gt_metric, with_oracle, oracle_repair, and oracle_* modes from production eligibility. The refreshed gate has pass_joint=false, best production e2e 0.655240, and best joint 0.654009.",
+    "status": "closed"
+  },
+  {
+    "direction": "no_anchor_fullscore_scheduler_guard_hardening",
+    "finding": "The offline full-score scheduler now mirrors the hardened result gate: it reads rows/full_rows/top_full_rows, maps full-score idf1 rows, excludes oracle/GT-selection diagnostics, and by default requires predicted_full_idf1 to exceed the standing production best 0.655240 before spending remote full-score budget. On the delivery-proxy candidate pool it read 150 rows, kept 12 strict-eligible rows, and selected only 2 diverse candidates; the exploratory legacy setting still selects 11. This supports submitting a strict manifest first, then edge-rank target-fragment sweeps when Pluto recovers.",
+    "status": "active"
+  },
+  {
+    "direction": "no_anchor_fullscore_scheduler_artifact_provenance_guard",
+    "finding": "A broad strict scheduler pass over 4349 existing pair/pair-only rows exposed another evaluator leak: the learned proxy again selected assignment_state_policy because pair F1 was 0.954690, even though its artifact already contains full IDF1 0.085412 and output/eval coverage around 431/430. The scheduler now follows artifact provenance: when a candidate points at a local JSON/CSV artifact, it reads matching full metrics and delivery fields before eligibility checks. The state-policy false positive is now rejected by known_below_current_best and low_delivery; the broad strict manifest keeps 26 eligible rows and selects 5 diverse candidates. Remote h100-test-2/3 remain unavailable, so no new DS1 full score was produced.",
+    "status": "active"
+  },
+  {
+    "direction": "no_anchor_fullscore_scheduler_family_canonicalization",
+    "finding": "The broad scheduler still had a duplicate-budget leak: the same conflict-subcluster reassignment could appear once as a learned-candidate signature family such as source_target:12:19 and once as an artifact row component family such as component:21->19. The scheduler now canonicalizes component families before signature families, and if a candidate references a local artifact it reads the matching pair row to recover source_component_label/target_component. The self-test covers this artifact-backed family recovery. Broad strict scheduling remains 26 eligible rows but now selects 4 unique candidates instead of 5, saving one redundant remote full-score slot.",
+    "status": "active"
+  },
+  {
+    "direction": "no_anchor_edge_mass_budget_audit",
+    "finding": "Added an eval-only missing-mass budget audit for no-anchor edge-table rules. The cleanest tiny-fragment rule is 17/17 true edges with precision 1.0, but it covers only 0.0448% of the oracle missing true-pair mass and linearly estimates full IDF1 0.653095 from base 0.653071. A wider rule sweep reaches only 0.4329% missing-mass coverage while dropping edge precision to 6.9%. Because reaching full IDF1 0.70 would require about 88.3% of the oracle gap, target-fragment edge repair is a low-risk small fix, not the main path. Pivot to high-mass false-split component bridge/split selection.",
+    "status": "closed"
+  },
+  {
+    "direction": "candidate_search_fullscore_fidelity_and_high_mass_bridge_launcher",
+    "finding": "Found and fixed a candidate-search fidelity risk in no_anchor_assignment_conflict_reassign_sweep.py: rows generated by prefix/skip accepted_preview were later reconstructed for full scoring through the ordinary _choose_targets path, so full scoring and assignment export could diverge from the selected candidate-search edit. Candidate-search full scoring now restores source_indices directly from accepted_preview source_seqs. Added a no-GT mass_bridge_proxy ranker that explicitly prioritizes moved mass and target component size while retaining visual, margin, source-acceptor, and side-effect terms. Added kit/run_no_anchor_high_mass_bridge.sh for a larger high-mass component bridge sweep with diverse-first-edge full scoring. Local py_compile, solver self-test, mass-budget self-test, and launcher bash -n passed. Pluto API and SSH remain unavailable, so no new full score was produced.",
+    "status": "active"
+  },
+  {
+    "direction": "high_mass_candidate_edge_preranking",
+    "finding": "The high-mass row ranker still inherited a proposal_score bottleneck because candidate_search_top_n truncation happened before mass_bridge_proxy was computed. Added --candidate-edge-rank-by proposal|mass_bridge to no_anchor_assignment_conflict_reassign_sweep.py. The mass_bridge candidate-edge pre-ranker is no-GT and prioritizes source size, target size, target visual agreement, target margin, source acceptor score, and source score before prefix/skip selection. kit/run_no_anchor_high_mass_bridge.sh now uses --candidate-edge-rank-by mass_bridge.",
+    "status": "active"
+  },
+  {
+    "direction": "oracle_gap_concentration_audit",
+    "finding": "Added analyze_no_anchor_oracle_gap_concentration.py. On the current softcut oracle decomposition, the top-1/3/5/10/20/30 false-split GT identities cover 11.5% / 26.3% / 39.2% / 56.8% / 80.9% / 95.8% of missing true-pair mass. False-merge mass is less concentrated relative to base predicted pair mass: top-20 covers 14.7%. This confirms the next no-anchor branch should prioritize high-mass fragmented identities, not tiny-fragment edge cleanup.",
+    "status": "closed"
+  },
+  {
+    "direction": "high_mass_component_merge_provenance",
+    "finding": "Component-merge rows now preserve accepted edge provenance and no-GT mass proxies. kit/no_anchor_component_merge_sweep.py emits accepted_preview, score/rank-margin means, component weight sums, size-product sums, and pair-mass proxies; kit/no_anchor_assignment_component_merge_sweep.py inherits those fields from assignment CSV inputs. Both expose --rank-by mass_proxy so full-score budget can target high-mass false-split component bridges rather than pair-F1 winners. kit/no_anchor_fullscore_scheduler.py now recognizes component-merge accepted_preview source/target fields for family de-duplication. Added kit/run_no_anchor_high_mass_component_merge.sh to run fused-feature and DINO-feature assignment-level component merge with accepted-preview-n 40, mass_proxy ranking, and full-top-n 12 when Pluto recovers. Local py_compile, component self-test, gate/opponent/scheduler self-tests, and launcher bash -n passed; h100-test-3 dry-run still fails at SSH banner exchange.",
+    "status": "active"
+  },
+  {
+    "direction": "edge_table_oracle_coverage_audit",
+    "finding": "Added analyze_no_anchor_edge_table_oracle_coverage.py to test candidate recall of the existing softcut and DINO-fused edge acceptor tables against the oracle false-split concentration audit. Combined, the edge tables have 5240 candidate edges, 47 eval-only true edges, and only 39,412,716 true same-ID edge mass, covering 0.432865% of the 9,105,079,781 missing true-pair mass. Top-1 oracle GT coverage is 0.030661%, top-3 coverage is 0.013385%, and GT 36 plus GT 11 have zero true edge coverage. This closes edge-table target-fragment repair as a main route to full IDF1 0.70; keep it as cleanup and prioritize high-mass component/hub bridge generation.",
+    "status": "closed"
+  },
+  {
+    "direction": "multiview_mass_proxy_bridge_provenance",
+    "finding": "Updated the multiview false-split bridge solver so the proposer records accepted_preview, accepted-edge score/view aggregates, and no-GT mass proxies. Added --rank-by mass_proxy and switched run_no_anchor_false_split_budget_merge.sh to --rank-by mass_proxy with --accepted-preview-n 40. This makes full-score budget target high-mass component/hub bridge rows rather than low-impact pair-score winners. No anchors or GT are used for production ranking.",
+    "status": "active"
+  },
+  {
+    "direction": "full_proxy_mass_feature_refresh",
+    "finding": "Refreshed the compact full-IDF1 proxy with accepted-edge provenance and mass features. The audit at local_runs/no_anchor_full_proxy_training_audit_mass_features_20260620.json has 32 rows, 34 features, full-IDF1 range 0.602445..0.654009, and ridge LOOCV corr 0.969076 / MAE 0.001736 / RMSE 0.004556. Use this as an ordering heuristic for scarce full-score slots, not as a completion gate; the standing production full IDF1 remains 0.655240 below the 0.70 goal.",
+    "status": "active"
+  },
+  {
+    "direction": "fullscore_scheduler_mass_feature_diversity_guard",
+    "finding": "Refreshed no_anchor_fullscore_scheduler.py to recover CSV-row provenance from sibling JSON via _source_rank, canonicalize JSON/CSV artifact families by stem, and expose --max-per-mode. Using the mass-feature full proxy on 202,010 existing pair candidates yields 696 eligible rows but only 3 deduplicated strict full-score families: conflict components 32->15, 21->19, and 21->0, with predicted full IDF1 0.658179, 0.658302, and 0.655254. This fixes duplicate budget allocation and creates a concrete remote full-score manifest, but does not complete the e2e 0.70 goal.",
+    "status": "active"
+  },
+  {
+    "direction": "component_multiview_existing_artifact_refutation",
+    "finding": "Ran a component/multiview-only exploratory scheduler with relaxed gates over 12,938 rows. The best existing assignment_multiview_merge row predicts full IDF1 0.653753 and the best existing assignment_component_merge rows predict 0.652845, both below the standing production best 0.655240. Therefore old component/multiview grids should not consume strict full-score budget; the active high-mass route requires newly generated mass-proxy component/hub bridge rows.",
+    "status": "closed"
+  },
+  {
+    "direction": "deli_autoresearch_manifest_executor_and_pluto_probe",
+    "finding": "Distilled Deli AutoResearch into the VLINCS no-anchor loop as proposer/scheduler/executor/judge separation with durable state and score-drop-as-evidence discipline. Added export_no_anchor_scheduler_manifest_assignments.py and run_no_anchor_scheduler_manifest_fullscore.sh. The exporter replays accepted_preview edits from the strict scheduler manifest onto the base assignment CSV; real manifest recovery verified ranks 1/2/3 as component edits 32->15 (12 seqs), 21->19 (12 seqs), and 21->0 (8 seqs), including CSV-to-sibling-JSON preview recovery for rank 3. Local py_compile, exporter self-test, real preview recovery, and launcher bash -n passed. Remote full-score did not start because h100-test-3, h100-test-2, and test-video-0 SSH probes timed out during banner exchange and Pluto CLI status returned Failed to connect to Pluto service.",
+    "status": "active"
+  },
+  {
+    "direction": "accepted_preview_evidence_audit_and_conflict_reassign_refutation",
+    "finding": "Added analyze_no_anchor_preview_evidence.py and generated local_runs/no_anchor_preview_evidence_audit_20260620.json/csv plus reports/no_anchor_preview_evidence_audit_20260620.md. Across 5051 accepted_preview rows, only 38 have full-score labels and zero exceed the current best full IDF1 0.655240. Best labelled conflict_subcluster_reassign_candidate_search preview rows reach 0.654009; best conflict_subcluster_reassign reaches 0.653823; provisional relink reaches 0.652265. This closes repeat-small-conflict-reassign-hard as the main route and supports a structural pivot to larger hub/component bridge candidates with preview evidence.",
+    "status": "closed"
+  },
+  {
+    "direction": "large_source_hub_bridge_launcher_pivot",
+    "finding": "Based on accepted-preview evidence audit, patched run_no_anchor_high_mass_bridge.sh to search larger source groups and hub-bridge edits: --source-min-group-sizes 2,4,8,12,16, --source-max-group-sizes 12,24,48, and --max-reassignments 2,4,8,12,24. This directly targets the route-closing evidence that full-scored small 8..12 tracklet conflict reassignments never exceeded current full IDF1 best 0.655240. Launcher bash -n passed.",
+    "status": "active"
+  },
+  {
+    "direction": "hub_bridge_composite_next_queue",
+    "finding": "Added compose_no_anchor_hub_bridge_candidates.py, a no-anchor structural proposer that deduplicates accepted_preview source islands and composes multiple source groups into one target hub/component bridge. It produced 25 unique preview items, 18 target components, and 5 composite candidates. Combined scheduler over composites plus strict conflict rows produced 153 raw / 147 eligible / 7 selected rows: 4 hub composites and 3 strict conflict rows. Best predicted row is hub_component_bridge_composite 4+0->6, moving 16 tracklets with predicted full IDF1 0.659003; largest composite 19+4+0->6 moves 28 tracklets. All selected rows recover executable accepted_preview via export_no_anchor_scheduler_manifest_assignments.py.",
+    "status": "active"
+  },
+  {
+    "direction": "hub_bridge_portfolio_next_queue",
+    "finding": "Added compose_no_anchor_portfolio_candidates.py, which builds no-anchor portfolio assignment candidates from selected executable scheduler rows. Compatibility requires no source-seq overlap and no chained source/target component edits. Generated 30 portfolio rows from 7 source scheduler rows. Top portfolio ranks [1,2,3] targets 15+19+6, moves 40 tracklets across 4 accepted-preview edits, pair-mass proxy 5764, predicted full 0.662663. Portfolio scheduler selected 20/30 rows; top scheduler score 0.661267. Dry-run of run_no_anchor_scheduler_manifest_fullscore.sh with the portfolio scheduler passed local file/argument checks but h100-test-3 still timed out during SSH banner exchange.",
+    "status": "active"
+  },
+  {
+    "direction": "portfolio_video_focus_scheduler",
+    "finding": "Added rerank_no_anchor_scheduler_by_video_focus.py to reallocate scarce full-score budget toward videos below the 0.70 e2e target. The current best production row has bottlenecks MCAM04 Tc6 IDF1 0.560694, MCAM06 Tc6 0.608378, and MCAM03 Tc8 0.628615. The reranker uses prior full-score per-video metrics only as eval feedback for experiment scheduling, not as anchors or assignment evidence. The first rerank selected 8 executable portfolio rows; the top three are original portfolio ranks 19, 18, and 20 because they cover many MCAM04 tracklets. A widened all30 rerank over all eligible portfolio rows selected 10 rows and pulled original ranks 30, 29, 23, and 21 into the top set because they cover MCAM04 and a little MCAM06 Tc6. export_no_anchor_scheduler_manifest_assignments.py materialized all all30-video-focus ranks 1..10, moving 32..72 tracklets per row.",
+    "status": "active"
+  },
+  {
+    "direction": "direct_video_focus_portfolio_proposer",
+    "finding": "Added compose_no_anchor_video_focus_portfolio_candidates.py, which scans no-anchor accepted_preview items and composes cross-target portfolios aimed at the current low-video bottlenecks. The moderate branch limits portfolios to 6 edits and generated 16 candidates; the scheduler selected 8 rows with predicted full IDF1 0.658162..0.658897, pair F1 above 0.766, and moved counts [52,52,52,52,52,52,52,56]. The aggressive branch permits 10 edits and selected 8 rows moving 92..96 tracklets. Exporter materialization passed for both queues. GT is not used as anchors, labels, or assignment evidence; prior per-video full-score is used only as research-budget feedback.",
+    "status": "active"
+  },
+  {
+    "direction": "local_sample_fullscore_export_executor",
+    "finding": "Added a local parquet/sample manifest executor for no-anchor scheduler rows. It materializes selected rows as assignment CSVs, merges them with DS1 detection-level tracklet parquets, and exports submission zips without PostgreSQL. On this Mac DS1 GT is not mounted, so the moderate video-focus top-8 run produced gt_available=false export artifacts, not new canonical full scores.",
+    "status": "active"
+  },
+  {
+    "direction": "crossqueue_portfolio_composition",
+    "finding": "Merged selected rows from existing hub-bridge and direct video-focus scheduler queues into a 41-row no-anchor union scheduler, then composed compatible cross-queue portfolios. The relaxed composer produced 7 compatible rows; the full-score scheduler selected 3 with predicted full IDF1 0.663182 / 0.661996 / 0.660630 and moved counts 56 / 60 / 72. Local sample export produced three 10-video zips, but local DS1 GT remains unavailable so no canonical e2e score is claimed.",
+    "status": "active"
+  },
+  {
+    "direction": "deli_embedding_choice_referee_single_edge",
+    "finding": "Distilled the Deli AutoResearch protocol into the current no-anchor loop as durable state, ready-means-execute, honest score drops, and worker/referee separation. Added rerank_no_anchor_single_edge_by_embedding_choice.py, a no-GT source-local referee for duplicate-source single-edge candidates. It uses crop-embedding top5/p99/max support, target detection quality, and existing scheduler similarities to choose one target per source. On the focused single-edge queue it selected 7/8 rows and replaced source 3 target 45 with target 68. Eval-only audit confirms rank06 3->68 is the only selected edge with false-split gap coverage 0.005659 and positive bridge mass 51530040. Local export produced seven assignment zips, but no canonical e2e score is claimed because local DS1 GT and remote full scoring remain unavailable.",
+    "status": "active"
+  },
+  {
+    "direction": "portfolio_embedding_choice_referee_ablation",
+    "finding": "Added rerank_no_anchor_portfolio_by_embedding_choice.py to test whether the single-edge source-local referee should be applied inside portfolio rows. The moderate video-focus portfolio queue has 8/16 rows with same-source multi-target conflicts; cleaning suppresses 8 preview items and exports 8 scheduler rows successfully. Eval-only audit is negative for a blanket rule: original moderate scheduler summed positive bridge mass 63863193 with top coverage 0.002338, while the cleaned scheduler drops to 21555371 and top coverage 0.002323. Conclusion: source-local arbitration helps single-edge duplicate-target choice, but portfolio rows need margin-gated or physically-impossible conflict handling, not one-target-per-source globally.",
+    "status": "closed"
+  },
+  {
+    "artifacts": [
+      "local_runs/no_anchor_union_crossqueue_plus_single_edge68_20260620.json",
+      "local_runs/no_anchor_crossqueue_plus_single_edge68_portfolio_candidates_20260620.json",
+      "local_runs/no_anchor_fullscore_scheduler_crossqueue_plus_single_edge68_20260620.json",
+      "local_runs/no_anchor_candidate_false_split_coverage_crossqueue_plus_single_edge68_20260620.json",
+      "local_runs/no_anchor_crossqueue_plus_single_edge68_sample_export_20260620/summary.json",
+      "reports/no_anchor_crossqueue_plus_single_edge68_20260620.md"
+    ],
+    "direction": "crossqueue_plus_single_edge68_seed_portfolio",
+    "finding": "Composed the no-GT single-edge embedding-choice seed 3->68 with the existing crossqueue portfolio. The 4-row union scheduler yielded 3 compatible portfolios; scheduler selected all 3 with top predicted full proxy 0.664682, pair F1/P/R 0.769356/0.815368/0.728260, 7 accepted edits, and 304 moved tracklets. Eval-only audit reports top-row false-split coverage 0.005791, 3 positive edges, and summed positive bridge mass 158174490 across audited rows; the production queue itself remains no-anchor/no-GT. Local exports produced assignment zips and sample submission zips, but local DS1 GT is unavailable and Pluto full scoring is unreachable, so canonical e2e best remains IDF1 0.655240.",
+    "status": "active"
+  },
+  {
+    "artifacts": [
+      "local_runs/no_anchor_single_edge_broad_scheduler_candidates_20260620.json",
+      "local_runs/no_anchor_single_edge_broad_embedding_choice_20260620.json",
+      "local_runs/no_anchor_candidate_false_split_coverage_single_edge_broad_embedding_choice_20260620.json",
+      "reports/no_anchor_single_edge_broad_referee_probe_20260620.md"
+    ],
+    "direction": "broad_single_edge_referee_probe",
+    "finding": "Expanded all 20260620 no-anchor scheduler rows into broad single-edge candidates: 168 parent rows -> 19 deduped edges, then no-GT embedding-choice rerank selected 17. The no-GT proxy ranked 40->21, 26->21, and 21->0 highest, but eval-only opponent audit shows these top rows have zero positive bridge mass. The best eval-only broad edge is 9->7 with bridge mass 21153911 and coverage 0.002323, but it is only no-GT rerank rank 15. This diagnoses a scorer failure mode: current aggregate embedding-choice misses localized clean source-island attachments with high target_best_sim, low source_cross_mean_sim, and low source_conflicts_to_rest. Use this only as a next candidate-family hypothesis, not as production GT selection.",
+    "status": "active"
+  },
+  {
+    "artifacts": [
+      "kit/rerank_no_anchor_single_edge_localized_island.py",
+      "local_runs/no_anchor_single_edge_localized_island_20260620.json",
+      "local_runs/no_anchor_fullscore_scheduler_crossqueue_singleedge68_localized_island_20260620.json",
+      "local_runs/no_anchor_candidate_false_split_coverage_crossqueue_singleedge68_localized_island_20260620.json",
+      "local_runs/no_anchor_crossqueue_singleedge68_localized_island_sample_export_20260620/summary.json",
+      "reports/no_anchor_crossqueue_singleedge68_localized_island_20260620.md"
+    ],
+    "direction": "crossqueue_singleedge68_localized_island_queue",
+    "finding": "Added rerank_no_anchor_single_edge_localized_island.py, a narrow no-GT proposer for clean source-island attachments with high target_best_sim, localized peak, low source_cross_mean_sim, and few source conflicts. It selected 9->7 as the only accepted row from 19 broad single-edge candidates. Composing crossqueue rows with 3->68 and 9->7 produced 10 portfolio candidates; scheduler selected 8 with top predicted full proxies 0.668890/0.668110/0.668105 depending risk ordering and pair F1 around 0.769. Eval-only opponent coverage improved to 0.008114, above crossqueue+3->68 coverage 0.005791; strongest audited row contains positive bridge edges 3->68 (51530040), 9->7 (21153911), 32->15 (933375), and 4->6 (261415). Local assignment and sample zip exports succeeded for ranks 1..8, but gt_available=false locally and Pluto full scoring remains unreachable, so verified e2e best remains IDF1 0.655240.",
+    "status": "active"
+  },
+  {
+    "artifacts": [
+      "kit/filter_no_anchor_portfolio_edges_by_referee.py",
+      "local_runs/no_anchor_referee_pruned_crossqueue_singleedge68_localized_island_20260620.json",
+      "local_runs/no_anchor_fullscore_scheduler_referee_pruned_crossqueue_singleedge68_localized_island_20260620.json",
+      "local_runs/no_anchor_candidate_false_split_coverage_referee_pruned_crossqueue_singleedge68_localized_island_20260620.json",
+      "local_runs/no_anchor_referee_pruned_crossqueue_singleedge68_localized_island_sample_export_20260620/summary.json",
+      "reports/no_anchor_referee_pruned_crossqueue_singleedge68_localized_island_20260620.md"
+    ],
+    "direction": "referee_pruned_crossqueue_singleedge68_localized_island_queue",
+    "finding": "Added filter_no_anchor_portfolio_edges_by_referee.py, an edge-level no-GT portfolio pruning referee. It preserves large_source_singleton_seed (3->68), localized_island (9->7), and stable_multiview_attach (4->6,32->15) while pruning weak extra edges from the previous portfolio queue. Raw 77 accepted_preview edges were reduced to 32 kept edges across 10 emitted rows; scheduler selected 4 rows. Eval-only top coverage remains 0.008114 with the same four positive bridge edges as the previous best opponent row, but the top audited row now has only 4 edges and 276 moved tracklets instead of weak extras. Local assignment/sample zips were exported for ranks 1..4; local gt_available=false and Pluto API/SSH remain unavailable, so verified e2e best remains 0.655240.",
+    "status": "active"
+  },
+  {
+    "artifacts": [
+      "kit/rerank_no_anchor_scheduler_by_proxy_ensemble.py",
+      "reports/no_anchor_proxy_reviewer_autoresearch_20260620.md",
+      "local_runs/no_anchor_proxy_reviewer_ensemble_scheduler_20260620.json",
+      "local_runs/no_anchor_proxy_reviewer_ensemble_exploration_scheduler_20260620.json",
+      "local_runs/no_anchor_proxy_reviewer_ensemble_exploration_local_export_20260620/summary.json"
+    ],
+    "direction": "proxy_reviewer_ensemble_refutation_and_exploration_queue",
+    "finding": "Distilled Deli AutoResearch into a proxy-reviewer referee for no-anchor scheduler rows. Added kit/rerank_no_anchor_scheduler_by_proxy_ensemble.py, which scores candidates with four independent historical full-IDF1 proxy models and schedules by median minus uncertainty. Strict gate over 33 current portfolio/localized-island rows selected 0 candidates: no row had median predicted full IDF1 above the standing 0.655240, and no reviewer predicted above current best for the top rows. A relaxed exploration queue selected 8 rows with median proxies 0.653043..0.654675 and exported 8 assignment/submission zips, but gt_available=false locally. This refutes the current portfolio family as a high-confidence route to 0.70 and supports a structural pivot to a new no-GT high-mass false-split proposer.",
+    "status": "active"
+  },
+  {
+    "artifacts": [
+      "kit/compose_no_anchor_component_graph_candidates.py",
+      "kit/filter_no_anchor_component_graph_rescue_rule.py",
+      "kit/compose_no_anchor_portfolio_candidates.py",
+      "local_runs/no_anchor_component_graph_high_mass_candidates_20260620.json",
+      "local_runs/no_anchor_component_graph_low_vote_rescue_broad_20260620.json",
+      "local_runs/no_anchor_candidate_false_split_coverage_component_graph_low_vote_rescue_broad_20260620.json",
+      "local_runs/no_anchor_fullscore_scheduler_referee_pruned_plus_component_rescue_dedup_probe_20260620.json",
+      "local_runs/no_anchor_referee_pruned_plus_component_rescue_dedup_probe_local_export_20260620/summary.json",
+      "reports/no_anchor_component_graph_low_vote_rescue_20260620.md"
+    ],
+    "direction": "component_graph_low_vote_rescue_high_mass_proposer",
+    "finding": "Added a no-GT component-graph high-mass bridge proposer and low-vote rescue filter. Raw graph produced 94 rows; eval-only opponent found 10 positives with total bridge mass 48547656 but buried the strongest 24<->31 rows at ranks 83/84. Strict rescue selected 2/2 positive rows with mass 45703206; broad rescue selected 4/8 positives with mass 45970846 and exported 8 local zips. Historical proxy-reviewers were OOD and selected 0 rows. While composing rescue rows with the referee-pruned portfolio, replay exposed a duplicate-source-component bug; compose_no_anchor_portfolio_candidates now rejects duplicate source components and passes self-test. A dedup probe scheduler selected 12 rows and exported 12 local rank zips with skipped_empty_source_components empty, but gt_available=false locally so verified e2e remains 0.655240.",
+    "status": "active"
+  },
+  {
+    "artifacts": [
+      "kit/filter_no_anchor_component_graph_directional_rescue.py",
+      "local_runs/no_anchor_component_graph_directional_rescue_highconf_20260620.json",
+      "local_runs/no_anchor_fullscore_scheduler_referee_pruned_plus_directional_rescue_highconf_probe_20260620.json",
+      "local_runs/no_anchor_candidate_false_split_coverage_referee_pruned_plus_directional_rescue_highconf_probe_20260620.json",
+      "local_runs/no_anchor_referee_pruned_plus_directional_rescue_highconf_probe_local_export_20260620/summary.json",
+      "reports/no_anchor_directional_rescue_highconf_probe_20260620.md"
+    ],
+    "direction": "directional_component_graph_rescue_highconf_probe",
+    "finding": "Remote full-score dry-run against h100-test-3, h100-test-2, and test-video-0 still failed with SSH banner timeouts. Added a no-GT directionality filter for component-graph rescue rows that keeps one larger-target high-sim direction per unordered component pair. It selected 31->24 from the broad rescue set; eval-only audit reports 1/1 positive with bridge mass 22851603 and coverage 0.002510. Composed this high-confidence edge with the referee-pruned portfolio queue, producing a 4-row probe with local zip exports, skipped_empty_source_components=0, and eval-only top coverage 0.010624 / positive bridge mass 96730344 in the best row. No canonical e2e score changed because local GT is unavailable and remote scorer is unreachable.",
+    "status": "active"
+  },
+  {
+    "artifacts": [
+      "kit/admit_no_anchor_component_graph_candidates.py",
+      "reports/deli_autoresearch_component_admission_20260620.md",
+      "reports/no_anchor_component_graph_admission_20260620.md",
+      "local_runs/no_anchor_component_graph_admission_20260620.json",
+      "local_runs/no_anchor_fullscore_scheduler_referee_pruned_plus_component_admission_probe_20260620.json",
+      "local_runs/no_anchor_referee_pruned_plus_component_admission_probe_local_export_20260620/summary.json",
+      "reports/no_anchor_candidate_false_split_coverage_component_admission_probe_20260620.md"
+    ],
+    "direction": "deli_component_admission_quarantine_probe",
+    "finding": "Distilled Deli AutoResearch into an explicit no-GT admission/quarantine step for component-graph rescue rows. Added admit_no_anchor_component_graph_candidates.py: 8 broad rescue rows collapsed into 4 unordered groups with 1 committed_probe (31->24), 1 provisional_probe (44->8), 2 quarantined groups, and 4 rejected direction duplicates. Composed committed admission with the referee-pruned portfolio queue; scheduler selected 4 rows and local replay exported 4x10-video zips with skipped_empty_source_components=[] and gt_available=false. Eval-only opponent coverage stayed at top_coverage=0.010624 and total_positive_bridge_mass=313042635, preserving the prior strongest evidence while making risk status explicit. No canonical e2e score changed because local DS1 GT is absent and Pluto CLI/SSH remain unavailable.",
+    "status": "active"
+  },
+  {
+    "artifacts": [
+      "kit/analyze_no_anchor_component_graph_rule_sweep.py",
+      "local_runs/no_anchor_component_graph_rule_sweep_20260620.json",
+      "reports/no_anchor_component_graph_rule_sweep_20260620.md",
+      "local_runs/no_anchor_full_proxy_componentaware_audit_20260620.json",
+      "reports/no_anchor_full_proxy_componentaware_audit_20260620.md",
+      "local_runs/no_anchor_full_proxy_componentaware_ridge_model_20260620.json"
+    ],
+    "direction": "component_graph_rule_sweep_high_vote_refutation",
+    "finding": "Codified the component-graph high-vote supplement ablation as a reusable rule sweep. Broad high-vote supplement is rejected: 11 selected rows contain only 2 positives and 9 false rows under eval-only opponent audit, with positive bridge mass 1118967 versus 22851603 for the committed 31->24 low-vote direction. The only clean high-vote singleton 32->15 is already represented by existing portfolio evidence. Do not spend full-score budget on broad high-vote expansion; next route is scorer recovery or a new no-GT target-impurity/outcome proxy rather than another local threshold expansion.",
+    "status": "closed"
+  },
+  {
+    "artifacts": [
+      "kit/filter_no_anchor_component_graph_target_impurity_proxy.py",
+      "local_runs/no_anchor_component_graph_target_impurity_proxy_20260620.json",
+      "reports/no_anchor_component_graph_target_impurity_proxy_20260620.md",
+      "local_runs/no_anchor_candidate_false_split_coverage_component_graph_target_impurity_proxy_20260620.json",
+      "reports/no_anchor_candidate_false_split_coverage_component_graph_target_impurity_proxy_20260620.md",
+      "local_runs/no_anchor_union_referee_pruned_plus_target_impurity_proxy_20260620.json",
+      "local_runs/no_anchor_portfolio_referee_pruned_plus_target_impurity_proxy_20260620.json",
+      "reports/no_anchor_portfolio_referee_pruned_plus_target_impurity_proxy_20260620.md",
+      "local_runs/no_anchor_candidate_false_split_coverage_referee_pruned_plus_target_impurity_proxy_20260620.json",
+      "reports/no_anchor_candidate_false_split_coverage_referee_pruned_plus_target_impurity_proxy_20260620.md",
+      "local_runs/no_anchor_fullscore_scheduler_referee_pruned_plus_target_impurity_proxy_ablation_20260620.json",
+      "local_runs/no_anchor_referee_pruned_plus_target_impurity_proxy_ablation_local_export_20260620/summary.json"
+    ],
+    "direction": "component_graph_target_impurity_proxy_ablation",
+    "finding": "Added a no-GT target-impurity proxy filter for under-ranked component-graph bridges: low global graph score, strong local best visual evidence, bounded same-video overlap, and reported target-absorption risk. It selected 31->24 and the new 9->6 edge from 94 graph candidates; eval-only audit shows 2/2 positive with bridge mass 23021041 and zero false selected edges. Portfolio ablation shows the new edge is real but not better than the existing 9->7 source-local target: best coverage remains 0.010624 and rows using 9->6 instead of 9->7 lose about 21M bridge mass. Local assignment/submission export for seven ablation portfolios succeeded without GT. Close this as a useful negative/diagnostic result; next direction is source-local target arbitration or canonical scorer recovery.",
+    "status": "closed"
+  },
+  {
+    "artifacts": [
+      "kit/arbitrate_no_anchor_source_local_targets.py",
+      "local_runs/no_anchor_source_local_target_arbitration_trusted_20260620.json",
+      "reports/no_anchor_source_local_target_arbitration_trusted_20260620.md",
+      "local_runs/no_anchor_candidate_false_split_coverage_source_local_arbitration_trusted_20260620.json",
+      "reports/no_anchor_candidate_false_split_coverage_source_local_arbitration_trusted_20260620.md",
+      "local_runs/no_anchor_source_local_target_arbitration_wide_20260620.json",
+      "reports/no_anchor_candidate_false_split_coverage_source_local_arbitration_wide_20260620.md",
+      "local_runs/no_anchor_source_local_target_arbitration_trusted_local_export_20260620/summary.json"
+    ],
+    "direction": "source_local_target_arbitration_ablation",
+    "finding": "Added arbitrate_no_anchor_source_local_targets.py, a production-side no-GT source-local target selector that flattens accepted_preview edits, scores only visual/provenance/risk metadata, and keeps at most one target per source component. A parser bug for composite top-level source labels was fixed so preview-level edges such as 3->68 are preserved. On the trusted recovered-base queue it keeps 32->15, 4->6, 9->7, 3->68, and 31->24 while rejecting the weaker 9->6; eval-only top coverage is 0.010624, matching the standing best evidence. On a wide provenance pool it selects many visually strong single-edge candidates but eval-only coverage falls to 0.008184 with many zero-mass edges, so broad provenance mixing is rejected. Local assignment/submission export for the trusted two-row queue succeeded with gt_available=false. This branch stabilizes target choice but does not improve verified e2e; next route is per-video no-GT source selection or restoring canonical full-score execution.",
+    "status": "closed"
+  },
+  {
+    "artifacts": [
+      "kit/no_anchor_local_pervideo_source_selector.py",
+      "local_runs/no_anchor_local_pervideo_source_selector_conservative_20260620.json",
+      "reports/no_anchor_local_pervideo_source_selector_conservative_20260620.md",
+      "local_runs/no_anchor_local_pervideo_source_selector_conservative_20260620_assignments.csv",
+      "local_runs/no_anchor_local_pervideo_source_selector_conservative_sample_full_20260620.json",
+      "local_runs/no_anchor_local_pervideo_source_selector_conservative_20260620.zip",
+      "local_runs/no_anchor_local_pervideo_source_selector_balanced_20260620.json",
+      "reports/no_anchor_local_pervideo_source_selector_balanced_20260620.md",
+      "local_runs/no_anchor_local_pervideo_source_selector_balanced_20260620_assignments.csv",
+      "local_runs/no_anchor_local_pervideo_source_selector_balanced_sample_full_20260620.json",
+      "local_runs/no_anchor_local_pervideo_source_selector_balanced_20260620.zip",
+      "local_runs/no_anchor_result_gate_after_pervideo_source_selector_20260620.json",
+      "reports/no_anchor_deli_opponent_after_pervideo_source_selector_20260620.md"
+    ],
+    "direction": "local_pervideo_no_gt_source_selector_export",
+    "finding": "Implemented a filesystem-only no-GT per-video source selector over complete assignment CSVs. It aligns candidate predicted IDs to the base namespace by tracklet-overlap majority, selects per-video sources from assignment metadata only, and writes coherent assignment CSVs plus 10-video submission zips. Conservative selection switches 8/10 videos to trusted_arb and keeps base for MCAM03 Tc8 / MCAM06 Tc6; balanced selection switches all videos to trusted_arb. Both outputs are no-anchor/no-GT and ready for remote scoring, but local gt_available=false and h100-test-3/Pluto remain unreachable, so verified e2e remains 0.655240. The branch is an exported candidate family, not a proven improvement.",
+    "status": "active"
+  },
+  {
+    "artifacts": [
+      "kit/audit_no_anchor_autoresearch_protocol.py",
+      "local_runs/no_anchor_autoresearch_protocol_audit_20260620.json",
+      "reports/no_anchor_autoresearch_protocol_audit_20260620.md",
+      "kit/no_anchor_local_pervideo_consensus_selector.py",
+      "local_runs/no_anchor_local_pervideo_consensus_selector_20260620.json",
+      "reports/no_anchor_local_pervideo_consensus_selector_20260620.md",
+      "local_runs/no_anchor_local_pervideo_consensus_selector_20260620_assignments.csv",
+      "local_runs/no_anchor_local_pervideo_consensus_selector_sample_full_20260620.json",
+      "local_runs/no_anchor_local_pervideo_consensus_selector_20260620.zip",
+      "local_runs/no_anchor_result_gate_after_consensus_selector_20260620.json",
+      "local_runs/no_anchor_deli_opponent_after_consensus_selector_20260620.json",
+      "reports/no_anchor_deli_opponent_after_consensus_selector_20260620.md",
+      "local_runs/no_anchor_autoresearch_protocol_audit_after_consensus_20260620.json",
+      "reports/no_anchor_autoresearch_protocol_audit_after_consensus_20260620.md"
+    ],
+    "direction": "deli_consensus_source_selector_and_protocol_audit",
+    "finding": "Distilled the open Deli AutoResearch/self-play thread into a stricter local protocol audit and a threshold self-play consensus selector. audit_no_anchor_autoresearch_protocol.py verifies that selected candidate rows and frozen proxy-reviewer models do not use anchors, oracle selection, or GT/full-score fields as production features; the current exploration queue and consensus policy pass with 0 hard blockers. no_anchor_local_pervideo_consensus_selector.py ran 96 no-GT selector perturbations over complete assignment sources and committed only stable per-video choices: MCAM00 Tc6 and MCAM00 Tc8 switch to trusted_arb, while the other 8 videos quarantine to base. The resulting assignment has 7487 assigned tracklets, 81 assignment IDs, 519 pervideo_source_select rows, and a 10-video submission zip, but local GT is unavailable. Result gate and Deli opponent still verdict pivot: best newly gated full IDF1 is 0.654009, below the standing promoted 0.655240, so the e2e goal is not met. Remote h100-test-3 SSH and Pluto CLI remain unavailable.",
+    "status": "active"
+  },
+  {
+    "artifacts": [
+      "reports/deli_autoresearch_distillation_vlincs_20260620.md",
+      "kit/analyze_no_anchor_assignment_summary_proxy.py",
+      "local_runs/no_anchor_assignment_summary_proxy_full_ds1_20260620.json",
+      "local_runs/no_anchor_assignment_summary_proxy_full_ds1_20260620.csv",
+      "reports/no_anchor_assignment_summary_proxy_full_ds1_20260620.md",
+      "local_runs/no_anchor_assignment_summary_proxy_fullscore_queue_20260620.json",
+      "reports/no_anchor_assignment_summary_proxy_fullscore_queue_20260620.md",
+      "local_runs/no_anchor_autoresearch_protocol_audit_assignment_summary_proxy_20260620.json",
+      "reports/no_anchor_autoresearch_protocol_audit_assignment_summary_proxy_20260620.md",
+      "local_runs/no_anchor_autoresearch_protocol_audit_assignment_queue_20260620.json",
+      "reports/no_anchor_autoresearch_protocol_audit_assignment_queue_20260620.md",
+      "local_runs/no_anchor_result_gate_after_assignment_summary_proxy_20260620.json",
+      "local_runs/no_anchor_deli_opponent_after_assignment_summary_proxy_20260620.json",
+      "reports/no_anchor_deli_opponent_after_assignment_summary_proxy_20260620.md"
+    ],
+    "direction": "assignment_summary_proxy_full_ds1_queue_refutation",
+    "finding": "Trained a no-anchor assignment-summary full-IDF1 proxy on 10 non-oracle full-scored assignment rows and ranked 137 full-DS1 local candidate assignments. The initial unfiltered top prediction 0.710 was an OOD false positive from 2-video sample assignments, so a full-DS1 coverage filter was added. The filtered top is the balanced per-video source selector at proxy 0.664464, followed by conservative 0.663442, edge-table focused 0.655650, and consensus 0.654289. A top-20 queue has ready zip paths for remote scoring, and protocol audits passed with zero hard blockers. Result gate and Deli opponent still return pivot: no verified e2e improvement above the standing 0.655240, so source-selector/portfolio families are treated as saturated below the 0.70 target.",
+    "status": "closed"
+  },
+  {
+    "artifacts": [
+      "reports/deli_autoresearch_distillation_vlincs_20260620.md"
+    ],
+    "direction": "deli_autoresearch_distillation_vlincs_protocol",
+    "finding": "Distilled the public Deli AutoResearch framework and self-play story into VLINCS no-anchor operating rules: ready candidates must be executed/queued, state must be file-backed, score drops are negative evidence, stale_count>=8 requires structural pivot, and proposer/referee/gate/opponent roles stay separate. Applied immediately to reject the assignment-summary proxy sample-slice 0.710 false positive and to force the next branch away from threshold-only source selection.",
+    "status": "active"
+  },
+  {
+    "artifacts": [
+      "reports/deli_autoresearch_distillation_vlincs_20260620.md",
+      "reports/no_anchor_deli_selfplay_bridge_ablation_20260620.md",
+      "local_runs/no_anchor_deli_selfplay_bridge_ablation_20260620/summary.json",
+      "local_runs/no_anchor_deli_selfplay_bridge_ablation_proxy_20260620.json",
+      "local_runs/no_anchor_deli_selfplay_bridge_ablation_proxy_20260620.csv",
+      "reports/no_anchor_deli_selfplay_bridge_ablation_proxy_20260620.md",
+      "local_runs/no_anchor_deli_selfplay_bridge_ablation_queue_20260620.json",
+      "local_runs/no_anchor_deli_selfplay_bridge_ablation_20260620/rank01_balanced_plus_provisional_44_to_8_assignments.csv",
+      "local_runs/no_anchor_deli_selfplay_bridge_ablation_20260620/rank01_balanced_plus_provisional_44_to_8.zip",
+      "local_runs/no_anchor_deli_selfplay_bridge_ablation_20260620/rank03_balanced_plus_quarantine_17_to_47_assignments.csv",
+      "local_runs/no_anchor_deli_selfplay_bridge_ablation_20260620/rank03_balanced_plus_quarantine_17_to_47.zip",
+      "local_runs/no_anchor_autoresearch_protocol_audit_selfplay_bridge_ablation_20260620.json",
+      "reports/no_anchor_autoresearch_protocol_audit_selfplay_bridge_ablation_20260620.md",
+      "local_runs/no_anchor_result_gate_after_selfplay_bridge_ablation_20260620.json",
+      "local_runs/no_anchor_deli_opponent_after_selfplay_bridge_ablation_20260620.json",
+      "reports/no_anchor_deli_opponent_after_selfplay_bridge_ablation_20260620.md"
+    ],
+    "direction": "deli_selfplay_noncommitted_bridge_ablation",
+    "finding": "Ran a Deli-style self-play bridge ablation on the top assignment-summary selector. The base balanced selector already contains the committed 31->24 component bridge and remains highest at proxy 0.664464. Adding provisional 44->8 changes 130 tracklets and drops slightly to 0.663957, so it is exported as a low-priority full-score probe. Quarantine 17->47 scores 0.663641, quarantine 13->2 scores 0.661941, and enabling all non-committed bridges changes 493 tracklets and drops to 0.660916; batch promotion is rejected. Two probe zips were exported with gt_available=false. Protocol audit passed, result gate remains pass_joint=false, and Deli opponent remains pivot with standing e2e best 0.655240.",
+    "status": "closed"
+  },
+  {
+    "artifacts": [
+      "kit/run_no_anchor_assignment_queue_fullscore.sh",
+      "kit/apply_no_anchor_component_bridge_counterfactuals.py",
+      "local_runs/remote_fullscore_fetch_20260620/h100-test-3_assignment_summary_top3.json",
+      "local_runs/remote_fullscore_fetch_20260620/h100-test-2_selfplay_bridge_probe.json",
+      "local_runs/remote_fullscore_fetch_20260620/h100-test-2_adversary_bridge_top3.json",
+      "local_runs/remote_fullscore_fetch_20260620/h100-test-3_density_edge_table.json",
+      "local_runs/remote_fullscore_fetch_20260620/h100-test-3_density_balanced.json",
+      "local_runs/no_anchor_remote_fullscore_assignment_queues_summary_20260620.json",
+      "local_runs/no_anchor_remote_fullscore_assignment_queues_summary_20260620.csv",
+      "local_runs/no_anchor_result_gate_after_remote_assignment_queues_20260620.json",
+      "local_runs/no_anchor_deli_opponent_after_remote_assignment_queues_20260620.json",
+      "reports/no_anchor_remote_fullscore_assignment_queues_20260620.md",
+      "reports/no_anchor_deli_opponent_after_remote_assignment_queues_20260620.md"
+    ],
+    "direction": "restored_remote_fullscore_assignment_queues_and_adversary_counterfactual_refutation",
+    "finding": "Restored canonical Pluto full scoring on h100-test-2/3 and scored assignment-summary top3, self-play bridge probes, adversarial one-bridge counterfactuals, and density-filtered variants. Best new canonical result was edge-table focused + density_oracle_lite at IDF1 0.654041 / HOTA 0.517791 / AssA 0.533451, below standing 0.655240. Balanced/conservative source selectors scored 0.653177/0.653175; self-play probes scored 0.638369/0.637193; adversarial bridges were no-op or negative at 0.653177/0.651455/0.651993. Gate remains pass_joint=false and opponent verdict pivot. Next direction is hard-video source-local repair for MCAM04 Tc6 and MCAM06 Tc6.",
+    "status": "closed"
+  },
+  {
+    "direction": "source_component_softcut_split",
+    "finding": "Single-component softcut split is a tiny positive e2e branch: 2-way split plus density_oracle_lite reached 0.655323, 3-way split reached 0.655378 and becomes the no-anchor primary standing best. Two-component split fell to 0.655021 after density, so broader splitting is rejected. Next work should add new evidence or admission/commit-defer logic rather than only widen split thresholds.",
+    "status": "active"
+  },
+  {
+    "direction": "commit_defer_drop_forced_after_k3",
+    "finding": "No-GT state policy conflict_rate_threshold=0.01 quarantined 4 forced_conflict components / 252 tracklets after k3 softcut. It improved pair diagnostics but collapsed forced-output full IDF1 to 0.645007 raw and 0.647252 with density_oracle_lite, so direct deletion of forced-conflict components is rejected. Keep state metadata for explanation/reporting, not as the submission output.",
+    "status": "closed"
+  },
+  {
+    "direction": "commit_defer_color_forced_after_k3",
+    "finding": "No-GT color_forced at conflict_rate_threshold=0.01 kept all tracklets and split 252 forced-conflict tracklets into 15 parts, but full-score reached only 0.652914 raw and 0.655110 after density_oracle_lite. This refutes pure cannot-link state coloring as a route beyond 0.655378; next work should add a visual verifier or constrained false-split bridge repair.",
+    "status": "closed"
+  },
+  {
+    "artifacts": [
+      "local_runs/no_anchor_k3_mass_bridge_proxy_search_20260621_summary.json",
+      "local_runs/no_anchor_k3_mass_bridge_proxy_search_20260621/search.json",
+      "local_runs/no_anchor_k3_mass_bridge_proxy_search_20260621/search.csv",
+      "local_runs/no_anchor_k3_mass_bridge_proxy_search_20260621/top_assignments.csv",
+      "reports/no_anchor_k3_mass_bridge_proxy_refutation_20260621.md"
+    ],
+    "direction": "k3_mass_bridge_proxy_after_softcut",
+    "finding": "On the k3 softcut standing-best assignment, mass_bridge_proxy selected a visually strong 8-tracklet source island 21->0. Pair F1 improved to 0.772364 from the k3 base 0.769367, but canonical full IDF1 was 0.653963, below the standing 0.655378. Local visual bridge similarity is insufficient as a production admission gate; next direction should add visual identity verifier/counter-target checks or detector-quality admission.",
+    "status": "closed"
+  },
+  {
+    "artifacts": [
+      "kit/no_anchor_visual_seed_subcluster_merge.py",
+      "local_runs/no_anchor_k3_visual_seed_subcluster_single_fast_20260621_summary.json",
+      "local_runs/no_anchor_k3_visual_seed_subcluster_single_fast_20260621/search.json",
+      "local_runs/no_anchor_k3_visual_seed_subcluster_single_fast_20260621/search.csv",
+      "local_runs/no_anchor_k3_visual_seed_subcluster_single_fast_20260621/top_assignments.csv",
+      "reports/no_anchor_k3_visual_seed_subcluster_refutation_20260621.md"
+    ],
+    "direction": "k3_visual_seed_subcluster_from_old_decisions",
+    "finding": "Directly reusing the 2026-06-19 no-GT visual decisions on the k3 softcut assignment accepted 4 high-confidence seed groups and moved 33 tracklets, but full IDF1 dropped to 0.649982. Old visual-positive seed surgery does not transfer cleanly after k3 component restructuring; future verifier must regenerate current-assignment counter-target evidence and include detector-quality side-effect checks.",
+    "status": "closed"
+  },
+  {
+    "artifacts": [
+      "kit/audit_no_anchor_countertarget_verifier.py",
+      "local_runs/no_anchor_countertarget_inputs_20260621/no_anchor_countertarget_compact_edges_20260621.json",
+      "local_runs/no_anchor_countertarget_audit_k3_mass_20260621/audit.json",
+      "local_runs/no_anchor_countertarget_audit_compact_edges_20260621/audit.json",
+      "local_runs/no_anchor_countertarget_verified_edge_fullscore_20260621/verified_edge_full.json",
+      "local_runs/no_anchor_countertarget_verified_edge_fullscore_20260621/verified_edge_density_filter.json",
+      "local_runs/no_anchor_countertarget_verified_edge_fullscore_20260621/verified_edge_no_gt_spacetime_diagnostic.json",
+      "local_runs/no_anchor_countertarget_verified_edge_fullscore_20260621_summary.json",
+      "reports/no_anchor_countertarget_verifier_refutation_20260621.md",
+      "/mnt/localssd/vlincs_reid_runs/no_anchor_countertarget_verified_edge_fullscore_20260621/verified_edge_submission.zip",
+      "/mnt/localssd/vlincs_reid_runs/no_anchor_countertarget_verified_edge_fullscore_20260621/verified_edge_density_primary.zip"
+    ],
+    "direction": "countertarget_visual_verifier_after_k3",
+    "finding": "The no-GT visual counter-target verifier is useful as a reducer (k3 mass bridge 21->0 rejected; compact pool 18 edges -> 1 accepted), but not sufficient as a production admission gate. The sole accepted edge 13->49 lowered raw IDF1 to 0.652833 and density_oracle_lite IDF1 to 0.654999, below standing 0.655378. Next direction must add same-camera temporal/local-track opponent and detector-quality admission.",
+    "status": "closed"
+  },
+  {
+    "artifacts": [
+      "local_runs/no_anchor_countertarget_audit_k3_mass_temporal_20260621/audit.json",
+      "local_runs/no_anchor_countertarget_audit_k3_mass_temporal_20260621/audit.csv",
+      "local_runs/no_anchor_countertarget_audit_compact_edges_temporal_20260621/audit.json",
+      "local_runs/no_anchor_countertarget_audit_compact_edges_temporal_20260621/audit.csv"
+    ],
+    "direction": "temporal_overlap_opponent_for_countertarget_edges",
+    "finding": "Adding a same-camera interval-overlap opponent to the visual counter-target verifier rejects the only visual-accepted compact candidate, the known bad 13->49 edge, and leaves zero accepted candidates in the compact pool. This validates temporal cannot-link as a necessary admission stage; the next direction is to generate a new temporally clean candidate pool or local-track relink candidates.",
+    "status": "closed"
+  },
+  {
+    "artifacts": [
+      "reports/deli_autoresearch_selfplay_operationalization_20260621.md",
+      "reports/no_anchor_temporal_clean_bridge_queue_refutation_20260621.md",
+      "local_runs/no_anchor_temporal_clean_bridge_queue_20260621_summary.json",
+      "local_runs/no_anchor_temporal_clean_bridge_queue_20260621/search.json",
+      "local_runs/no_anchor_temporal_clean_bridge_queue_20260621/search.csv",
+      "local_runs/no_anchor_temporal_clean_bridge_queue_20260621/audit_visual_temporal.json",
+      "local_runs/no_anchor_temporal_clean_bridge_queue_20260621/audit_visual_temporal.csv",
+      "/mnt/localssd/vlincs_reid_runs/no_anchor_temporal_clean_bridge_queue_20260621/search.json",
+      "/mnt/localssd/vlincs_reid_runs/no_anchor_temporal_clean_bridge_queue_20260621/audit_visual_temporal.json"
+    ],
+    "direction": "temporal_clean_bridge_queue_after_countertarget_gate",
+    "finding": "Generated a fresh no-anchor single-edge bridge queue on h100-test-3 after skipping prior mass-bridge families 0..200. The proposer produced 100 candidate rows and full-scored rank1 at IDF1 0.653339 / HOTA 0.517177 / AssA 0.532767, below standing 0.655378. The visual+temporal counter-target verifier audited 100 edges and accepted 0; all were reject_countertarget, only 11 had positive weighted margin, 2 had rank_vote>=0.75, and 0 had margin_vote>=0.50. This refutes wider mass-bridge queues under Deli-style opposition; next structural pivot is a learned counter-target verifier with temporal hard negatives or detector-quality/density admission.",
+    "status": "closed"
+  },
+  {
+    "artifacts": [
+      "reports/no_anchor_k3_admission_grid_refutation_20260621.md",
+      "local_runs/no_anchor_k3_admission_grid_20260621_summary.json",
+      "local_runs/no_anchor_k3_admission_grid_20260621/admission_grid.json",
+      "local_runs/no_anchor_k3_admission_grid_20260621/top_assignment.csv",
+      "/mnt/localssd/vlincs_reid_runs/no_anchor_k3_admission_grid_20260621/admission_grid.json",
+      "/mnt/localssd/vlincs_reid_runs/no_anchor_k3_admission_grid_20260621/top_assignment.csv"
+    ],
+    "direction": "k3_global_tracklet_admission_grid",
+    "finding": "Ran a 16-row no-anchor global tracklet admission grid on the k3 standing-best assignment with min_conf 0.0/0.08/0.12/0.16 and min_quality -inf/0.50/0.55/0.60. The top 4 coverage-balanced rows all full-scored at IDF1 0.653210 / HOTA 0.517030 / AssA 0.532678, below standing 0.655378. Filtering removed up to 576 output tracklets in the scored rows but assigned_after_filter stayed 7487 and pair F1 stayed 0.769367, so global min-conf/min-quality tracklet admission does not touch the current identity bottleneck. Next pivot should be per-video density/admission around hard videos, local-track continuity, or a learned counter-target verifier with temporal hard negatives.",
+    "status": "closed"
+  },
+  {
+    "direction": "mcam04_08_temporal_and_target_fragment_selection_probe",
+    "finding": "Strict local temporal continuity found no mass; ultrawide temporal and target-fragment small-component relinks both scored below the standing e2e best despite tiny/proxy pair gains.",
+    "status": "closed"
+  },
+  {
+    "direction": "delivery_side_effect_critic_plus_source_split_quarantine",
+    "finding": "Conservative source-side conflict quarantine found a safe 1-node split but full-score stayed below the standing e2e best; quarantine is useful only as a safety/admission primitive.",
+    "status": "closed"
+  },
+  {
+    "direction": "component_scale_search_with_delivery_side_effect_critic",
+    "finding": "Existing component-scale bridge results plus new side-effect critic refresh show current row-summary proxy cannot rank e2e side effects; move to richer opponent evidence.",
+    "status": "closed"
+  },
+  {
+    "artifacts": [
+      "kit/audit_no_anchor_countertarget_verifier.py",
+      "kit/no_anchor_fullscore_scheduler.py",
+      "kit/analyze_no_anchor_full_proxy_training.py",
+      "reports/no_anchor_countertarget_opponent_features_v2_20260621.md",
+      "local_runs/no_anchor_countertarget_opponent_features_v2_summary_20260621.json",
+      "local_runs/remote_h100_test_3_20260621/no_anchor_countertarget_compact_opponent_features_v2_20260621/audit_visual_features.json",
+      "local_runs/remote_h100_test_3_20260621/no_anchor_countertarget_compact_opponent_features_v2_20260621/audit_visual_features.csv",
+      "local_runs/remote_h100_test_3_20260621/no_anchor_countertarget_compact_opponent_features_v2_20260621/audit_temporal_features.json",
+      "local_runs/remote_h100_test_3_20260621/no_anchor_countertarget_compact_opponent_features_v2_20260621/audit_temporal_features.csv",
+      "local_runs/remote_h100_test_3_20260621/no_anchor_countertarget_compact_opponent_features_v2_20260621/summary.json",
+      "local_runs/no_anchor_full_proxy_training_audit_opponent_schema_v5_20260621.json",
+      "local_runs/no_anchor_full_proxy_selfplay_ridge_model_opponent_schema_v5_20260621.json",
+      "reports/no_anchor_full_proxy_training_audit_opponent_schema_v5_20260621.md",
+      "/mnt/localssd/vlincs_reid_runs/no_anchor_countertarget_compact_opponent_features_v2_20260621/audit_visual_features.json",
+      "/mnt/localssd/vlincs_reid_runs/no_anchor_countertarget_compact_opponent_features_v2_20260621/audit_temporal_features.json",
+      "/mnt/localssd/vlincs_reid_runs/no_anchor_countertarget_compact_opponent_features_v2_20260621/summary.json"
+    ],
+    "direction": "countertarget_crop_opponent_and_per_video_delta_features",
+    "finding": "Added no-GT crop/view/temporal/video-namespace opponent fields and verified the compact pool: visual-only accepted one known bad edge 13->49, temporal opponent rejected it with max same-video overlap 247 frames, leaving zero accepted candidates. Scheduler/proxy now accept the schema; next generators must propagate fields into candidate rows.",
+    "status": "closed"
+  },
+  {
+    "artifacts": [],
+    "direction": "propagate_opponent_features_into_candidate_rows_and_scheduler_fullscore_queue",
+    "finding": "Closed after postfilter-aware r1-9 hard-negative reranking: strict scheduler selected 0 above-current candidates from the temporal-clean bridge queue. Further expansion of this queue is a cognitive loop.",
+    "status": "closed"
+  },
+  {
+    "artifacts": [
+      "kit/attach_no_anchor_countertarget_opponent_features.py",
+      "kit/no_anchor_fullscore_scheduler.py",
+      "kit/filter_no_anchor_portfolio_edges_by_referee.py",
+      "local_runs/remote_h100_test_3_20260621/no_anchor_temporal_clean_bridge_queue_opponent_v2_20260621/audit_temporal_features.json",
+      "local_runs/no_anchor_temporal_clean_bridge_queue_opponent_v2_20260621/augmented_candidates.json",
+      "local_runs/no_anchor_temporal_clean_bridge_queue_opponent_scheduler_labelled_w0p016_20260621.json",
+      "local_runs/remote_h100_test_3_20260621/no_anchor_opponent_scheduler_labelled_w0p016_fullscore_20260621/manifest_assignments.json",
+      "local_runs/remote_h100_test_3_20260621/no_anchor_opponent_scheduler_labelled_w0p016_fullscore_20260621/rank01_conflict_subcluster_reassign_candidate_search_augmented_candidates_assignments_full.json",
+      "local_runs/remote_h100_test_3_20260621/no_anchor_opponent_scheduler_labelled_w0p016_fullscore_20260621/rank02_conflict_subcluster_reassign_candidate_search_augmented_candidates_assignments_full.json",
+      "local_runs/remote_h100_test_3_20260621/no_anchor_opponent_scheduler_labelled_w0p016_fullscore_20260621/rank03_conflict_subcluster_reassign_candidate_search_augmented_candidates_assignments_full.json",
+      "local_runs/no_anchor_temporal_clean_bridge_queue_opponent_hardgate_20260621.json",
+      "local_runs/no_anchor_temporal_clean_bridge_queue_opponent_hardgate_20260621.csv",
+      "reports/no_anchor_temporal_clean_bridge_queue_opponent_hardgate_20260621.md",
+      "local_runs/no_anchor_opponent_scheduler_labelled_w0p016_fullscore_summary_20260621.json",
+      "reports/no_anchor_opponent_scheduler_labelled_w0p016_refutation_20260621.md",
+      "/mnt/localssd/vlincs_reid_runs/no_anchor_opponent_scheduler_labelled_w0p016_fullscore_20260621"
+    ],
+    "date": "2026-06-21",
+    "direction": "propagate_opponent_features_into_candidate_rows_and_scheduler_fullscore_queue",
+    "finding": "Attached countertarget opponent fields to the 100-row temporal-clean bridge queue, patched scheduler proxy validity, and full-scored labelled w0.016 ranks 1/2/3. All three scheduler picks were countertarget rejects and all lost full-score: rank1 40->21 IDF1 0.653709, rank2 24->38 IDF1 0.653305, rank3 15->14 IDF1 0.652473, below standing 0.655378. Added --require-countertarget-accept hard gate to portfolio referee; it keeps 0/100 edges on this queue. Next structural pivot is hardgate-first candidate generation or split/quarantine actions, not more side-effect-risk scheduler tuning.",
+    "uses_anchors": false,
+    "uses_gt_for_evaluation_only": true,
+    "uses_gt_for_training_or_anchors": false
+  },
+  {
+    "artifacts": [
+      "local_runs/no_anchor_density_simple_sourcezip_promotion_20260621.json",
+      "reports/no_anchor_density_simple_sourcezip_promotion_20260621.md",
+      "local_runs/remote_h100_test_3_20260621/no_anchor_softcut_split_k3_density_simple_sourcezip_20260621/density_simple_sourcezip.json",
+      "/mnt/localssd/vlincs_reid_runs/no_anchor_softcut_split_k3_density_simple_sourcezip_20260621/density_simple_sourcezip.zip",
+      "/mnt/localssd/vlincs_reid_runs/no_anchor_softcut_split_k3_density_simple_policy_20260621/density_simple.json"
+    ],
+    "date": "2026-06-21",
+    "direction": "promote_fixed_no_gt_density_simple_sourcezip_delivery_policy",
+    "finding": "Re-ran the k3 softcut source-zip delivery filter with predeclared no-GT density_simple policy and reproduced IDF1 0.655385 / HOTA 0.518806 / AssA 0.534548, a +0.000007 IDF1 micro-improvement over the prior density_oracle_lite standing best 0.655378. The assignment-csv rebuild path scored only 0.653427, so delivery zip provenance is material. This updates the standing best but does not change the main blocker: e2e remains below 0.70.",
+    "uses_anchors": false,
+    "uses_gt_for_evaluation_only": true,
+    "uses_gt_for_training_or_anchors": false
+  },
+  {
+    "artifacts": [
+      "local_runs/no_anchor_opponent_scheduler_density_simple_postfilter_promotion_20260621.json",
+      "reports/no_anchor_opponent_scheduler_density_simple_postfilter_promotion_20260621.md",
+      "local_runs/remote_h100_test_3_20260621/no_anchor_opponent_scheduler_labelled_w0p016_density_simple_sourcezip_20260621/summary.json",
+      "/mnt/localssd/vlincs_reid_runs/no_anchor_opponent_scheduler_labelled_w0p016_density_simple_sourcezip_20260621/rank01_density_simple_sourcezip.zip",
+      "/mnt/localssd/vlincs_reid_runs/no_anchor_opponent_scheduler_labelled_w0p016_density_simple_sourcezip_20260621"
+    ],
+    "date": "2026-06-21",
+    "direction": "apply_fixed_density_simple_sourcezip_postfilter_to_scheduler_candidates",
+    "finding": "Applied fixed no-GT density_simple source-zip postfilter to the three opponent-scheduler candidates. Raw full-score had rejected all three, but postfilter rescued rank01 from raw IDF1 0.653709 to 0.655817 / HOTA 0.519228 / AssA 0.534791, beating previous best 0.655385. Rank02 reached 0.655479 and rank03 0.654642. New standing best is rank01 density_simple sourcezip; future scheduler refutation must include the fixed delivery postfilter stage.",
+    "uses_anchors": false,
+    "uses_gt_for_evaluation_only": true,
+    "uses_gt_for_training_or_anchors": false
+  },
+  {
+    "artifacts": [
+      "local_runs/no_anchor_opponent_scheduler_r1_6_postfilter_ablation_20260621.json",
+      "reports/no_anchor_opponent_scheduler_r1_6_postfilter_ablation_20260621.md",
+      "local_runs/remote_h100_test_3_20260621/no_anchor_opponent_scheduler_labelled_w0p016_r4_6_fullscore_20260621/summary_postfilter.json",
+      "local_runs/remote_h100_test_3_20260621/no_anchor_opponent_scheduler_labelled_w0p016_r4_6_density_simple_sourcezip_20260621"
+    ],
+    "date": "2026-06-21",
+    "direction": "score_scheduler_ranks_4_6_with_fixed_density_simple_postfilter",
+    "finding": "Full-scored scheduler ranks 4-6 and applied the fixed density_simple source-zip postfilter. Results were rank04 0.655169, rank05 0.654968, rank06 0.655214, all below rank01 postfilter best 0.655817. Delivery postfilter gives consistent gain but does not make arbitrary countertarget-reject relinks useful. Next step should be postfilter-aware reranking/proxy training before scoring more queue rows.",
+    "uses_anchors": false,
+    "uses_gt_for_evaluation_only": true,
+    "uses_gt_for_training_or_anchors": false
+  },
+  {
+    "artifacts": [
+      "reports/no_anchor_postfilter_proxy_clamped_r1_3_refutation_20260621.md",
+      "local_runs/no_anchor_postfilter_proxy_labels_20260621/postfilter_labels_r1_9_with_clamped_negatives.json",
+      "reports/no_anchor_temporal_clean_bridge_queue_postfilter_proxy_scheduler_r1_9_strict_w0p016_20260621.md"
+    ],
+    "date": "2026-06-21",
+    "direction": "postfilter_proxy_hard_negative_rerank_temporal_clean_queue",
+    "finding": "Clamped postfilter proxy initially ranked source_ranks 49/52/56, but raw full-scores were 0.652866/0.652973/0.652170 and density_simple source-zip scores were 0.655037/0.655140/0.654343, all below best 0.655817. Added the three as hard negatives; r1-9 LOOCV corr improved to 0.7147 and strict scheduler selected 0 candidates above current best.",
+    "uses_anchors": false,
+    "uses_gt_for_evaluation_only": true,
+    "uses_gt_for_training_or_anchors": false
+  },
+  {
+    "artifacts": [
+      "reports/no_anchor_current_best_rank01_delivery_policy_ablation_20260621.md",
+      "local_runs/no_anchor_current_best_rank01_delivery_policy_ablation_20260621.json",
+      "local_runs/remote_h100_test_3_20260621/no_anchor_current_best_rank01_delivery_policy_ablation_20260621/policies.json"
+    ],
+    "date": "2026-06-21",
+    "direction": "current_best_rank01_delivery_policy_ablation",
+    "finding": "Ran density_simple/density_oracle_lite/confidence_tail on the current-best rank01 raw source zip. Scores were 0.655817/0.655810/0.655800; density_simple remains best and delivery-only filtering is at a local plateau.",
+    "uses_anchors": false,
+    "uses_gt_for_evaluation_only": true,
+    "uses_gt_for_filter_selection": false,
+    "uses_gt_for_training_or_anchors": false
+  },
+  {
+    "artifacts": [
+      "reports/no_anchor_current_best_rank01_softcut_true_split_refutation_20260621.md",
+      "reports/deli_autoresearch_selfplay_operationalization_20260621.md",
+      "local_runs/no_anchor_current_best_rank01_softcut_true_split_refutation_20260621.json",
+      "local_runs/remote_h100_test_3_20260621/no_anchor_current_best_rank01_softcut_true_split_20260621/softcut.json",
+      "local_runs/remote_h100_test_3_20260621/no_anchor_current_best_rank01_softcut_true_split_20260621/softcut.csv",
+      "local_runs/remote_h100_test_3_20260621/no_anchor_current_best_rank01_softcut_true_split_20260621/top_full_export.json",
+      "local_runs/remote_h100_test_3_20260621/no_anchor_current_best_rank01_softcut_true_split_20260621/density_simple_sourcezip.json",
+      "/mnt/localssd/vlincs_reid_runs/no_anchor_current_best_rank01_softcut_true_split_20260621/softcut.json",
+      "/mnt/localssd/vlincs_reid_runs/no_anchor_current_best_rank01_softcut_true_split_20260621/top_full_export.json",
+      "/mnt/localssd/vlincs_reid_runs/no_anchor_current_best_rank01_softcut_true_split_20260621/density_simple_sourcezip.json",
+      "/mnt/localssd/vlincs_reid_runs/no_anchor_current_best_rank01_softcut_true_split_20260621/top_full.zip",
+      "/mnt/localssd/vlincs_reid_runs/no_anchor_current_best_rank01_softcut_true_split_20260621/density_simple_sourcezip.zip"
+    ],
+    "date": "2026-06-21",
+    "direction": "structural_pivot_component_source_side_effect_critic_or_assignment_decomposition",
+    "finding": "Current-best delivery policy ablation plateaued at 0.655817 and a true softcut split of one large component / 162 tracklets dropped density_simple IDF1 to 0.651408. Coarse component/source split is refuted as a primary production edit.",
+    "status": "closed_negative"
+  },
+  {
+    "artifacts": [
+      "reports/no_anchor_current_best_rank01_softcut_true_split_refutation_20260621.md",
+      "reports/deli_autoresearch_selfplay_operationalization_20260621.md",
+      "local_runs/no_anchor_current_best_rank01_softcut_true_split_refutation_20260621.json",
+      "local_runs/remote_h100_test_3_20260621/no_anchor_current_best_rank01_softcut_true_split_20260621/softcut.json",
+      "local_runs/remote_h100_test_3_20260621/no_anchor_current_best_rank01_softcut_true_split_20260621/softcut.csv",
+      "local_runs/remote_h100_test_3_20260621/no_anchor_current_best_rank01_softcut_true_split_20260621/top_full_export.json",
+      "local_runs/remote_h100_test_3_20260621/no_anchor_current_best_rank01_softcut_true_split_20260621/density_simple_sourcezip.json",
+      "/mnt/localssd/vlincs_reid_runs/no_anchor_current_best_rank01_softcut_true_split_20260621/softcut.json",
+      "/mnt/localssd/vlincs_reid_runs/no_anchor_current_best_rank01_softcut_true_split_20260621/top_full_export.json",
+      "/mnt/localssd/vlincs_reid_runs/no_anchor_current_best_rank01_softcut_true_split_20260621/density_simple_sourcezip.json",
+      "/mnt/localssd/vlincs_reid_runs/no_anchor_current_best_rank01_softcut_true_split_20260621/top_full.zip",
+      "/mnt/localssd/vlincs_reid_runs/no_anchor_current_best_rank01_softcut_true_split_20260621/density_simple_sourcezip.zip"
+    ],
+    "date": "2026-06-21",
+    "direction": "current_best_rank01_softcut_true_split",
+    "finding": "refuted: conflict reduction 44->34 did not translate to delivery; pair recall and e2e IDF1 both dropped.",
+    "status": "closed_negative",
+    "uses_anchors": false,
+    "uses_gt_for_evaluation_only": true,
+    "uses_gt_for_training_or_anchors": false
+  },
+  {
+    "artifacts": [
+      "reports/no_anchor_current_best_rank01_local_continuity_refutation_20260621.md",
+      "reports/deli_autoresearch_selfplay_operationalization_20260621.md",
+      "local_runs/no_anchor_current_best_rank01_local_continuity_refutation_20260621.json",
+      "local_runs/remote_h100_test_3_20260621/no_anchor_current_best_rank01_localtrack_relink_probe_20260621/localtrack_probe.json",
+      "local_runs/remote_h100_test_3_20260621/no_anchor_current_best_rank01_localtrack_relink_forced_single_20260621/localtrack_forced_single.json",
+      "local_runs/remote_h100_test_3_20260621/no_anchor_current_best_rank01_video_temporal_relink_probe_20260621/result.json",
+      "local_runs/remote_h100_test_3_20260621/no_anchor_current_best_rank01_video_temporal_relink_probe_20260621/result.csv",
+      "local_runs/remote_h100_test_3_20260621/no_anchor_current_best_rank01_video_temporal_oneedge_fullscore_20260621/result.json",
+      "local_runs/remote_h100_test_3_20260621/no_anchor_current_best_rank01_video_temporal_oneedge_fullscore_20260621/result.csv",
+      "local_runs/remote_h100_test_3_20260621/no_anchor_current_best_rank01_video_temporal_oneedge_fullscore_20260621/top_full_export.json",
+      "local_runs/remote_h100_test_3_20260621/no_anchor_current_best_rank01_video_temporal_oneedge_fullscore_20260621/density_simple_sourcezip.json",
+      "/mnt/localssd/vlincs_reid_runs/no_anchor_current_best_rank01_localtrack_relink_probe_20260621/localtrack_probe.json",
+      "/mnt/localssd/vlincs_reid_runs/no_anchor_current_best_rank01_localtrack_relink_forced_single_20260621/localtrack_forced_single.json",
+      "/mnt/localssd/vlincs_reid_runs/no_anchor_current_best_rank01_video_temporal_relink_probe_20260621/result.json",
+      "/mnt/localssd/vlincs_reid_runs/no_anchor_current_best_rank01_video_temporal_oneedge_fullscore_20260621/result.json",
+      "/mnt/localssd/vlincs_reid_runs/no_anchor_current_best_rank01_video_temporal_oneedge_fullscore_20260621/top_full.zip",
+      "/mnt/localssd/vlincs_reid_runs/no_anchor_current_best_rank01_video_temporal_oneedge_fullscore_20260621/density_simple_sourcezip.zip"
+    ],
+    "date": "2026-06-21",
+    "direction": "target_local_continuity_relabel_with_opponent_temporal_contradiction_gate",
+    "finding": "Local-track continuity touched 0 groups; video-temporal adjacency produced only one accepted MCAM08 edge. Raw full-score was below best, density_simple tied 0.655817. Candidate recall is too low.",
+    "status": "closed_neutral_low_coverage",
+    "uses_anchors": false
+  },
+  {
+    "artifacts": [
+      "reports/no_anchor_current_best_rank01_local_continuity_refutation_20260621.md",
+      "reports/deli_autoresearch_selfplay_operationalization_20260621.md",
+      "local_runs/no_anchor_current_best_rank01_local_continuity_refutation_20260621.json",
+      "local_runs/remote_h100_test_3_20260621/no_anchor_current_best_rank01_localtrack_relink_probe_20260621/localtrack_probe.json",
+      "local_runs/remote_h100_test_3_20260621/no_anchor_current_best_rank01_localtrack_relink_forced_single_20260621/localtrack_forced_single.json",
+      "local_runs/remote_h100_test_3_20260621/no_anchor_current_best_rank01_video_temporal_relink_probe_20260621/result.json",
+      "local_runs/remote_h100_test_3_20260621/no_anchor_current_best_rank01_video_temporal_relink_probe_20260621/result.csv",
+      "local_runs/remote_h100_test_3_20260621/no_anchor_current_best_rank01_video_temporal_oneedge_fullscore_20260621/result.json",
+      "local_runs/remote_h100_test_3_20260621/no_anchor_current_best_rank01_video_temporal_oneedge_fullscore_20260621/result.csv",
+      "local_runs/remote_h100_test_3_20260621/no_anchor_current_best_rank01_video_temporal_oneedge_fullscore_20260621/top_full_export.json",
+      "local_runs/remote_h100_test_3_20260621/no_anchor_current_best_rank01_video_temporal_oneedge_fullscore_20260621/density_simple_sourcezip.json",
+      "/mnt/localssd/vlincs_reid_runs/no_anchor_current_best_rank01_localtrack_relink_probe_20260621/localtrack_probe.json",
+      "/mnt/localssd/vlincs_reid_runs/no_anchor_current_best_rank01_localtrack_relink_forced_single_20260621/localtrack_forced_single.json",
+      "/mnt/localssd/vlincs_reid_runs/no_anchor_current_best_rank01_video_temporal_relink_probe_20260621/result.json",
+      "/mnt/localssd/vlincs_reid_runs/no_anchor_current_best_rank01_video_temporal_oneedge_fullscore_20260621/result.json",
+      "/mnt/localssd/vlincs_reid_runs/no_anchor_current_best_rank01_video_temporal_oneedge_fullscore_20260621/top_full.zip",
+      "/mnt/localssd/vlincs_reid_runs/no_anchor_current_best_rank01_video_temporal_oneedge_fullscore_20260621/density_simple_sourcezip.zip"
+    ],
+    "date": "2026-06-21",
+    "direction": "current_best_rank01_local_continuity_relink",
+    "finding": "local_track_id relink has zero coverage; video temporal relink finds one neutral edge that ties density-simple best but does not improve it.",
+    "status": "closed_neutral_low_coverage",
+    "uses_anchors": false,
+    "uses_gt_for_evaluation_only": true,
+    "uses_gt_for_training_or_anchors": false
+  },
+  {
+    "artifacts": [
+      "kit/no_anchor_endpoint_component_relink_sweep.py",
+      "reports/no_anchor_endpoint_component_relink_refutation_20260621.md",
+      "local_runs/no_anchor_endpoint_component_relink_refutation_20260621.json",
+      "local_runs/remote_h100_test_3_20260621/no_anchor_endpoint_component_relink_smoke_mcam04_08_20260621/result.json",
+      "local_runs/remote_h100_test_3_20260621/no_anchor_endpoint_component_relink_smoke_mcam04_08_20260621/result.csv",
+      "local_runs/remote_h100_test_3_20260621/no_anchor_endpoint_component_relink_smoke_allvideos_20260621/result.json",
+      "local_runs/remote_h100_test_3_20260621/no_anchor_endpoint_component_relink_smoke_allvideos_20260621/result.csv",
+      "local_runs/remote_h100_test_3_20260621/no_anchor_endpoint_component_relink_top1_fullscore_20260621/result.json",
+      "local_runs/remote_h100_test_3_20260621/no_anchor_endpoint_component_relink_top1_fullscore_20260621/result.csv",
+      "local_runs/remote_h100_test_3_20260621/no_anchor_endpoint_component_relink_top1_fullscore_20260621/top_full_export.json",
+      "local_runs/remote_h100_test_3_20260621/no_anchor_endpoint_component_relink_top1_fullscore_20260621/density_simple_sourcezip.json",
+      "/mnt/localssd/vlincs_reid_by_search/kit/no_anchor_endpoint_component_relink_sweep.py",
+      "/mnt/localssd/vlincs_reid_runs/no_anchor_endpoint_component_relink_smoke_mcam04_08_20260621/result.json",
+      "/mnt/localssd/vlincs_reid_runs/no_anchor_endpoint_component_relink_smoke_allvideos_20260621/result.json",
+      "/mnt/localssd/vlincs_reid_runs/no_anchor_endpoint_component_relink_top1_fullscore_20260621/result.json",
+      "/mnt/localssd/vlincs_reid_runs/no_anchor_endpoint_component_relink_top1_fullscore_20260621/top_full.zip",
+      "/mnt/localssd/vlincs_reid_runs/no_anchor_endpoint_component_relink_top1_fullscore_20260621/density_simple_sourcezip.zip"
+    ],
+    "date": "2026-06-21",
+    "direction": "candidate_recall_expansion_endpoint_crop_pair_retrieval_and_side_effect_gate",
+    "finding": "Endpoint component relink expanded candidate recall (5 all-video candidates) but top geometry/visual edge slightly reduced pair precision and density-simple IDF1 0.655815 < best 0.655817.",
+    "status": "closed_negative_endpoint_ranking_false_positive",
+    "uses_anchors": false
+  },
+  {
+    "artifacts": [
+      "kit/no_anchor_endpoint_component_relink_sweep.py",
+      "reports/no_anchor_endpoint_component_relink_refutation_20260621.md",
+      "local_runs/no_anchor_endpoint_component_relink_refutation_20260621.json",
+      "local_runs/remote_h100_test_3_20260621/no_anchor_endpoint_component_relink_smoke_mcam04_08_20260621/result.json",
+      "local_runs/remote_h100_test_3_20260621/no_anchor_endpoint_component_relink_smoke_mcam04_08_20260621/result.csv",
+      "local_runs/remote_h100_test_3_20260621/no_anchor_endpoint_component_relink_smoke_allvideos_20260621/result.json",
+      "local_runs/remote_h100_test_3_20260621/no_anchor_endpoint_component_relink_smoke_allvideos_20260621/result.csv",
+      "local_runs/remote_h100_test_3_20260621/no_anchor_endpoint_component_relink_top1_fullscore_20260621/result.json",
+      "local_runs/remote_h100_test_3_20260621/no_anchor_endpoint_component_relink_top1_fullscore_20260621/result.csv",
+      "local_runs/remote_h100_test_3_20260621/no_anchor_endpoint_component_relink_top1_fullscore_20260621/top_full_export.json",
+      "local_runs/remote_h100_test_3_20260621/no_anchor_endpoint_component_relink_top1_fullscore_20260621/density_simple_sourcezip.json",
+      "/mnt/localssd/vlincs_reid_by_search/kit/no_anchor_endpoint_component_relink_sweep.py",
+      "/mnt/localssd/vlincs_reid_runs/no_anchor_endpoint_component_relink_smoke_mcam04_08_20260621/result.json",
+      "/mnt/localssd/vlincs_reid_runs/no_anchor_endpoint_component_relink_smoke_allvideos_20260621/result.json",
+      "/mnt/localssd/vlincs_reid_runs/no_anchor_endpoint_component_relink_top1_fullscore_20260621/result.json",
+      "/mnt/localssd/vlincs_reid_runs/no_anchor_endpoint_component_relink_top1_fullscore_20260621/top_full.zip",
+      "/mnt/localssd/vlincs_reid_runs/no_anchor_endpoint_component_relink_top1_fullscore_20260621/density_simple_sourcezip.zip"
+    ],
+    "date": "2026-06-21",
+    "direction": "endpoint_component_relink_candidate_recall",
+    "finding": "New endpoint-extrapolation proposer generated more candidates than direct temporal adjacency, but the top no-GT ranked singleton relink was a false positive by full-score and density-simple delivery.",
+    "status": "closed_negative_endpoint_ranking_false_positive",
+    "uses_anchors": false,
+    "uses_gt_for_evaluation_only": true,
+    "uses_gt_for_training_or_anchors": false
+  },
+  {
+    "artifacts": [],
+    "date": "2026-06-21",
+    "direction": "endpoint_candidate_opponent_referee_countertarget_and_source_retention_gate",
+    "finding": "Next structural pivot: keep endpoint candidates, but add source-retention/countertarget opponent features before materializing. Penalize singleton-to-large moves with only one or two support edges unless target support beats current support by margin.",
+    "status": "open",
+    "uses_anchors": false
+  },
+  {
+    "direction": "endpoint_pair_micro_surgery_after_candidate_audit",
+    "finding": "Endpoint audit found 2 locally true endpoint pairs whose target components were dominated by other GT identities, plus 1 support_edges=1 false endpoint. Direct micro-surgery raised pair F1 to 0.770956 but full IDF1/HOTA/AssA dropped to 0.653731/0.517546/0.532996, below the standing 0.655817/0.519228/0.534791. Treat endpoint evidence as referee/scheduler features, not direct assignment edits.",
+    "status": "closed"
+  },
+  {
+    "direction": "endpoint_evidence_as_referee_scheduler_feature_with_action_signature_dedup",
+    "finding": "Next structural pivot from Deli AutoResearch: use endpoint geometry/local-truth evidence in candidate evidence cards and scheduler side-effect critics, with full-score queues deduplicated by actual action signature.",
+    "status": "active"
+  },
+  {
+    "direction": "endpoint_evidence_scheduler_guard_action_signature_dedup",
+    "finding": "no_anchor_fullscore_scheduler.py now uses action_signature for family de-dup and penalizes endpoint direct actions through no-GT side-effect reasons. On endpoint micro-surgery JSON, the guard rejected 100/100 rows and selected 0; top rejection had large_target_component, endpoint_direct_action, endpoint_large_target_component plus known_below_current_best.",
+    "status": "active"
+  },
+  {
+    "direction": "tiny_local_component_reassign_with_density_and_face_audit",
+    "finding": "Tiny-local visual source island component 21 -> large target component 0 looked strong locally but raw full IDF1 was 0.654461 and best density policy was 0.654608, below current best 0.655817. FaceNet max sim 0.766 is not a safe accept/reject threshold under weak calibration. Pivot to identity-component evidence cards and target split first.",
+    "status": "closed_negative"
+  },
+  {
+    "direction": "multiview_target_split_first_evidence_cards",
+    "finding": "Target split first with fused+DINO+pose/color+colorhist+FaceNet evidence produced visually plausible splits, but no-GT mass-heavy top scored IDF1 0.653405 and single-best component scored raw 0.653781 / density_simple 0.653924, all below best 0.655817. Need subpart-level quarantine/attach with countertarget and delivery-delta critic.",
+    "status": "closed_negative"
+  },
+  {
+    "direction": "subpart_level_attach_from_multiview_evidence_card",
+    "finding": "Smallest split part attach moved only seqs 8888 and 9282 to target component 38 selected by no-GT top5 visual sim and cannot-link=0; full IDF1 0.653718 below best. More component rearrangement is stale; need new evidence source or detector-level admission.",
+    "status": "closed_negative"
+  },
+  {
+    "direction": "detector_tiny_box_area_admission",
+    "finding": "A no-GT detection admission rule on the current best source zip, global area>=800, drops 1404 tiny-box rows and improves e2e IDF1 from 0.655817 to 0.655855. Confidence-tail pruning and stronger area thresholds are negative. This is a small postfilter, not a path to 0.70 by itself.",
+    "status": "active_small_positive"
+  },
+  {
+    "direction": "pervideo_area_quantile_detection_admission",
+    "finding": "Per-video area quantile admission improves the current no-anchor best: p0.1/p0.2/p0.3/p0.5 score IDF1 0.655859/0.655872/0.655887/0.655911, then p0.75/p1.0 fall to 0.655891/0.655825. p0.5 is the promoted candidate, but this family is a tiny detector postfilter, not the main path to 0.70.",
+    "status": "active_small_positive_promoted_candidate"
+  },
+  {
+    "artifacts": [
+      "reports/autoresearch_deli_vlincs_distillation_20260621.md",
+      "reports/no_anchor_component_rescue_oldbase_r1_3_refutation_20260621.md",
+      "local_runs/no_anchor_component_rescue_r1_3_remote_run_20260621.sh",
+      "local_runs/concat_no_anchor_base_chunks_20260621.sh",
+      "local_runs/remote_h100_test_3_20260621/no_anchor_component_rescue_dedup_probe_r1_3_fullscore_20260621/summary.json",
+      "/mnt/localssd/vlincs_reid_runs/no_anchor_component_rescue_dedup_probe_r1_3_fullscore_20260621/summary.json"
+    ],
+    "date": "2026-06-21",
+    "direction": "component_rescue_oldbase_r1_3_fullscore",
+    "finding": "Distilled the Deli AutoResearch/self-play thread into a file-backed proposer/reviewer/opponent/scorer protocol, then ran a bounded structural probe on the 20260620 old-base component-rescue ranks 1-3. Remote full-score on h100-test-3 shows rank01/rank02 raw IDF1 0.653177 and fixed p0.5 delivery IDF1 0.655290, both below current best 0.655911; rank03 is worse at raw 0.639705 and p0.5 0.642169. The learned/proxy score around 0.6683 was over-optimistic for broad multi-edge old-base relabeling. Close this as a hard negative for side-effect critic; next work should generate candidates in current-k3 namespace or regenerate detector/tracklet evidence for MCAM04/MCAM06/MCAM03Tc8.",
+    "gt_use": "evaluation_only",
+    "no_anchor": true
+  },
+  {
+    "direction": "current_k3_component_graph_rescue_refutation",
+    "finding": "Patched the component-graph candidate generator to support seqs/features NPZ schemas and concatenate fused+DINOv2+posecolor tracklet features. On the current k3 assignment it emitted 46 no-anchor bridge rows and the rescue rule kept 2 broad 35/40 merges. Full DS1 scoring rejected both: raw IDF1 0.646435 and p0.5 IDF1 0.648646, well below current best 0.655911. This is a hard negative for broad high-similarity component merges and motivates small-fragment attachment or detector/tracklet regeneration next.",
+    "status": "closed"
+  },
+  {
+    "direction": "current_k3_small_fragment_attachment_nearmiss",
+    "finding": "A no-anchor small-fragment rule selected 6 candidate rows from the current-k3 component graph and full-scored ranks 1-4. All moved only 4 tracklets. Best rank1 reached p0.5 IDF1/HOTA/AssA 0.655486/0.519236/0.534963, closer than broad component rescue but still below current best 0.655911/0.519311/0.534922. This supports small-fragment attachment as a near-positive family, but not as a production update without a better no-GT impact/side-effect critic or detector evidence.",
+    "status": "closed"
+  },
+  {
+    "direction": "current_k3_small_fragment_combo_refutation",
+    "finding": "No-GT combo composer generated 17 non-conflicting 2-edit/3-edit rows from current-k3 small-fragment candidates and full-scored ranks 1-5. Best p0.5 IDF1 remained 0.655486, identical to the best single small-fragment row and below the current best 0.655911. Extra edits are safe but low-impact; simple component-graph combos should stop until a stronger no-anchor side-effect/impact critic or new detector evidence is available.",
+    "status": "closed"
+  },
+  {
+    "direction": "current_best_p005_weak_video_area_oracle_refutation",
+    "finding": "Added a video-scoped no-anchor filter oracle and tested extra area quantile pruning on MCAM03 Tc8, MCAM04 Tc6, and MCAM06 Tc6 after the promoted p0.5% per-video area admission. Eval-only oracle selected area_q=0 for all three weak videos; combined IDF1/HOTA/AssA stayed 0.655911/0.519311/0.534922. Extra area pruning after p0.5 improves DetPr/unmatched FP but loses DetRe/IDF1, so this branch is saturated.",
+    "status": "closed"
+  },
+  {
+    "artifacts": [
+      "kit/prepare_botsort_no_anchor_sample.py",
+      "reports/no_anchor_botsort_gtbox_tracklet_upper_bound_20260621.md",
+      "local_runs/remote_h100_test_3_20260621/botsort_no_anchor_sample_20260621/prepare_summary.json",
+      "local_runs/remote_h100_test_3_20260621/botsort_no_anchor_sample_20260621/no_anchor_botsort_sample_focused_crop_bbox_v1.json"
+    ],
+    "date": "2026-06-21",
+    "direction": "botsort_vs_gtbox_weak_feature_tracklet_upper_bound",
+    "finding": "Prepared BoTSORT sample tracklets with eval-only IoU majority labels and ran the same weak crop+bbox no-anchor sample sweep used by the prior GT-box upper-bound. BoTSORT best identity F1/pair F1 was 0.191162/0.032079; prior GT-box weak-feature best was 0.217860/0.032319. Better boxes with the same weak identity evidence do not rescue global-ID resolution, so close this branch and pivot to stronger crop/person evidence.",
+    "gt_use": "evaluation_only",
+    "no_anchor": true,
+    "status": "closed_negative"
+  },
+  {
+    "artifacts": [
+      "kit/extract_sample_tracklet_osnet_features.py",
+      "reports/no_anchor_botsort_gtbox_tracklet_upper_bound_20260621.md",
+      "local_runs/remote_h100_test_3_20260621/botsort_no_anchor_sample_20260621/features_botsort_osnet_color_s3_20260621.npz",
+      "local_runs/remote_h100_test_3_20260621/botsort_no_anchor_sample_20260621/no_anchor_botsort_sample_osnet_color_s3_v1.json",
+      "local_runs/remote_h100_test_3_20260621/botsort_no_anchor_sample_20260621/no_anchor_botsort_sample_osnet_color_s3_v1.csv",
+      "local_runs/remote_h100_test_3_20260621/botsort_no_anchor_sample_20260621/no_anchor_botsort_sample_osnet_color_s3_v1_slices.csv"
+    ],
+    "date": "2026-06-21",
+    "direction": "botsort_sample_osnet_color_identity_evidence_promotion",
+    "finding": "Patched BoTSORT sample OSNet extraction for hash-suffixed video keys and extracted OSNet+color features for all 2406 BoTSORT sample tracklets. The no-anchor sample sweep improved identity F1 0.191162 -> 0.380024 and pair F1 0.032079 -> 0.253572 versus the weak crop+bbox baseline. This is a real identity-evidence gain but still below the 0.70 target, so continue with GT-box OSNet/color upper-bound and NFC/metric-transform sweeps before DS1 insertion.",
+    "gt_use": "evaluation_only",
+    "no_anchor": true,
+    "status": "open_positive_incomplete"
+  },
+  {
+    "artifacts": [
+      "kit/analyze_sample_feature_retrieval.py",
+      "reports/no_anchor_gtbox_osnet_retrieval_nfc_diagnostic_20260622.md",
+      "reports/feature_retrieval_gtbox_osnet_color_s3_20260622.md",
+      "reports/feature_retrieval_botsort_osnet_color_s3_20260622.md",
+      "local_runs/remote_h100_test_3_20260621/gtbox_no_anchor_sample_20260618/gtbox_eval.parquet",
+      "local_runs/remote_h100_test_3_20260621/gtbox_no_anchor_sample_20260618/features_gtbox_osnet_color_s3_20260622.npz",
+      "local_runs/remote_h100_test_3_20260621/gtbox_no_anchor_sample_20260618/no_anchor_gtbox_sample_osnet_color_s3_v1.json",
+      "local_runs/remote_h100_test_3_20260621/gtbox_no_anchor_sample_20260618/feature_retrieval_gtbox_osnet_color_s3_20260622.json"
+    ],
+    "date": "2026-06-22",
+    "direction": "gtbox_osnet_retrieval_and_botsort_nfc_diagnostic",
+    "finding": "GT-box 3-sample mean OSNet+color underperforms BoTSORT OSNet+color: identity F1/pair F1 0.272212/0.095926 vs 0.380024/0.253572. Retrieval diagnostic shows GT-box same/different separability is poor despite high top-45 hit recall: AP/AUC 0.098062/0.623248 and cross-video top-positive > top-negative only 0.255962. NFC k8 gives tiny pair-F1 gain 0.253572 -> 0.255158 but lowers identity F1 0.380024 -> 0.372728; k16 degrades. Close GT-box mean-feature upper-bound and simple NFC; move to multi-prototype crop aggregation and weak pair scoring.",
+    "gt_use": "evaluation_only",
+    "no_anchor": true,
+    "status": "closed_mixed_negative"
+  },
+  {
+    "artifacts": [
+      "kit/extract_sample_tracklet_osnet_features.py"
+    ],
+    "date": "2026-06-22",
+    "direction": "multi_prototype_extractor_feature_blocks_prepared",
+    "finding": "Extended extract_sample_tracklet_osnet_features.py to emit features_osnet_std and features_color_std alongside existing mean features. This prepares a no-anchor mean+dispersion or multi-prototype aggregation sweep; no metrics are claimed from this preparation step.",
+    "gt_use": "none",
+    "no_anchor": true,
+    "status": "open_preparation"
+  },
+  {
+    "artifacts": [
+      "reports/deli_autoresearch_selfplay_operationalization_20260622.md"
+    ],
+    "date": "2026-06-22",
+    "direction": "deli_autoresearch_selfplay_protocol_update_for_multiprototype_branch",
+    "finding": "Read the Deli AutoResearch framework, papers page, self-play story, related bilevel autoresearch abstract, and autoresearch guardrail note. Updated the no-anchor VLINCS loop contract: durable state, proposer/referee/opponent/executor/result-gate separation, honest score drops, reviewer-persona checks, strict no-anchor production evidence, and structural pivot after stale threshold loops. Applied to the current sample evidence branch: close GT-box 3-sample mean OSNet and simple NFC as main routes; next experiment must rerun mean+std or prototype-aware weak pair scoring before DS1 insertion.",
+    "gt_use": "evaluation_only_for_metrics_and_opponent_reports",
+    "no_anchor": true,
+    "status": "open_protocol_update"
+  },
+  {
+    "artifacts": [
+      "reports/no_anchor_botsort_s5_mean_std_feature_ablation_20260622.md",
+      "local_runs/remote_h100_test_3_20260621/botsort_no_anchor_sample_20260621/features_botsort_osnet_color_s5_std_cpu_20260622.npz",
+      "local_runs/remote_h100_test_3_20260621/botsort_no_anchor_sample_20260621/no_anchor_botsort_sample_osnet_color_s5_mean_only_20260622.json",
+      "local_runs/remote_h100_test_3_20260621/botsort_no_anchor_sample_20260621/no_anchor_botsort_sample_osnet_color_s5_mean_std_small_20260622.json",
+      "local_runs/remote_h100_test_3_20260621/botsort_no_anchor_sample_20260621/no_anchor_botsort_sample_osnet_color_s5_mean_std_strong_20260622.json",
+      "local_runs/remote_h100_test_3_20260621/botsort_no_anchor_sample_20260621/no_anchor_botsort_sample_osnet_color_s5_mean_std_w045_20260622.json",
+      "local_runs/remote_h100_test_3_20260621/botsort_no_anchor_sample_20260621/no_anchor_botsort_sample_osnet_color_s5_mean_std_w060_20260622.json",
+      "local_runs/remote_h100_test_3_20260621/botsort_no_anchor_sample_20260621/no_anchor_botsort_sample_osnet_color_s5_mean_std_osonly030_20260622.json"
+    ],
+    "direction": "botsort_s5_mean_std_sample_evidence_promotion",
+    "finding": "Extracted five-crop BoTSORT sample OSNet/color features with mean and std blocks for 2406/2406 tracklets, then ran no-anchor sample sweeps. Best sample identity F1 improved from prior BoTSORT OSNet/color s3 0.380024 to 0.461553; best sample pair F1/P/R improved from 0.253572/0.315609/0.211916 to 0.360210/0.435531/0.307100. This promotes S5 mean/std evidence but remains far below 0.70, and scalar std-weight sweeps show diminishing returns. Pivot structurally to prototype-aware pair scoring rather than more std-threshold tuning. No anchors used; GT labels are eval-only; DS1 e2e best remains 0.655911.",
+    "status": "active"
+  },
+  {
+    "artifacts": [
+      "kit/extract_sample_tracklet_osnet_features.py",
+      "kit/make_sample_prototype_pair_feature_views.py",
+      "kit/no_anchor_global_id_model.py",
+      "kit/no_anchor_sample_parquet_sweep.py",
+      "reports/no_anchor_botsort_s5_mean_std_feature_ablation_20260622.md",
+      "local_runs/remote_h100_test_3_20260621/botsort_no_anchor_sample_20260621/features_botsort_osnet_color_s5_proto_cpu_20260622.npz",
+      "local_runs/remote_h100_test_3_20260621/botsort_no_anchor_sample_20260621/prototype_pair_features_osnet_s5_20260622/osnet_proto_manifest.json",
+      "local_runs/remote_h100_test_3_20260621/botsort_no_anchor_sample_20260621/prototype_pair_features_osnet_s5_allcross_20260622/osnet_proto_manifest.json",
+      "local_runs/remote_h100_test_3_20260621/botsort_no_anchor_sample_20260621/no_anchor_botsort_sample_osnet_color_s5_proto_pair_w045_20260622.json",
+      "local_runs/remote_h100_test_3_20260621/botsort_no_anchor_sample_20260621/no_anchor_botsort_sample_osnet_color_s5_proto_allcross_w045_20260622.json"
+    ],
+    "direction": "sample_osnet_prototype_pair_feature_refutation",
+    "finding": "Tested prototype-aware OSNet evidence after the S5 mean/std promotion. Extractor now saves per-crop prototype tensors and sample/global pair-feature loaders can consume both slot-vector views and 3D all-cross prototype views. Both prototype routes underperformed the S5 mean/std baseline: slot views reached identity/pair 0.442073/0.350859, all-cross views reached 0.443991/0.352414, versus mean/std 0.461553/0.360210. Eval-only retrieval audit also favored S5 mean OSNet over all-cross max: AP 0.430425 vs 0.372521 and cross positive margin 0.788167 vs 0.685156. Close this prototype aggregation route; next no-anchor branch should change identity evidence source or weak-label curriculum rather than aggregate the same OSNet crops harder.",
+    "status": "closed"
+  },
+  {
+    "artifacts": [
+      "reports/deli_autoresearch_selfplay_operationalization_20260622.md",
+      "reports/no_anchor_referee_pruned_crossqueue_singleedge68_localized_island_fullscore_20260622.md",
+      "local_runs/remote_h100_test_3_20260622/no_anchor_referee_pruned_crossqueue_singleedge68_localized_island_fullscore_20260622/full_results.jsonl",
+      "local_runs/remote_h100_test_3_20260622/no_anchor_referee_pruned_crossqueue_singleedge68_localized_island_fullscore_20260622/manifest_assignments.json",
+      "local_runs/remote_h100_test_3_20260622/no_anchor_referee_pruned_crossqueue_singleedge68_localized_island_fullscore_20260622/status.json",
+      "/mnt/localssd/vlincs_reid_runs/no_anchor_referee_pruned_crossqueue_singleedge68_localized_island_fullscore_20260622"
+    ],
+    "date": "2026-06-22",
+    "direction": "referee_pruned_crossqueue_singleedge68_fullscore_refutation",
+    "evidence": {
+      "best_e2e_idf1_unchanged": 0.655911,
+      "gt_eval_only": true,
+      "rank1_assa": 0.5295,
+      "rank1_delta_vs_best": -0.005197,
+      "rank1_hota": 0.514125,
+      "rank1_idf1": 0.650714,
+      "rank1_predicted_full": 0.665788,
+      "rank2_assa": 0.518994,
+      "rank2_delta_vs_best": -0.029113,
+      "rank2_hota": 0.494799,
+      "rank2_idf1": 0.626798,
+      "rank2_predicted_full": 0.664389,
+      "rank3_assa": 0.516447,
+      "rank3_delta_vs_best": -0.030933,
+      "rank3_hota": 0.492621,
+      "rank3_idf1": 0.624978,
+      "rank3_predicted_full": 0.66679,
+      "rank4_assa": 0.517068,
+      "rank4_delta_vs_best": -0.030894,
+      "rank4_hota": 0.492936,
+      "rank4_idf1": 0.625017,
+      "rank4_predicted_full": 0.662361,
+      "uses_anchors": false
+    },
+    "finding": "Distilled the Deli AutoResearch/self-play thread into the current no-anchor loop as ready-means-execute: run concrete proxy candidates through canonical DS1 full-score instead of stopping at a queue. Then full-scored referee-pruned crossqueue/single-edge localized-island ranks 1-4 on h100-test-3. The proxy predicted full IDF1 0.662361-0.666790 with pair F1 around 0.769, but actual canonical IDF1/HOTA/AssA were rank1 0.650714/0.514125/0.529500, rank2 0.626798/0.494799/0.518994, rank3 0.624978/0.492621/0.516447, and rank4 0.625017/0.492936/0.517068, all below the current best 0.655911/0.519311/0.534922. The large 3->68 move causes severe DS1 side effects despite high pair F1. Close this old-base crossqueue component-reassignment family and pivot structurally to stronger no-anchor weak-label curriculum or new identity evidence with hard negatives from these failed moves.",
+    "gt_use": "evaluation_only_for_canonical_ds1_scoring",
+    "no_anchor": true,
+    "status": "closed"
+  },
+  {
+    "artifacts": [
+      "reports/no_anchor_botsort_time_agglom_topk15_sample_promotion_20260622.md",
+      "local_runs/remote_h100_test_3_20260621/botsort_no_anchor_sample_20260621/no_anchor_botsort_sample_curriculum_strict_v4_20260622.json",
+      "local_runs/remote_h100_test_3_20260621/botsort_no_anchor_sample_20260621/no_anchor_botsort_sample_curriculum_no_strong_20260622.json",
+      "local_runs/remote_h100_test_3_20260621/botsort_no_anchor_sample_20260621/no_anchor_botsort_sample_curriculum_precision_guard_20260622.json",
+      "local_runs/remote_h100_test_3_20260622/no_anchor_time_agglom_topk15_theta_probe_20260622/time_agglom_topk15_theta_probe.json",
+      "local_runs/remote_h100_test_3_20260622/no_anchor_time_agglom_topk15_theta_probe_20260622/time_agglom_topk15_theta_probe.csv",
+      "/mnt/localssd/vlincs_reid_runs/no_anchor_time_agglom_topk15_theta_probe_20260622"
+    ],
+    "date": "2026-06-22",
+    "direction": "botsort_time_agglom_topk15_sample_promotion_ds1_transfer_refutation",
+    "evidence": {
+      "best_e2e_idf1_unchanged": 0.655911,
+      "ds1_best_probe_assa": 0.46346,
+      "ds1_best_probe_hota": 0.444591,
+      "ds1_best_probe_idf1": 0.587838,
+      "ds1_best_probe_theta": 0.025,
+      "ds1_fast_pair_f1_best": 0.612019,
+      "ds1_fast_pair_precision_best": 0.78272,
+      "ds1_fast_pair_recall_best": 0.502443,
+      "gt_eval_only": true,
+      "previous_sample_identity_f1": 0.461553,
+      "previous_sample_pair_f1": 0.36021,
+      "sample_best_identity_f1": 0.702092,
+      "sample_best_mode": "time_agglom",
+      "sample_best_pair_f1": 0.639093,
+      "sample_best_pair_precision": 0.607764,
+      "sample_best_pair_recall": 0.673829,
+      "sample_best_theta": 0.035,
+      "sample_best_top_k": 15,
+      "uses_anchors": false
+    },
+    "finding": "Ran stricter no-anchor BoTSORT sample curriculum/top-k ablations after the crossqueue DS1 refutation. The key discovery was not the learned pair model but baseline time_agglom with top_k=15 and theta=0.035: sample identity F1 reached 0.702092 and pair F1/P/R reached 0.639093/0.607764/0.673829, correcting the prior S5 mean/std plateau 0.461553 identity and 0.360210 pair F1. Three curriculum variants all selected the same no-training baseline row, so the gain is a resolver search-space discovery. A direct DS1 migration probe with time_agglom top_k=15 theta 0.025-0.045 was negative: fast pair F1 peaked at 0.612019 with P/R 0.782720/0.502443, and canonical full IDF1/HOTA/AssA peaked at 0.587838/0.444591/0.463460, far below the current no-anchor best 0.655911/0.519311/0.534922. Promote the sample insight as a precision-biased candidate generator, but refute full-resolver replacement on DS1.",
+    "gt_use": "evaluation_only_for_sample_and_ds1_metrics",
+    "no_anchor": true,
+    "status": "mixed_promote_sample_refute_direct_ds1"
+  },
+  {
+    "artifacts": [
+      "reports/no_anchor_timeagglom_topk15_currentbest_attach_20260622.md",
+      "kit/export_no_anchor_assignment_zip.py",
+      "kit/run_no_anchor_density_area_pipeline.sh",
+      "local_runs/remote_h100_test_3_20260622/no_anchor_timeagglom_attach_currentbest_20260622/timeagglom_attach_candidates.json",
+      "local_runs/remote_h100_test_3_20260622/no_anchor_timeagglom_attach_currentbest_20260622/manifest_assignments.json",
+      "/mnt/localssd/vlincs_reid_runs/no_anchor_timeagglom_attach_currentbest_20260622"
+    ],
+    "date": "2026-06-22",
+    "direction": "localized_topk15_high_precision_candidate_generator_attached_to_current_best_with_side_effect_critic",
+    "evidence": {
+      "base_assa": 0.534922,
+      "base_hota": 0.519311,
+      "base_idf1": 0.655911,
+      "best_new_assa": 0.534962,
+      "best_new_hota": 0.519356,
+      "best_new_idf1": 0.655948,
+      "gt_eval_only": true,
+      "rank08_delta_idf1": 3.7e-05,
+      "rank08_moved_seq": 4973,
+      "rank08_source_component": 58,
+      "rank08_target_component": 55,
+      "rank09_idf1": 0.655898,
+      "rank10_idf1": 0.655843,
+      "rank11_idf1": 0.655805,
+      "uses_anchors": false
+    },
+    "finding": "The top_k15 time-agglom sample insight transfers to DS1 only as a very sparse local attach proposer. Through the canonical assignment CSV -> full submission zip -> density_simple sourcezip -> p005 area scorer, rank08 improved IDF1/HOTA/AssA from 0.655911/0.519311/0.534922 to 0.655948/0.519356/0.534962 by moving seq 4973 from component 58 to 55. Similar single attaches rank09/rank10/rank11 lost with IDF1 0.655898/0.655843/0.655805. Promote rank08 as a micro-gain, close ungated combo spending for this family, and use the near misses as hard negatives for a tiny-attach side-effect critic.",
+    "gt_use": "evaluation_only_for_canonical_ds1_scoring",
+    "no_anchor": true,
+    "status": "micro_promote_rank08_refute_rank09_11"
+  },
+  {
+    "artifacts": [
+      "reports/no_anchor_timeagglom_attach_critic_rank08base_20260622.md",
+      "kit/compose_no_anchor_time_agglom_attach_candidates.py",
+      "local_runs/remote_h100_test_3_20260622/no_anchor_timeagglom_attach_critic_rank08base_20260622/critic_attach_candidates_v2.json",
+      "local_runs/remote_h100_test_3_20260622/no_anchor_timeagglom_attach_critic_rank08base_20260622/combo_4_5_assignments_density_p005_area.json",
+      "/mnt/localssd/vlincs_reid_runs/no_anchor_timeagglom_attach_critic_rank08base_20260622"
+    ],
+    "date": "2026-06-22",
+    "direction": "tiny_attach_side_effect_critic_rank08base_relaxed_pool",
+    "evidence": {
+      "combo_4_1_idf1": 0.656059,
+      "combo_4_3_idf1": 0.656057,
+      "combo_4_5_assa": 0.535174,
+      "combo_4_5_hota": 0.519553,
+      "combo_4_5_idf1": 0.656083,
+      "gt_eval_only": true,
+      "previous_best_idf1": 0.655948,
+      "rank01_idf1": 0.655939,
+      "rank03_idf1": 0.655936,
+      "rank04_idf1": 0.656068,
+      "rank05_idf1": 0.655963,
+      "uses_anchors": false
+    },
+    "finding": "A relaxed rank08-base top_k15 attach pool plus no-GT temporal/namespace features found additional micro-gains, but the hand critic is not a good ordering function. Critic rank04, not the top-ranked row, promoted to IDF1 0.656068; rank05 weakly promoted to 0.655963; combo 4+5 reached the new best 0.656083/0.519553/0.535174 IDF1/HOTA/AssA. Critic rank01 and rank03 were hard negatives at 0.655939/0.655936. Continue this family only with a learned/calibrated attach ranker trained from verified local-edit labels.",
+    "gt_use": "evaluation_only_for_canonical_ds1_scoring",
+    "no_anchor": true,
+    "status": "micro_promote_combo_4_5_hand_critic_ordering_refuted"
+  },
+  {
+    "artifacts": [
+      "reports/deli_autoresearch_vlincs_distillation_20260622.md",
+      "reports/no_anchor_timeagglom_attach_learned_ranker_20260622.md",
+      "kit/rank_no_anchor_attach_candidates_by_verified_labels.py",
+      "local_runs/remote_h100_test_3_20260622/no_anchor_timeagglom_attach_learned_ranker_20260622/learned_ranker_combo45_candidates.json",
+      "local_runs/remote_h100_test_3_20260622/no_anchor_timeagglom_attach_learned_ranker_20260622/manifest_learned_ranker_assignments.json",
+      "local_runs/remote_h100_test_3_20260622/no_anchor_timeagglom_attach_learned_ranker_20260622/rank01_time_agglom_local_attach_source_assignments_density_p005_area.json",
+      "/mnt/localssd/vlincs_reid_runs/no_anchor_timeagglom_attach_learned_ranker_20260622"
+    ],
+    "date": "2026-06-22",
+    "direction": "calibrated_tiny_attach_ranker_combo45base",
+    "evidence": {
+      "gt_eval_only": true,
+      "loocv_corr": 0.035787,
+      "loocv_mae": 6.1451e-05,
+      "new_best_assa": 0.535233,
+      "new_best_hota": 0.519617,
+      "new_best_idf1": 0.656141,
+      "previous_best_assa": 0.535174,
+      "previous_best_hota": 0.519553,
+      "previous_best_idf1": 0.656083,
+      "rank01_density_idf1": 0.656047,
+      "rank01_edit": "382+2821+7262->2329",
+      "rank01_p005_idf1": 0.656141,
+      "rank02_p005_idf1": 0.65598,
+      "rank03_p005_idf1": 0.656133,
+      "rank04_p005_idf1": 0.656049,
+      "uses_anchors": false
+    },
+    "finding": "A tiny ridge ranker trained from verified local-edit full-score labels found one additional no-anchor micro-gain on the combo 4+5 base. Rank01 moved seqs 382, 2821, and 7262 from component 19 to 2329 and improved p005-area IDF1/HOTA/AssA from 0.656083/0.519553/0.535174 to 0.656141/0.519617/0.535233. Ranker LOOCV was weak (corr 0.035787), and rank02/rank04 were negative while rank03 was close but below rank01, so independent single-attach ranking is near saturation. Next should score edit interactions and per-video side effects or pivot after two stale micro iterations.",
+    "gt_use": "evaluation_only_for_canonical_ds1_scoring_and_prior_fullscore_deltas_for_budget_scheduler_labels",
+    "no_anchor": true,
+    "status": "micro_promote_rank01_ranker_weak_combo_aware_next"
+  },
+  {
+    "artifacts": [
+      "reports/deli_autoresearch_vlincs_distillation_20260622.md",
+      "reports/no_anchor_timeagglom_attach_learned_ranker_20260622.md",
+      "reports/no_anchor_timeagglom_attach_learned_ranker_rolls_20260622.md",
+      "kit/rank_no_anchor_attach_candidates_by_verified_labels.py",
+      "local_runs/remote_h100_test_3_20260622/no_anchor_timeagglom_attach_learned_ranker_20260622/learned_ranker_combo45_candidates.json",
+      "local_runs/remote_h100_test_3_20260622/no_anchor_timeagglom_attach_learned_ranker_roll2_20260622/learned_ranker_rank01base_candidates.json",
+      "local_runs/remote_h100_test_3_20260622/no_anchor_timeagglom_attach_learned_ranker_roll3_20260622/learned_ranker_rank02base_candidates.json",
+      "local_runs/remote_h100_test_3_20260622/no_anchor_timeagglom_attach_learned_ranker_roll3_20260622/rank04_time_agglom_local_attach_source_assignments_density_p005_area.json",
+      "local_runs/remote_h100_test_3_20260622/no_anchor_timeagglom_attach_learned_ranker_roll3_20260622/assignments_learned/rank04_time_agglom_local_attach_source_assignments.csv",
+      "/mnt/localssd/vlincs_reid_runs/no_anchor_timeagglom_attach_learned_ranker_roll3_20260622"
+    ],
+    "date": "2026-06-22",
+    "direction": "rolling_calibrated_tiny_attach_ranker_roll1_roll3",
+    "evidence": {
+      "base_combo45_idf1": 0.656083,
+      "gt_eval_only": true,
+      "mcam04_tc6_idf1": 0.562439,
+      "mcam06_tc6_idf1": 0.610296,
+      "mcam08_tc6_idf1": 0.769911,
+      "roll1_best_edit": "382+2821+7262->2329",
+      "roll1_best_idf1": 0.656141,
+      "roll2_best_edit": "9202->15",
+      "roll2_best_idf1": 0.656193,
+      "roll3_best_assa": 0.535329,
+      "roll3_best_edit": "6960->10",
+      "roll3_best_hota": 0.519723,
+      "roll3_best_idf1": 0.656225,
+      "roll3_rank01_p005_idf1": 0.656157,
+      "roll3_rank02_p005_idf1": 0.656193,
+      "roll3_rank03_p005_idf1": 0.656184,
+      "uses_anchors": false
+    },
+    "finding": "Rolling the calibrated tiny-attach ranker over three bases produced a real no-anchor micro-chain from IDF1 0.656083 to 0.656225, but the marginal gains are only 0.000058, 0.000052, and 0.000032. The final best adds 6960->10 on top of prior positives. Roll3 top rows were mostly negative or neutral, so ordinary ridge roll4 should stop. Use the collected labels to train a side-effect/per-video gate targeting MCAM04/MCAM06/MCAM08, or pivot to higher-mass evidence.",
+    "gt_use": "evaluation_only_for_canonical_ds1_scoring_and_prior_fullscore_deltas_for_budget_scheduler_labels",
+    "no_anchor": true,
+    "status": "micro_promoted_but_marginal_stop_blind_roll4"
+  },
+  {
+    "artifacts": [
+      "reports/no_anchor_timeagglom_attach_side_effect_gate_20260622.md",
+      "kit/build_no_anchor_attach_side_effect_labels.py",
+      "kit/rank_no_anchor_attach_candidates_by_side_effect_labels.py",
+      "local_runs/remote_h100_test_3_20260622/no_anchor_attach_side_effect_labels_20260622/roll1_labels.json",
+      "local_runs/remote_h100_test_3_20260622/no_anchor_attach_side_effect_labels_20260622/roll2_labels.json",
+      "local_runs/remote_h100_test_3_20260622/no_anchor_attach_side_effect_labels_20260622/roll3_labels.json",
+      "local_runs/remote_h100_test_3_20260622/no_anchor_timeagglom_attach_side_effect_gate_20260622/side_effect_ranked_candidates.json",
+      "local_runs/remote_h100_test_3_20260622/no_anchor_timeagglom_attach_side_effect_gate_20260622/side_effect_combo_candidates.json",
+      "local_runs/remote_h100_test_3_20260622/no_anchor_timeagglom_attach_side_effect_gate_20260622/rank01_time_agglom_local_attach_side_effect_combo_source_assignments_density_p005_area.json",
+      "local_runs/remote_h100_test_3_20260622/no_anchor_timeagglom_attach_side_effect_gate_20260622/rank04_time_agglom_local_attach_side_effect_combo_source_assignments_density_p005_area.json",
+      "/mnt/localssd/vlincs_reid_runs/no_anchor_timeagglom_attach_side_effect_gate_20260622"
+    ],
+    "date": "2026-06-22",
+    "direction": "side_effect_aware_attach_gate_v1_from_verified_roll_labels",
+    "evidence": {
+      "best_combo_delta_vs_current_best": -2.5e-05,
+      "global_delta_loocv_corr": -0.481683,
+      "gt_eval_only": true,
+      "label_count": 12,
+      "mcam04_loocv_corr": -0.16823,
+      "mcam06_loocv_corr": -0.058447,
+      "mcam08_loocv_corr": 0.551672,
+      "metric_hygiene_fix": "reran rank02_rank04_with_remote_p005_area_config_file_after_bad_config_name_assignment_path",
+      "previous_best_assa": 0.535329,
+      "previous_best_hota": 0.519723,
+      "previous_best_idf1": 0.656225,
+      "rank01_combo_assa": 0.535294,
+      "rank01_combo_hota": 0.519692,
+      "rank01_combo_p005_idf1": 0.6562,
+      "rank01_combo_pred_delta_idf1": 0.000157705,
+      "rank01_combo_signature": "9487->33 + 2681->28",
+      "rank02_combo_p005_idf1": 0.656151,
+      "rank03_combo_p005_idf1": 0.656141,
+      "rank04_combo_p005_idf1": 0.656153,
+      "raw_candidate_count": 64,
+      "side_effect_selected_count": 12,
+      "uses_anchors": false
+    },
+    "finding": "Side-effect gate v1, trained on only 12 verified local edit labels, failed as a scheduler. LOOCV was anti-correlated for global, MCAM04, and MCAM06 deltas; four corrected p005 combo evaluations all remained below current best. Keep the artifacts as refutation labels and pivot to richer per-video/undo side-effect labels or higher-mass MCAM04 component evidence.",
+    "gt_use": "evaluation_only_for_canonical_ds1_scoring_and_prior_fullscore_deltas_for_side_effect_labels",
+    "no_anchor": true,
+    "status": "negative_ablation_no_promotion"
+  },
+  {
+    "artifacts": [
+      "reports/no_anchor_timeagglom_attach_side_effect_v2_20260622.md",
+      "kit/run_no_anchor_density_area_pipeline.sh",
+      "local_runs/remote_h100_test_3_20260622/no_anchor_attach_side_effect_labels_20260622/side_effect_gate_v1_single_labels.json",
+      "local_runs/remote_h100_test_3_20260622/no_anchor_attach_side_effect_labels_20260622/side_effect_gate_v1_combo_labels.json",
+      "local_runs/remote_h100_test_3_20260622/no_anchor_timeagglom_attach_side_effect_gate_20260622/side_effect_v2_ranked_candidates.json",
+      "local_runs/remote_h100_test_3_20260622/no_anchor_timeagglom_attach_side_effect_v2_20260622/manifest_v2_assignments.json",
+      "local_runs/remote_h100_test_3_20260622/no_anchor_timeagglom_attach_side_effect_v2_20260622/rank01_time_agglom_local_attach_source_assignments_density_p005_area.json",
+      "local_runs/remote_h100_test_3_20260622/no_anchor_timeagglom_attach_side_effect_v2_20260622/rank04_time_agglom_local_attach_source_assignments_density_p005_area.json",
+      "/mnt/localssd/vlincs_reid_runs/no_anchor_timeagglom_attach_side_effect_v2_20260622"
+    ],
+    "date": "2026-06-22",
+    "direction": "side_effect_gate_v2_with_v1_feedback_labels",
+    "evidence": {
+      "global_delta_loocv_corr": -0.256258,
+      "gt_eval_only": true,
+      "mcam04_loocv_corr": 0.260832,
+      "mcam06_loocv_corr": -0.051049,
+      "mcam08_loocv_corr": 0.028224,
+      "p005_guard_passed_all_ranked_runs": true,
+      "previous_best_assa": 0.535329,
+      "previous_best_hota": 0.519723,
+      "previous_best_idf1": 0.656225,
+      "rank01_assa": 0.535329,
+      "rank01_edit": "6797->9",
+      "rank01_hota": 0.519723,
+      "rank01_p005_idf1": 0.656225,
+      "rank02_edit": "1811+6864->46",
+      "rank02_p005_idf1": 0.656182,
+      "rank03_edit": "313->21",
+      "rank03_p005_idf1": 0.656158,
+      "rank04_edit": "6234->17",
+      "rank04_p005_idf1": 0.656214,
+      "uses_anchors": false,
+      "v2_label_count": 20
+    },
+    "finding": "Side-effect gate V2, trained with V1 feedback labels, found a no-op tie at 6797->9 and one near miss at 6234->17, but no e2e promotion. Global uplift prediction remains anti-correlated. Stop local attach-only iterations and pivot to high-mass component rollback/split and MCAM04 structural evidence.",
+    "gt_use": "evaluation_only_for_canonical_ds1_scoring_and_prior_fullscore_deltas_for_side_effect_labels",
+    "no_anchor": true,
+    "status": "near_tie_no_promotion"
+  },
+  {
+    "direction": "mcam04_tracklet_area_admission_refutation",
+    "finding": "Explicit no-anchor MCAM04 area admission is refuted on the current best. The mild 2600/3000 policies improve DetPr but lose DetRe and drop global IDF1 to 0.655613/0.655421; MCAM04 slice IDF1 also drops to 0.560655/0.560031. Stop current-best MCAM04 tracklet pruning and pivot to recall-preserving structural/subpart conflict repair.",
+    "status": "closed"
+  },
+  {
+    "date": "2026-06-22",
+    "direction": "recall_guarded_subpart_repair_currentbest",
+    "status": "promoted",
+    "finding": "Recall-guarded subpart repair promoted a new no-anchor e2e best without dropping tracklets. The relaxed rank01 edit moved six MCAM04 Tc6 tracklets from component 8 to 40 and improved canonical p005-area IDF1/HOTA/AssA from 0.656225/0.519723/0.535329 to 0.656453/0.519993/0.535718. The gain is small but structurally useful: MCAM04 IDF1 improved from 0.562439 to 0.563063 through DetRe 0.476722 -> 0.477831 while other focus videos stayed unchanged. Strict rank01 and relaxed ranks 2/4 were weaker positive/negative ablations. Continue with compatible subpart combinations and a side-effect label bank; e2e remains below 0.70.",
+    "evidence": {
+      "uses_anchors": false,
+      "gt_eval_only": true,
+      "previous_best_idf1": 0.656225,
+      "previous_best_hota": 0.519723,
+      "previous_best_assa": 0.535329,
+      "new_best_idf1": 0.656453,
+      "new_best_hota": 0.519993,
+      "new_best_assa": 0.535718,
+      "promoted_edit": "8->40",
+      "promoted_moved_tracklets": 6,
+      "promoted_moved_seqs": [
+        3886,
+        3929,
+        3967,
+        4002,
+        4043,
+        4079
+      ],
+      "mcam04_previous_idf1": 0.562439,
+      "mcam04_new_idf1": 0.563063,
+      "mcam04_previous_detre": 0.476722,
+      "mcam04_new_detre": 0.477831,
+      "strict_rank01_p005_idf1": 0.656146,
+      "relaxed_rank01_p005_idf1": 0.656453,
+      "relaxed_rank02_p005_idf1": 0.65632,
+      "relaxed_rank04_p005_idf1": 0.656241,
+      "heavy_split_then_merge_runtime_refuted": true,
+      "heavy_split_then_merge_killed_after_seconds": 406
+    },
+    "artifacts": [
+      "reports/deli_autoresearch_vlincs_distillation_20260622.md",
+      "reports/no_anchor_currentbest_subpart_repair_promotion_20260622.md",
+      "kit/propose_no_anchor_subpart_repair_candidates.py",
+      "local_runs/remote_h100_test_3_20260622/no_anchor_currentbest_subpart_repair_20260622/subpart_repair_manifest.json",
+      "local_runs/remote_h100_test_3_20260622/no_anchor_currentbest_subpart_repair_20260622/rank01_subpart_s9_to21_2seq_assignments_density_p005_area.json",
+      "local_runs/remote_h100_test_3_20260622/no_anchor_currentbest_subpart_repair_relaxed_20260622/subpart_repair_manifest.json",
+      "local_runs/remote_h100_test_3_20260622/no_anchor_currentbest_subpart_repair_relaxed_20260622/rank01_subpart_s8_to40_6seq_assignments_density_p005_area.json",
+      "local_runs/remote_h100_test_3_20260622/no_anchor_currentbest_subpart_repair_relaxed_20260622/rank02_subpart_s24_to38_2seq_assignments_density_p005_area.json",
+      "local_runs/remote_h100_test_3_20260622/no_anchor_currentbest_subpart_repair_relaxed_20260622/rank04_subpart_s40_to2329_3seq_assignments_density_p005_area.json",
+      "/mnt/localssd/vlincs_reid_runs/no_anchor_currentbest_subpart_repair_20260622",
+      "/mnt/localssd/vlincs_reid_runs/no_anchor_currentbest_subpart_repair_relaxed_20260622"
+    ],
+    "gt_use": "eval_only",
+    "anchor_use": "none",
+    "next_direction": "subpart_repair_combo_and_side_effect_label_bank"
+  }
+]

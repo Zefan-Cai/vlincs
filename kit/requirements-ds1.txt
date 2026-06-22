@@ -1,0 +1,13 @@
+# DS1 MLflow-PATH extras only — for PULLING the DS1 inputs from MLflow. The MS02 demo and the OFFLINE DS1
+# run (`git lfs pull` the kit/demo_data/ds1/ bundle) need NONE of these: base kit/requirements.txt is
+# public-PyPI-only and self-contained (pyyaml + sklearn + reid_hota cover the offline path). Install these
+# only for the on-network MLflow path:
+#
+#   pip install --index-url http://euclid.novateur.com:48731/novateur/dev/+simple/ \
+#               --trusted-host euclid.novateur.com -r kit/requirements-ds1.txt
+#   export MLFLOW_TRACKING_URI=http://maxwell.novateur.com:9091
+#
+# mlflow is public PyPI; vlincs-sdk[mlflow] is the internal package (the dim-reducer for raw embeds + the
+# provenance helpers), from the Novateur devpi index above.
+mlflow>=2.0
+vlincs-sdk[mlflow]

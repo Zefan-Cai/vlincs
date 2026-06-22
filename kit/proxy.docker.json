@@ -1,0 +1,2 @@
+{ "/api": { "target": "http://viz:8077", "secure": false, "changeOrigin": true,
+            "pathRewrite": { "^/api": "" } } }

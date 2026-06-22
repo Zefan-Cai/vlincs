@@ -1,0 +1,18 @@
+# CPU-only. No torch, no ultralytics, no model weights — the gallery matches on the embeddings YOU push.
+numpy
+pandas
+pyarrow
+pyyaml                          # read the pipeline recipe (pipelines/ds1.yaml)
+scikit-learn
+psycopg[binary]
+pgvector
+faiss-cpu                       # in-process exemplar k-NN — needed for match_mode="retrieval" + large-gallery scale
+                                # (default match_mode="centroid" uses exact numpy mean-cosine; faiss not used there)
+opencv-python-headless          # viz crops from the source video
+fastapi
+uvicorn[standard]
+# reid_hota = the canonical TA1 scorer (IDF1/HOTA). PUBLIC NIST package on PyPI — no internal index needed:
+#   https://github.com/usnistgov/reid_hota
+reid_hota>=0.3.5   # pin >=0.3.5 — the PROTOCOL §13 / DS1 IDF1 numbers are reid_hota 0.3.5
+# scipy is used (lazily) by the matcher and comes transitively with scikit-learn; listed implicitly there.
+# Optional, not pinned: `umap-learn` — if installed, the embedding-projection viz uses UMAP; else PCA.
