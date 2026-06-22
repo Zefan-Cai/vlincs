@@ -267,3 +267,44 @@ s3://dit-scale-up/zcai/vlincs/reports/no_anchor_teacher_consensus_rank58_refutat
 s3://dit-scale-up/zcai/vlincs/remote_runs_h100-test-3_20260622/no_anchor_teacher_consensus_rank58_20260622/
 s3://dit-scale-up/zcai/vlincs/research_snapshot_current/local_runs/remote_h100_test_3_20260622/no_anchor_teacher_consensus_rank58_20260622/
 ```
+
+## Latest Current-Best Error Audit
+
+The current best rank58 assignment was audited with no anchors and GT used only
+for evaluation.  Pair-level F1 / precision / recall is:
+
+`0.773980 / 0.823426 / 0.730136`
+
+The direct full export score is:
+
+`IDF1 / HOTA / AssA = 0.655836 / 0.519304 / 0.534154`
+
+This direct export is not the canonical delivery wrapper.  The canonical
+`density_simple + p005_area` score remains:
+
+`IDF1 / HOTA / AssA = 0.658025 / 0.521057 / 0.536049`
+
+Dominant false splits are GT IDs `9`, `36`, `11`, `52`, and `43`.  Dominant
+false merges are predicted components `96000035`, `96000048`, `96000021`, and
+`96000026`.  MCAM04/Tc6 remains the worst high-mass slice.  The next no-anchor
+branch should restore compute, run component edge diagnostics, then test local
+split/admission guards rather than broad teacher-consensus merges.
+
+Fresh sync pointers:
+
+```text
+s3://dit-scale-up/zcai/vlincs/LATEST_NO_ANCHOR_PROGRESS.txt
+s3://dit-scale-up/zcai/vlincs/reports_current/no_anchor_current_best_error_audit_20260622.md
+s3://dit-scale-up/zcai/vlincs/reports_current/publish_manifest_20260622.md
+s3://dit-scale-up/zcai/vlincs/autoresearch_state_current/no_anchor_global_id/state/progress.json
+s3://dit-scale-up/zcai/vlincs/local_runs_current/remote_h100_test_3_20260622/no_anchor_current_best_error_audit_20260622/current_best_error_audit_top80_full.json
+s3://dit-scale-up/zcai/vlincs/local_runs_current/remote_h100_test_3_20260622/no_anchor_current_best_edge_diagnostics_20260622/run_edge_diagnostics.sh
+```
+
+Publish note: the 2026-06-22 light sync uploaded progress, reports, durable
+state, core code, and current audit artifacts.  A full raw `local_runs/` sync
+encountered S3 multipart `AccessDenied` on older large assignment archives, so
+those old archive payloads remain S3-best-effort rather than a blocking
+deliverable for this publish.  The current audit JSON, reports, state, and code
+needed to continue the no-anchor research loop are included in the verified
+publish set.
