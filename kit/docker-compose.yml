@@ -4,13 +4,11 @@
 services:
   db:
     image: pgvector/pgvector:pg16          # pgvector only (the schema needs the `vector` type; no postgis)
-    restart: unless-stopped                # survive host reboots/docker restarts (a 2026-06-19 reboot left the
-                                           # whole stack down with no policy -> "connection refused" until manual up)
     environment:
       POSTGRES_USER: gallery
       POSTGRES_PASSWORD: gallery
       POSTGRES_DB: gallery
-    ports: ["${GALLERY_DB_HOST_PORT:-55433}:5432"]   # dev: localhost:55433. CI sets =0 (ephemeral) so concurrent same-host builds don't clash on the port
+    ports: ["55433:5432"]                  # YOUR pipeline connects here: PGHOST=localhost PGPORT=55433
     volumes: ["pgdata:/var/lib/postgresql/data"]
     healthcheck:
       test: ["CMD-SHELL", "pg_isready -U gallery"]
@@ -20,25 +18,18 @@ services:
 
   viz:                                     # the viz API (FastAPI) — crops/decisions/identities from the DB
     build: { context: .., dockerfile: kit/Dockerfile }
-    restart: unless-stopped
     depends_on: { db: { condition: service_healthy } }
     environment:
       PGHOST: db
       PGPORT: "5432"
       DATA_ROOT: /data
       GALLERY_DATASET: "${DATASET:-ds1}"   # which dataset's gallery the viz shows
-    volumes:
-      - "${DATA_ROOT:-/mnt/datastore2_videolincs/data}:/data:ro"   # videos (for crops) + GT, read-only
-      - ../vlincs_gallery:/app/vlincs_gallery                      # LIVE viz API source: uvicorn --reload picks
-                                                                   # up viz/app.py edits with NO `docker compose build viz`
+    volumes: ["${DATA_ROOT:-/mnt/datastore2_videolincs/data}:/data:ro"]   # videos (for crops) + GT, read-only
     ports: ["8077:8077"]
-    # --reload + the live mount above hot-reload the viz API on edit. Routed through entrypoint.sh's `exec "$@"`
-    # passthrough; PYTHONPATH=/app:/app/kit is baked in the image so the module import resolves unchanged.
-    command: ["uvicorn", "vlincs_gallery.viz.app:app", "--host", "0.0.0.0", "--port", "8077", "--reload", "--reload-dir", "/app/vlincs_gallery"]
+    command: ["serve"]
 
   ui:                                      # http://localhost:4200 — the existing Angular frontend, proxied to viz
     image: node:20-slim
-    restart: unless-stopped
     working_dir: /ui
     depends_on: [viz]
     volumes:
@@ -49,7 +40,6 @@ services:
 
   pgadmin:                                 # http://localhost:5050 — inspect the DB visually; server + password pre-seeded
     build: { context: ./pgadmin }          # bakes servers.json + pgpass at libpq-correct perms (see pgadmin/Dockerfile)
-    restart: unless-stopped
     depends_on: { db: { condition: service_healthy } }
     environment:
       PGADMIN_DEFAULT_EMAIL: admin@vlincs.com    # pgAdmin rejects .local (and other special-use TLDs) — use a real TLD

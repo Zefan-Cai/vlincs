@@ -1,0 +1,46 @@
+VLINCS no-anchor global ID progress
+Date: 2026-06-22
+
+Current best e2e:
+IDF1 / HOTA / AssA = 0.657887 / 0.520944 / 0.535983
+
+Current best model-side pair metrics:
+F1 / precision / recall = 0.775234 / 0.820504 / 0.734698
+
+Latest promoted edit:
+side-effect blacklisted subpart combo: 32 -> 15 plus 47 -> 2330, moved 14 tracklets, from weakmetric+dino no-anchor candidate search.
+
+Latest ablation:
+High-mass candidates were generated from the r47+r49 current best with min group size 10 and max group size 34. Direct top-6 full scoring did not improve the current best: 32->41 tied at 0.657887, while 21->60, 55->2330, 26->24, 28->31, and 49->19 were negative. A targeted 21->60 peel test scored size16 at 0.657877, size22 at 0.657810, and size10 at 0.657498. The size16 near miss is only 0.000010 below best, so it is a strong hard-negative/near-tie side-effect label, not a promotion.
+
+Previous ablation:
+Three no-anchor subpart pools were generated from the previous best assignment and filtered with accumulated side-effect blacklists. Six novel singles were full-scored: 32->15 promoted to 0.657860, 47->2330 promoted to 0.657680, 24->31 and 31->24 tied, while 11->19 and 44->29 were negative. Five combo ablations showed 32->15 + 47->2330 is compatible and promotes the e2e best to 0.657887; adding 24->31 or 31->24 ties the same score.
+
+Goal status:
+Global-id model target is above 0.70. End-to-end IDF1 remains below 0.70.
+
+Open first:
+reports/no_anchor_highmass_from_r47r49_refutation_20260622.md
+
+Current-best detail:
+reports/no_anchor_sideeffect_blacklisted_subpart_promotion_20260622.md
+reports/no_anchor_filter_sweep_currentbest_20260622.md
+reports/no_anchor_currentbest_subpart_multiview_combo_refutation_20260622.md
+
+Key artifacts:
+reports/no_anchor_highmass_from_r47r49_refutation_20260622.md
+local_runs/remote_h100_test_3_20260622/no_anchor_highmass_from_r47r49_20260622/p005_fullscore_top6_summary.json
+local_runs/remote_h100_test_3_20260622/no_anchor_highmass_from_r47r49_20260622/p005_peel21_fullscore_summary.json
+local_runs/remote_h100_test_3_20260622/no_anchor_highmass_from_r47r49_20260622/highmass_blacklisted_selection.json
+autoresearch_state/no_anchor_global_id/state/progress.json
+reports/publish_manifest_20260622.md
+
+S3:
+s3://dit-scale-up/zcai/vlincs/LATEST_NO_ANCHOR_PROGRESS.txt
+s3://dit-scale-up/zcai/vlincs/core_snapshot_20260622/
+s3://dit-scale-up/zcai/vlincs/research_snapshot_current/
+s3://dit-scale-up/zcai/vlincs/remote_runs_h100-test-3_20260622/no_anchor_highmass_from_r47r49_20260622/
+s3://dit-scale-up/zcai/vlincs/remote_runs_h100-test-3_20260622/no_anchor_sideeffect_blacklisted_subpart_search_20260622/
+
+GitHub:
+https://github.com/Zefan-Cai/vlincs

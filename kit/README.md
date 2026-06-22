@@ -68,6 +68,112 @@ g.export_submission("out.zip")    # the ONLY file ever written
   appearance-only behavior.
 - The viz reads the **live DB** - decisions/identities/crops update as your loop runs.
 
+### No-GT weak-supervision global IDs
+
+For the VLINCS open-world/global-ID setting, the package also exposes a label-free weak graph resolver:
+
+```python
+from vlincs_gallery import TrackletEvidence, WeakGraphConfig, resolve_weak_graph
+
+records = [
+    TrackletEvidence(
+        tracklet_key="video::tracklet-001",
+        video=video,
+        camera=camera,
+        start_frame=min(frames),
+        end_frame=max(frames),
+        embedding=embedding,                       # pooled visual/resolve vector
+        weak_tokens={"upper_color": "black", "hat": "no"},  # LM/VLM/CV attributes, not IDs
+    )
+    for video, camera, frames, boxes, embedding, weak_tokens in your_tracklets_with_weak_labels()
+]
+
+result = resolve_weak_graph(records, WeakGraphConfig())
+for row in result.assignments:
+    print(row.tracklet_key, row.predicted_global_id, row.decision_status)
+```
+
+This path is intentionally **no-GT**: `TrackletEvidence` has no `global_id`, `gt_id`, or
+`reference_global_id` field. It uses pooled embeddings, weak language tokens, camera/time metadata, and
+same-camera overlap cannot-links to build M7 candidate edges, then emits weak component IDs. Until a later
+calibrated M8 resolver adds threshold, margin, and stability checks, these IDs are marked
+`decision_status="forced"`: useful for a required submission or metric view, but not committed identity
+truth and not training labels for future prototypes.
+
+The same evidence can be driven through the live DB-backed gallery. Pass weak labels during ingest, then
+run the weak global resolver over the stored tracklet embeddings:
+
+```python
+g = OnlineGallery("ds1")
+for video, camera, frames, boxes, embedding, resolve_embedding, weak_tokens in your_pipeline():
+    g.add_tracklet(
+        video, camera, frames, boxes, embedding,
+        resolve_emb=resolve_embedding,
+        weak_tokens=weak_tokens,
+        weak_source="clip-vitb32",
+    )
+
+info = g.resolve_weak_global(WeakGraphConfig(), weak_source="clip-vitb32", apply=True)
+print(info)                         # forced weak component IDs are now in assignments
+g.export_submission("out.zip")
+```
+
+`resolve_weak_global(apply=True)` rewrites only the submission-facing `assignments` table with numeric
+forced IDs. It does not admit weak outputs into the exemplar bank, create calibration positives, or mutate
+the matcher prototypes.
+
+Weak labels can be generated directly from tracker boxes. With no videos this emits bbox/time tokens; with
+`--videos-root` and OpenCV available it also samples tracklet crops and emits coarse upper/lower color
+tokens. It still reads no reference annotations:
+
+```bash
+python cli.py generate-weak-labels \
+  --tracklets-root kit/demo_data/ds1/tracklets \
+  --out weak_labels.csv \
+  --max-tracklets 1000
+```
+
+If weak labels were produced offline as a CSV keyed by `tracklet_key`, or produced by the command above,
+import them after ingest and then resolve from the stored DB evidence:
+
+```bash
+python cli.py import-weak-labels --dataset ds1 \
+  --csv weak_labels.csv \
+  --source bbox-crop
+
+python cli.py weak-resolve --dataset ds1 \
+  --source bbox-crop \
+  --embedding-role resolve \
+  --apply \
+  --submit weak_graph_submission.zip
+```
+
+For a full DS1 demo run, the built-in loader now preserves the source `tracklet_key` from the tracker
+artifacts, so the weak-label CSV can be joined in the same one-shot command:
+
+```bash
+python cli.py demo --dataset ds1 \
+  --weak-label-csv weak_labels.csv \
+  --weak-source bbox-crop \
+  --weak-resolve \
+  --weak-embedding-role resolve \
+  --submit weak_graph_submission.zip
+```
+
+On a Pluto/H100 node with the repo, venv, DB, and DS1 data shim already staged, the same no-GT run is:
+
+```bash
+cd /mnt/localssd/vlincs_reid_by_search
+kit/run_pluto_ds1.sh h100-test-3
+```
+
+By default this uses `--auto-weak-labels --weak-resolve` so the weak tokens are derived from the loaded
+tracklet boxes even when DS1 tracklets are fetched from MLflow instead of local files. Set
+`WEAK_LABEL_CSV=/path/to/weak.csv` to use an external VLM/LM CSV instead.
+
+The importer ignores identity-like columns such as `gt_id`, `reference_global_id`, `audit_*`, and
+`global_id` even if they appear in the CSV.
+
 See `example.py` for the copy-me template (drop in your own pipeline), and `demo.py` - run via
 `docker compose run --rm app demo` - for a **one-click real run** on shipped MS02 data: real
 tracklets+embeddings streamed through the live gallery → real AssA, viz populated, no pipeline to write.

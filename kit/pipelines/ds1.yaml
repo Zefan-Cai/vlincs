@@ -25,21 +25,19 @@ reduce:
   method: none          # the greedy embed is already 64-d (FT emb_red) -> push as-is (pca/umap for raw 1024-d)
 
 gallery:
-  # PER-VIDEO (two-tier) method: one matcher per video (= camera-card) for high-PURITY within-camera locals,
-  # then ONE cross-video MUST-LINK resolve (same-local tracklets forced together; cross-video links from the
-  # kNN graph). Beats the flat global-agglom resolve on DS1: IDF1 0.6285 / AssA 0.5051 vs flat 0.595 / 0.471.
-  per_video:       true         # per-video matchers (within-camera locals); cross-video join is resolve_two_tier
   cannot_link:     false        # DS1 cameras overlap -> appearance-only (the simultaneity veto would mis-block)
   match_mode:      centroid
-  tau:             0.75         # high-purity within-camera match (the per-video sweet spot; fragmentation is
-                                # harmless - the two-tier resolve re-merges; impurity is not, so keep tau high)
+  tau:             0.60
   merge_tau:       0.35
   coherence_floor: 0.40
   max_reps:        16
-  resolve:         two_tier     # must-link cross-video resolve on the STORED osnet-xcam resolve vecs
-  resolve_theta:   auto         # GT-FREE theta via co-visibility violations (estimate_two_tier_theta); lands
-                                # on the DS1 peak (~0.04). A float (e.g. 0.04) pins it deterministically instead.
-  resolve_theta_grid: [0.02, 0.04, 0.05, 0.08, 0.10]   # candidates the GT-free picker sweeps
-  resolve_top_k:   30           # kNN-sparse cross-video neighbours per tracklet
-  resolve_min_dets: 1           # two-tier re-partitions all tracklets (the must-link keeps locals intact)
+  # RESOLVE — stream greedy match-or-expand (SOLIDER), then ONE global average-linkage re-cluster on the
+  # gallery's STORED osnet-xcam resolve vectors (read back from the DB) — recovers greedy over-split AND
+  # over-merge (vlincs_gallery/resolve.py). Per-tracklet, top_k=15, theta=0.02, min_dets=20 (only tracklets
+  # with >=20 dets are re-partitioned; shorter ones keep a singleton id). Alternatives still in code:
+  # auto (greedy consolidate) / on / off.
+  resolve:         global_agglom
+  resolve_theta:   0.02         # merge AFFINITY (agglom distance_threshold = 1 - theta)
+  resolve_top_k:   15           # kNN-sparse cross-camera neighbours per item
+  resolve_min_dets: 20          # only re-partition tracklets with >= this many dets; shorter -> singleton
   xcam_gate:       1.2          # (only resolve:auto) mean_cams/gid gate for the greedy-consolidate path

@@ -275,10 +275,6 @@ export class GalleryComponent implements OnInit, AfterViewInit {
   // seq (decision-order) analogues of posToT/tToPos — map the scrubber over ingest step
   posToStep(pos: number): number {
     const q = this.sq;
-    // Far-right = the terminal RESOLVE step (seq1 = resolve_seq when a resolve ran): its merge wave
-    // collapses the per-video locals into the final identities. The seq quantiles only span the decision
-    // seqs (< resolve_seq), so without this the slider could never reach the resolve.
-    if (pos >= 1000) return this.seq1;
     if (!q || q.length < 2) return Math.round(this.seq0 + (this.seq1 - this.seq0) * pos / 1000);
     const f = Math.max(0, Math.min(1, pos / 1000)) * (q.length - 1), i = Math.floor(f);
     return Math.round(q[i] + (q[Math.min(i + 1, q.length - 1)] - q[i]) * (f - i));

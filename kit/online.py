@@ -30,20 +30,6 @@ import numpy as np
 
 _HERE = Path(__file__).resolve().parent
 
-# Above this many tracklets the dense two-tier resolve (N^2 cosine Gram + N^2 precomputed agglomerative)
-# OOMs - DS1 is ~9.7k (dense, the validated path), DS2 is ~232k (scalable). The faiss-kNN + must-link
-# contraction path is the exact UPGMA-contraction equivalent, so the switch is purely a scale guard.
-_RESOLVE_DENSE_MAX = 40_000
-
-
-def _iou_mat(B):
-    """Pairwise IoU of an (n,4) box array -> (n,n)."""
-    x1 = np.maximum(B[:, 0, None], B[None, :, 0]); y1 = np.maximum(B[:, 1, None], B[None, :, 1])
-    x2 = np.minimum(B[:, 2, None], B[None, :, 2]); y2 = np.minimum(B[:, 3, None], B[None, :, 3])
-    inter = np.clip(x2 - x1, 0, None) * np.clip(y2 - y1, 0, None)
-    a = (B[:, 2] - B[:, 0]) * (B[:, 3] - B[:, 1])
-    return inter / (a[:, None] + a[None, :] - inter + 1e-9)
-
 
 def _code_sha() -> str:
     """Short git sha of the gallery checkout - run provenance stamped onto every decision_log row. Prefers
@@ -60,6 +46,25 @@ def _code_sha() -> str:
         return r.stdout.strip() if r.returncode == 0 else ""
     except Exception:
         return ""
+
+
+def _coherence(vecs, metric: str = "avg") -> float:
+    """Mean pairwise cosine coherence for an exemplar bank.
+
+    The deployable kit's core path is intended to stay public-PyPI-only. Some
+    research helpers expose the same reducer through ``vlincs_sdk``, but this
+    local implementation keeps resolve/score runnable when that optional SDK is
+    not installed.
+    """
+    arr = np.asarray(vecs, np.float32)
+    if len(arr) < 2:
+        return 1.0
+    if metric != "avg":
+        raise ValueError(f"unsupported coherence metric: {metric!r}")
+    arr = arr / (np.linalg.norm(arr, axis=1, keepdims=True) + 1e-9)
+    sim = arr @ arr.T
+    iu = np.triu_indices(len(arr), k=1)
+    return float(np.mean(sim[iu]))
 
 # Heavy/DB deps (psycopg, pgvector, the vlincs_gallery package matcher) are loaded lazily -
 # `import online` works without them (e.g. to read CARDDIRS or run example.py --help); they're
@@ -122,6 +127,24 @@ _INSERT_RESOLVE_EMB = """
     INSERT INTO embeddings (entity_kind, entity_id, model_id, role, dim, vec, gid, seq, is_rep)
     VALUES ('tracklet', %s, %s, 'resolve', %s, %s, %s, %s, false) ON CONFLICT DO NOTHING"""
 
+_UPSERT_TRACKLET = """
+    INSERT INTO tracklets (seq, entity_id, tracklet_key, video, camera, start_frame, end_frame, n_dets)
+    VALUES (%s, %s, %s, %s, %s, %s, %s, %s)
+    ON CONFLICT (seq) DO UPDATE SET
+        entity_id=EXCLUDED.entity_id,
+        tracklet_key=EXCLUDED.tracklet_key,
+        video=EXCLUDED.video,
+        camera=EXCLUDED.camera,
+        start_frame=EXCLUDED.start_frame,
+        end_frame=EXCLUDED.end_frame,
+        n_dets=EXCLUDED.n_dets"""
+
+_UPSERT_WEAK_LABEL = """
+    INSERT INTO weak_tracklet_labels (entity_id, seq, source, tokens, confidence)
+    VALUES (%s, %s, %s, %s::jsonb, %s)
+    ON CONFLICT (entity_id, source) DO UPDATE SET
+        seq=EXCLUDED.seq, tokens=EXCLUDED.tokens, confidence=EXCLUDED.confidence"""
+
 _UPSERT_ASSIGNMENT = """
     INSERT INTO assignments (det_id, gid, score, decision_type, seq)
     VALUES (%s,%s,%s,%s,%s) ON CONFLICT (det_id) DO UPDATE SET gid=EXCLUDED.gid"""
@@ -139,7 +162,8 @@ _REFRESH_IDENTITY_SPANS = """
         last_wall_ms=s.hi, cameras=COALESCE(s.cams,'{}'), updated_seq=s.mx
     FROM (SELECT count(*) n, min(d.abs_ms) lo, max(d.abs_ms) hi, array_agg(DISTINCT d.camera) cams,
                  max(a.seq) mx
-          FROM assignments a JOIN detections d ON d.det_id=a.det_id WHERE a.gid=%s) s
+          FROM assignments a JOIN detections d ON d.det_id=a.det_id
+          WHERE a.gid=%s AND a.decision_type <> 'forced') s
     WHERE i.gid=%s"""
 
 # Incremental O(1) span extend used on the per-tracklet streaming add (the full recompute above re-JOINs the
@@ -163,6 +187,43 @@ _SELECT_ASSIGNMENTS = """
 _INSERT_MERGE = "INSERT INTO merges (at_seq, old_gid, new_gid, score) VALUES (%s, %s, %s, %s)"
 
 
+def _json_weak_tokens(weak_tokens) -> str:
+    """Serialize weak evidence tokens for JSONB storage without inventing identity labels."""
+    if weak_tokens is None:
+        return "{}"
+    if isinstance(weak_tokens, str):
+        return json.dumps([part.strip() for part in weak_tokens.replace(",", "|").split("|") if part.strip()])
+    if isinstance(weak_tokens, dict):
+        return json.dumps(weak_tokens, sort_keys=True)
+    return json.dumps([str(part) for part in weak_tokens])
+
+
+_WEAK_LABEL_NON_TOKEN_COLUMNS = {
+    "tracklet_key", "entity_id", "seq", "source", "contact_sheet", "caption", "confidence",
+    "video", "camera", "start_frame", "end_frame", "frame", "frame_idx",
+}
+_WEAK_LABEL_FORBIDDEN_SUBSTRINGS = ("gt", "reference", "audit", "global_id")
+
+
+def _weak_csv_token_payload(row, token_cols: list[str], token_col: str | None = "weak_tokens"):
+    """Build a weak-token payload from one CSV row, never from identity/reference columns."""
+    if token_col and token_col in row and row[token_col] == row[token_col] and str(row[token_col]).strip():
+        return str(row[token_col])
+    payload = {}
+    for col in token_cols:
+        low = col.lower()
+        if low in _WEAK_LABEL_NON_TOKEN_COLUMNS or any(part in low for part in _WEAK_LABEL_FORBIDDEN_SUBSTRINGS):
+            continue
+        value = row[col]
+        if value != value:
+            continue
+        text = str(value).strip()
+        if not text or text.lower() in {"unknown", "none", "nan"}:
+            continue
+        payload[col] = text
+    return payload
+
+
 class OnlineGallery:
     """Streaming, DB-backed online identity gallery service. One per dataset.
 
@@ -176,8 +237,7 @@ class OnlineGallery:
                  match_mode: str = "centroid",  # whole-bank-mean match space
                  tracklet_coh_min: float = 0.0, admit_tau: float = 0.9, max_reps: int = 16,
                  max_speed: float = 3.0, sim_window_ms: int = 200, same_box_iou: float = 0.35,
-                 cannot_link: bool = True, overlaps=None, batch_commit: int = 1,
-                 per_video: bool = False):
+                 cannot_link: bool = True, overlaps=None, batch_commit: int = 1):
         """Open (and optionally wipe) the dataset's gallery DB and build the matcher.
 
         Args:
@@ -219,7 +279,8 @@ class OnlineGallery:
         cur = self.con.cursor()
         if truncate:
             cur.execute("TRUNCATE detections, identities, assignments, decision_log, "
-                        "merges, embeddings, models, cameras RESTART IDENTITY CASCADE;")
+                        "merges, embeddings, weak_tracklet_labels, tracklets, models, cameras "
+                        "RESTART IDENTITY CASCADE;")
             # Ephemeral fast-ingest (the demo / any truncate-before-ingest run): this DB is rebuilt from
             # scratch every run, so durability buys nothing. Turn off WAL - UNLOGGED tables skip WAL entirely
             # (the tables are empty right after TRUNCATE, so SET UNLOGGED is instant) and synchronous_commit=off
@@ -229,7 +290,7 @@ class OnlineGallery:
             # cannot reference an unlogged one; unlogged->logged is allowed). FKs: assignments->{detections,
             # identities}; {detections,embeddings}->models. So referencers first, models last.
             cur.execute("SET synchronous_commit = off")
-            for _t in ("assignments", "embeddings", "detections", "identities",
+            for _t in ("assignments", "embeddings", "weak_tracklet_labels", "tracklets", "detections", "identities",
                        "decision_log", "merges", "cameras", "models"):
                 cur.execute(f"ALTER TABLE {_t} SET UNLOGGED")
             self.con.commit()
@@ -263,34 +324,13 @@ class OnlineGallery:
             # physically-correct default.
             self.m._cannot_link = lambda *a, **k: None
             self.m.merge_free_xcam = True
-        # PER-VIDEO mode: one matcher PER VIDEO (within-camera locals), gid namespaced as
-        # vidx*VID_OFFSET + local so locals never collide across videos; the cross-video join is done after
-        # the stream by resolve_two_tier (must-link). add_tracklet routes self.m to the video's matcher.
-        # Off by default == one global matcher (the flat path, unchanged). _mk_matcher closes over the
-        # run config so every per-video matcher is built identically.
-        self._per_video = bool(per_video)
-        self.VID_OFFSET = 1_000_000
-        self._matchers: dict = {}
-        self._video_idx: dict = {}
-
-        def _mk():
-            mm = _Matcher(cam_xy, dist, set(overlaps or []), tau, max_speed, sim_window_ms,
-                          admit_tau, max_reps, same_box_iou=same_box_iou,
-                          coherence_floor=coherence_floor, tracklet_coh_min=tracklet_coh_min,
-                          match_mode=match_mode)
-            if not cannot_link:
-                mm._cannot_link = lambda *a, **k: None
-                mm.merge_free_xcam = True
-            return mm
-        self._mk_matcher = _mk
         # Persist the decision config (the knobs this run was built with) as a models row so the viz can
         # show what the current DB state reflects. role='gallery' fits the models table's "settings
         # provenance" purpose; /meta returns it.
         self.config = {"cannot_link": bool(cannot_link), "match_mode": match_mode,
                        "tau": tau, "merge_tau": merge_tau, "coherence_floor": coherence_floor,
                        "tracklet_coh_min": tracklet_coh_min, "admit_tau": admit_tau, "max_reps": max_reps,
-                       "max_speed": max_speed, "sim_window_ms": sim_window_ms, "same_box_iou": same_box_iou,
-                       "per_video": bool(per_video)}
+                       "max_speed": max_speed, "sim_window_ms": sim_window_ms, "same_box_iou": same_box_iou}
         gdb.upsert_model(cur, "gallery", "online-gallery", params=self.config)
         self.con.commit()
         self._emb_dim = None
@@ -298,8 +338,6 @@ class OnlineGallery:
         self._batch = max(1, batch_commit)
         self._ndet = 0
         self._last_seq = -1        # the most recent decision seq committed (the step a resolve() merge takes effect)
-        self._gseq = 0             # GLOBAL monotonic tracklet seq for the DB (per_video matchers each have their
-                                   # own per-video seq counter that collides across videos; the DB needs unique)
         self._trk_seq = 0          # monotonic per-tracklet counter -> auto-generated det_ids never collide
         # Additive pgvector persistence (viz + DB-side ANN path only - the matcher's rep_mat is untouched).
         # The pushed match vector goes to the polymorphic `embeddings` table at whatever dim it is; the
@@ -315,20 +353,6 @@ class OnlineGallery:
         self._disc_ratio = None     # cached self.m.discriminability(); NULL until >=2 gids exist
         self._disc_every = 200
         self._global_resolved = False   # set by resolve_global (then the matcher bank no longer keys live gids)
-
-    def _matcher_for(self, video):
-        """Per-video mode: the matcher for `video` (lazily created), gid-namespaced by video index so locals
-        never collide. The first matcher's rep_mat dim is fixed by add_tracklet's first-push; later matchers
-        inherit the now-known dim here."""
-        m = self._matchers.get(video)
-        if m is None:
-            vidx = self._video_idx.setdefault(video, len(self._video_idx))
-            m = self._mk_matcher()
-            m.next_gid = vidx * self.VID_OFFSET + 1
-            if self._emb_dim is not None:
-                m.rep_mat = np.zeros((0, self._emb_dim), np.float32)
-            self._matchers[video] = m
-        return m
 
     def _register_embedder(self, cur, name=None):
         """On the first push, register the embedder (name + the now-known dim) and lazily create its
@@ -358,10 +382,6 @@ class OnlineGallery:
         split_low_coherence uses) into identities.coherence. Recomputed in bulk here (at resolve), not on the
         streaming add - the value churns per-add and the reducer is O(bank^2) per gid. A gid with <2 exemplars
         gets NULL (coherence undefined for a singleton bank)."""
-        try:
-            from vlincs_sdk.clustering import _coherence as _sdk_coherence   # SDK reducer (lazy, OPTIONAL)
-        except ImportError:
-            return   # identities.coherence is a display-only column; base kit (no vlincs-sdk) leaves it NULL
         m = self.m
         rg = getattr(m, "rep_gid", None)
         if rg is None or rg.size == 0:
@@ -369,7 +389,7 @@ class OnlineGallery:
         rows = []
         for g in np.unique(m.rep_gid):
             vecs = m.rep_mat[m.rep_gid == g]
-            coh = round(float(_sdk_coherence(vecs, "avg")), 4) if len(vecs) >= 2 else None
+            coh = round(float(_coherence(vecs, "avg")), 4) if len(vecs) >= 2 else None
             rows.append((coh, int(g)))
         if rows:
             cur.executemany("UPDATE identities SET coherence=%s WHERE gid=%s", rows)
@@ -384,13 +404,19 @@ class OnlineGallery:
         return epoch_ms + int(round(fr / self.fps * 1000.0))
 
     def add_detection(self, video: str, camera: str, frame: int, box, embedding, conf: float = -1.0,
-                      object_type: int = 0, det_id: str | None = None) -> int:
+                      object_type: int = 0, det_id: str | None = None, weak_tokens=None,
+                      weak_source: str = "weak", weak_confidence: float | None = None,
+                      tracklet_key: str | None = None) -> int:
         """Match-or-expand a single detection. Returns its global id."""
         return self.add_tracklet(video, camera, [frame], [box], embedding, confs=[conf],
-                                 object_type=object_type, det_ids=[det_id] if det_id else None)
+                                 object_type=object_type, det_ids=[det_id] if det_id else None,
+                                 weak_tokens=weak_tokens, weak_source=weak_source,
+                                 weak_confidence=weak_confidence, tracklet_key=tracklet_key)
 
     def add_tracklet(self, video: str, camera: str, frames, boxes, embedding, confs=None,
-                     object_type: int = 0, det_ids=None, model: str | None = None, resolve_emb=None) -> int:
+                     object_type: int = 0, det_ids=None, model: str | None = None, resolve_emb=None,
+                     weak_tokens=None, weak_source: str = "weak", weak_confidence: float | None = None,
+                     tracklet_key: str | None = None) -> int:
         """Match-or-expand a tracklet against the live gallery and persist the result.
 
         A tracklet is your tracker's output: same-camera detections plus one pooled appearance
@@ -412,6 +438,12 @@ class OnlineGallery:
             resolve_emb: Optional SECOND per-tracklet vector (e.g. osnet-xcam) stored under
                 ``role='resolve'`` the gallery is the system of record for both the match and
                 resolve spaces, and ``resolve_global()`` re-clusters on it. Not used to match.
+            weak_tokens: Optional language/VLM/CV attributes for this tracklet. Stored as evidence
+                under ``weak_tracklet_labels`` and consumed by ``resolve_weak_global``; never an ID.
+            weak_source: Provenance key for ``weak_tokens`` (for example ``"clip-vitb32"``).
+            weak_confidence: Optional weak-label confidence from the labeler.
+            tracklet_key: Optional stable external tracklet key. If supplied, later weak-label CSV
+                imports can join by this key; if omitted, the representative detection id is used.
 
         Returns:
             int: The global id this tracklet was bound to (matched) or minted (expanded).
@@ -420,8 +452,6 @@ class OnlineGallery:
         per_det = emb.ndim == 2
         pooled = emb.mean(0) if per_det else emb
         pooled = pooled / (np.linalg.norm(pooled) + 1e-9)
-        if self._per_video:                                # route to this video's matcher (within-camera locals)
-            self.m = self._matcher_for(video)
         if self._emb_dim is None:                          # first add fixes the index dim (any D)
             self._emb_dim = pooled.shape[0]
             self.m.rep_mat = np.zeros((0, self._emb_dim), np.float32)
@@ -441,6 +471,7 @@ class OnlineGallery:
         _c = np.asarray(confs, float) if (confs is not None and len(confs) == n_dets) else None
         rep_idx = int(np.argmax(_c)) if (_c is not None and np.ptp(_c) > 0) else int(np.argsort(frames)[n_dets // 2])
         rep_did = det_ids[rep_idx]
+        external_tracklet_key = str(tracklet_key or rep_did)
         confs = list(confs) if confs is not None else [-1.0] * n_dets   # -1.0 = detector conf not supplied
         self_coh = self_coherence(list(emb)) if per_det else 1.0
 
@@ -451,15 +482,6 @@ class OnlineGallery:
         # persist live: detections + assignment + the decision (the viz reads this)
         cur = self.con.cursor()
         decision = self.m.decisions[-1]
-        # GLOBAL tracklet seq for the DB. The matcher's decision["seq"] is a per-matcher counter, so in
-        # per_video mode it COLLIDES across videos (every matcher starts at the same seq) - which would make
-        # the seq-keyed DB rows (assignments/embeddings/decision_log) and resolve_two_tier's GROUP BY seq
-        # merge unrelated tracklets across videos. Flat path: one matcher, seq already global.
-        if self._per_video:
-            self._gseq += 1
-            tseq = self._gseq
-        else:
-            tseq = int(decision["seq"])
         if self._emb_model_id is None:                        # first push: register the embedder + its DB-ANN index
             self._register_embedder(cur, model)
         # The matcher's appearance state lives only in the in-process index (rep_mat). We additively persist
@@ -474,10 +496,10 @@ class OnlineGallery:
         det_rows = [(det_ids[i], video, camera, int(frames[i]), det_abs_ms[i] - epoch_ms, det_abs_ms[i],
                      float(boxes[i][0]), float(boxes[i][1]), float(boxes[i][2]), float(boxes[i][3]),
                      float(confs[i]), int(object_type)) for i in range(n_dets)]
-        asn_rows = [(det_ids[i], int(gid), float(score), decision_type, tseq)
+        asn_rows = [(det_ids[i], int(gid), float(score), decision_type, int(decision["seq"]))
                     for i in range(n_dets)]
         cur.execute("INSERT INTO identities (gid, n_members, created_seq, updated_seq) VALUES (%s,0,%s,%s) "
-                    "ON CONFLICT (gid) DO NOTHING", (int(gid), tseq, tseq))
+                    "ON CONFLICT (gid) DO NOTHING", (int(gid), int(decision["seq"]), int(decision["seq"])))
         cur.executemany(_INSERT_DETECTION, det_rows)
 
         # Fallback to ensure no duplicates. Not actually an issue during normal ingestion. Protection against buggy repeated replays.
@@ -491,11 +513,11 @@ class OnlineGallery:
         cur.executemany(_UPSERT_ASSIGNMENT, asn_rows)
         # Snapshot the gallery's discriminability at decision time (cached: the kNN over all centroids is too
         # costly to recompute every det). NaN (<2 gids) -> NULL.
-        if self._disc_ratio is None or tseq % self._disc_every == 0:
+        if self._disc_ratio is None or int(decision["seq"]) % self._disc_every == 0:
             dr = self.m.discriminability()
             self._disc_ratio = None if dr != dr else round(float(dr), 4)
         cur.execute(_INSERT_DECISION_LOG,
-                    (tseq, rep_did, int(gid), decision["decision_type"], bool(decision["admitted"]),
+                    (decision["seq"], rep_did, int(gid), decision["decision_type"], bool(decision["admitted"]),
                      decision["candidate_gids"], decision["scores"], decision["cannot_link_pruned"],
                      decision["veto_reasons"], decision["threshold"],
                      decision.get("admit_reason"), decision.get("admit_sim"), decision.get("admit_min"),
@@ -506,14 +528,23 @@ class OnlineGallery:
         # to the exemplar bank - the viz "bank" subset). The matcher's live bank is rep_mat in memory; this is
         # the additive copy the viz + DB-side ANN read. Any dim.
         cur.execute(_INSERT_EMBEDDING, (rep_did, self._emb_model_id, self._emb_dim, vec,
-                                        int(gid), tseq, bool(decision["admitted"])))
+                                        int(gid), int(decision["seq"]), bool(decision["admitted"])))
+        cur.execute(_UPSERT_TRACKLET, (
+            int(decision["seq"]), rep_did, external_tracklet_key, video, camera,
+            int(min(frames)), int(max(frames)), int(n_dets),
+        ))
         if resolve_emb is not None:                          # the SECOND (resolve-space) vector for this tracklet
             rv = np.ascontiguousarray(resolve_emb, dtype=np.float32)
             if self._resolve_model_id is None:               # register the resolve embedder once (no ANN index needed)
                 self._resolve_model_id, _ = gdb.register_embedder(cur, "resolve-embedder", int(rv.shape[0]))
                 self.con.commit()
             cur.execute(_INSERT_RESOLVE_EMB, (rep_did, self._resolve_model_id, int(rv.shape[0]), rv,
-                                              int(gid), tseq))
+                                              int(gid), int(decision["seq"])))
+        if weak_tokens is not None:
+            cur.execute(_UPSERT_WEAK_LABEL, (
+                rep_did, int(decision["seq"]), str(weak_source), _json_weak_tokens(weak_tokens),
+                None if weak_confidence is None else float(weak_confidence),
+            ))
         # keep this identity's span/cameras/member-count current so the viz /state (and its KPIs) reflect
         # the gallery as of t. Incremental extend (O(1)) - not the full re-JOIN recompute, which scales with
         # the matched gid's whole assignment set. (resolve() still does the full recompute for merge-touched
@@ -523,8 +554,8 @@ class OnlineGallery:
         else:
             cur.execute(_EXTEND_IDENTITY_SPAN,
                         (n_dets, min(det_abs_ms), min(det_abs_ms), max(det_abs_ms), max(det_abs_ms), [camera],
-                         tseq, int(gid)))
-        self._last_seq = tseq     # the step a subsequent resolve()'s merges take effect at
+                         int(decision["seq"]), int(gid)))
+        self._last_seq = int(decision["seq"])     # the step a subsequent resolve()'s merges take effect at
         self._ndet += n_dets
         self._pending += 1
         if self._pending >= self._batch:
@@ -583,34 +614,9 @@ class OnlineGallery:
         self.con.commit()
         return {"merges": len(real), "events": len(events) if events else 0}
 
-    def _record_resolve_merges(self, cur, rows, gid_of_seq, seqs, score):
-        """Record the resolve as a TERMINAL merge wave so the viz reflects it.
-
-        The viz replays identities by walking the `merges` table (at_seq <= step) from each detection's
-        birth gid (decision_log.chosen_gid). The bulk resolve UPDATEs assignments.gid but writes no
-        merges, so a decision-order replay never sees the collapse and the timeline ends on the
-        pre-resolve local gids ("loads of IDs"). Here we record, at at_seq = max(seq)+1 (one step past
-        the last decision), a merge for every pre-resolve local gid (rows[i][4] = MIN(gid) per seq) into
-        its final resolved gid. Scrubbing to that terminal step then "pops" the locals into the resolved
-        identities, reusing the viz's existing _CANON merge-replay. Idempotent: clears any prior resolve
-        wave (at_seq past the last decision) first. resolve_two_tier is must-link so local->resolved is
-        1:1; resolve_global can split a local across clusters (captured best-effort, first resolved seen).
-        """
-        if not seqs:
-            return
-        last = max(seqs)
-        cur.execute("DELETE FROM merges WHERE at_seq > %s", (last,))   # clear any prior resolve wave
-        term = last + 1
-        birth = {int(r[0]): int(r[4]) for r in rows}                   # seq -> pre-resolve (canonical local) gid
-        loc2res: dict[int, int] = {}
-        for s in seqs:
-            old, new = birth.get(s, s), int(gid_of_seq[s])
-            if old != new:
-                loc2res.setdefault(old, new)
-        if loc2res:
-            cur.executemany(_INSERT_MERGE, [(term, old, new, float(score)) for old, new in loc2res.items()])
-
-    def resolve_global(self, theta: float, *, top_k: int = 15, min_dets: int = 20) -> dict:
+    def resolve_global(self, theta: float, *, top_k: int = 15, min_dets: int = 20,
+                       nfc_k1: int = 0, nfc_k2: int = 2, nfc_eta: float = 1.0,
+                       nfc_exclude_same_camera: bool = False) -> dict:
         """GLOBAL re-partition from the gallery's OWN stored resolve embeddings (role='resolve', pushed per
         tracklet during the stream - the gallery is the system of record). Reads them back seq-ordered + each
         tracklet's camera + detection count, runs vlincs_gallery.resolve.global_agglom_resolve (kNN-sparse
@@ -622,9 +628,9 @@ class OnlineGallery:
         preceded the re-partition). New gids are OFFSET clear of the greedy ones."""
         from vlincs_gallery.resolve import global_agglom_resolve
         cur = self.con.cursor()
-        cur.execute("SELECT e.seq, d.camera, e.vec, n.cnt, n.lid FROM embeddings e "
+        cur.execute("SELECT e.seq, d.camera, e.vec, n.cnt FROM embeddings e "
                     "JOIN detections d ON e.entity_id = d.det_id "
-                    "JOIN (SELECT seq, COUNT(*) cnt, MIN(gid) lid FROM assignments GROUP BY seq) n ON n.seq = e.seq "
+                    "JOIN (SELECT seq, COUNT(*) cnt FROM assignments GROUP BY seq) n ON n.seq = e.seq "
                     "WHERE e.role = 'resolve' ORDER BY e.seq")
         rows = cur.fetchall()
         if not rows:
@@ -634,6 +640,17 @@ class OnlineGallery:
         cams = sorted({rows[i][1] for i in keep}); ccode = {c: j for j, c in enumerate(cams)}
         cam_codes = np.array([ccode[rows[i][1]] for i in keep], np.int64)
         emb = np.stack([np.asarray(rows[i][2], np.float32) for i in keep])
+        nfc_info = None
+        if int(nfc_k1) > 0:
+            from vlincs_gallery.feature_centralization import neighbor_feature_centralization
+            emb, nfc_info = neighbor_feature_centralization(
+                emb,
+                k1=int(nfc_k1),
+                k2=int(nfc_k2),
+                eta=float(nfc_eta),
+                group_codes=cam_codes,
+                exclude_same_group=bool(nfc_exclude_same_camera),
+            )
         res = global_agglom_resolve(emb, cam_codes, theta=theta, top_k=top_k, exclude_same_cam=True)
         OFFSET = 10_000_000
         gid_of_seq = {seqs[i]: int(res.labels[k]) + OFFSET for k, i in enumerate(keep)}   # clustered -> cluster id
@@ -650,174 +667,211 @@ class OnlineGallery:
                     "created_seq=s.mn, updated_seq=s.mx "
                     "FROM (SELECT a.gid, COUNT(DISTINCT a.seq) n, MIN(d.wall_clock_ms) lo, MAX(d.wall_clock_ms) hi, "
                     "             ARRAY_AGG(DISTINCT d.camera ORDER BY d.camera) cams, MIN(a.seq) mn, MAX(a.seq) mx "
-                    "      FROM assignments a JOIN detections d ON a.det_id = d.det_id GROUP BY a.gid) s "
+                    "      FROM assignments a JOIN detections d ON a.det_id = d.det_id "
+                    "      WHERE a.decision_type <> 'forced' GROUP BY a.gid) s "
                     "WHERE i.gid = s.gid")
         cur.execute("UPDATE identities SET n_members=0, first_wall_ms=NULL, last_wall_ms=NULL, cameras='{}' "
                     "WHERE gid < %s", (OFFSET,))            # drop the now-empty greedy identities from /state
         # Per-cluster appearance coherence from the resolve embeddings just clustered (right grain for the new
         # OFFSET gids; the matcher's in-memory bank still keys the pre-resolve_global gids, so don't use that).
-        from vlincs_sdk.clustering import _coherence as _sdk_coherence
         coh_rows = []
         for lbl in np.unique(res.labels):
             v = emb[res.labels == lbl]
-            coh_rows.append((round(float(_sdk_coherence(v, "avg")), 4) if len(v) >= 2 else None,
+            coh_rows.append((round(float(_coherence(v, "avg")), 4) if len(v) >= 2 else None,
                              int(lbl) + OFFSET))
         if coh_rows:
             cur.executemany("UPDATE identities SET coherence=%s WHERE gid=%s", coh_rows)
-        self._record_resolve_merges(cur, rows, gid_of_seq, seqs, theta)
         self.con.commit()
         self._global_resolved = True    # the matcher bank now keys the stale pre-resolve gids (see close())
-        return {"clusters": int(res.n_clusters), "theta": float(theta), "min_dets": min_dets,
-                "n_tracklets": len(seqs), "n_clustered": len(keep), "n_singleton": len(seqs) - len(keep)}
+        out = {"clusters": int(res.n_clusters), "theta": float(theta), "min_dets": min_dets,
+               "n_tracklets": len(seqs), "n_clustered": len(keep), "n_singleton": len(seqs) - len(keep)}
+        if nfc_info is not None:
+            out["nfc"] = {
+                "k1": int(nfc_info.k1),
+                "k2": int(nfc_info.k2),
+                "eta": float(nfc_info.eta),
+                "n_mutual_edges": int(nfc_info.n_mutual_edges),
+                "mean_mutuals_per_item": round(float(nfc_info.mean_mutuals_per_item), 6),
+                "exclude_same_camera": bool(nfc_exclude_same_camera),
+            }
+        return out
 
-    def resolve_two_tier(self, theta: float, *, top_k: int = 30, min_dets: int = 1) -> dict:
-        """TWO-TIER global resolve for ``per_video=True`` streams (the per-video-galleries method).
+    def resolve_weak_global(self, cfg=None, *, embedding_role: str = "resolve", fallback_to_match: bool = True,
+                            weak_source: str = "weak", min_dets: int = 1, apply: bool = True,
+                            offset: int = 20_000_000) -> dict:
+        """No-GT weak-supervision global resolve from stored tracklet evidence.
 
-        Re-partitions ALL stored resolve-vectors with a per-video MUST-LINK constraint: tracklets that share
-        a per-video local identity (their streamed gid - the within-camera grouping) are forced to stay
-        together, and cross-video links come from the kNN-sparse cross-camera affinity. Keeps the flat
-        resolve's edge-redundancy AND the per-video grouping (``vlincs_gallery.resolve.mustlink_resolve``) -
-        the variant that beats flat on DS1. New gids are OFFSET clear of the greedy per-video locals.
-
-        Args:
-            theta: cross-video merge affinity; agglomerative ``distance_threshold = 1 - theta``. Calibrate
-                per embedding (see ``estimate_theta_by_violations``); it is NOT a universal constant.
-            top_k: kNN shortlist per tracklet.
-            min_dets: re-partition only tracklets with >= this many dets (default 1 = all; shorter ones
-                otherwise keep their own singleton id).
-
-        Returns:
-            dict: ``{clusters, theta, n_tracklets, n_clustered, n_locals}``.
+        Reads the gallery's per-tracklet embeddings and optional ``weak_tracklet_labels`` rows, runs
+        ``vlincs_gallery.weak_graph.resolve_weak_graph``, and optionally rewrites the live
+        ``assignments`` table with forced delivery gids so ``score()`` / ``export_submission()`` can
+        consume the result. This is deliberately a forced-output layer: it does not update exemplar
+        prototypes, decision_log positives, calibration data, or the matcher's in-memory bank.
         """
-        from vlincs_gallery.resolve import (mustlink_resolve, mustlink_resolve_scalable,
-                                            prepare_mustlink_scalable, cluster_prepared)
-        cur = self.con.cursor()
-        # n.lid = the tracklet's per-video LOCAL gid (its streamed assignment gid; all the tracklet's dets
-        # share it) -> the must-link key. n.cnt = its detection count (the min_dets gate). The exclude-same
-        # key is d.VIDEO, NOT d.camera: DS1 reuses camera names across cards (MCAM00_Tc6 and MCAM00_Tc8 are
-        # both "MCAM00"), and the same person DOES recur across cards, so cross-card links must stay allowed.
-        cur.execute("SELECT e.seq, d.video, e.vec, n.cnt, n.lid FROM embeddings e "
-                    "JOIN detections d ON e.entity_id = d.det_id "
-                    "JOIN (SELECT seq, COUNT(*) cnt, MIN(gid) lid FROM assignments GROUP BY seq) n ON n.seq = e.seq "
-                    "WHERE e.role = 'resolve' ORDER BY e.seq")
-        rows = cur.fetchall()
-        if not rows:
-            raise RuntimeError("resolve_two_tier: no role='resolve' embeddings - pass resolve_emb to add_tracklet")
-        seqs = [int(r[0]) for r in rows]
-        keep = [i for i in range(len(rows)) if int(rows[i][3]) >= min_dets]
-        vids = sorted({rows[i][1] for i in keep}); ccode = {c: j for j, c in enumerate(vids)}
-        cam_codes = np.array([ccode[rows[i][1]] for i in keep], np.int64)
-        local_ids = np.array([int(rows[i][4]) for i in keep], np.int64)
-        emb = np.stack([np.asarray(rows[i][2], np.float32) for i in keep])
-        # Above _RESOLVE_DENSE_MAX tracklets the dense N^2 affinity + precomputed agglomerative OOM (DS2:
-        # ~232k -> 200 GiB). The scalable path (faiss cross-cam kNN + must-link contraction to L locals +
-        # L x L average-linkage) is the exact UPGMA-contraction equivalent (validated == dense on DS1).
-        if len(keep) > _RESOLVE_DENSE_MAX:
-            # Reuse the faiss-kNN + contracted affinity built by a preceding estimate_two_tier_theta on the
-            # SAME (kept) tracklets - the DB is unchanged between estimate and resolve, so rebuilding it
-            # (another ~400s faiss pass at DS2 scale) is pure waste.
-            sig = (min_dets, top_k, len(keep), seqs[keep[0]] if keep else -1,
-                   seqs[keep[-1]] if keep else -1)
-            cached = getattr(self, "_tt_prep", None)
-            if cached is not None and cached[0] == sig:
-                print(f"[online] resolve_two_tier: reusing cached affinity from estimate ({len(keep)} tracklets)",
-                      flush=True)
-                res = cluster_prepared(cached[1], theta)
-            else:
-                print(f"[online] resolve_two_tier: {len(keep)} tracklets > {_RESOLVE_DENSE_MAX} -> scalable "
-                      "(faiss kNN + contracted UPGMA)", flush=True)
-                res = mustlink_resolve_scalable(emb, cam_codes, local_ids, theta=theta, top_k=top_k)
-        else:
-            res = mustlink_resolve(emb, cam_codes, local_ids, theta=theta, top_k=top_k)
-        OFFSET = 100_000_000     # clear of the greedy per-video locals (vidx*VID_OFFSET, <= n_videos*1M) AND
-        gid_of_seq = {seqs[i]: int(res.labels[k]) + OFFSET for k, i in enumerate(keep)}   # resolve_global's 10M
-        sing = OFFSET + int(res.n_clusters) + 1
-        for s in seqs:
-            if s not in gid_of_seq:
-                gid_of_seq[s] = sing; sing += 1
-        new_gids = [gid_of_seq[s] for s in seqs]
-        cur.executemany("INSERT INTO identities (gid, n_members) VALUES (%s, 0) ON CONFLICT (gid) DO NOTHING",
-                        [(g,) for g in sorted(set(new_gids))])
-        cur.execute("UPDATE assignments a SET gid = r.g "
-                    "FROM unnest(%s::bigint[], %s::bigint[]) AS r(s, g) WHERE a.seq = r.s", (seqs, new_gids))
-        cur.execute("UPDATE identities i SET n_members=s.n, first_wall_ms=s.lo, last_wall_ms=s.hi, cameras=s.cams, "
-                    "created_seq=s.mn, updated_seq=s.mx "
-                    "FROM (SELECT a.gid, COUNT(DISTINCT a.seq) n, MIN(d.wall_clock_ms) lo, MAX(d.wall_clock_ms) hi, "
-                    "             ARRAY_AGG(DISTINCT d.camera ORDER BY d.camera) cams, MIN(a.seq) mn, MAX(a.seq) mx "
-                    "      FROM assignments a JOIN detections d ON a.det_id = d.det_id GROUP BY a.gid) s "
-                    "WHERE i.gid = s.gid")
-        cur.execute("UPDATE identities SET n_members=0, first_wall_ms=NULL, last_wall_ms=NULL, cameras='{}' "
-                    "WHERE gid < %s", (OFFSET,))
-        from vlincs_sdk.clustering import _coherence as _sdk_coherence
-        coh_rows = [(round(float(_sdk_coherence(emb[res.labels == lbl], "avg")), 4)
-                     if int((res.labels == lbl).sum()) >= 2 else None, int(lbl) + OFFSET)
-                    for lbl in np.unique(res.labels)]
-        if coh_rows:
-            cur.executemany("UPDATE identities SET coherence=%s WHERE gid=%s", coh_rows)
-        self._record_resolve_merges(cur, rows, gid_of_seq, seqs, theta)
+        from vlincs_gallery.weak_graph import TrackletEvidence, WeakGraphConfig, resolve_weak_graph
+
         self.con.commit()
-        self._global_resolved = True
-        return {"clusters": int(res.n_clusters), "theta": float(theta), "min_dets": min_dets,
-                "n_tracklets": len(seqs), "n_clustered": len(keep), "n_locals": int(len(set(local_ids.tolist())))}
-
-    def estimate_two_tier_theta(self, theta_grid, *, top_k: int = 30, min_dets: int = 1,
-                                budget: float = 0.01, rel_margin: float = 0.35, frame_stride: int = 3):
-        """GT-FREE theta for resolve_two_tier, from the gallery's OWN state (no GT, no scoring).
-
-        Mines co-visibility cannot-link pairs (tracklets sharing a (video, frame) with distinct boxes,
-        IoU < same_box_iou = definitely different people) from the DB, then picks the most-merging theta
-        whose violation rate stays within rel_margin of its floor (estimate_theta_by_violations). Returns
-        (theta, curve). Strong on multi-camera/dense co-visibility (DS1); weak (defaults conservative) where
-        co-visibility is sparse (e.g. 2-camera MS02)."""
-        from vlincs_gallery.resolve import (mustlink_resolve, mustlink_resolve_scalable,
-                                            prepare_mustlink_scalable, cluster_prepared,
-                                            estimate_theta_by_violations)
-        from collections import defaultdict
+        cfg = cfg or WeakGraphConfig()
         cur = self.con.cursor()
-        cur.execute("SELECT e.seq, d.video, e.vec, n.cnt, n.lid FROM embeddings e "
-                    "JOIN detections d ON e.entity_id = d.det_id "
-                    "JOIN (SELECT seq, COUNT(*) cnt, MIN(gid) lid FROM assignments GROUP BY seq) n ON n.seq = e.seq "
-                    "WHERE e.role = 'resolve' ORDER BY e.seq")
-        rows = cur.fetchall()
+
+        def fetch(role: str):
+            cur.execute(
+                """SELECT e.seq, COALESCE(t.tracklet_key, e.entity_id) AS tracklet_key,
+                          COALESCE(t.video, d.video) AS video,
+                          COALESCE(t.camera, d.camera) AS camera,
+                          e.vec,
+                          COALESCE(t.n_dets, n.cnt) AS cnt,
+                          COALESCE(t.start_frame, n.start_frame) AS start_frame,
+                          COALESCE(t.end_frame, n.end_frame) AS end_frame,
+                          w.tokens, w.confidence
+                   FROM embeddings e
+                   JOIN detections d ON e.entity_id = d.det_id
+                   JOIN (
+                        SELECT a.seq, COUNT(*) cnt, MIN(d.frame_idx) start_frame, MAX(d.frame_idx) end_frame
+                        FROM assignments a JOIN detections d ON a.det_id = d.det_id GROUP BY a.seq
+                   ) n ON n.seq = e.seq
+                   LEFT JOIN tracklets t ON t.entity_id = e.entity_id
+                   LEFT JOIN weak_tracklet_labels w ON w.entity_id = e.entity_id AND w.source = %s
+                   WHERE e.role = %s AND n.cnt >= %s
+                   ORDER BY e.seq""",
+                (weak_source, role, int(min_dets)),
+            )
+            return cur.fetchall()
+
+        rows = fetch(embedding_role)
+        actual_role = embedding_role
+        if not rows and fallback_to_match and embedding_role != "match":
+            rows = fetch("match")
+            actual_role = "match"
         if not rows:
-            raise RuntimeError("estimate_two_tier_theta: no role='resolve' embeddings")
+            raise RuntimeError(
+                f"resolve_weak_global: no role={embedding_role!r} embeddings with >= {min_dets} detections"
+            )
+
         seqs = [int(r[0]) for r in rows]
-        keep = [i for i in range(len(rows)) if int(rows[i][3]) >= min_dets]
-        vids = sorted({rows[i][1] for i in keep}); ccode = {c: j for j, c in enumerate(vids)}
-        cam_codes = np.array([ccode[rows[i][1]] for i in keep], np.int64)
-        local_ids = np.array([int(rows[i][4]) for i in keep], np.int64)
-        emb = np.stack([np.asarray(rows[i][2], np.float32) for i in keep])
-        pos = {seqs[i]: k for k, i in enumerate(keep)}          # seq -> row in emb/local_ids
-        # co-visibility cannot-link pairs (frame-strided for speed), indexed into the emb rows
-        cur.execute("SELECT a.seq, d.video, d.frame_idx, d.x1, d.y1, d.x2, d.y2 FROM detections d "
-                    "JOIN assignments a ON a.det_id = d.det_id WHERE d.frame_idx %% %s = 0", (frame_stride,))
-        present = defaultdict(list)
-        for seq, video, fr, x1, y1, x2, y2 in cur.fetchall():
-            if int(seq) in pos:
-                present[(video, int(fr))].append((pos[int(seq)], (x1, y1, x2, y2)))
-        sbi = float(self.config.get("same_box_iou", 0.35))
-        cl = set()
-        for lst in present.values():
-            if len(lst) < 2:
+        records = [
+            TrackletEvidence(
+                tracklet_key=str(r[1]),
+                video=str(r[2]),
+                camera=str(r[3]),
+                embedding=np.asarray(r[4], np.float32),
+                start_frame=int(r[6]),
+                end_frame=int(r[7]),
+                weak_tokens=r[8],
+            )
+            for r in rows
+        ]
+        result = resolve_weak_graph(records, cfg)
+        weak_to_gid: dict[str, int] = {}
+        next_gid = int(offset)
+        for assignment in result.assignments:
+            if assignment.predicted_global_id not in weak_to_gid:
+                weak_to_gid[assignment.predicted_global_id] = next_gid
+                next_gid += 1
+        gid_by_seq = {
+            seq: weak_to_gid[assignment.predicted_global_id]
+            for seq, assignment in zip(seqs, result.assignments)
+        }
+        conf_by_seq = {
+            seq: float(assignment.confidence)
+            for seq, assignment in zip(seqs, result.assignments)
+        }
+
+        if apply:
+            new_gids = sorted(set(gid_by_seq.values()))
+            cur.executemany("INSERT INTO identities (gid, n_members) VALUES (%s, 0) ON CONFLICT (gid) DO NOTHING",
+                            [(gid,) for gid in new_gids])
+            cur.execute(
+                """UPDATE assignments a SET gid = r.g, score = r.score, decision_type = 'forced'
+                   FROM unnest(%s::bigint[], %s::bigint[], %s::real[]) AS r(s, g, score)
+                   WHERE a.seq = r.s""",
+                (seqs, [gid_by_seq[s] for s in seqs], [conf_by_seq[s] for s in seqs]),
+            )
+            cur.execute(
+                """UPDATE identities i SET n_members=s.n, first_wall_ms=s.lo, last_wall_ms=s.hi,
+                          cameras=s.cams, created_seq=s.mn, updated_seq=s.mx
+                   FROM (SELECT a.gid, COUNT(DISTINCT a.seq) n, MIN(d.wall_clock_ms) lo,
+                                MAX(d.wall_clock_ms) hi, ARRAY_AGG(DISTINCT d.camera ORDER BY d.camera) cams,
+                                MIN(a.seq) mn, MAX(a.seq) mx
+                         FROM assignments a JOIN detections d ON a.det_id = d.det_id
+                         WHERE a.decision_type <> 'forced' GROUP BY a.gid) s
+                   WHERE i.gid = s.gid"""
+            )
+            cur.execute("UPDATE identities SET n_members=0, first_wall_ms=NULL, last_wall_ms=NULL, cameras='{}' "
+                        "WHERE gid < %s", (int(offset),))
+            cur.execute("UPDATE identities SET n_members=0, first_wall_ms=NULL, last_wall_ms=NULL, cameras='{}' "
+                        "WHERE gid >= %s AND NOT (gid = ANY(%s::bigint[]))", (int(offset), new_gids))
+            self.con.commit()
+            self._global_resolved = True
+
+        return {
+            "applied": bool(apply),
+            "embedding_role": actual_role,
+            "weak_source": weak_source,
+            "min_dets": int(min_dets),
+            "offset": int(offset),
+            "n_tracklets": len(records),
+            "n_weak_labels": int(sum(r[8] is not None for r in rows)),
+            "clusters": result.summary["components"],
+            "largest_component": result.summary["largest_component"],
+            "candidate_edges": result.summary["candidate_edges"],
+            "accepted_edges": result.summary["accepted_edges"],
+            "cannot_link_edges": result.summary["cannot_link_edges"],
+            "decision_status": result.summary["decision_status"],
+            "uses_ground_truth": result.summary["uses_ground_truth"],
+        }
+
+    def import_weak_labels_csv(self, path: str, *, source: str = "weak", key_col: str = "tracklet_key",
+                               token_cols: list[str] | None = None, token_col: str | None = "weak_tokens",
+                               confidence_col: str | None = "confidence") -> dict:
+        """Import external weak-label CSV rows keyed by tracklet_key into the live DB.
+
+        This is the bridge for offline LM/VLM/CV labelers: a CSV from contact sheets can be joined to
+        the tracklets table without using reference identity labels. Columns whose names contain
+        ``gt``, ``reference``, ``audit``, or ``global_id`` are ignored even if present.
+        """
+        import pandas as pd
+
+        df = pd.read_csv(path)
+        if key_col not in df.columns:
+            raise ValueError(f"weak label CSV is missing key column {key_col!r}")
+        if token_cols is None:
+            token_cols = [str(col) for col in df.columns if str(col) != key_col]
+        forbidden = [col for col in token_cols if any(part in str(col).lower() for part in _WEAK_LABEL_FORBIDDEN_SUBSTRINGS)]
+        if forbidden:
+            token_cols = [col for col in token_cols if col not in forbidden]
+
+        keys = [str(k) for k in df[key_col].dropna().astype(str).unique()]
+        cur = self.con.cursor()
+        if not keys:
+            return {"csv_rows": int(len(df)), "matched": 0, "inserted": 0, "missing": 0, "source": source}
+        cur.execute("SELECT tracklet_key, entity_id, seq FROM tracklets WHERE tracklet_key = ANY(%s)", (keys,))
+        mapping = {str(key): (entity_id, int(seq)) for key, entity_id, seq in cur.fetchall()}
+
+        rows = []
+        missing = 0
+        for row in df.itertuples(index=False):
+            data = row._asdict()
+            key = str(data.get(key_col, ""))
+            if key not in mapping:
+                missing += 1
                 continue
-            idxs = np.array([i for i, _ in lst]); B = np.array([b for _, b in lst], float)
-            ai, bi = np.where(np.triu(_iou_mat(B) < sbi, 1))
-            for a, b in zip(idxs[ai], idxs[bi]):
-                cl.add((int(a), int(b)) if a < b else (int(b), int(a)))
-        # Build the faiss-kNN + contracted affinity ONCE for the whole theta sweep when large (the dense
-        # path would recompute the N^2 work per grid point and OOM at DS2 scale); else dense per-theta.
-        if len(keep) > _RESOLVE_DENSE_MAX:
-            print(f"[online] estimate_two_tier_theta: {len(keep)} tracklets > {_RESOLVE_DENSE_MAX} -> scalable "
-                  "(prepare affinity once, re-cut per theta)", flush=True)
-            prep = prepare_mustlink_scalable(emb, cam_codes, local_ids, top_k=top_k)
-            resolve_fn = lambda t: cluster_prepared(prep, t)
-            # stash for resolve_two_tier so it reuses this affinity instead of rebuilding (same DB state)
-            sig = (min_dets, top_k, len(keep), seqs[keep[0]] if keep else -1, seqs[keep[-1]] if keep else -1)
-            self._tt_prep = (sig, prep)
-        else:
-            resolve_fn = lambda t: mustlink_resolve(emb, cam_codes, local_ids, theta=t, top_k=top_k)
-        return estimate_theta_by_violations(
-            resolve_fn, theta_grid, cl, budget=budget, rel_margin=rel_margin)
+            entity_id, seq = mapping[key]
+            confidence = None
+            if confidence_col and confidence_col in data and data[confidence_col] == data[confidence_col]:
+                confidence = float(data[confidence_col])
+            payload = _weak_csv_token_payload(data, token_cols, token_col=token_col)
+            rows.append((entity_id, seq, str(source), _json_weak_tokens(payload), confidence))
+        if rows:
+            cur.executemany(_UPSERT_WEAK_LABEL, rows)
+            self.con.commit()
+        return {
+            "csv_rows": int(len(df)),
+            "matched": int(len(rows)),
+            "inserted": int(len(rows)),
+            "missing": int(missing),
+            "source": source,
+            "ignored_identity_columns": forbidden,
+        }
 
     def score(self) -> dict:
         """IDF1 from the live DB via the canonical reid_hota scorer (leaderboard config, dense=False).

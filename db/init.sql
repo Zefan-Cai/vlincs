@@ -105,6 +105,23 @@ CREATE INDEX IF NOT EXISTS emb_model_role ON embeddings (model_id, role);
 CREATE INDEX IF NOT EXISTS emb_entity     ON embeddings (entity_id);
 CREATE INDEX IF NOT EXISTS emb_rep        ON embeddings (model_id, seq) WHERE is_rep;
 
+-- Tracklet metadata at the gallery unit of work. entity_id is the representative detection id used by
+-- embeddings.entity_id; tracklet_key is the caller's stable external key when one exists. This lets
+-- offline weak-label CSVs keyed by tracker output join back to the live DB without using GT labels.
+CREATE TABLE IF NOT EXISTS tracklets (
+    seq          BIGINT PRIMARY KEY,
+    entity_id    TEXT NOT NULL REFERENCES detections(det_id) ON DELETE CASCADE,
+    tracklet_key TEXT NOT NULL,
+    video        TEXT NOT NULL,
+    camera       TEXT NOT NULL,
+    start_frame  INTEGER NOT NULL,
+    end_frame    INTEGER NOT NULL,
+    n_dets       INTEGER NOT NULL,
+    UNIQUE (entity_id),
+    UNIQUE (tracklet_key)
+);
+CREATE INDEX IF NOT EXISTS tracklets_key ON tracklets (tracklet_key);
+
 -- Drop dead fixed-dim embedding columns / table / hnsw index from older per-dataset DBs (no-op on fresh
 -- DBs). Run AFTER the `embeddings` CREATE.
 ALTER TABLE detections DROP COLUMN IF EXISTS embedding;
@@ -118,7 +135,7 @@ CREATE TABLE IF NOT EXISTS assignments (
     det_id        TEXT PRIMARY KEY REFERENCES detections(det_id),
     gid           BIGINT NOT NULL REFERENCES identities(gid),
     score         REAL,
-    decision_type TEXT   NOT NULL CHECK (decision_type IN ('match','expand','quarantine','revised')),
+    decision_type TEXT   NOT NULL CHECK (decision_type IN ('match','expand','quarantine','revised','forced')),
     seq           BIGINT NOT NULL
 );
 CREATE INDEX IF NOT EXISTS asn_gid ON assignments (gid);
@@ -130,11 +147,26 @@ CREATE INDEX IF NOT EXISTS asn_seq ON assignments (seq);
 -- is retained for forward-compat (currently unused).
 ALTER TABLE assignments DROP CONSTRAINT IF EXISTS assignments_decision_type_check;
 ALTER TABLE assignments ADD CONSTRAINT assignments_decision_type_check
-    CHECK (decision_type IN ('match','expand','quarantine','revised'));
+    CHECK (decision_type IN ('match','expand','quarantine','revised','forced'));
 -- disc_ratio is a WHOLE-GALLERY scalar (mean kNN centroid separation), so a per-detection column was the
 -- wrong grain - every det of a tracklet shared one gid and so one value. The decision-time snapshot lives
 -- on decision_log.disc_ratio (one row per decision = a real time-series); drop the dead per-det column.
 ALTER TABLE assignments DROP COLUMN IF EXISTS disc_ratio;
+
+-- Optional weak evidence attached to the tracklet unit of work. entity_id is the representative
+-- detection id used by embeddings.entity_id; tokens are language/VLM/CV attributes such as
+-- {"upper_color":"black","hat":"no"} or ["upper_color:black", "hat:no"]. These are evidence,
+-- never identity labels.
+CREATE TABLE IF NOT EXISTS weak_tracklet_labels (
+    entity_id  TEXT   NOT NULL REFERENCES detections(det_id) ON DELETE CASCADE,
+    seq        BIGINT NOT NULL,
+    source     TEXT   NOT NULL DEFAULT 'weak',
+    tokens     JSONB  NOT NULL DEFAULT '{}',
+    confidence REAL,
+    created_at TIMESTAMPTZ NOT NULL DEFAULT now(),
+    PRIMARY KEY (entity_id, source)
+);
+CREATE INDEX IF NOT EXISTS weak_tracklet_labels_seq ON weak_tracklet_labels (seq);
 
 -- Append-only event record -> the gallery state is a deterministic fold over this log (replay).
 CREATE TABLE IF NOT EXISTS decision_log (

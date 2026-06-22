@@ -291,13 +291,6 @@ def meta(card: str = ""):
     seqspan = _q(f"""SELECT min(dl.seq) s0, max(dl.seq) s1, count(*) n
                      FROM decision_log dl JOIN detections d ON d.det_id=dl.det_id WHERE TRUE{card_clause_d}""",
                  card_params, one=True) or {}
-    # The resolve writes a terminal merge WAVE at at_seq = (global last decision seq)+1 (see
-    # OnlineGallery._record_resolve_merges). Extend the decision scrubber by that one step so dragging to the
-    # end applies the resolve merges and the per-video locals "pop" into the final resolved identities.
-    rsq = _q("SELECT max(at_seq) r FROM merges WHERE at_seq > (SELECT COALESCE(max(seq),0) FROM decision_log)", one=True)
-    resolve_seq = (rsq or {}).get("r")
-    if resolve_seq is not None and seqspan.get("s1") is not None:
-        seqspan["s1"] = max(int(seqspan["s1"]), int(resolve_seq))
     cards = [r["card"] for r in _q("SELECT DISTINCT split_part(video,'_',5) AS card FROM cameras ORDER BY 1")]
     tallies = _q("SELECT decision_type, admitted, count(*) n FROM decision_log GROUP BY 1,2")
     n = _q("""SELECT (SELECT count(*) FROM identities) gids,
@@ -308,7 +301,6 @@ def meta(card: str = ""):
     return {"dataset": gdb.dataset_db(_active_dataset()), "cameras": cams, "t0": span.get("t0"), "t1": span.get("t1"),
             "t_quantiles": t_quantiles, "seq_quantiles": seq_quantiles,
             "seq0": seqspan.get("s0"), "seq1": seqspan.get("s1"), "n_decisions": seqspan.get("n"),
-            "resolve_seq": resolve_seq,    # the terminal step where the resolve "pops" (NULL if not resolved)
             "cards": cards, "card": card,
             "counts": n, "decision_tallies": tallies, "models": models}
 

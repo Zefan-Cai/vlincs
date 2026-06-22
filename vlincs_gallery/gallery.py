@@ -41,6 +41,20 @@ def _normed(v: np.ndarray) -> np.ndarray:
     return v / (np.linalg.norm(v) + 1e-9)
 
 
+def _discriminability_ratio(centroids: np.ndarray, k: int = 20) -> float:
+    """Mean kNN centroid separation for the live gallery."""
+    c = np.asarray(centroids, dtype=np.float32)
+    if c.shape[0] < 2:
+        return float("nan")
+    norms = np.linalg.norm(c, axis=1, keepdims=True)
+    c = c / np.maximum(norms, 1e-9)
+    sim = np.clip(c @ c.T, -1.0, 1.0)
+    np.fill_diagonal(sim, -np.inf)
+    nn = min(max(int(k), 1), c.shape[0] - 1)
+    nearest = np.partition(sim, -nn, axis=1)[:, -nn:]
+    return float(np.mean(1.0 - nearest))
+
+
 def _haversine_m(a, b):
     R = 6371000.0
     la1, lo1 = math.radians(a[0]), math.radians(a[1])
@@ -394,12 +408,8 @@ class IdentityGallery:
         return np.stack([_normed(self.rep_mat[self.rep_gid == g].mean(0)) for g in gids])
 
     def discriminability(self) -> float:
-        try:
-            from vlincs_sdk.gallery import discriminability_ratio  # SDK helper (lazy, OPTIONAL)
-        except ImportError:
-            return float("nan")   # diagnostic snapshot only; the base kit (no vlincs-sdk) skips it -> disc_ratio NULL
         c = self.centroids()
-        return discriminability_ratio(c, k=self.disc_k) if len(c) >= 2 else float("nan")
+        return _discriminability_ratio(c, k=self.disc_k)
 
     # --------------------------------------------------------------------------------------------
     # MATCHER CORE
