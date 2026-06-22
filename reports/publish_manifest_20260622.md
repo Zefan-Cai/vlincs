@@ -6,9 +6,9 @@ Date: 2026-06-22
 
 - Setting: no-anchor global-id research.
 - Global-id pair model: F1 / precision / recall =
-  `0.775234 / 0.820504 / 0.734698`.
+  `0.781330 / 0.849326 / 0.723413`.
 - End-to-end best: IDF1 / HOTA / AssA =
-  `0.658025 / 0.521057 / 0.536049`.
+  `0.664050 / 0.524893 / 0.536568`.
 - Goal remains open: end-to-end IDF1 is still below `0.70`.
 
 ## Main Recent Promotions
@@ -308,3 +308,63 @@ those old archive payloads remain S3-best-effort rather than a blocking
 deliverable for this publish.  The current audit JSON, reports, state, and code
 needed to continue the no-anchor research loop are included in the verified
 publish set.
+
+## Latest Offline Component-Split Promotion
+
+A local DB-free scorer was restored from DS1 tracklet parquets plus S3 GT and
+calibrated by reproducing the previous direct full score exactly:
+
+`IDF1 / HOTA / AssA = 0.655836 / 0.519304 / 0.534154`
+
+Then a no-anchor split/admission edit on top of rank58 split three impure
+components:
+
+- `96000035` with SigLIP `k=2`;
+- `96000048` with weakmetric `k=4`;
+- `96000020` with weakmetric `k=6`.
+
+Pair F1 / precision / recall improved to:
+
+`0.781330 / 0.849326 / 0.723413`
+
+Direct full improved to:
+
+`IDF1 / HOTA / AssA = 0.661843 / 0.523137 / 0.534683`
+
+After the existing no-GT `density_simple` wrapper and canonical `p005_area`
+delivery filter, the current best is:
+
+`IDF1 / HOTA / AssA = 0.664050 / 0.524893 / 0.536568`
+
+Key artifacts:
+
+```text
+s3://dit-scale-up/zcai/vlincs/reports_current/no_anchor_offline_component_split_promotion_20260622.md
+s3://dit-scale-up/zcai/vlincs/local_runs_current/offline_no_anchor_split_probe_20260622/best_combo_split_assignments.csv
+s3://dit-scale-up/zcai/vlincs/local_runs_current/offline_no_anchor_split_probe_20260622/best_combo_split_density_p005_area.json
+s3://dit-scale-up/zcai/vlincs/local_runs_current/offline_no_anchor_split_probe_20260622/best_combo_split_density_p005_area.zip
+```
+
+## Latest Current-Best Residual Greedy12 Refutation
+
+After the component-split promotion, a residual greedy12 split probe improved
+the eval-only pair proxy again:
+
+`F1 / precision / recall = 0.785529 / 0.862643 / 0.721070`
+
+However, full-score validation did not improve:
+
+`IDF1 / HOTA / AssA = 0.661843 / 0.523137 / 0.534683`
+
+This ties the promoted 3-component split direct full score at 6 decimals.  The
+extra residual splits are retained as hard negatives for the split admission
+model: pair precision gains alone are not enough to predict pipeline IDF1 gain.
+
+Fresh sync pointers:
+
+```text
+s3://dit-scale-up/zcai/vlincs/reports_current/no_anchor_currentbest_residual_greedy12_refutation_20260622.md
+s3://dit-scale-up/zcai/vlincs/local_runs_current/offline_no_anchor_split_probe_20260622/currentbest_residual_split_probe.json
+s3://dit-scale-up/zcai/vlincs/local_runs_current/offline_no_anchor_split_probe_20260622/currentbest_residual_greedy12_full_export.json
+s3://dit-scale-up/zcai/vlincs/local_runs_current/offline_no_anchor_split_probe_20260622/currentbest_residual_greedy12_full_export.zip
+```
