@@ -1663,5 +1663,261 @@
     "gt_use": "eval_only",
     "next_direction": "train_or_calibrate_no_anchor_subpart_side_effect_referee_and_compose_low_risk_micro_positives",
     "status": "promoted_not_complete"
+  },
+  {
+    "direction": "compose_multiview_subpart_low_risk_micro_positives",
+    "evidence": {
+      "gt_eval_only": true,
+      "negative_count": 2,
+      "new_best_found": false,
+      "positive_count": 0,
+      "previous_best_assa": 0.535819,
+      "previous_best_hota": 0.520723,
+      "previous_best_idf1": 0.657653,
+      "rank3_negative_confirmations": [
+        "subpart_combo_r02_r03_9seq_assignments",
+        "subpart_combo_r02_r01_r03_18seq_assignments"
+      ],
+      "result_rows": [
+        {
+          "assa": 0.535819,
+          "delta_idf1_vs_current_best": 0.0,
+          "edits": [
+            "10->22",
+            "9->32"
+          ],
+          "hota": 0.520723,
+          "idf1": 0.657653,
+          "label": "tie",
+          "mcam04_idf1": 0.565566,
+          "moved_tracklets": 11,
+          "ranks": [
+            2,
+            1
+          ],
+          "side_effect_label": "safe_neutral_with_10_to22"
+        },
+        {
+          "assa": 0.535819,
+          "delta_idf1_vs_current_best": 0.0,
+          "edits": [
+            "10->22",
+            "24->41"
+          ],
+          "hota": 0.520723,
+          "idf1": 0.657653,
+          "label": "tie",
+          "mcam04_idf1": 0.565566,
+          "moved_tracklets": 9,
+          "ranks": [
+            2,
+            5
+          ],
+          "side_effect_label": "safe_neutral_with_10_to22"
+        },
+        {
+          "assa": 0.535819,
+          "delta_idf1_vs_current_best": 0.0,
+          "edits": [
+            "10->22",
+            "32->9"
+          ],
+          "hota": 0.520723,
+          "idf1": 0.657653,
+          "label": "tie",
+          "mcam04_idf1": 0.565566,
+          "moved_tracklets": 8,
+          "ranks": [
+            2,
+            6
+          ],
+          "side_effect_label": "safe_neutral_with_10_to22"
+        },
+        {
+          "assa": 0.535819,
+          "delta_idf1_vs_current_best": 0.0,
+          "edits": [
+            "10->22",
+            "9->19"
+          ],
+          "hota": 0.520723,
+          "idf1": 0.657653,
+          "label": "tie",
+          "mcam04_idf1": 0.565566,
+          "moved_tracklets": 11,
+          "ranks": [
+            2,
+            7
+          ],
+          "side_effect_label": "safe_neutral_with_10_to22"
+        },
+        {
+          "assa": 0.535819,
+          "delta_idf1_vs_current_best": 0.0,
+          "edits": [
+            "10->22",
+            "9->32",
+            "24->41"
+          ],
+          "hota": 0.520723,
+          "idf1": 0.657653,
+          "label": "tie",
+          "mcam04_idf1": 0.565566,
+          "moved_tracklets": 18,
+          "ranks": [
+            2,
+            1,
+            5
+          ],
+          "side_effect_label": "safe_neutral_with_10_to22"
+        },
+        {
+          "assa": 0.535819,
+          "delta_idf1_vs_current_best": 0.0,
+          "edits": [
+            "10->22",
+            "9->32",
+            "32->9"
+          ],
+          "hota": 0.520723,
+          "idf1": 0.657653,
+          "label": "tie",
+          "mcam04_idf1": 0.565566,
+          "moved_tracklets": 17,
+          "ranks": [
+            2,
+            1,
+            6
+          ],
+          "side_effect_label": "safe_neutral_with_10_to22"
+        },
+        {
+          "assa": 0.535819,
+          "delta_idf1_vs_current_best": 0.0,
+          "edits": [
+            "10->22",
+            "9->32",
+            "9->19"
+          ],
+          "hota": 0.520723,
+          "idf1": 0.657653,
+          "label": "tie",
+          "mcam04_idf1": 0.565566,
+          "moved_tracklets": 20,
+          "ranks": [
+            2,
+            1,
+            7
+          ],
+          "side_effect_label": "safe_neutral_with_10_to22"
+        },
+        {
+          "assa": 0.535819,
+          "delta_idf1_vs_current_best": 0.0,
+          "edits": [
+            "10->22",
+            "24->41",
+            "32->9"
+          ],
+          "hota": 0.520723,
+          "idf1": 0.657653,
+          "label": "tie",
+          "mcam04_idf1": 0.565566,
+          "moved_tracklets": 15,
+          "ranks": [
+            2,
+            5,
+            6
+          ],
+          "side_effect_label": "safe_neutral_with_10_to22"
+        },
+        {
+          "assa": 0.535819,
+          "delta_idf1_vs_current_best": 0.0,
+          "edits": [
+            "10->22",
+            "24->41",
+            "9->19"
+          ],
+          "hota": 0.520723,
+          "idf1": 0.657653,
+          "label": "tie",
+          "mcam04_idf1": 0.565566,
+          "moved_tracklets": 18,
+          "ranks": [
+            2,
+            5,
+            7
+          ],
+          "side_effect_label": "safe_neutral_with_10_to22"
+        },
+        {
+          "assa": 0.535819,
+          "delta_idf1_vs_current_best": 0.0,
+          "edits": [
+            "10->22",
+            "32->9",
+            "9->19"
+          ],
+          "hota": 0.520723,
+          "idf1": 0.657653,
+          "label": "tie",
+          "mcam04_idf1": 0.565566,
+          "moved_tracklets": 17,
+          "ranks": [
+            2,
+            6,
+            7
+          ],
+          "side_effect_label": "safe_neutral_with_10_to22"
+        },
+        {
+          "assa": 0.535698,
+          "delta_idf1_vs_current_best": -8.3e-05,
+          "edits": [
+            "10->22",
+            "19->11"
+          ],
+          "hota": 0.520622,
+          "idf1": 0.65757,
+          "label": "negative",
+          "mcam04_idf1": 0.565785,
+          "moved_tracklets": 9,
+          "ranks": [
+            2,
+            3
+          ],
+          "side_effect_label": "rank3_19_to11_negative_confirmed"
+        },
+        {
+          "assa": 0.535698,
+          "delta_idf1_vs_current_best": -8.3e-05,
+          "edits": [
+            "10->22",
+            "9->32",
+            "19->11"
+          ],
+          "hota": 0.520622,
+          "idf1": 0.65757,
+          "label": "negative",
+          "mcam04_idf1": 0.565785,
+          "moved_tracklets": 18,
+          "ranks": [
+            2,
+            1,
+            3
+          ],
+          "side_effect_label": "rank3_19_to11_negative_confirmed"
+        }
+      ],
+      "tie_count": 10,
+      "uses_anchors": false
+    },
+    "finding": "Composing the latest 10->22 micro-promotion with low-risk/tie multiview subpart edits produced 10 exact ties and 2 rank3 negatives, no e2e gain.",
+    "gt_use": "eval_only",
+    "iteration": 88,
+    "next_direction": "train_subpart_side_effect_referee_and_search_new_high_recall_false_split_repairs",
+    "status": "refuted_no_new_best",
+    "ts": "2026-06-22"
   }
 ]

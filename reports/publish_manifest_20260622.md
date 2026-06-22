@@ -92,3 +92,25 @@ s3://dit-scale-up/zcai/vlincs/remote_runs_h100-test-3_20260622/no_anchor_current
 s3://dit-scale-up/zcai/vlincs/remote_runs_h100-test-3_20260622/no_anchor_currentbest_subpart_followup_20260622/
 s3://dit-scale-up/zcai/vlincs/core_snapshot_20260622/
 ```
+
+## Latest Multiview Combo Refutation
+
+A follow-up composition run tested 12 low-risk/tie multiview subpart combos on top of the latest `weakmetric 10 -> 22` promotion.
+
+Result: no new best. Ten combinations tied the standing current best exactly:
+
+`IDF1 / HOTA / AssA = 0.657653 / 0.520723 / 0.535819`
+
+The two combinations containing selection rank `3`, corresponding to `19 -> 11`, dropped to:
+
+`IDF1 / HOTA / AssA = 0.657570 / 0.520622 / 0.535698`
+
+This converts `19 -> 11` from a suspicious near-negative into a confirmed hard-negative side-effect label. The next branch should train/calibrate a side-effect referee and search new high-recall false-split repair sources instead of blindly composing tie edits.
+
+Additional S3 pointers:
+
+```text
+s3://dit-scale-up/zcai/vlincs/local_snapshots/vlincs_reid_by_search_20260622_current.tgz
+s3://dit-scale-up/zcai/vlincs/remote_runs_h100-test-3_20260622/no_anchor_currentbest_subpart_multiview_combo_20260622/
+```
+
