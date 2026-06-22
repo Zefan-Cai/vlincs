@@ -8,7 +8,7 @@ Date: 2026-06-22
 - Global-id pair model: F1 / precision / recall =
   `0.775234 / 0.820504 / 0.734698`.
 - End-to-end best: IDF1 / HOTA / AssA =
-  `0.657653 / 0.520723 / 0.535819`.
+  `0.657887 / 0.520944 / 0.535983`.
 - Goal remains open: end-to-end IDF1 is still below `0.70`.
 
 ## Main Recent Promotions
@@ -160,4 +160,29 @@ s3://dit-scale-up/zcai/vlincs/remote_runs_h100-test-3_20260622/no_anchor_current
 s3://dit-scale-up/zcai/vlincs/remote_runs_h100-test-3_20260622/no_anchor_filter_sweep_currentbest_20260622_env/
 s3://dit-scale-up/zcai/vlincs/remote_runs_h100-test-3_20260622/no_anchor_sideeffect_blacklisted_subpart_search_20260622/
 s3://dit-scale-up/zcai/vlincs/research_snapshot_current/
+```
+
+
+## Latest High-Mass Refutation
+
+Starting from the `32 -> 15 + 47 -> 2330` current best, a high-mass no-anchor
+candidate sweep selected 143 candidate edits after side-effect blacklist
+filtering.  Canonical p005 full scoring of the top six found no new best:
+`32 -> 41` tied the standing score exactly, while the remaining broad 34-tracklet
+moves were negative.
+
+A targeted `21 -> 60` peel ablation tested sizes 10/16/22.  The best near miss
+was size 16:
+
+`IDF1 / HOTA / AssA = 0.657877 / 0.520918 / 0.535962`
+
+This is only `0.000010` below the current best, so it is retained as a hard
+near-miss side-effect label rather than promoted.  The current best remains:
+
+`IDF1 / HOTA / AssA = 0.657887 / 0.520944 / 0.535983`
+
+Additional S3 pointer:
+
+```text
+s3://dit-scale-up/zcai/vlincs/remote_runs_h100-test-3_20260622/no_anchor_highmass_from_r47r49_20260622/
 ```

@@ -1935,5 +1935,10 @@
     "direction": "side_effect_blacklisted_low_video_subpart_candidate_search",
     "finding": "Blacklist-filtered no-anchor subpart search produced a micro-promotion: 32->15 plus 47->2330 moved 14 tracklets and scored e2e IDF1/HOTA/AssA 0.657887/0.520944/0.535983; still below 0.70, but it expands the side-effect label bank with positives, ties, and negatives.",
     "status": "active"
+  },
+  {
+    "direction": "highmass_from_r47r49_and_peel21_refutation",
+    "finding": "High-mass direct edits from the r47+r49 best did not improve e2e IDF1. Broad 34-tracklet moves are negative or neutral; the best 21->60 peel size16 is a near-tie hard negative at 0.657877, 0.000010 below the standing 0.657887 best. Continue with a calibrated high-mass/subpart side-effect referee rather than direct broad moved-mass promotion.",
+    "status": "closed"
   }
 ]

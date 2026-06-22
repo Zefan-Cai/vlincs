@@ -11,19 +11,19 @@
   "goal_global_id_pair_f1": 0.7,
   "goal_global_id_pair_precision": 0.7,
   "goal_global_id_pair_recall": 0.7,
-  "iteration": 90,
+  "iteration": 91,
   "last_artifacts": [
-    "reports/no_anchor_sideeffect_blacklisted_subpart_promotion_20260622.md",
-    "local_runs/remote_h100_test_3_20260622/no_anchor_sideeffect_blacklisted_subpart_search_20260622/p005_fullscore_summary.json",
-    "local_runs/remote_h100_test_3_20260622/no_anchor_sideeffect_blacklisted_subpart_search_20260622/p005_combo_fullscore_summary.json",
-    "local_runs/remote_h100_test_3_20260622/no_anchor_sideeffect_blacklisted_subpart_search_20260622/blacklisted_novel_selection.json",
-    "local_runs/remote_h100_test_3_20260622/no_anchor_sideeffect_blacklisted_subpart_search_20260622/combos/subpart_combo_manifest.json",
-    "/mnt/localssd/vlincs_reid_runs/no_anchor_sideeffect_blacklisted_subpart_search_20260622"
+    "reports/no_anchor_highmass_from_r47r49_refutation_20260622.md",
+    "local_runs/remote_h100_test_3_20260622/no_anchor_highmass_from_r47r49_20260622/p005_fullscore_top6_summary.json",
+    "local_runs/remote_h100_test_3_20260622/no_anchor_highmass_from_r47r49_20260622/p005_peel21_fullscore_summary.json",
+    "local_runs/remote_h100_test_3_20260622/no_anchor_highmass_from_r47r49_20260622/highmass_blacklisted_selection.json",
+    "local_runs/remote_h100_test_3_20260622/no_anchor_highmass_from_r47r49_20260622/no_anchor_highmass_from_r47r49_20260622_light.tgz",
+    "/mnt/localssd/vlincs_reid_runs/no_anchor_highmass_from_r47r49_20260622"
   ],
-  "last_direction": "side_effect_blacklisted_low_video_subpart_candidate_search",
-  "last_result": "Generated three no-anchor subpart candidate pools from the current best assignment, filtered with the accumulated side-effect blacklist, full-scored six novel candidates, then full-scored five positive/tie combos. New best is combo 32->15 + 47->2330, moving 14 tracklets and scoring IDF1/HOTA/AssA 0.657887/0.520944/0.535983. Singles: 32->15 reached 0.657860 and 47->2330 reached 0.657680; 24->31 and 31->24 were safe-neutral; 11->19 and 44->29 were negatives. E2E remains below 0.70.",
+  "last_direction": "highmass_from_r47r49_and_peel21_refutation",
+  "last_result": "Generated high-mass no-anchor subpart candidates from the r47+r49 current best and full-scored top six plus 21->60 peel sizes 10/16/22. No new best: 32->41 tied the standing best, broad high-mass edits were negative, and the best 21->60 peel size16 reached IDF1/HOTA/AssA 0.657877/0.520918/0.535962, only 0.000010 below the current best. Treat these as side-effect labels and near-miss hard negatives; current best remains 0.657887/0.520944/0.535983.",
   "last_updated": "2026-06-22",
-  "next_direction": "side_effect_label_bank_high_mass_search_from_r47_r49_best",
-  "stale_count": 0,
-  "status": "active_no_anchor_sideeffect_blacklisted_subpart_promoted_best_e2e_0p657887_e2e_still_below_0p70"
+  "next_direction": "train_highmass_subpart_side_effect_referee_from_positive_tie_negative_and_peel_labels",
+  "stale_count": 1,
+  "status": "active_no_anchor_highmass_refutation_best_e2e_0p657887_e2e_still_below_0p70"
 }
