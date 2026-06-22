@@ -4,6 +4,8 @@
 services:
   db:
     image: pgvector/pgvector:pg16          # pgvector only (the schema needs the `vector` type; no postgis)
+    restart: unless-stopped                # survive host reboots/docker restarts (a 2026-06-19 reboot left the
+                                           # whole stack down with no policy -> "connection refused" until manual up)
     environment:
       POSTGRES_USER: gallery
       POSTGRES_PASSWORD: gallery
@@ -18,6 +20,7 @@ services:
 
   viz:                                     # the viz API (FastAPI) — crops/decisions/identities from the DB
     build: { context: .., dockerfile: kit/Dockerfile }
+    restart: unless-stopped
     depends_on: { db: { condition: service_healthy } }
     environment:
       PGHOST: db
@@ -35,6 +38,7 @@ services:
 
   ui:                                      # http://localhost:4200 — the existing Angular frontend, proxied to viz
     image: node:20-slim
+    restart: unless-stopped
     working_dir: /ui
     depends_on: [viz]
     volumes:
@@ -45,6 +49,7 @@ services:
 
   pgadmin:                                 # http://localhost:5050 — inspect the DB visually; server + password pre-seeded
     build: { context: ./pgadmin }          # bakes servers.json + pgpass at libpq-correct perms (see pgadmin/Dockerfile)
+    restart: unless-stopped
     depends_on: { db: { condition: service_healthy } }
     environment:
       PGADMIN_DEFAULT_EMAIL: admin@vlincs.com    # pgAdmin rejects .local (and other special-use TLDs) — use a real TLD

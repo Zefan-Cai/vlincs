@@ -394,7 +394,10 @@ class IdentityGallery:
         return np.stack([_normed(self.rep_mat[self.rep_gid == g].mean(0)) for g in gids])
 
     def discriminability(self) -> float:
-        from vlincs_sdk.gallery import discriminability_ratio  # SDK helper (lazy)
+        try:
+            from vlincs_sdk.gallery import discriminability_ratio  # SDK helper (lazy, OPTIONAL)
+        except ImportError:
+            return float("nan")   # diagnostic snapshot only; the base kit (no vlincs-sdk) skips it -> disc_ratio NULL
         c = self.centroids()
         return discriminability_ratio(c, k=self.disc_k) if len(c) >= 2 else float("nan")
 

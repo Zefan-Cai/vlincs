@@ -60,8 +60,10 @@ def export(con, dataset: str, out_zip: str) -> str:
         for c in ("lat", "long", "alt"):
             df[c] = np.float64("nan")
         p = tmp / f"{video}.parquet"
-        df[["frame", "id", "x1", "y1", "x2", "y2", "box_hash", "object_type", "confidence",
-            "lat", "long", "alt"]].to_parquet(p)
+        # Corners only (x1,y1,x2,y2) — MITRE's required schema. reid_hota scores IoU on xyxy; x/y/w/h is NOT
+        # required (its packager + scorer use corners), so we don't emit the redundant COCO-xywh form.
+        df[["frame", "id", "x1", "y1", "x2", "y2", "box_hash", "object_type",
+            "confidence", "lat", "long", "alt"]].to_parquet(p)
         written.append(p)
     with zipfile.ZipFile(out_zip, "w", zipfile.ZIP_DEFLATED) as z:
         for p in written:

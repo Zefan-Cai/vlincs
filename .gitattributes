@@ -1,2 +1,4 @@
 kit/demo_data/ds1/**/*.parquet filter=lfs diff=lfs merge=lfs -text
 kit/demo_data/ds1/**/*.npz filter=lfs diff=lfs merge=lfs -text
+kit/demo_data/ds2/**/*.parquet filter=lfs diff=lfs merge=lfs -text
+kit/demo_data/ds2/**/*.npz filter=lfs diff=lfs merge=lfs -text

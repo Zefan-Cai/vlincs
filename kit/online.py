@@ -358,7 +358,10 @@ class OnlineGallery:
         split_low_coherence uses) into identities.coherence. Recomputed in bulk here (at resolve), not on the
         streaming add - the value churns per-add and the reducer is O(bank^2) per gid. A gid with <2 exemplars
         gets NULL (coherence undefined for a singleton bank)."""
-        from vlincs_sdk.clustering import _coherence as _sdk_coherence   # SDK reducer (lazy)
+        try:
+            from vlincs_sdk.clustering import _coherence as _sdk_coherence   # SDK reducer (lazy, OPTIONAL)
+        except ImportError:
+            return   # identities.coherence is a display-only column; base kit (no vlincs-sdk) leaves it NULL
         m = self.m
         rg = getattr(m, "rep_gid", None)
         if rg is None or rg.size == 0:

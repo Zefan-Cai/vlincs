@@ -33,6 +33,21 @@ case "$selected" in
       echo "[demo.sh] DS1 offline bundle not pulled -> MLflow build ('git lfs pull' for offline)"
     fi
     ;;
+  "ds2"|"ds0002")
+    selected="ds2"
+    selected_desc="DS0002 (no GT, 30 videos)"
+    # Same offline-vs-MLflow split as DS1. The ~425 MB Git LFS bundle (demo_data/ds2/) runs on the base kit
+    # with no MLflow/SDK/devpi (the matcher's optional vlincs-sdk calls degrade gracefully); otherwise build
+    # the MLflow extras to fetch track + match-emb + resolve-emb from MLflow.
+    if find demo_data/ds2 -name '*.parquet' -size +100k 2>/dev/null | grep -q .; then
+      DS1_flag=0
+      echo "[demo.sh] DS2 offline bundle present -> base-kit build (no MLflow/SDK/devpi)"
+    else
+      DS1_flag=1
+      echo "[demo.sh] DS2 offline bundle not pulled -> MLflow build ('git lfs pull' for offline)"
+    fi
+    echo "[demo.sh] NOTE: DS2 has no GT (score() returns None) and ingests 232k tracklets -> expect ~70 min."
+    ;;
   *)
     selected=$default
     ;;

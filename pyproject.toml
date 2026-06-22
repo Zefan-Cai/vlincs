@@ -14,7 +14,8 @@ dependencies = [
     "geoalchemy2",
     "sqlalchemy>=2",
     "reid-hota>=0.3.5",   # the §13.3 / PROTOCOL scorer version (DS1 IDF1 numbers are reid_hota 0.3.5)
-    "vlincs-sdk[harness]",
+    "vlincs-sdk[harness]>=0.20.0",   # 0.20.0 is the first to ship vlincs_sdk.gallery (discriminability_ratio,
+                                     # used by the matcher at decision time) — older pins crash mid-ingest
     "torch",
     "timm",
     "ultralytics",

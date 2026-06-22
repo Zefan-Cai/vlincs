@@ -113,9 +113,10 @@ def main():
     for name in ("list-videos", "score", "selftest"):
         p = sub.add_parser(name)
         p.add_argument("--dataset", required=True, choices=list(CARDDIRS))
-    pdemo = sub.add_parser("demo")                       # real one-click demo (ms02 shipped; ds1 = pipelines/ds1.yaml)
-    pdemo.add_argument("--dataset", default="ms02", choices=["ms02", "ds1"],
-                       help="ms02 = shipped bundle (offline); ds1 = pipelines/ds1.yaml (bundle or MLflow)")
+    pdemo = sub.add_parser("demo")                       # real one-click demo (ms02 shipped; ds1/ds2 = pipelines/<ds>.yaml)
+    pdemo.add_argument("--dataset", default="ms02", choices=["ms02", "ds1", "ds2"],
+                       help="ms02 = shipped bundle (offline); ds1/ds2 = pipelines/<ds>.yaml (bundle or MLflow; "
+                            "ds2 has no GT -> populate/replay only, ~70 min for 232k tracklets)")
     pdemo.add_argument("--resolve-every", type=int, default=None, help="periodic resolve every N tracklets (default ds1=500, ms02=100)")
     pdemo.add_argument("--submit", default=None, help="also write a TA1 submission zip here")
     pdemo.add_argument("--cannot-link", dest="cannot_link", action="store_true", default=None,

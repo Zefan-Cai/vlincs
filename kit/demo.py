@@ -130,13 +130,24 @@ def _ds1_from_bundle(pkl: str, resolve_emb_path: str | None = None, resolve_emb_
 _DS1_BUNDLE = _HERE / "demo_data" / "ds1"     # optional offline (Git LFS) bundle; `git lfs pull` to populate
 
 
+def _is_lfs_pointer(f: Path) -> bool:
+    """A not-yet-pulled Git LFS file is a small text stub starting with the spec line; a real artifact never is
+    (npz is a zip -> starts b'PK', parquet -> b'PAR1'). Detect by CONTENT, not size: a video with only a few
+    tracklets yields a legitimately <4 KB npz, so a size threshold wrongly flags it as a pointer (DS2 has 3)."""
+    try:
+        with open(f, "rb") as fh:
+            return fh.read(40).startswith(b"version https://git-lfs")
+    except OSError:
+        return True
+
+
 def _ds1_input_dir(sub: str, run: str, mlflow_path: str, bundle_root: Path = _DS1_BUNDLE):
     """An offline-first input dir: use the local Git LFS bundle (`kit/demo_data/<ds>/<sub>`) if its files are
     really present (not LFS pointers), else download `mlflow_path` from the MLflow `run`. Returns (dir, source).
     `bundle_root` selects the dataset's bundle (default DS1)."""
     p = bundle_root / sub
     real = [f for f in p.rglob("*") if f.suffix in (".parquet", ".npz")] if p.is_dir() else []
-    if real and all(f.stat().st_size > 4096 for f in real):     # LFS pointers are ~130 B; real artifacts are MB
+    if real and not any(_is_lfs_pointer(f) for f in real):
         return p, "local LFS bundle"
     try:
         import mlflow

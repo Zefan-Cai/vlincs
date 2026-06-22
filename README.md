@@ -165,12 +165,17 @@ Defaults are the validated config. Tune `tau` first (to your embedding's cosine 
 cd kit
 ./demo.sh ms02      # MS02 (offline, shipped data) → AssA ≈ 0.70 - builds, brings up the stack, leaves it up
 ./demo.sh ds1       # DS1 - pulls track + match-emb + resolve-emb from MLflow, runs the §13.3 global re-cluster → IDF1 ≈ 0.60
-#   then explore the gallery at http://localhost:4200   (ds1 needs MLFLOW_TRACKING_URI + the GT datastore mounted)
+./demo.sh ds2       # DS2 - 30 videos / 231,914 tracklets, osnet-xcam two-tier resolve. No GT (replay only), ~70 min
+#   then explore the gallery at http://localhost:4200   (ds1/ds2 need MLFLOW_TRACKING_URI + GT datastore, OR `git lfs pull`)
 ```
 
-DS1 inputs default to MLflow (provenance-tracked, ~8 MB clone). For an **offline DS1** run (no MLflow), `git lfs
-pull` first to fetch the ~83 MB bundle into `kit/demo_data/ds1/`; the demo reads it locally and falls back to
-MLflow only if it isn't pulled. (Scoring still needs the GT datastore mounted, same as MS02.)
+DS1/DS2 inputs default to MLflow (provenance-tracked, ~8 MB clone). For an **offline** run (no MLflow), `git lfs
+pull` first to fetch the bundles into `kit/demo_data/<ds>/`; the demo reads them locally and falls back to MLflow
+only if not pulled. DS1 ≈ 83 MB; **DS2 ≈ 425 MB** (30 videos, 231,914 tracklets). The DS2 bundle's embedding
+vectors are stored **float16** (the demo upcasts to float32 at load) — fine for replay, but it is therefore *not*
+bit-identical to the fp32-MLflow path, so a few resolve cluster counts can differ by <0.5%; use MLflow for a
+scored/reproducible artifact. DS2 has **no GT shipped**, so `score()` returns `None` (validate on the leaderboard).
+(DS1 scoring still needs the GT datastore mounted, same as MS02.)
 
 Drive it from your own pipeline with the tiny `OnlineGallery` API (no intermediate files):
 
