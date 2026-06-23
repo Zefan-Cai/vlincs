@@ -1,5 +1,5 @@
 {
-  "command": "./demo.sh no-anchor-top32 --data-root /Users/zcai/Codex/vlincs_reid_by_search/local_runs/local_data_root_20260622 --run-dir local_runs/repro_from_demo_top32",
+  "command": "./demo.sh --data-root /Users/zcai/Codex/vlincs_reid_by_search/local_runs/local_data_root_20260622 --run-dir local_runs/repro_from_demo_top32",
   "date": "2026-06-23",
   "density_simple": {
     "assa": 0.538947,

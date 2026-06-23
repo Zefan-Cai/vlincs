@@ -89,7 +89,7 @@
   ],
   "commands": [
     "bash reports/vlincs_iterations/20260623_rank01_37to86_top32_p005_gain/reproduce.sh --data-root /path/to/vlincs_reid_data",
-    "./demo.sh no-anchor-top32 --data-root /path/to/vlincs_reid_data --run-dir local_runs/reproduce_rank06_top32_20260623",
+    "./demo.sh --data-root /path/to/vlincs_reid_data --run-dir local_runs/reproduce_rank06_top32_20260623",
     "python kit/compose_no_anchor_component_subset_variants.py --assignment-csv local_runs/offline_no_anchor_split_probe_20260623/component_graph_fullscore/rank04_plus_small_fragment_combo/assignments/rank01_small_fragment_combo_combo_rank77_rank36_component_graph_small_fragment_assignments.csv --source-component 37 --target-component 86 --embeddings local_runs/s3_feature_cache_20260622/ds1_tracklet_weakmetric_osnet_s7_fused_w002_20260620_w0p1.npz --embeddings local_runs/s3_feature_cache_20260622/ds1_tracklet_dinov2base_s1_20260620.npz --embeddings local_runs/s3_feature_cache_20260622/ds1_tracklet_siglip2_person_reid_s1_20260620.npz --top-ks 22,24,26,28,30,32,34,36 --json local_runs/offline_no_anchor_split_probe_20260623/rank01_37to86_top28_neighbor_variants.json --csv local_runs/offline_no_anchor_split_probe_20260623/rank01_37to86_top28_neighbor_variants.csv --md local_runs/offline_no_anchor_split_probe_20260623/rank01_37to86_top28_neighbor_variants.md",
     "DATA_ROOT=/Users/zcai/Codex/vlincs_reid_by_search/local_runs/local_data_root_20260622 python kit/run_no_anchor_scheduler_manifest_sample_fullscore.py --scheduler-json local_runs/offline_no_anchor_split_probe_20260623/rank01_37to86_top28_neighbor_variants.json --base-assignment-csv local_runs/offline_no_anchor_split_probe_20260623/component_graph_fullscore/rank04_plus_small_fragment_combo/assignments/rank01_small_fragment_combo_combo_rank77_rank36_component_graph_small_fragment_assignments.csv --run-dir local_runs/offline_no_anchor_split_probe_20260623/component_graph_fullscore/rank01_37to86_top28_neighbor_probe --selection-ranks 5,6,7,9,10,11 --fallback singleton",
     "DATA_ROOT=/Users/zcai/Codex/vlincs_reid_by_search/local_runs/local_data_root_20260622 python kit/no_anchor_pervideo_filter_selector.py --source-zip local_runs/offline_no_anchor_split_probe_20260623/component_graph_fullscore/rank01_37to86_top28_neighbor_probe/rank06_component_subset_attach_source_assignments.zip --policies density_simple --json local_runs/offline_no_anchor_split_probe_20260623/component_graph_fullscore/rank01_37to86_top28_neighbor_probe/rank06_density_simple.json --zip-out local_runs/offline_no_anchor_split_probe_20260623/component_graph_fullscore/rank01_37to86_top28_neighbor_probe/rank06_density_simple.zip",
@@ -213,7 +213,7 @@
     "artifact_manifest": "reports/vlincs_iterations/20260623_rank01_37to86_top32_p005_gain/repro/artifact_manifest.json",
     "checksums": "reports/vlincs_iterations/20260623_rank01_37to86_top32_p005_gain/repro/checksums.sha256",
     "clean_worktree_verification": "reports/vlincs_iterations/20260623_rank01_37to86_top32_p005_gain/repro/verification_clean_worktree_20260623.json",
-    "entrypoint": "./demo.sh no-anchor-top32 --data-root /path/to/vlincs_reid_data --run-dir local_runs/reproduce_rank06_top32_20260623",
+    "entrypoint": "./demo.sh --data-root /path/to/vlincs_reid_data --run-dir local_runs/reproduce_rank06_top32_20260623",
     "note": "This replays the delivered identity decision. Full candidate regeneration also needs the feature caches listed in artifact_manifest.json.",
     "requires": [
       "git lfs pull --include=\"kit/demo_data/ds1/**\"",

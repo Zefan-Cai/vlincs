@@ -19,24 +19,22 @@ A local top-k boundary search around the promoted top28 bridge found that top32 
 
 ## Reproduction
 
-This package now has a repo-level replay path. The standard DS1 demo and the
-no-anchor gain are intentionally separate:
+This package now has a repo-level replay path. On the `wisc` branch the root
+`./demo.sh` defaults to the best WISC no-anchor top32 replay:
 
-- `./demo.sh ds1` runs the original online-gallery DS1 pipeline from
+- `./demo.sh` replays this delivered no-anchor identity decision artifact and
+  verifies `IDF1/HOTA/AssA = 0.668198/0.528747/0.539071`.
+- `./demo_wisc.sh` is kept as an alias for the same replay path.
+- `kit/demo.sh ds1` runs the original online-gallery DS1 pipeline from
   `kit/pipelines/ds1.yaml`; this is the baseline demo path and is expected to
   reproduce the earlier `IDF1 ~= 0.5999` result.
-- `./demo.sh no-anchor-top32` replays this delivered no-anchor identity
-  decision artifact and verifies `IDF1/HOTA/AssA = 0.668198/0.528747/0.539071`.
-- `./demo_wisc.sh` is the hardcoded WISC replay entrypoint for the same
-  no-anchor top32 result; pass only reproduction args such as `--data-root` and
-  `--run-dir`.
 
 From a fresh checkout:
 
 ```bash
 git checkout wisc
 git lfs pull --include="kit/demo_data/ds1/**"
-DATA_ROOT=/path/to/vlincs_reid_data ./demo_wisc.sh \
+DATA_ROOT=/path/to/vlincs_reid_data ./demo.sh \
   --run-dir local_runs/reproduce_rank06_top32_20260623
 ```
 
@@ -47,7 +45,7 @@ was:
 
 ```bash
 DATA_ROOT=/Users/zcai/Codex/vlincs_reid_by_search/local_runs/local_data_root_20260622 \
-  ./demo_wisc.sh --run-dir local_runs/repro_check_top32
+  ./demo.sh --run-dir local_runs/repro_check_top32
 ```
 
 The replay does not require PostgreSQL. It rebuilds the submission from:
@@ -64,8 +62,7 @@ Expected verification line:
 
 There are two reproducibility levels:
 
-- Replay: reproducible now through `./demo_wisc.sh` or
-  `./demo.sh no-anchor-top32`; this verifies the
+- Replay: reproducible now through `./demo.sh`; this verifies the
   delivered global-ID decision and canonical delivery score.
 - Regeneration: the original candidate-generation run also used feature caches
   under `local_runs/s3_feature_cache_20260622/*.npz`. Those are listed in

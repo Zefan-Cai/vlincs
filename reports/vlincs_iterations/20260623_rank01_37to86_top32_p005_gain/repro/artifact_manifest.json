@@ -80,13 +80,13 @@
     },
     {
       "path": "reports/vlincs_iterations/20260623_rank01_37to86_top32_p005_gain/repro/verification_clean_worktree_20260623.json",
-      "sha256": "d3046dbc4c832e4868e0f777d9e6a39d35ba44ee7ba85ab6d01fb446f5fd94a7",
-      "size_bytes": 767
+      "sha256": "153216a9fb1f922c43d30f523a353ce319bf3599164c7b8b4d5ffa5b91192b24",
+      "size_bytes": 751
     }
   ],
   "date": "2026-06-23",
   "entrypoints": [
-    "./demo.sh no-anchor-top32 --data-root /path/to/vlincs_reid_data --run-dir local_runs/reproduce_rank06_top32_20260623",
+    "./demo.sh --data-root /path/to/vlincs_reid_data --run-dir local_runs/reproduce_rank06_top32_20260623",
     "reports/vlincs_iterations/20260623_rank01_37to86_top32_p005_gain/reproduce.sh --data-root /path/to/vlincs_reid_data"
   ],
   "expected_metrics": {
@@ -398,5 +398,5 @@
       }
     ]
   },
-  "verification_note": "Clean wisc worktree replay via ./demo.sh no-anchor-top32 reproduced p005_area IDF1/HOTA/AssA 0.668198/0.528747/0.539071."
+  "verification_note": "Clean wisc worktree replay via ./demo.sh reproduced p005_area IDF1/HOTA/AssA 0.668198/0.528747/0.539071."
 }
