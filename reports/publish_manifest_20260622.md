@@ -368,3 +368,42 @@ s3://dit-scale-up/zcai/vlincs/local_runs_current/offline_no_anchor_split_probe_2
 s3://dit-scale-up/zcai/vlincs/local_runs_current/offline_no_anchor_split_probe_20260622/currentbest_residual_greedy12_full_export.json
 s3://dit-scale-up/zcai/vlincs/local_runs_current/offline_no_anchor_split_probe_20260622/currentbest_residual_greedy12_full_export.zip
 ```
+
+## Verified Publish Closeout
+
+The current core code/report/state mirror was pushed to GitHub:
+
+```text
+https://github.com/Zefan-Cai/vlincs
+main@0169285
+```
+
+The latest S3 publish includes directly addressable reports/state plus a
+complete split bundle of the current progress snapshot.  The bundle is stored
+as parts to avoid multipart-permission and long single-connection upload
+failure modes:
+
+```text
+s3://dit-scale-up/zcai/vlincs/progress_snapshots/20260622_no_anchor_global_id_current/vlincs_no_anchor_progress_current_20260622_parts/MANIFEST.txt
+s3://dit-scale-up/zcai/vlincs/progress_snapshots/20260622_no_anchor_global_id_current/vlincs_no_anchor_progress_current_20260622_parts/part-aa
+...
+s3://dit-scale-up/zcai/vlincs/progress_snapshots/20260622_no_anchor_global_id_current/vlincs_no_anchor_progress_current_20260622_parts/part-as
+```
+
+Verified part count and byte total:
+
+```text
+objects = 20
+bytes = 2447088252
+```
+
+Reconstruct locally:
+
+```bash
+aws s3 sync s3://dit-scale-up/zcai/vlincs/progress_snapshots/20260622_no_anchor_global_id_current/vlincs_no_anchor_progress_current_20260622_parts/ ./vlincs_no_anchor_progress_current_20260622_parts/
+cd ./vlincs_no_anchor_progress_current_20260622_parts
+cat part-* > ../vlincs_no_anchor_progress_current_20260622.tar
+shasum -a 256 ../vlincs_no_anchor_progress_current_20260622.tar
+```
+
+The expected SHA256 is recorded in `MANIFEST.txt`.
