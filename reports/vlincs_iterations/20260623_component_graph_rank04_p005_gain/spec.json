@@ -55,7 +55,7 @@
     "reports/vlincs_iterations/20260623_component_graph_rank04_p005_gain/metrics/density_simple.json",
     "reports/vlincs_iterations/20260623_component_graph_rank04_p005_gain/metrics/p005_area.json"
   ],
-  "bitbucket": "prepared for publish to Novateur/vlincs_reid_by_search wisc; commit hash will be recorded after push",
+  "bitbucket": "published to Novateur/vlincs_reid_by_search branch wisc at commit 6333c71 (Promote component graph rank04 p005 gain)",
   "code_paths": [
     "kit/compose_no_anchor_component_graph_candidates.py",
     "kit/filter_no_anchor_component_graph_directional_rescue.py",
