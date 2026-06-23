@@ -2,7 +2,24 @@ VLINCS no-anchor global ID progress
 Date: 2026-06-23
 
 Current best e2e:
-IDF1 / HOTA / AssA = 0.666422 / 0.526871 / 0.537617
+IDF1 / HOTA / AssA = 0.666597 / 0.527169 / 0.537950
+
+Latest rank04 plus small-fragment combo gain:
+After rank04 became the base, the no-anchor small-fragment manifests were
+replayed on top of the rank04 assignment. Rank02 moves four residual
+MCAM04/Tc6 component 57 tracklets into component 46 / gid 96000050. It improves
+direct full-score to 0.664401/0.525406/0.536068, density_simple to
+0.666492/0.527088/0.537828, and valid p005_area to
+0.666595/0.527166/0.537947. The combo adds the near-tie 68->27 move for two
+more tracklets and reaches the new best p005_area
+0.666597/0.527169/0.537950 with config_name=p005_area and
+dropped_rows=45467. This improves the previous canonical best by +0.000175
+IDF1, +0.000298 HOTA, and +0.000333 AssA. Per-video gain lands mainly on
+MCAM04/Tc6 (+0.000458 IDF1) with a tiny MCAM08/Tc6 lift (+0.000009 IDF1).
+The package is reports/vlincs_iterations/20260623_rank04_plus_small_combo_p005_gain/
+with README.md, presentation.html, spec.json, metrics, and 3 coordinate-fallback
+visual cases. Raw frames are still absent locally, so case panels remain bbox
+coordinate evidence rather than real-pixel crops.
 
 Latest component-graph rank04 directional-rescue gain:
 On top of the rank77+rank36 combo best, a no-anchor component-graph proposer

@@ -1,0 +1,32 @@
+<!doctype html>
+<html><head><meta charset="utf-8"><title>Rank04 component graph bridge 56 to 86</title>
+<style>
+body{font-family:Arial,Helvetica,sans-serif;margin:32px;background:#f6f7f9;color:#17202c}
+main{max-width:1120px;margin:auto} img{max-width:100%;border:1px solid #ccd3dc;background:white}
+.kpi{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin:18px 0}
+.card{background:white;border:1px solid #d7dde5;padding:14px} table{border-collapse:collapse;width:100%;background:white}
+td,th{border:1px solid #d7dde5;padding:8px;text-align:left} code{background:#eef1f5;padding:2px 4px}
+</style></head><body><main>
+<h1>Rank04 component graph bridge 56 to 86</h1>
+<p>Twenty-one MCAM04/Tc6 tracklets move from component 56 / gid 96000060 to component 86 / gid 960000350; the case samples 8 representative tracklets.</p>
+<div class="kpi">
+<div class="card"><b>Before</b><br>component 56, gid 96000060, component_size 21</div>
+<div class="card"><b>After</b><br>component 86, gid 960000350, component_size 128, decision_status manifest_reassign</div>
+<div class="card"><b>Evidence</b><br>target_sim=0.7980, target_margin=0.2883, source_rest_margin=0.2883<br><b>Raw frame</b><br>unavailable_coordinate_fallback</div>
+</div>
+<h2>Failure and fix</h2>
+<p><b>Old failure:</b> The previous rank77+rank36 combo left a coherent MCAM04/Tc6 residual island in component 56, forcing it to gid 96000060 instead of attaching to the visually closer split-child component 86.</p>
+<p><b>New implementation:</b> The directional component-graph filter accepts the larger-target bridge only when multiview similarity is high, overlap risk is bounded, and the target has stronger quality; canonical density+p005 improves.</p>
+<h2>BBox evidence</h2>
+<img src="rank04_bbox_evidence.png" alt="rank15 bbox evidence">
+<h2>Moved tracklets</h2>
+<table><thead><tr><th>seq</th><th>video</th><th>gid</th><th>component</th><th>frames</th><th>dets</th></tr></thead><tbody><tr><td>3963</td><td>vlincs_MS01_MC0001_MCAM04_2024-03-Tc6</td><td>96000060 -> 960000350</td><td>56 -> 86</td><td>38683-38982</td><td>300</td></tr>
+<tr><td>3922</td><td>vlincs_MS01_MC0001_MCAM04_2024-03-Tc6</td><td>96000060 -> 960000350</td><td>56 -> 86</td><td>38383-38682</td><td>300</td></tr>
+<tr><td>4074</td><td>vlincs_MS01_MC0001_MCAM04_2024-03-Tc6</td><td>96000060 -> 960000350</td><td>56 -> 86</td><td>39583-39882</td><td>300</td></tr>
+<tr><td>3733</td><td>vlincs_MS01_MC0001_MCAM04_2024-03-Tc6</td><td>96000060 -> 960000350</td><td>56 -> 86</td><td>37024-37323</td><td>300</td></tr>
+<tr><td>3596</td><td>vlincs_MS01_MC0001_MCAM04_2024-03-Tc6</td><td>96000060 -> 960000350</td><td>56 -> 86</td><td>36300-36599</td><td>295</td></tr>
+<tr><td>3088</td><td>vlincs_MS01_MC0001_MCAM04_2024-03-Tc6</td><td>96000060 -> 960000350</td><td>56 -> 86</td><td>32161-32448</td><td>199</td></tr>
+<tr><td>4376</td><td>vlincs_MS01_MC0001_MCAM04_2024-03-Tc6</td><td>96000060 -> 960000350</td><td>56 -> 86</td><td>40980-41104</td><td>110</td></tr>
+<tr><td>3315</td><td>vlincs_MS01_MC0001_MCAM04_2024-03-Tc6</td><td>96000060 -> 960000350</td><td>56 -> 86</td><td>34687-34691</td><td>5</td></tr></tbody></table>
+
+</main></body></html>

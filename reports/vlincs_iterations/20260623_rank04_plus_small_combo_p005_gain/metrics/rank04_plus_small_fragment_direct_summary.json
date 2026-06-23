@@ -1,0 +1,348 @@
+{
+  "base_assignment_csv": "local_runs/offline_no_anchor_split_probe_20260623/component_graph_fullscore/directional_rescue/assignments/rank04_component_graph_high_mass_bridge_source_assignments.csv",
+  "best_idf1": 0.664401,
+  "gt_available": true,
+  "manifest_json": "local_runs/offline_no_anchor_split_probe_20260623/component_graph_fullscore/rank04_plus_small_fragment/manifest_assignments.json",
+  "outputs": [
+    {
+      "accepted_preview_count": 1,
+      "assa": 0.53574,
+      "assigned_tracklets": 7487,
+      "assignment_status_counts": {
+        "forced_component": 7436,
+        "forced_singleton": 28,
+        "manifest_reassign": 23
+      },
+      "deta": 0.514734,
+      "detpr": 0.769632,
+      "detre": 0.584222,
+      "fallback": "singleton",
+      "gt_available": true,
+      "hota": 0.525112,
+      "idf1": 0.664231,
+      "input_rows": 1723070,
+      "input_tracklets": 9734,
+      "missing_assignment_tracklets": 2247,
+      "missing_source_seqs": [],
+      "mode": "component_graph_high_mass_bridge",
+      "moved_preview": [
+        {
+          "from_component": 68,
+          "from_predicted_global_id": 96000072,
+          "seq": 7622,
+          "to_component": 27,
+          "to_predicted_global_id": 96000029
+        },
+        {
+          "from_component": 68,
+          "from_predicted_global_id": 96000072,
+          "seq": 8582,
+          "to_component": 27,
+          "to_predicted_global_id": 96000029
+        }
+      ],
+      "moved_tracklets": 2,
+      "output_csv": "local_runs/offline_no_anchor_split_probe_20260623/component_graph_fullscore/rank04_plus_small_fragment/assignments/rank01_component_graph_high_mass_bridge_combo_rank77_rank36_component_graph_candidates_assignments.csv",
+      "pair_f1": null,
+      "pair_precision": null,
+      "pair_recall": null,
+      "per_video": {
+        "vlincs_MS01_MC0001_MCAM00_2024-03-Tc6": {
+          "assa": 0.835905,
+          "deta": 0.79496,
+          "detpr": 0.910942,
+          "detre": 0.84865,
+          "hota": 0.81476,
+          "idf1": 0.878694
+        },
+        "vlincs_MS01_MC0001_MCAM00_2024-03-Tc8": {
+          "assa": 0.786603,
+          "deta": 0.715036,
+          "detpr": 0.906797,
+          "detre": 0.761913,
+          "hota": 0.74985,
+          "idf1": 0.828065
+        },
+        "vlincs_MS01_MC0001_MCAM03_2024-03-Tc6": {
+          "assa": 0.623537,
+          "deta": 0.541376,
+          "detpr": 0.808966,
+          "detre": 0.598963,
+          "hota": 0.580758,
+          "idf1": 0.688302
+        },
+        "vlincs_MS01_MC0001_MCAM03_2024-03-Tc8": {
+          "assa": 0.55781,
+          "deta": 0.47418,
+          "detpr": 0.775138,
+          "detre": 0.529394,
+          "hota": 0.514098,
+          "idf1": 0.62912
+        },
+        "vlincs_MS01_MC0001_MCAM04_2024-03-Tc6": {
+          "assa": 0.492759,
+          "deta": 0.428178,
+          "detpr": 0.700773,
+          "detre": 0.495539,
+          "hota": 0.458837,
+          "idf1": 0.580552
+        },
+        "vlincs_MS01_MC0001_MCAM05_2024-03-Tc6": {
+          "assa": 0.638352,
+          "deta": 0.565886,
+          "detpr": 0.820234,
+          "detre": 0.628564,
+          "hota": 0.601013,
+          "idf1": 0.711721
+        },
+        "vlincs_MS01_MC0001_MCAM05_2024-03-Tc8": {
+          "assa": 0.728795,
+          "deta": 0.666277,
+          "detpr": 0.860223,
+          "detre": 0.729116,
+          "hota": 0.696826,
+          "idf1": 0.789262
+        },
+        "vlincs_MS01_MC0001_MCAM06_2024-03-Tc6": {
+          "assa": 0.598228,
+          "deta": 0.448875,
+          "detpr": 0.838449,
+          "detre": 0.480085,
+          "hota": 0.518041,
+          "idf1": 0.610567
+        },
+        "vlincs_MS01_MC0001_MCAM06_2024-03-Tc8": {
+          "assa": 0.614314,
+          "deta": 0.551932,
+          "detpr": 0.790347,
+          "detre": 0.622104,
+          "hota": 0.582124,
+          "idf1": 0.696205
+        },
+        "vlincs_MS01_MC0001_MCAM08_2024-03-Tc6": {
+          "assa": 0.679518,
+          "deta": 0.649518,
+          "detpr": 0.816994,
+          "detre": 0.733077,
+          "hota": 0.664237,
+          "idf1": 0.772764
+        }
+      },
+      "predicted_full_idf1": null,
+      "predicted_ids": 2337,
+      "result_json": "local_runs/offline_no_anchor_split_probe_20260623/component_graph_fullscore/rank04_plus_small_fragment/rank01_component_graph_high_mass_bridge_combo_rank77_rank36_component_graph_candidates_assignments_sample_full.json",
+      "scored_rows": 1723070,
+      "selection_rank": 1,
+      "skipped_empty_source_components": [],
+      "source_file": "local_runs/offline_no_anchor_split_probe_20260623/combo_rank77_rank36_component_graph_candidates.json",
+      "source_rank": 15,
+      "target_component_repairs": [],
+      "target_components": [
+        27
+      ],
+      "target_predicted_global_ids": [
+        96000029
+      ],
+      "unmatched_fp": 301980,
+      "uses_anchors": false,
+      "uses_gt_for_evaluation_only": true,
+      "uses_gt_for_training_or_anchors": false,
+      "videos_scored": [
+        "vlincs_MS01_MC0001_MCAM00_2024-03-Tc6",
+        "vlincs_MS01_MC0001_MCAM00_2024-03-Tc8",
+        "vlincs_MS01_MC0001_MCAM03_2024-03-Tc6",
+        "vlincs_MS01_MC0001_MCAM03_2024-03-Tc8",
+        "vlincs_MS01_MC0001_MCAM04_2024-03-Tc6",
+        "vlincs_MS01_MC0001_MCAM05_2024-03-Tc6",
+        "vlincs_MS01_MC0001_MCAM05_2024-03-Tc8",
+        "vlincs_MS01_MC0001_MCAM06_2024-03-Tc6",
+        "vlincs_MS01_MC0001_MCAM06_2024-03-Tc8",
+        "vlincs_MS01_MC0001_MCAM08_2024-03-Tc6"
+      ],
+      "zip_files": 10,
+      "zip_out": "local_runs/offline_no_anchor_split_probe_20260623/component_graph_fullscore/rank04_plus_small_fragment/rank01_component_graph_high_mass_bridge_combo_rank77_rank36_component_graph_candidates_assignments.zip"
+    },
+    {
+      "accepted_preview_count": 1,
+      "assa": 0.536068,
+      "assigned_tracklets": 7487,
+      "assignment_status_counts": {
+        "forced_component": 7434,
+        "forced_singleton": 28,
+        "manifest_reassign": 25
+      },
+      "deta": 0.514994,
+      "detpr": 0.769454,
+      "detre": 0.584588,
+      "fallback": "singleton",
+      "gt_available": true,
+      "hota": 0.525406,
+      "idf1": 0.664401,
+      "input_rows": 1723070,
+      "input_tracklets": 9734,
+      "missing_assignment_tracklets": 2247,
+      "missing_source_seqs": [],
+      "mode": "component_graph_high_mass_bridge",
+      "moved_preview": [
+        {
+          "from_component": 57,
+          "from_predicted_global_id": 96000061,
+          "seq": 4526,
+          "to_component": 46,
+          "to_predicted_global_id": 96000050
+        },
+        {
+          "from_component": 57,
+          "from_predicted_global_id": 96000061,
+          "seq": 4580,
+          "to_component": 46,
+          "to_predicted_global_id": 96000050
+        },
+        {
+          "from_component": 57,
+          "from_predicted_global_id": 96000061,
+          "seq": 4625,
+          "to_component": 46,
+          "to_predicted_global_id": 96000050
+        },
+        {
+          "from_component": 57,
+          "from_predicted_global_id": 96000061,
+          "seq": 4859,
+          "to_component": 46,
+          "to_predicted_global_id": 96000050
+        }
+      ],
+      "moved_tracklets": 4,
+      "output_csv": "local_runs/offline_no_anchor_split_probe_20260623/component_graph_fullscore/rank04_plus_small_fragment/assignments/rank02_component_graph_high_mass_bridge_combo_rank77_rank36_component_graph_candidates_assignments.csv",
+      "pair_f1": null,
+      "pair_precision": null,
+      "pair_recall": null,
+      "per_video": {
+        "vlincs_MS01_MC0001_MCAM00_2024-03-Tc6": {
+          "assa": 0.835905,
+          "deta": 0.79496,
+          "detpr": 0.910942,
+          "detre": 0.84865,
+          "hota": 0.81476,
+          "idf1": 0.878694
+        },
+        "vlincs_MS01_MC0001_MCAM00_2024-03-Tc8": {
+          "assa": 0.786603,
+          "deta": 0.715036,
+          "detpr": 0.906797,
+          "detre": 0.761913,
+          "hota": 0.74985,
+          "idf1": 0.828065
+        },
+        "vlincs_MS01_MC0001_MCAM03_2024-03-Tc6": {
+          "assa": 0.623537,
+          "deta": 0.541376,
+          "detpr": 0.808966,
+          "detre": 0.598963,
+          "hota": 0.580758,
+          "idf1": 0.688302
+        },
+        "vlincs_MS01_MC0001_MCAM03_2024-03-Tc8": {
+          "assa": 0.55781,
+          "deta": 0.47418,
+          "detpr": 0.775138,
+          "detre": 0.529394,
+          "hota": 0.514098,
+          "idf1": 0.62912
+        },
+        "vlincs_MS01_MC0001_MCAM04_2024-03-Tc6": {
+          "assa": 0.493746,
+          "deta": 0.428784,
+          "detpr": 0.7005,
+          "detre": 0.496339,
+          "hota": 0.459628,
+          "idf1": 0.581006
+        },
+        "vlincs_MS01_MC0001_MCAM05_2024-03-Tc6": {
+          "assa": 0.638352,
+          "deta": 0.565886,
+          "detpr": 0.820234,
+          "detre": 0.628564,
+          "hota": 0.601013,
+          "idf1": 0.711721
+        },
+        "vlincs_MS01_MC0001_MCAM05_2024-03-Tc8": {
+          "assa": 0.728795,
+          "deta": 0.666277,
+          "detpr": 0.860223,
+          "detre": 0.729116,
+          "hota": 0.696826,
+          "idf1": 0.789262
+        },
+        "vlincs_MS01_MC0001_MCAM06_2024-03-Tc6": {
+          "assa": 0.598228,
+          "deta": 0.448875,
+          "detpr": 0.838449,
+          "detre": 0.480085,
+          "hota": 0.518041,
+          "idf1": 0.610567
+        },
+        "vlincs_MS01_MC0001_MCAM06_2024-03-Tc8": {
+          "assa": 0.614314,
+          "deta": 0.551932,
+          "detpr": 0.790347,
+          "detre": 0.622104,
+          "hota": 0.582124,
+          "idf1": 0.696205
+        },
+        "vlincs_MS01_MC0001_MCAM08_2024-03-Tc6": {
+          "assa": 0.679501,
+          "deta": 0.649506,
+          "detpr": 0.81699,
+          "detre": 0.733063,
+          "hota": 0.664222,
+          "idf1": 0.772754
+        }
+      },
+      "predicted_full_idf1": null,
+      "predicted_ids": 2337,
+      "result_json": "local_runs/offline_no_anchor_split_probe_20260623/component_graph_fullscore/rank04_plus_small_fragment/rank02_component_graph_high_mass_bridge_combo_rank77_rank36_component_graph_candidates_assignments_sample_full.json",
+      "scored_rows": 1723070,
+      "selection_rank": 2,
+      "skipped_empty_source_components": [],
+      "source_file": "local_runs/offline_no_anchor_split_probe_20260623/combo_rank77_rank36_component_graph_candidates.json",
+      "source_rank": 29,
+      "target_component_repairs": [],
+      "target_components": [
+        46
+      ],
+      "target_predicted_global_ids": [
+        96000050
+      ],
+      "unmatched_fp": 300792,
+      "uses_anchors": false,
+      "uses_gt_for_evaluation_only": true,
+      "uses_gt_for_training_or_anchors": false,
+      "videos_scored": [
+        "vlincs_MS01_MC0001_MCAM00_2024-03-Tc6",
+        "vlincs_MS01_MC0001_MCAM00_2024-03-Tc8",
+        "vlincs_MS01_MC0001_MCAM03_2024-03-Tc6",
+        "vlincs_MS01_MC0001_MCAM03_2024-03-Tc8",
+        "vlincs_MS01_MC0001_MCAM04_2024-03-Tc6",
+        "vlincs_MS01_MC0001_MCAM05_2024-03-Tc6",
+        "vlincs_MS01_MC0001_MCAM05_2024-03-Tc8",
+        "vlincs_MS01_MC0001_MCAM06_2024-03-Tc6",
+        "vlincs_MS01_MC0001_MCAM06_2024-03-Tc8",
+        "vlincs_MS01_MC0001_MCAM08_2024-03-Tc6"
+      ],
+      "zip_files": 10,
+      "zip_out": "local_runs/offline_no_anchor_split_probe_20260623/component_graph_fullscore/rank04_plus_small_fragment/rank02_component_graph_high_mass_bridge_combo_rank77_rank36_component_graph_candidates_assignments.zip"
+    }
+  ],
+  "results_jsonl": "local_runs/offline_no_anchor_split_probe_20260623/component_graph_fullscore/rank04_plus_small_fragment/sample_full_results.jsonl",
+  "run_dir": "local_runs/offline_no_anchor_split_probe_20260623/component_graph_fullscore/rank04_plus_small_fragment",
+  "scheduler_json": "local_runs/offline_no_anchor_split_probe_20260623/combo_rank77_rank36_component_graph_small_fragment.json",
+  "selection_ranks": [
+    1,
+    2
+  ],
+  "uses_anchors": false,
+  "uses_gt_for_evaluation_only": true,
+  "uses_gt_for_training_or_anchors": false
+}

@@ -1,8 +1,8 @@
 {
-  "best_assignment_csv": "local_runs/offline_no_anchor_split_probe_20260623/component_graph_fullscore/directional_rescue/assignments/rank04_component_graph_high_mass_bridge_source_assignments.csv",
-  "best_e2e_assa": 0.537617,
-  "best_e2e_hota": 0.526871,
-  "best_e2e_idf1": 0.666422,
+  "best_assignment_csv": "local_runs/offline_no_anchor_split_probe_20260623/component_graph_fullscore/rank04_plus_small_fragment_combo/assignments/rank01_small_fragment_combo_combo_rank77_rank36_component_graph_small_fragment_assignments.csv",
+  "best_e2e_assa": 0.53795,
+  "best_e2e_hota": 0.527169,
+  "best_e2e_idf1": 0.666597,
   "best_model_pair_f1": 0.782244,
   "best_model_pair_precision": 0.850111,
   "best_model_pair_recall": 0.724411,
@@ -12,7 +12,7 @@
   "goal_global_id_pair_f1": 0.7,
   "goal_global_id_pair_precision": 0.7,
   "goal_global_id_pair_recall": 0.7,
-  "iteration": 108,
+  "iteration": 109,
   "last_artifacts": [
     "reports/no_anchor_offline_component_split_promotion_20260622.md",
     "local_runs/offline_no_anchor_split_probe_20260622/best_combo_split_assignments.csv",
@@ -117,12 +117,22 @@
     "kit/filter_no_anchor_component_graph_directional_rescue.py",
     "kit/filter_no_anchor_component_graph_small_fragment_rule.py",
     "kit/filter_no_anchor_component_graph_rescue_rule.py",
-    "kit/compose_no_anchor_small_fragment_combos.py"
+    "kit/compose_no_anchor_small_fragment_combos.py",
+    "reports/vlincs_iterations/20260623_rank04_plus_small_combo_p005_gain/",
+    "local_runs/offline_no_anchor_split_probe_20260623/component_graph_fullscore/rank04_plus_small_fragment/summary.json",
+    "local_runs/offline_no_anchor_split_probe_20260623/component_graph_fullscore/rank04_plus_small_fragment/rank02_density_simple.json",
+    "local_runs/offline_no_anchor_split_probe_20260623/component_graph_fullscore/rank04_plus_small_fragment/rank02_density_p005_area.json",
+    "local_runs/offline_no_anchor_split_probe_20260623/component_graph_fullscore/rank04_plus_small_fragment/rank02_density_p005_area.zip",
+    "local_runs/offline_no_anchor_split_probe_20260623/component_graph_fullscore/rank04_plus_small_fragment_combo/summary.json",
+    "local_runs/offline_no_anchor_split_probe_20260623/component_graph_fullscore/rank04_plus_small_fragment_combo/rank01_density_simple.json",
+    "local_runs/offline_no_anchor_split_probe_20260623/component_graph_fullscore/rank04_plus_small_fragment_combo/rank01_density_p005_area.json",
+    "local_runs/offline_no_anchor_split_probe_20260623/component_graph_fullscore/rank04_plus_small_fragment_combo/rank01_density_p005_area.zip",
+    "local_runs/offline_no_anchor_split_probe_20260623/component_graph_fullscore/rank04_plus_small_fragment_combo/assignments/rank01_small_fragment_combo_combo_rank77_rank36_component_graph_small_fragment_assignments.csv"
   ],
-  "last_direction": "component_graph_rank04_directional_rescue_p005_gain",
-  "last_result": "Component-graph directional rescue on top of rank77+rank36 combo promoted rank04 56->86: 21 MCAM04/Tc6 tracklets moved from gid 96000060/component 56 to gid 960000350/component 86. Direct full improved from 0.663077/0.524175/0.535328 to 0.664229/0.525110/0.535737; density_simple improved from 0.665148/0.525843/0.537081 to 0.666319/0.526792/0.537498; valid p005_area scored 0.666422/0.526871/0.537617 with config_name=p005_area and dropped_rows=45467, improving canonical IDF1 by +0.001176. The gain lands on MCAM04/Tc6 (+0.002773 IDF1). Positive but smaller ablations: small rank02 p005 0.665420 and small combo p005 0.665422; directional rank02 and rank08 were direct-negative.",
+  "last_direction": "rank04_plus_small_fragment_combo_p005_gain",
+  "last_result": "On top of component-graph rank04, replayed no-anchor small-fragment candidates from production manifests. Rank02 57->46 moved four MCAM04/Tc6 residual tracklets and improved direct to 0.664401/0.525406/0.536068, density_simple to 0.666492/0.527088/0.537828, and valid p005_area to 0.666595/0.527166/0.537947. The combo adds near-tie 68->27 for two more tracklets and reaches the new best p005_area 0.666597/0.527169/0.537950 with config_name=p005_area and dropped_rows=45467. Gain over previous canonical best is +0.000175 IDF1, +0.000298 HOTA, +0.000333 AssA.",
   "last_updated": "2026-06-23",
-  "next_direction": "train_or_hand_tune_component_graph_directional_admission_gate_then_search_rank04_compatible_combos_with_hard_negative_guards",
+  "next_direction": "search_rank04_plus_small_combo_residual_small_fragment_and_component_graph_interactions_with_near_tie_penalty_and_MCAM04_focus",
   "stale_count": 0,
-  "status": "active_no_anchor_best_e2e_0p666422_component_graph_rank04_gain_e2e_still_below_0p70"
+  "status": "active_no_anchor_best_e2e_0p666597_rank04_plus_small_combo_gain_e2e_still_below_0p70"
 }
