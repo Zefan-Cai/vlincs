@@ -1,0 +1,402 @@
+{
+  "branch": "wisc",
+  "candidate_regeneration_artifacts_not_committed": [
+    {
+      "path": "local_runs/offline_no_anchor_split_probe_20260623/component_graph_fullscore/rank04_plus_small_fragment_combo/assignments/rank01_small_fragment_combo_combo_rank77_rank36_component_graph_small_fragment_assignments.csv",
+      "sha256": "81bd086dfbfb84b9bf54cddc306b3b9db64731d34def2788a91c1d31dc97e951",
+      "size_bytes": 1341207
+    },
+    {
+      "path": "local_runs/s3_feature_cache_20260622/ds1_tracklet_weakmetric_osnet_s7_fused_w002_20260620_w0p1.npz",
+      "sha256": "22513aa393f1cc7abb3dfd15fd38dbcd55159d34d76596716d4f3f6cd1dfabc8",
+      "size_bytes": 51001061
+    },
+    {
+      "path": "local_runs/s3_feature_cache_20260622/ds1_tracklet_dinov2base_s1_20260620.npz",
+      "sha256": "57bf7026bdd92a9e1c6ff7af1eacee2608647ab2c34af5c95669e0552b096a47",
+      "size_bytes": 27806813
+    },
+    {
+      "path": "local_runs/s3_feature_cache_20260622/ds1_tracklet_siglip2_person_reid_s1_20260620.npz",
+      "sha256": "bdfde67d8f4bfc3e96c17d94328fccfdfbe600b2c3a3aa1786d56e561fa3f63f",
+      "size_bytes": 27787209
+    }
+  ],
+  "committed_replay_artifacts": [
+    {
+      "path": "reports/vlincs_iterations/20260623_rank01_37to86_top32_p005_gain/repro/expected/rank06_density_p005_area.json",
+      "sha256": "77d53678cb71b14123692ed46227e76b8de3f237fda7f1d5f6c3ac60042d161e",
+      "size_bytes": 8302
+    },
+    {
+      "path": "reports/vlincs_iterations/20260623_rank01_37to86_top32_p005_gain/repro/expected/rank06_density_simple.json",
+      "sha256": "8e30d357071b448722d16fea94550b35b78d3cdab0f3fe810384e428f4111152",
+      "size_bytes": 13367
+    },
+    {
+      "path": "reports/vlincs_iterations/20260623_rank01_37to86_top32_p005_gain/repro/expected/rank06_full_export.json",
+      "sha256": "da3d2eeb22cc2a35deff861e5cf767ded9b333b845d4b0510a9071a1519e7639",
+      "size_bytes": 3150
+    },
+    {
+      "path": "reports/vlincs_iterations/20260623_rank01_37to86_top32_p005_gain/repro/input/p005_area_config.txt",
+      "sha256": "a041e0bef7fb12e367794c387d2c1aa4e9d879e6bae38c927e3e7bdfbc40d066",
+      "size_bytes": 523
+    },
+    {
+      "path": "reports/vlincs_iterations/20260623_rank01_37to86_top32_p005_gain/repro/input/rank06_component_subset_attach_source_assignments.csv",
+      "sha256": "61b357f405d320040349a4344f9957f14a702e172f7321d8c1f9d9475d420fe6",
+      "size_bytes": 1341303
+    },
+    {
+      "path": "reports/vlincs_iterations/20260623_rank01_37to86_top32_p005_gain/repro/provenance/manifest_assignments.json",
+      "sha256": "7b5416d7071bb4791a670ff66de1dbb133872ce068cc0a0daea58b1a9fc16de8",
+      "size_bytes": 38976
+    },
+    {
+      "path": "reports/vlincs_iterations/20260623_rank01_37to86_top32_p005_gain/repro/provenance/rank01_37to86_top28_neighbor_variants.csv",
+      "sha256": "ee378f5d33b4eac417cd6ea93965eab81e810a1101898da79468974106de05dc",
+      "size_bytes": 5076
+    },
+    {
+      "path": "reports/vlincs_iterations/20260623_rank01_37to86_top32_p005_gain/repro/provenance/rank01_37to86_top28_neighbor_variants.json",
+      "sha256": "edd42a615275b8fd8cc90b13ff630a470d22e7632a2dfd60d38d3735d184e93e",
+      "size_bytes": 55788
+    },
+    {
+      "path": "reports/vlincs_iterations/20260623_rank01_37to86_top32_p005_gain/repro/provenance/rank01_37to86_top28_neighbor_variants.md",
+      "sha256": "35f1887d56fde1efdbda5a0a0691061fb5296a56406e0b685571b452693e9be2",
+      "size_bytes": 2694
+    },
+    {
+      "path": "reports/vlincs_iterations/20260623_rank01_37to86_top32_p005_gain/repro/provenance/sample_full_results.jsonl",
+      "sha256": "3e964f0ae3788221fe43c4e2f56c432bbd2923a2003575e89aca4f68c5d9f004",
+      "size_bytes": 43376
+    },
+    {
+      "path": "reports/vlincs_iterations/20260623_rank01_37to86_top32_p005_gain/repro/provenance/summary.json",
+      "sha256": "c825c5a04dfff5e3853d0bc12ccebe64a6e56289eb530b4a1529a3ca6973b71b",
+      "size_bytes": 63085
+    },
+    {
+      "path": "reports/vlincs_iterations/20260623_rank01_37to86_top32_p005_gain/repro/verification_clean_worktree_20260623.json",
+      "sha256": "d3046dbc4c832e4868e0f777d9e6a39d35ba44ee7ba85ab6d01fb446f5fd94a7",
+      "size_bytes": 767
+    }
+  ],
+  "date": "2026-06-23",
+  "entrypoints": [
+    "./demo.sh no-anchor-top32 --data-root /path/to/vlincs_reid_data --run-dir local_runs/reproduce_rank06_top32_20260623",
+    "reports/vlincs_iterations/20260623_rank01_37to86_top32_p005_gain/reproduce.sh --data-root /path/to/vlincs_reid_data"
+  ],
+  "expected_metrics": {
+    "density_simple": {
+      "assa": 0.538947,
+      "dropped_rows": 35029,
+      "hota": 0.528665,
+      "idf1": 0.668093,
+      "rows": 1688041
+    },
+    "direct_full_export": {
+      "assa": 0.537182,
+      "hota": 0.526982,
+      "idf1": 0.666005
+    },
+    "p005_area": {
+      "assa": 0.539071,
+      "config_name": "p005_area",
+      "dropped_rows": 45467,
+      "hota": 0.528747,
+      "idf1": 0.668198,
+      "rows": 1642574
+    }
+  },
+  "name": "vlincs_no_anchor_rank06_top32_reproducibility",
+  "no_anchor": true,
+  "repo_lfs_ds1_inputs": [
+    {
+      "checkout": true,
+      "downloaded": true,
+      "oid": "3210c923d5dfa8b9ea6163dab05fdd65ce516413e45c4add14d63b7ec8b75826",
+      "path": "kit/demo_data/ds1/embeddings/vlincs_MS01_MC0001_MCAM00_2024-03-Tc6/embeddings.npz",
+      "size_bytes": 210616
+    },
+    {
+      "checkout": true,
+      "downloaded": true,
+      "oid": "7166792b440414e0a009a3468aa8cd0460174ab393173a6071e3344b879f647b",
+      "path": "kit/demo_data/ds1/embeddings/vlincs_MS01_MC0001_MCAM00_2024-03-Tc8/embeddings.npz",
+      "size_bytes": 258376
+    },
+    {
+      "checkout": true,
+      "downloaded": true,
+      "oid": "7480457d230f31b091c02f996aee8e343f0a49b2f06fa9b3e315412fb6bafaf2",
+      "path": "kit/demo_data/ds1/embeddings/vlincs_MS01_MC0001_MCAM03_2024-03-Tc6/embeddings.npz",
+      "size_bytes": 767816
+    },
+    {
+      "checkout": true,
+      "downloaded": true,
+      "oid": "3dba951be9803f0cb37f8c843a1ff7b374e7dcc5c7ead371247bab71bf4f3797",
+      "path": "kit/demo_data/ds1/embeddings/vlincs_MS01_MC0001_MCAM03_2024-03-Tc8/embeddings.npz",
+      "size_bytes": 533792
+    },
+    {
+      "checkout": true,
+      "downloaded": true,
+      "oid": "2b4b1209bc7294fcfd5c9e8ca2755de8147135be3ddcae4c62d2c367c52f463a",
+      "path": "kit/demo_data/ds1/embeddings/vlincs_MS01_MC0001_MCAM04_2024-03-Tc6/embeddings.npz",
+      "size_bytes": 2942068
+    },
+    {
+      "checkout": true,
+      "downloaded": true,
+      "oid": "b3401806c43dea86be5cca13df40530dbbe6973b742b78dba9c20ddd7f2918f0",
+      "path": "kit/demo_data/ds1/embeddings/vlincs_MS01_MC0001_MCAM05_2024-03-Tc6/embeddings.npz",
+      "size_bytes": 670704
+    },
+    {
+      "checkout": true,
+      "downloaded": true,
+      "oid": "f8acaa864e8b87e4815b88309d769d9471ae7c6ebcd2d9ed753d4b6dc03a072e",
+      "path": "kit/demo_data/ds1/embeddings/vlincs_MS01_MC0001_MCAM05_2024-03-Tc8/embeddings.npz",
+      "size_bytes": 118484
+    },
+    {
+      "checkout": true,
+      "downloaded": true,
+      "oid": "c845f127a98a3e5462800b78712b88e70df9986bc1792418060de917b4c21499",
+      "path": "kit/demo_data/ds1/embeddings/vlincs_MS01_MC0001_MCAM06_2024-03-Tc6/embeddings.npz",
+      "size_bytes": 228128
+    },
+    {
+      "checkout": true,
+      "downloaded": true,
+      "oid": "8db16f6bbfee644be6f65936c5d47f753225ed679f52a1a1aa64127e9c45153c",
+      "path": "kit/demo_data/ds1/embeddings/vlincs_MS01_MC0001_MCAM06_2024-03-Tc8/embeddings.npz",
+      "size_bytes": 200268
+    },
+    {
+      "checkout": true,
+      "downloaded": true,
+      "oid": "ddf49e0a05df0caf3d3ccbe6a529022d94e3594b5bf0e54ba51fa0419d04aab3",
+      "path": "kit/demo_data/ds1/embeddings/vlincs_MS01_MC0001_MCAM08_2024-03-Tc6/embeddings.npz",
+      "size_bytes": 1854068
+    },
+    {
+      "checkout": true,
+      "downloaded": true,
+      "oid": "ba147b9b3a48497a555ce0b609e4a0d5d82c7b31e7da2c2dd5489d68cfa88603",
+      "path": "kit/demo_data/ds1/resolve/embeddings/vlincs_MS01_MC0001_MCAM00_2024-03-Tc6/embeddings.npz",
+      "size_bytes": 552244
+    },
+    {
+      "checkout": true,
+      "downloaded": true,
+      "oid": "952c331c2fb6a402e25ddc210fb3c131c354d2f2fd816aee3ee873ad0b947828",
+      "path": "kit/demo_data/ds1/resolve/embeddings/vlincs_MS01_MC0001_MCAM00_2024-03-Tc8/embeddings.npz",
+      "size_bytes": 678004
+    },
+    {
+      "checkout": true,
+      "downloaded": true,
+      "oid": "a55cadd9a3ccbc3a6f2ccab80897848419ccf8c1dfd024ef675b5caf26f6e26d",
+      "path": "kit/demo_data/ds1/resolve/embeddings/vlincs_MS01_MC0001_MCAM03_2024-03-Tc6/embeddings.npz",
+      "size_bytes": 2019444
+    },
+    {
+      "checkout": true,
+      "downloaded": true,
+      "oid": "ddc019854ee4151c25dc32a8ddf6f4bafc73983ebc7457f0f14d37af52962723",
+      "path": "kit/demo_data/ds1/resolve/embeddings/vlincs_MS01_MC0001_MCAM03_2024-03-Tc8/embeddings.npz",
+      "size_bytes": 1403220
+    },
+    {
+      "checkout": true,
+      "downloaded": true,
+      "oid": "fba11455247447e52e0ce1d0a816731c3cf61d031d0504ab798967adef06b833",
+      "path": "kit/demo_data/ds1/resolve/embeddings/vlincs_MS01_MC0001_MCAM04_2024-03-Tc6/embeddings.npz",
+      "size_bytes": 7708598
+    },
+    {
+      "checkout": true,
+      "downloaded": true,
+      "oid": "fbedc10381955d5f2d48b8989f7c9252ab378576bb81cb2dfb4db1e9ee77a195",
+      "path": "kit/demo_data/ds1/resolve/embeddings/vlincs_MS01_MC0001_MCAM05_2024-03-Tc6/embeddings.npz",
+      "size_bytes": 1763732
+    },
+    {
+      "checkout": true,
+      "downloaded": true,
+      "oid": "8ab6a11a80ebe8342e8d791bd59c94cde27ea32475b3c8d2b6f8d658e791079a",
+      "path": "kit/demo_data/ds1/resolve/embeddings/vlincs_MS01_MC0001_MCAM05_2024-03-Tc8/embeddings.npz",
+      "size_bytes": 311202
+    },
+    {
+      "checkout": true,
+      "downloaded": true,
+      "oid": "036fad76a9047efcd62eeeadc4f7446bbe834251c275d9c2feca775375da0017",
+      "path": "kit/demo_data/ds1/resolve/embeddings/vlincs_MS01_MC0001_MCAM06_2024-03-Tc6/embeddings.npz",
+      "size_bytes": 598356
+    },
+    {
+      "checkout": true,
+      "downloaded": true,
+      "oid": "47f84787f1feeaed7e3e4aea88266c6ce17d6f004702b3b290c8c18b1cdbdfd0",
+      "path": "kit/demo_data/ds1/resolve/embeddings/vlincs_MS01_MC0001_MCAM06_2024-03-Tc8/embeddings.npz",
+      "size_bytes": 524994
+    },
+    {
+      "checkout": true,
+      "downloaded": true,
+      "oid": "a7a543c293872826d14d7cf7fb1b89395e56e790a5d254a983faeb8048c120f7",
+      "path": "kit/demo_data/ds1/resolve/embeddings/vlincs_MS01_MC0001_MCAM08_2024-03-Tc6/embeddings.npz",
+      "size_bytes": 4856665
+    },
+    {
+      "checkout": true,
+      "downloaded": true,
+      "oid": "6be9a4db35887fc8552e80a8854c043f916726637b6446c21262d47f1032583f",
+      "path": "kit/demo_data/ds1/tracklets/vlincs_MS01_MC0001_MCAM00_2024-03-Tc6/tracklets.parquet",
+      "size_bytes": 2225465
+    },
+    {
+      "checkout": true,
+      "downloaded": true,
+      "oid": "a0282ba6301eaeba3f01ed81ea550ea6288d38a74941bac63662adcce36ca3a0",
+      "path": "kit/demo_data/ds1/tracklets/vlincs_MS01_MC0001_MCAM00_2024-03-Tc8/tracklets.parquet",
+      "size_bytes": 2797979
+    },
+    {
+      "checkout": true,
+      "downloaded": true,
+      "oid": "97c2239933037df30a37d3c22bd5c417b9b56a5e2fadff00ffb3858504048061",
+      "path": "kit/demo_data/ds1/tracklets/vlincs_MS01_MC0001_MCAM03_2024-03-Tc6/tracklets.parquet",
+      "size_bytes": 9021283
+    },
+    {
+      "checkout": true,
+      "downloaded": true,
+      "oid": "1b96cb8ddbb4d890c69cbe090ebe63d0e03c373411499d84c087d171f87232e6",
+      "path": "kit/demo_data/ds1/tracklets/vlincs_MS01_MC0001_MCAM03_2024-03-Tc8/tracklets.parquet",
+      "size_bytes": 6043683
+    },
+    {
+      "checkout": true,
+      "downloaded": true,
+      "oid": "ea8865dc3811fe1e7e34c8eb3408cadbae1ec66a62cfba9c40f6a738951b418e",
+      "path": "kit/demo_data/ds1/tracklets/vlincs_MS01_MC0001_MCAM04_2024-03-Tc6/tracklets.parquet",
+      "size_bytes": 28405648
+    },
+    {
+      "checkout": true,
+      "downloaded": true,
+      "oid": "d42e969bd4886a1b6225f475422b3301a51c3b2e4aa76316b9f2bc7778d17cec",
+      "path": "kit/demo_data/ds1/tracklets/vlincs_MS01_MC0001_MCAM05_2024-03-Tc6/tracklets.parquet",
+      "size_bytes": 6724926
+    },
+    {
+      "checkout": true,
+      "downloaded": true,
+      "oid": "6df12429e7f64da1639fcbf2535f2d56e0ea8481fbc42bf06ddbef60a3eff79d",
+      "path": "kit/demo_data/ds1/tracklets/vlincs_MS01_MC0001_MCAM05_2024-03-Tc8/tracklets.parquet",
+      "size_bytes": 1047587
+    },
+    {
+      "checkout": true,
+      "downloaded": true,
+      "oid": "f83a5b3809cdc86838deecfb57d00a24a77c3a155b33a1f29f167b993308e9b6",
+      "path": "kit/demo_data/ds1/tracklets/vlincs_MS01_MC0001_MCAM06_2024-03-Tc6/tracklets.parquet",
+      "size_bytes": 2522975
+    },
+    {
+      "checkout": true,
+      "downloaded": true,
+      "oid": "a22a30e69de55973d3486e0e0e9a5c31b10a5ca23a010a0fd026c3ad9ed9083e",
+      "path": "kit/demo_data/ds1/tracklets/vlincs_MS01_MC0001_MCAM06_2024-03-Tc8/tracklets.parquet",
+      "size_bytes": 1970782
+    },
+    {
+      "checkout": true,
+      "downloaded": true,
+      "oid": "b0e27ef5284e829a41ec391268b95e4011bb67c71cbe90332e2105e056f4d97c",
+      "path": "kit/demo_data/ds1/tracklets/vlincs_MS01_MC0001_MCAM08_2024-03-Tc6/tracklets.parquet",
+      "size_bytes": 18167746
+    }
+  ],
+  "reproduction_level": {
+    "regeneration": "documented but not fully portable until feature caches are uploaded",
+    "replay": "portable with repo checkout, Git LFS DS1 tracklets, and DS1 GT DATA_ROOT"
+  },
+  "s3_upload_status": {
+    "attempts": [
+      {
+        "command": "aws sts get-caller-identity --output json",
+        "result": "Unable to locate credentials"
+      },
+      {
+        "command": "source ~/.codex/configs.bash; aws sts get-caller-identity --output json",
+        "result": "Unable to locate credentials"
+      }
+    ],
+    "status": "blocked",
+    "target_prefix": "s3://dit-scale-up/zcai/vlincs/reports/vlincs_iterations/20260623_rank01_37to86_top32_p005_gain/"
+  },
+  "successful_local_gt_inventory": {
+    "data_root": "/Users/zcai/Codex/vlincs_reid_by_search/local_runs/local_data_root_20260622",
+    "files": [
+      {
+        "path": "Box/VLINCS_Performer/MS01/MC0001/2024-03-Tc6/vlincs_MS01_MC0001_MCAM00_2024-03-Tc6_v1.7.2.parquet",
+        "sha256": "08bd89132bb590cf871746759729aa90845cc9ba09c6caefb64332f721dd8cf6",
+        "size_bytes": 2046041
+      },
+      {
+        "path": "Box/VLINCS_Performer/MS01/MC0001/2024-03-Tc6/vlincs_MS01_MC0001_MCAM03_2024-03-Tc6_v1.7.2.parquet",
+        "sha256": "ac322d33fda013e91b15087393606d8d326bfe80f7e8990407f539776ee96733",
+        "size_bytes": 9202544
+      },
+      {
+        "path": "Box/VLINCS_Performer/MS01/MC0001/2024-03-Tc6/vlincs_MS01_MC0001_MCAM04_2024-03-Tc6_v1.7.2.parquet",
+        "sha256": "739c96c85ef425d91b0751eecdb33045e00f915176e5cd2316477de9e393ffc7",
+        "size_bytes": 35065309
+      },
+      {
+        "path": "Box/VLINCS_Performer/MS01/MC0001/2024-03-Tc6/vlincs_MS01_MC0001_MCAM05_2024-03-Tc6_v1.7.2.parquet",
+        "sha256": "4f05524371e334c6491ecafcdca2d17077ab631373b0ba14237756c604d4bb2d",
+        "size_bytes": 921254
+      },
+      {
+        "path": "Box/VLINCS_Performer/MS01/MC0001/2024-03-Tc6/vlincs_MS01_MC0001_MCAM06_2024-03-Tc6_v1.7.2.parquet",
+        "sha256": "d533340965dfa3ddfba2f4c4c534b75a51ed13f79b4a245ff0bb6238ba95899f",
+        "size_bytes": 2643062
+      },
+      {
+        "path": "Box/VLINCS_Performer/MS01/MC0001/2024-03-Tc6/vlincs_MS01_MC0001_MCAM08_2024-03-Tc6_v1.7.2.parquet",
+        "sha256": "d1d6b3d1349e28c179488f069ef34147b4d1d4105f92ffd21c6c149d42002d17",
+        "size_bytes": 16246606
+      },
+      {
+        "path": "Box/VLINCS_Performer/MS01/MC0001/2024-03-Tc8/vlincs_MS01_MC0001_MCAM00_2024-03-Tc8_v1.7.2.parquet",
+        "sha256": "eaba2db79720c5e94bca5e4e7035ccb8501fa75a0fae407125561c7480df3abc",
+        "size_bytes": 2830796
+      },
+      {
+        "path": "Box/VLINCS_Performer/MS01/MC0001/2024-03-Tc8/vlincs_MS01_MC0001_MCAM03_2024-03-Tc8_v1.7.2.parquet",
+        "sha256": "0d32c313cfa69cefee051477f49f9182df43a6909233671a1850bc1e3ec89b34",
+        "size_bytes": 6743879
+      },
+      {
+        "path": "Box/VLINCS_Performer/MS01/MC0001/2024-03-Tc8/vlincs_MS01_MC0001_MCAM05_2024-03-Tc8_v1.7.2.parquet",
+        "sha256": "bf2b6a18e52ffcdb247da50b2c99a3bf6dc7f19122c0a831e1a91a1375d05c07",
+        "size_bytes": 1133792
+      },
+      {
+        "path": "Box/VLINCS_Performer/MS01/MC0001/2024-03-Tc8/vlincs_MS01_MC0001_MCAM06_2024-03-Tc8_v1.7.2.parquet",
+        "sha256": "9e355f317231ef8bd55f8f0f759b0f611707b3bbb26c7063b81a106af151920c",
+        "size_bytes": 2206349
+      }
+    ]
+  },
+  "verification_note": "Clean wisc worktree replay via ./demo.sh no-anchor-top32 reproduced p005_area IDF1/HOTA/AssA 0.668198/0.528747/0.539071."
+}

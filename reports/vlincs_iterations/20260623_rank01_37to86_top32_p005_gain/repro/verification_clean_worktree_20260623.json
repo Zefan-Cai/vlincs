@@ -1,0 +1,31 @@
+{
+  "command": "./demo.sh no-anchor-top32 --data-root /Users/zcai/Codex/vlincs_reid_by_search/local_runs/local_data_root_20260622 --run-dir local_runs/repro_from_demo_top32",
+  "date": "2026-06-23",
+  "density_simple": {
+    "assa": 0.538947,
+    "dropped_rows": 35029,
+    "hota": 0.528665,
+    "idf1": 0.668093,
+    "rows": 1688041
+  },
+  "direct": {
+    "assa": 0.537182,
+    "hota": 0.526982,
+    "idf1": 0.666005,
+    "predicted_ids": 2336,
+    "scored_rows": 1723070
+  },
+  "exit_code": 0,
+  "gt_files": 10,
+  "p005_area": {
+    "assa": 0.539071,
+    "config_name": "p005_area",
+    "dropped_rows": 45467,
+    "hota": 0.528747,
+    "idf1": 0.668198,
+    "rows": 1642574
+  },
+  "passed": true,
+  "tracklet_parquets": 10,
+  "worktree": "/tmp/vlincs-wisc-repro"
+}

@@ -1,0 +1,1338 @@
+{
+  "assignment_out_dir": "local_runs/offline_no_anchor_split_probe_20260623/component_graph_fullscore/rank01_37to86_top28_neighbor_probe/assignments",
+  "base_assignment_csv": "local_runs/offline_no_anchor_split_probe_20260623/component_graph_fullscore/rank04_plus_small_fragment_combo/assignments/rank01_small_fragment_combo_combo_rank77_rank36_component_graph_small_fragment_assignments.csv",
+  "outputs": [
+    {
+      "accepted_preview_count": 1,
+      "missing_source_seqs": [],
+      "mode": "component_subset_attach",
+      "moved_preview": [
+        {
+          "from_component": 37,
+          "from_predicted_global_id": 96000040,
+          "seq": 1201,
+          "to_component": 86,
+          "to_predicted_global_id": 960000350
+        },
+        {
+          "from_component": 37,
+          "from_predicted_global_id": 96000040,
+          "seq": 1714,
+          "to_component": 86,
+          "to_predicted_global_id": 960000350
+        },
+        {
+          "from_component": 37,
+          "from_predicted_global_id": 96000040,
+          "seq": 1731,
+          "to_component": 86,
+          "to_predicted_global_id": 960000350
+        },
+        {
+          "from_component": 37,
+          "from_predicted_global_id": 96000040,
+          "seq": 2243,
+          "to_component": 86,
+          "to_predicted_global_id": 960000350
+        },
+        {
+          "from_component": 37,
+          "from_predicted_global_id": 96000040,
+          "seq": 2250,
+          "to_component": 86,
+          "to_predicted_global_id": 960000350
+        },
+        {
+          "from_component": 37,
+          "from_predicted_global_id": 96000040,
+          "seq": 2285,
+          "to_component": 86,
+          "to_predicted_global_id": 960000350
+        },
+        {
+          "from_component": 37,
+          "from_predicted_global_id": 96000040,
+          "seq": 2330,
+          "to_component": 86,
+          "to_predicted_global_id": 960000350
+        },
+        {
+          "from_component": 37,
+          "from_predicted_global_id": 96000040,
+          "seq": 2334,
+          "to_component": 86,
+          "to_predicted_global_id": 960000350
+        },
+        {
+          "from_component": 37,
+          "from_predicted_global_id": 96000040,
+          "seq": 2353,
+          "to_component": 86,
+          "to_predicted_global_id": 960000350
+        },
+        {
+          "from_component": 37,
+          "from_predicted_global_id": 96000040,
+          "seq": 2376,
+          "to_component": 86,
+          "to_predicted_global_id": 960000350
+        },
+        {
+          "from_component": 37,
+          "from_predicted_global_id": 96000040,
+          "seq": 2399,
+          "to_component": 86,
+          "to_predicted_global_id": 960000350
+        },
+        {
+          "from_component": 37,
+          "from_predicted_global_id": 96000040,
+          "seq": 2433,
+          "to_component": 86,
+          "to_predicted_global_id": 960000350
+        },
+        {
+          "from_component": 37,
+          "from_predicted_global_id": 96000040,
+          "seq": 2461,
+          "to_component": 86,
+          "to_predicted_global_id": 960000350
+        },
+        {
+          "from_component": 37,
+          "from_predicted_global_id": 96000040,
+          "seq": 2471,
+          "to_component": 86,
+          "to_predicted_global_id": 960000350
+        },
+        {
+          "from_component": 37,
+          "from_predicted_global_id": 96000040,
+          "seq": 2505,
+          "to_component": 86,
+          "to_predicted_global_id": 960000350
+        },
+        {
+          "from_component": 37,
+          "from_predicted_global_id": 96000040,
+          "seq": 2543,
+          "to_component": 86,
+          "to_predicted_global_id": 960000350
+        },
+        {
+          "from_component": 37,
+          "from_predicted_global_id": 96000040,
+          "seq": 2577,
+          "to_component": 86,
+          "to_predicted_global_id": 960000350
+        },
+        {
+          "from_component": 37,
+          "from_predicted_global_id": 96000040,
+          "seq": 2613,
+          "to_component": 86,
+          "to_predicted_global_id": 960000350
+        },
+        {
+          "from_component": 37,
+          "from_predicted_global_id": 96000040,
+          "seq": 2644,
+          "to_component": 86,
+          "to_predicted_global_id": 960000350
+        },
+        {
+          "from_component": 37,
+          "from_predicted_global_id": 96000040,
+          "seq": 2680,
+          "to_component": 86,
+          "to_predicted_global_id": 960000350
+        },
+        {
+          "from_component": 37,
+          "from_predicted_global_id": 96000040,
+          "seq": 2745,
+          "to_component": 86,
+          "to_predicted_global_id": 960000350
+        },
+        {
+          "from_component": 37,
+          "from_predicted_global_id": 96000040,
+          "seq": 2812,
+          "to_component": 86,
+          "to_predicted_global_id": 960000350
+        },
+        {
+          "from_component": 37,
+          "from_predicted_global_id": 96000040,
+          "seq": 2847,
+          "to_component": 86,
+          "to_predicted_global_id": 960000350
+        },
+        {
+          "from_component": 37,
+          "from_predicted_global_id": 96000040,
+          "seq": 4043,
+          "to_component": 86,
+          "to_predicted_global_id": 960000350
+        },
+        {
+          "from_component": 37,
+          "from_predicted_global_id": 96000040,
+          "seq": 4443,
+          "to_component": 86,
+          "to_predicted_global_id": 960000350
+        },
+        {
+          "from_component": 37,
+          "from_predicted_global_id": 96000040,
+          "seq": 4494,
+          "to_component": 86,
+          "to_predicted_global_id": 960000350
+        },
+        {
+          "from_component": 37,
+          "from_predicted_global_id": 96000040,
+          "seq": 4504,
+          "to_component": 86,
+          "to_predicted_global_id": 960000350
+        },
+        {
+          "from_component": 37,
+          "from_predicted_global_id": 96000040,
+          "seq": 4547,
+          "to_component": 86,
+          "to_predicted_global_id": 960000350
+        },
+        {
+          "from_component": 37,
+          "from_predicted_global_id": 96000040,
+          "seq": 4608,
+          "to_component": 86,
+          "to_predicted_global_id": 960000350
+        },
+        {
+          "from_component": 37,
+          "from_predicted_global_id": 96000040,
+          "seq": 4690,
+          "to_component": 86,
+          "to_predicted_global_id": 960000350
+        },
+        {
+          "from_component": 37,
+          "from_predicted_global_id": 96000040,
+          "seq": 5572,
+          "to_component": 86,
+          "to_predicted_global_id": 960000350
+        },
+        {
+          "from_component": 37,
+          "from_predicted_global_id": 96000040,
+          "seq": 5834,
+          "to_component": 86,
+          "to_predicted_global_id": 960000350
+        },
+        {
+          "from_component": 37,
+          "from_predicted_global_id": 96000040,
+          "seq": 5875,
+          "to_component": 86,
+          "to_predicted_global_id": 960000350
+        },
+        {
+          "from_component": 37,
+          "from_predicted_global_id": 96000040,
+          "seq": 5890,
+          "to_component": 86,
+          "to_predicted_global_id": 960000350
+        }
+      ],
+      "moved_tracklets": 34,
+      "output_csv": "local_runs/offline_no_anchor_split_probe_20260623/component_graph_fullscore/rank01_37to86_top28_neighbor_probe/assignments/rank05_component_subset_attach_source_assignments.csv",
+      "pair_f1": null,
+      "pair_precision": null,
+      "pair_recall": null,
+      "predicted_full_idf1": null,
+      "selection_rank": 5,
+      "skipped_empty_source_components": [],
+      "source_file": null,
+      "source_rank": null,
+      "target_component_repairs": [],
+      "target_components": [
+        86
+      ],
+      "target_predicted_global_ids": [
+        960000350
+      ]
+    },
+    {
+      "accepted_preview_count": 1,
+      "missing_source_seqs": [],
+      "mode": "component_subset_attach",
+      "moved_preview": [
+        {
+          "from_component": 37,
+          "from_predicted_global_id": 96000040,
+          "seq": 1201,
+          "to_component": 86,
+          "to_predicted_global_id": 960000350
+        },
+        {
+          "from_component": 37,
+          "from_predicted_global_id": 96000040,
+          "seq": 1714,
+          "to_component": 86,
+          "to_predicted_global_id": 960000350
+        },
+        {
+          "from_component": 37,
+          "from_predicted_global_id": 96000040,
+          "seq": 1731,
+          "to_component": 86,
+          "to_predicted_global_id": 960000350
+        },
+        {
+          "from_component": 37,
+          "from_predicted_global_id": 96000040,
+          "seq": 2243,
+          "to_component": 86,
+          "to_predicted_global_id": 960000350
+        },
+        {
+          "from_component": 37,
+          "from_predicted_global_id": 96000040,
+          "seq": 2250,
+          "to_component": 86,
+          "to_predicted_global_id": 960000350
+        },
+        {
+          "from_component": 37,
+          "from_predicted_global_id": 96000040,
+          "seq": 2285,
+          "to_component": 86,
+          "to_predicted_global_id": 960000350
+        },
+        {
+          "from_component": 37,
+          "from_predicted_global_id": 96000040,
+          "seq": 2330,
+          "to_component": 86,
+          "to_predicted_global_id": 960000350
+        },
+        {
+          "from_component": 37,
+          "from_predicted_global_id": 96000040,
+          "seq": 2334,
+          "to_component": 86,
+          "to_predicted_global_id": 960000350
+        },
+        {
+          "from_component": 37,
+          "from_predicted_global_id": 96000040,
+          "seq": 2353,
+          "to_component": 86,
+          "to_predicted_global_id": 960000350
+        },
+        {
+          "from_component": 37,
+          "from_predicted_global_id": 96000040,
+          "seq": 2376,
+          "to_component": 86,
+          "to_predicted_global_id": 960000350
+        },
+        {
+          "from_component": 37,
+          "from_predicted_global_id": 96000040,
+          "seq": 2399,
+          "to_component": 86,
+          "to_predicted_global_id": 960000350
+        },
+        {
+          "from_component": 37,
+          "from_predicted_global_id": 96000040,
+          "seq": 2433,
+          "to_component": 86,
+          "to_predicted_global_id": 960000350
+        },
+        {
+          "from_component": 37,
+          "from_predicted_global_id": 96000040,
+          "seq": 2471,
+          "to_component": 86,
+          "to_predicted_global_id": 960000350
+        },
+        {
+          "from_component": 37,
+          "from_predicted_global_id": 96000040,
+          "seq": 2505,
+          "to_component": 86,
+          "to_predicted_global_id": 960000350
+        },
+        {
+          "from_component": 37,
+          "from_predicted_global_id": 96000040,
+          "seq": 2543,
+          "to_component": 86,
+          "to_predicted_global_id": 960000350
+        },
+        {
+          "from_component": 37,
+          "from_predicted_global_id": 96000040,
+          "seq": 2577,
+          "to_component": 86,
+          "to_predicted_global_id": 960000350
+        },
+        {
+          "from_component": 37,
+          "from_predicted_global_id": 96000040,
+          "seq": 2613,
+          "to_component": 86,
+          "to_predicted_global_id": 960000350
+        },
+        {
+          "from_component": 37,
+          "from_predicted_global_id": 96000040,
+          "seq": 2644,
+          "to_component": 86,
+          "to_predicted_global_id": 960000350
+        },
+        {
+          "from_component": 37,
+          "from_predicted_global_id": 96000040,
+          "seq": 2680,
+          "to_component": 86,
+          "to_predicted_global_id": 960000350
+        },
+        {
+          "from_component": 37,
+          "from_predicted_global_id": 96000040,
+          "seq": 2745,
+          "to_component": 86,
+          "to_predicted_global_id": 960000350
+        },
+        {
+          "from_component": 37,
+          "from_predicted_global_id": 96000040,
+          "seq": 2812,
+          "to_component": 86,
+          "to_predicted_global_id": 960000350
+        },
+        {
+          "from_component": 37,
+          "from_predicted_global_id": 96000040,
+          "seq": 2847,
+          "to_component": 86,
+          "to_predicted_global_id": 960000350
+        },
+        {
+          "from_component": 37,
+          "from_predicted_global_id": 96000040,
+          "seq": 4043,
+          "to_component": 86,
+          "to_predicted_global_id": 960000350
+        },
+        {
+          "from_component": 37,
+          "from_predicted_global_id": 96000040,
+          "seq": 4443,
+          "to_component": 86,
+          "to_predicted_global_id": 960000350
+        },
+        {
+          "from_component": 37,
+          "from_predicted_global_id": 96000040,
+          "seq": 4494,
+          "to_component": 86,
+          "to_predicted_global_id": 960000350
+        },
+        {
+          "from_component": 37,
+          "from_predicted_global_id": 96000040,
+          "seq": 4504,
+          "to_component": 86,
+          "to_predicted_global_id": 960000350
+        },
+        {
+          "from_component": 37,
+          "from_predicted_global_id": 96000040,
+          "seq": 4547,
+          "to_component": 86,
+          "to_predicted_global_id": 960000350
+        },
+        {
+          "from_component": 37,
+          "from_predicted_global_id": 96000040,
+          "seq": 4608,
+          "to_component": 86,
+          "to_predicted_global_id": 960000350
+        },
+        {
+          "from_component": 37,
+          "from_predicted_global_id": 96000040,
+          "seq": 4690,
+          "to_component": 86,
+          "to_predicted_global_id": 960000350
+        },
+        {
+          "from_component": 37,
+          "from_predicted_global_id": 96000040,
+          "seq": 5834,
+          "to_component": 86,
+          "to_predicted_global_id": 960000350
+        },
+        {
+          "from_component": 37,
+          "from_predicted_global_id": 96000040,
+          "seq": 5875,
+          "to_component": 86,
+          "to_predicted_global_id": 960000350
+        },
+        {
+          "from_component": 37,
+          "from_predicted_global_id": 96000040,
+          "seq": 5890,
+          "to_component": 86,
+          "to_predicted_global_id": 960000350
+        }
+      ],
+      "moved_tracklets": 32,
+      "output_csv": "local_runs/offline_no_anchor_split_probe_20260623/component_graph_fullscore/rank01_37to86_top28_neighbor_probe/assignments/rank06_component_subset_attach_source_assignments.csv",
+      "pair_f1": null,
+      "pair_precision": null,
+      "pair_recall": null,
+      "predicted_full_idf1": null,
+      "selection_rank": 6,
+      "skipped_empty_source_components": [],
+      "source_file": null,
+      "source_rank": null,
+      "target_component_repairs": [],
+      "target_components": [
+        86
+      ],
+      "target_predicted_global_ids": [
+        960000350
+      ]
+    },
+    {
+      "accepted_preview_count": 1,
+      "missing_source_seqs": [],
+      "mode": "component_subset_attach",
+      "moved_preview": [
+        {
+          "from_component": 37,
+          "from_predicted_global_id": 96000040,
+          "seq": 1201,
+          "to_component": 86,
+          "to_predicted_global_id": 960000350
+        },
+        {
+          "from_component": 37,
+          "from_predicted_global_id": 96000040,
+          "seq": 1731,
+          "to_component": 86,
+          "to_predicted_global_id": 960000350
+        },
+        {
+          "from_component": 37,
+          "from_predicted_global_id": 96000040,
+          "seq": 2243,
+          "to_component": 86,
+          "to_predicted_global_id": 960000350
+        },
+        {
+          "from_component": 37,
+          "from_predicted_global_id": 96000040,
+          "seq": 2250,
+          "to_component": 86,
+          "to_predicted_global_id": 960000350
+        },
+        {
+          "from_component": 37,
+          "from_predicted_global_id": 96000040,
+          "seq": 2285,
+          "to_component": 86,
+          "to_predicted_global_id": 960000350
+        },
+        {
+          "from_component": 37,
+          "from_predicted_global_id": 96000040,
+          "seq": 2330,
+          "to_component": 86,
+          "to_predicted_global_id": 960000350
+        },
+        {
+          "from_component": 37,
+          "from_predicted_global_id": 96000040,
+          "seq": 2334,
+          "to_component": 86,
+          "to_predicted_global_id": 960000350
+        },
+        {
+          "from_component": 37,
+          "from_predicted_global_id": 96000040,
+          "seq": 2353,
+          "to_component": 86,
+          "to_predicted_global_id": 960000350
+        },
+        {
+          "from_component": 37,
+          "from_predicted_global_id": 96000040,
+          "seq": 2399,
+          "to_component": 86,
+          "to_predicted_global_id": 960000350
+        },
+        {
+          "from_component": 37,
+          "from_predicted_global_id": 96000040,
+          "seq": 2433,
+          "to_component": 86,
+          "to_predicted_global_id": 960000350
+        },
+        {
+          "from_component": 37,
+          "from_predicted_global_id": 96000040,
+          "seq": 2471,
+          "to_component": 86,
+          "to_predicted_global_id": 960000350
+        },
+        {
+          "from_component": 37,
+          "from_predicted_global_id": 96000040,
+          "seq": 2505,
+          "to_component": 86,
+          "to_predicted_global_id": 960000350
+        },
+        {
+          "from_component": 37,
+          "from_predicted_global_id": 96000040,
+          "seq": 2543,
+          "to_component": 86,
+          "to_predicted_global_id": 960000350
+        },
+        {
+          "from_component": 37,
+          "from_predicted_global_id": 96000040,
+          "seq": 2577,
+          "to_component": 86,
+          "to_predicted_global_id": 960000350
+        },
+        {
+          "from_component": 37,
+          "from_predicted_global_id": 96000040,
+          "seq": 2613,
+          "to_component": 86,
+          "to_predicted_global_id": 960000350
+        },
+        {
+          "from_component": 37,
+          "from_predicted_global_id": 96000040,
+          "seq": 2644,
+          "to_component": 86,
+          "to_predicted_global_id": 960000350
+        },
+        {
+          "from_component": 37,
+          "from_predicted_global_id": 96000040,
+          "seq": 2680,
+          "to_component": 86,
+          "to_predicted_global_id": 960000350
+        },
+        {
+          "from_component": 37,
+          "from_predicted_global_id": 96000040,
+          "seq": 2745,
+          "to_component": 86,
+          "to_predicted_global_id": 960000350
+        },
+        {
+          "from_component": 37,
+          "from_predicted_global_id": 96000040,
+          "seq": 2812,
+          "to_component": 86,
+          "to_predicted_global_id": 960000350
+        },
+        {
+          "from_component": 37,
+          "from_predicted_global_id": 96000040,
+          "seq": 2847,
+          "to_component": 86,
+          "to_predicted_global_id": 960000350
+        },
+        {
+          "from_component": 37,
+          "from_predicted_global_id": 96000040,
+          "seq": 4043,
+          "to_component": 86,
+          "to_predicted_global_id": 960000350
+        },
+        {
+          "from_component": 37,
+          "from_predicted_global_id": 96000040,
+          "seq": 4443,
+          "to_component": 86,
+          "to_predicted_global_id": 960000350
+        },
+        {
+          "from_component": 37,
+          "from_predicted_global_id": 96000040,
+          "seq": 4494,
+          "to_component": 86,
+          "to_predicted_global_id": 960000350
+        },
+        {
+          "from_component": 37,
+          "from_predicted_global_id": 96000040,
+          "seq": 4504,
+          "to_component": 86,
+          "to_predicted_global_id": 960000350
+        },
+        {
+          "from_component": 37,
+          "from_predicted_global_id": 96000040,
+          "seq": 4547,
+          "to_component": 86,
+          "to_predicted_global_id": 960000350
+        },
+        {
+          "from_component": 37,
+          "from_predicted_global_id": 96000040,
+          "seq": 4608,
+          "to_component": 86,
+          "to_predicted_global_id": 960000350
+        },
+        {
+          "from_component": 37,
+          "from_predicted_global_id": 96000040,
+          "seq": 4690,
+          "to_component": 86,
+          "to_predicted_global_id": 960000350
+        },
+        {
+          "from_component": 37,
+          "from_predicted_global_id": 96000040,
+          "seq": 5834,
+          "to_component": 86,
+          "to_predicted_global_id": 960000350
+        },
+        {
+          "from_component": 37,
+          "from_predicted_global_id": 96000040,
+          "seq": 5875,
+          "to_component": 86,
+          "to_predicted_global_id": 960000350
+        },
+        {
+          "from_component": 37,
+          "from_predicted_global_id": 96000040,
+          "seq": 5890,
+          "to_component": 86,
+          "to_predicted_global_id": 960000350
+        }
+      ],
+      "moved_tracklets": 30,
+      "output_csv": "local_runs/offline_no_anchor_split_probe_20260623/component_graph_fullscore/rank01_37to86_top28_neighbor_probe/assignments/rank07_component_subset_attach_source_assignments.csv",
+      "pair_f1": null,
+      "pair_precision": null,
+      "pair_recall": null,
+      "predicted_full_idf1": null,
+      "selection_rank": 7,
+      "skipped_empty_source_components": [],
+      "source_file": null,
+      "source_rank": null,
+      "target_component_repairs": [],
+      "target_components": [
+        86
+      ],
+      "target_predicted_global_ids": [
+        960000350
+      ]
+    },
+    {
+      "accepted_preview_count": 1,
+      "missing_source_seqs": [],
+      "mode": "component_subset_attach",
+      "moved_preview": [
+        {
+          "from_component": 37,
+          "from_predicted_global_id": 96000040,
+          "seq": 1201,
+          "to_component": 86,
+          "to_predicted_global_id": 960000350
+        },
+        {
+          "from_component": 37,
+          "from_predicted_global_id": 96000040,
+          "seq": 1731,
+          "to_component": 86,
+          "to_predicted_global_id": 960000350
+        },
+        {
+          "from_component": 37,
+          "from_predicted_global_id": 96000040,
+          "seq": 2243,
+          "to_component": 86,
+          "to_predicted_global_id": 960000350
+        },
+        {
+          "from_component": 37,
+          "from_predicted_global_id": 96000040,
+          "seq": 2250,
+          "to_component": 86,
+          "to_predicted_global_id": 960000350
+        },
+        {
+          "from_component": 37,
+          "from_predicted_global_id": 96000040,
+          "seq": 2285,
+          "to_component": 86,
+          "to_predicted_global_id": 960000350
+        },
+        {
+          "from_component": 37,
+          "from_predicted_global_id": 96000040,
+          "seq": 2330,
+          "to_component": 86,
+          "to_predicted_global_id": 960000350
+        },
+        {
+          "from_component": 37,
+          "from_predicted_global_id": 96000040,
+          "seq": 2334,
+          "to_component": 86,
+          "to_predicted_global_id": 960000350
+        },
+        {
+          "from_component": 37,
+          "from_predicted_global_id": 96000040,
+          "seq": 2353,
+          "to_component": 86,
+          "to_predicted_global_id": 960000350
+        },
+        {
+          "from_component": 37,
+          "from_predicted_global_id": 96000040,
+          "seq": 2399,
+          "to_component": 86,
+          "to_predicted_global_id": 960000350
+        },
+        {
+          "from_component": 37,
+          "from_predicted_global_id": 96000040,
+          "seq": 2433,
+          "to_component": 86,
+          "to_predicted_global_id": 960000350
+        },
+        {
+          "from_component": 37,
+          "from_predicted_global_id": 96000040,
+          "seq": 2471,
+          "to_component": 86,
+          "to_predicted_global_id": 960000350
+        },
+        {
+          "from_component": 37,
+          "from_predicted_global_id": 96000040,
+          "seq": 2505,
+          "to_component": 86,
+          "to_predicted_global_id": 960000350
+        },
+        {
+          "from_component": 37,
+          "from_predicted_global_id": 96000040,
+          "seq": 2543,
+          "to_component": 86,
+          "to_predicted_global_id": 960000350
+        },
+        {
+          "from_component": 37,
+          "from_predicted_global_id": 96000040,
+          "seq": 2577,
+          "to_component": 86,
+          "to_predicted_global_id": 960000350
+        },
+        {
+          "from_component": 37,
+          "from_predicted_global_id": 96000040,
+          "seq": 2613,
+          "to_component": 86,
+          "to_predicted_global_id": 960000350
+        },
+        {
+          "from_component": 37,
+          "from_predicted_global_id": 96000040,
+          "seq": 2644,
+          "to_component": 86,
+          "to_predicted_global_id": 960000350
+        },
+        {
+          "from_component": 37,
+          "from_predicted_global_id": 96000040,
+          "seq": 2680,
+          "to_component": 86,
+          "to_predicted_global_id": 960000350
+        },
+        {
+          "from_component": 37,
+          "from_predicted_global_id": 96000040,
+          "seq": 2745,
+          "to_component": 86,
+          "to_predicted_global_id": 960000350
+        },
+        {
+          "from_component": 37,
+          "from_predicted_global_id": 96000040,
+          "seq": 4443,
+          "to_component": 86,
+          "to_predicted_global_id": 960000350
+        },
+        {
+          "from_component": 37,
+          "from_predicted_global_id": 96000040,
+          "seq": 4494,
+          "to_component": 86,
+          "to_predicted_global_id": 960000350
+        },
+        {
+          "from_component": 37,
+          "from_predicted_global_id": 96000040,
+          "seq": 4504,
+          "to_component": 86,
+          "to_predicted_global_id": 960000350
+        },
+        {
+          "from_component": 37,
+          "from_predicted_global_id": 96000040,
+          "seq": 4547,
+          "to_component": 86,
+          "to_predicted_global_id": 960000350
+        },
+        {
+          "from_component": 37,
+          "from_predicted_global_id": 96000040,
+          "seq": 4690,
+          "to_component": 86,
+          "to_predicted_global_id": 960000350
+        },
+        {
+          "from_component": 37,
+          "from_predicted_global_id": 96000040,
+          "seq": 5834,
+          "to_component": 86,
+          "to_predicted_global_id": 960000350
+        },
+        {
+          "from_component": 37,
+          "from_predicted_global_id": 96000040,
+          "seq": 5875,
+          "to_component": 86,
+          "to_predicted_global_id": 960000350
+        },
+        {
+          "from_component": 37,
+          "from_predicted_global_id": 96000040,
+          "seq": 5890,
+          "to_component": 86,
+          "to_predicted_global_id": 960000350
+        }
+      ],
+      "moved_tracklets": 26,
+      "output_csv": "local_runs/offline_no_anchor_split_probe_20260623/component_graph_fullscore/rank01_37to86_top28_neighbor_probe/assignments/rank09_component_subset_attach_source_assignments.csv",
+      "pair_f1": null,
+      "pair_precision": null,
+      "pair_recall": null,
+      "predicted_full_idf1": null,
+      "selection_rank": 9,
+      "skipped_empty_source_components": [],
+      "source_file": null,
+      "source_rank": null,
+      "target_component_repairs": [],
+      "target_components": [
+        86
+      ],
+      "target_predicted_global_ids": [
+        960000350
+      ]
+    },
+    {
+      "accepted_preview_count": 1,
+      "missing_source_seqs": [],
+      "mode": "component_subset_attach",
+      "moved_preview": [
+        {
+          "from_component": 37,
+          "from_predicted_global_id": 96000040,
+          "seq": 1201,
+          "to_component": 86,
+          "to_predicted_global_id": 960000350
+        },
+        {
+          "from_component": 37,
+          "from_predicted_global_id": 96000040,
+          "seq": 1731,
+          "to_component": 86,
+          "to_predicted_global_id": 960000350
+        },
+        {
+          "from_component": 37,
+          "from_predicted_global_id": 96000040,
+          "seq": 2243,
+          "to_component": 86,
+          "to_predicted_global_id": 960000350
+        },
+        {
+          "from_component": 37,
+          "from_predicted_global_id": 96000040,
+          "seq": 2250,
+          "to_component": 86,
+          "to_predicted_global_id": 960000350
+        },
+        {
+          "from_component": 37,
+          "from_predicted_global_id": 96000040,
+          "seq": 2285,
+          "to_component": 86,
+          "to_predicted_global_id": 960000350
+        },
+        {
+          "from_component": 37,
+          "from_predicted_global_id": 96000040,
+          "seq": 2330,
+          "to_component": 86,
+          "to_predicted_global_id": 960000350
+        },
+        {
+          "from_component": 37,
+          "from_predicted_global_id": 96000040,
+          "seq": 2334,
+          "to_component": 86,
+          "to_predicted_global_id": 960000350
+        },
+        {
+          "from_component": 37,
+          "from_predicted_global_id": 96000040,
+          "seq": 2353,
+          "to_component": 86,
+          "to_predicted_global_id": 960000350
+        },
+        {
+          "from_component": 37,
+          "from_predicted_global_id": 96000040,
+          "seq": 2433,
+          "to_component": 86,
+          "to_predicted_global_id": 960000350
+        },
+        {
+          "from_component": 37,
+          "from_predicted_global_id": 96000040,
+          "seq": 2471,
+          "to_component": 86,
+          "to_predicted_global_id": 960000350
+        },
+        {
+          "from_component": 37,
+          "from_predicted_global_id": 96000040,
+          "seq": 2505,
+          "to_component": 86,
+          "to_predicted_global_id": 960000350
+        },
+        {
+          "from_component": 37,
+          "from_predicted_global_id": 96000040,
+          "seq": 2543,
+          "to_component": 86,
+          "to_predicted_global_id": 960000350
+        },
+        {
+          "from_component": 37,
+          "from_predicted_global_id": 96000040,
+          "seq": 2577,
+          "to_component": 86,
+          "to_predicted_global_id": 960000350
+        },
+        {
+          "from_component": 37,
+          "from_predicted_global_id": 96000040,
+          "seq": 2613,
+          "to_component": 86,
+          "to_predicted_global_id": 960000350
+        },
+        {
+          "from_component": 37,
+          "from_predicted_global_id": 96000040,
+          "seq": 2644,
+          "to_component": 86,
+          "to_predicted_global_id": 960000350
+        },
+        {
+          "from_component": 37,
+          "from_predicted_global_id": 96000040,
+          "seq": 2745,
+          "to_component": 86,
+          "to_predicted_global_id": 960000350
+        },
+        {
+          "from_component": 37,
+          "from_predicted_global_id": 96000040,
+          "seq": 4443,
+          "to_component": 86,
+          "to_predicted_global_id": 960000350
+        },
+        {
+          "from_component": 37,
+          "from_predicted_global_id": 96000040,
+          "seq": 4494,
+          "to_component": 86,
+          "to_predicted_global_id": 960000350
+        },
+        {
+          "from_component": 37,
+          "from_predicted_global_id": 96000040,
+          "seq": 4504,
+          "to_component": 86,
+          "to_predicted_global_id": 960000350
+        },
+        {
+          "from_component": 37,
+          "from_predicted_global_id": 96000040,
+          "seq": 4547,
+          "to_component": 86,
+          "to_predicted_global_id": 960000350
+        },
+        {
+          "from_component": 37,
+          "from_predicted_global_id": 96000040,
+          "seq": 4690,
+          "to_component": 86,
+          "to_predicted_global_id": 960000350
+        },
+        {
+          "from_component": 37,
+          "from_predicted_global_id": 96000040,
+          "seq": 5834,
+          "to_component": 86,
+          "to_predicted_global_id": 960000350
+        },
+        {
+          "from_component": 37,
+          "from_predicted_global_id": 96000040,
+          "seq": 5875,
+          "to_component": 86,
+          "to_predicted_global_id": 960000350
+        },
+        {
+          "from_component": 37,
+          "from_predicted_global_id": 96000040,
+          "seq": 5890,
+          "to_component": 86,
+          "to_predicted_global_id": 960000350
+        }
+      ],
+      "moved_tracklets": 24,
+      "output_csv": "local_runs/offline_no_anchor_split_probe_20260623/component_graph_fullscore/rank01_37to86_top28_neighbor_probe/assignments/rank10_component_subset_attach_source_assignments.csv",
+      "pair_f1": null,
+      "pair_precision": null,
+      "pair_recall": null,
+      "predicted_full_idf1": null,
+      "selection_rank": 10,
+      "skipped_empty_source_components": [],
+      "source_file": null,
+      "source_rank": null,
+      "target_component_repairs": [],
+      "target_components": [
+        86
+      ],
+      "target_predicted_global_ids": [
+        960000350
+      ]
+    },
+    {
+      "accepted_preview_count": 1,
+      "missing_source_seqs": [],
+      "mode": "component_subset_attach",
+      "moved_preview": [
+        {
+          "from_component": 37,
+          "from_predicted_global_id": 96000040,
+          "seq": 1201,
+          "to_component": 86,
+          "to_predicted_global_id": 960000350
+        },
+        {
+          "from_component": 37,
+          "from_predicted_global_id": 96000040,
+          "seq": 2243,
+          "to_component": 86,
+          "to_predicted_global_id": 960000350
+        },
+        {
+          "from_component": 37,
+          "from_predicted_global_id": 96000040,
+          "seq": 2250,
+          "to_component": 86,
+          "to_predicted_global_id": 960000350
+        },
+        {
+          "from_component": 37,
+          "from_predicted_global_id": 96000040,
+          "seq": 2285,
+          "to_component": 86,
+          "to_predicted_global_id": 960000350
+        },
+        {
+          "from_component": 37,
+          "from_predicted_global_id": 96000040,
+          "seq": 2330,
+          "to_component": 86,
+          "to_predicted_global_id": 960000350
+        },
+        {
+          "from_component": 37,
+          "from_predicted_global_id": 96000040,
+          "seq": 2334,
+          "to_component": 86,
+          "to_predicted_global_id": 960000350
+        },
+        {
+          "from_component": 37,
+          "from_predicted_global_id": 96000040,
+          "seq": 2353,
+          "to_component": 86,
+          "to_predicted_global_id": 960000350
+        },
+        {
+          "from_component": 37,
+          "from_predicted_global_id": 96000040,
+          "seq": 2433,
+          "to_component": 86,
+          "to_predicted_global_id": 960000350
+        },
+        {
+          "from_component": 37,
+          "from_predicted_global_id": 96000040,
+          "seq": 2471,
+          "to_component": 86,
+          "to_predicted_global_id": 960000350
+        },
+        {
+          "from_component": 37,
+          "from_predicted_global_id": 96000040,
+          "seq": 2505,
+          "to_component": 86,
+          "to_predicted_global_id": 960000350
+        },
+        {
+          "from_component": 37,
+          "from_predicted_global_id": 96000040,
+          "seq": 2543,
+          "to_component": 86,
+          "to_predicted_global_id": 960000350
+        },
+        {
+          "from_component": 37,
+          "from_predicted_global_id": 96000040,
+          "seq": 2577,
+          "to_component": 86,
+          "to_predicted_global_id": 960000350
+        },
+        {
+          "from_component": 37,
+          "from_predicted_global_id": 96000040,
+          "seq": 2613,
+          "to_component": 86,
+          "to_predicted_global_id": 960000350
+        },
+        {
+          "from_component": 37,
+          "from_predicted_global_id": 96000040,
+          "seq": 2644,
+          "to_component": 86,
+          "to_predicted_global_id": 960000350
+        },
+        {
+          "from_component": 37,
+          "from_predicted_global_id": 96000040,
+          "seq": 2745,
+          "to_component": 86,
+          "to_predicted_global_id": 960000350
+        },
+        {
+          "from_component": 37,
+          "from_predicted_global_id": 96000040,
+          "seq": 4443,
+          "to_component": 86,
+          "to_predicted_global_id": 960000350
+        },
+        {
+          "from_component": 37,
+          "from_predicted_global_id": 96000040,
+          "seq": 4494,
+          "to_component": 86,
+          "to_predicted_global_id": 960000350
+        },
+        {
+          "from_component": 37,
+          "from_predicted_global_id": 96000040,
+          "seq": 4504,
+          "to_component": 86,
+          "to_predicted_global_id": 960000350
+        },
+        {
+          "from_component": 37,
+          "from_predicted_global_id": 96000040,
+          "seq": 4547,
+          "to_component": 86,
+          "to_predicted_global_id": 960000350
+        },
+        {
+          "from_component": 37,
+          "from_predicted_global_id": 96000040,
+          "seq": 4690,
+          "to_component": 86,
+          "to_predicted_global_id": 960000350
+        },
+        {
+          "from_component": 37,
+          "from_predicted_global_id": 96000040,
+          "seq": 5875,
+          "to_component": 86,
+          "to_predicted_global_id": 960000350
+        },
+        {
+          "from_component": 37,
+          "from_predicted_global_id": 96000040,
+          "seq": 5890,
+          "to_component": 86,
+          "to_predicted_global_id": 960000350
+        }
+      ],
+      "moved_tracklets": 22,
+      "output_csv": "local_runs/offline_no_anchor_split_probe_20260623/component_graph_fullscore/rank01_37to86_top28_neighbor_probe/assignments/rank11_component_subset_attach_source_assignments.csv",
+      "pair_f1": null,
+      "pair_precision": null,
+      "pair_recall": null,
+      "predicted_full_idf1": null,
+      "selection_rank": 11,
+      "skipped_empty_source_components": [],
+      "source_file": null,
+      "source_rank": null,
+      "target_component_repairs": [],
+      "target_components": [
+        86
+      ],
+      "target_predicted_global_ids": [
+        960000350
+      ]
+    }
+  ],
+  "scheduler_json": "local_runs/offline_no_anchor_split_probe_20260623/rank01_37to86_top28_neighbor_variants.json",
+  "selection_ranks": [
+    5,
+    6,
+    7,
+    9,
+    10,
+    11
+  ],
+  "uses_anchors": false,
+  "uses_gt_for_evaluation_only": false,
+  "uses_gt_for_training_or_anchors": false
+}

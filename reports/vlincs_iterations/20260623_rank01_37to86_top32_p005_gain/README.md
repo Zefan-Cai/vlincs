@@ -17,6 +17,58 @@ A local top-k boundary search around the promoted top28 bridge found that top32 
 - Delta: `0.000052`
 - Metric name: `canonical p005_area IDF1`
 
+## Reproduction
+
+This package now has a repo-level replay path. The standard DS1 demo and the
+no-anchor gain are intentionally separate:
+
+- `./demo.sh ds1` runs the original online-gallery DS1 pipeline from
+  `kit/pipelines/ds1.yaml`; this is the baseline demo path and is expected to
+  reproduce the earlier `IDF1 ~= 0.5999` result.
+- `./demo.sh no-anchor-top32` replays this delivered no-anchor identity
+  decision artifact and verifies `IDF1/HOTA/AssA = 0.668198/0.528747/0.539071`.
+
+From a fresh checkout:
+
+```bash
+git checkout wisc
+git lfs pull --include="kit/demo_data/ds1/**"
+DATA_ROOT=/path/to/vlincs_reid_data ./demo.sh no-anchor-top32 \
+  --run-dir local_runs/reproduce_rank06_top32_20260623
+```
+
+`DATA_ROOT` must expose the DS1 GT files under
+`Box/VLINCS_Performer/MS01/MC0001/2024-03-Tc6` and
+`Box/VLINCS_Performer/MS01/MC0001/2024-03-Tc8`. On Zefan's local repro run this
+was:
+
+```bash
+DATA_ROOT=/Users/zcai/Codex/vlincs_reid_by_search/local_runs/local_data_root_20260622 \
+  ./demo.sh no-anchor-top32 --run-dir local_runs/repro_check_top32
+```
+
+The replay does not require PostgreSQL. It rebuilds the submission from:
+
+- committed DS1 tracklet parquets in `kit/demo_data/ds1/tracklets`
+- committed assignment CSV in `repro/input/rank06_component_subset_attach_source_assignments.csv`
+- committed p005 config in `repro/input/p005_area_config.txt`
+
+Expected verification line:
+
+```json
+{"stage":"verified","p005_area":{"idf1":0.668198,"hota":0.528747,"assa":0.539071,"rows":1642574,"dropped_rows":45467,"config_name":"p005_area"}}
+```
+
+There are two reproducibility levels:
+
+- Replay: reproducible now through `./demo.sh no-anchor-top32`; this verifies the
+  delivered global-ID decision and canonical delivery score.
+- Regeneration: the original candidate-generation run also used feature caches
+  under `local_runs/s3_feature_cache_20260622/*.npz`. Those are listed in
+  `repro/artifact_manifest.json`. S3 upload is still blocked on this machine by
+  missing AWS credentials, so regeneration from raw feature caches is documented
+  but not fully portable yet.
+
 ## Implementation
 
 Reused the no-anchor component-subset proposer with custom top-k candidates 22,24,26,28,30,32,34,36. Direct scoring showed top32 as the best neighbor. The top32 delivery path keeps the same fixed density_simple and p005_area gates as the previous promoted result, so the gain is a boundary refinement rather than a new delivery heuristic.
@@ -52,8 +104,11 @@ python /Users/zcai/.codex/skills/vlincs-open-world-reid/scripts/make_iteration_a
 
 ## Code Paths
 
+- `demo.sh`
+- `reports/vlincs_iterations/20260623_rank01_37to86_top32_p005_gain/reproduce.sh`
 - `kit/compose_no_anchor_component_subset_variants.py`
 - `kit/export_no_anchor_subpart_visual_case.py`
+- `kit/evaluate_sample_assignments_full.py`
 - `kit/run_no_anchor_scheduler_manifest_sample_fullscore.py`
 - `kit/no_anchor_pervideo_filter_selector.py`
 - `kit/evaluate_submission_detection_filter.py`
@@ -62,6 +117,14 @@ python /Users/zcai/.codex/skills/vlincs-open-world-reid/scripts/make_iteration_a
 
 ## Artifacts
 
+- `reports/vlincs_iterations/20260623_rank01_37to86_top32_p005_gain/repro/input/rank06_component_subset_attach_source_assignments.csv`
+- `reports/vlincs_iterations/20260623_rank01_37to86_top32_p005_gain/repro/input/p005_area_config.txt`
+- `reports/vlincs_iterations/20260623_rank01_37to86_top32_p005_gain/repro/expected/rank06_full_export.json`
+- `reports/vlincs_iterations/20260623_rank01_37to86_top32_p005_gain/repro/expected/rank06_density_simple.json`
+- `reports/vlincs_iterations/20260623_rank01_37to86_top32_p005_gain/repro/expected/rank06_density_p005_area.json`
+- `reports/vlincs_iterations/20260623_rank01_37to86_top32_p005_gain/repro/artifact_manifest.json`
+- `reports/vlincs_iterations/20260623_rank01_37to86_top32_p005_gain/repro/checksums.sha256`
+- `reports/vlincs_iterations/20260623_rank01_37to86_top32_p005_gain/repro/verification_clean_worktree_20260623.json`
 - `local_runs/offline_no_anchor_split_probe_20260623/rank01_37to86_top28_neighbor_variants.json`
 - `local_runs/offline_no_anchor_split_probe_20260623/rank01_37to86_top28_neighbor_variants.csv`
 - `local_runs/offline_no_anchor_split_probe_20260623/rank01_37to86_top28_neighbor_variants.md`
@@ -106,8 +169,11 @@ python /Users/zcai/.codex/skills/vlincs-open-world-reid/scripts/make_iteration_a
 
 ## Upload
 
-- Bitbucket: `pushed to Novateur/vlincs_reid_by_search wisc in commit 3916aaf0c89923400b09d3b171feffb60173b9b8`
-- S3: `blocked: `aws sts get-caller-identity` returned `Unable to locate credentials`; local package remains at reports/vlincs_iterations/20260623_rank01_37to86_top32_p005_gain/; target prefix would be s3://dit-scale-up/zcai/vlincs/reports/vlincs_iterations/20260623_rank01_37to86_top32_p005_gain/`
+- Bitbucket: pushed to `Novateur/vlincs_reid_by_search` on branch `wisc`.
+- S3: blocked on this machine. Both plain `aws sts get-caller-identity` and
+  `source ~/.codex/configs.bash; aws sts get-caller-identity` returned
+  `Unable to locate credentials`. The intended target prefix is
+  `s3://dit-scale-up/zcai/vlincs/reports/vlincs_iterations/20260623_rank01_37to86_top32_p005_gain/`.
 
 ## Next
 
