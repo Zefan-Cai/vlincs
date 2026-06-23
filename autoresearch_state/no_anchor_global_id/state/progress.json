@@ -12,7 +12,7 @@
     "goal_global_id_pair_f1": 0.7,
     "goal_global_id_pair_precision": 0.7,
     "goal_global_id_pair_recall": 0.7,
-    "iteration": 98,
+    "iteration": 99,
     "last_artifacts": [
         "reports/no_anchor_offline_component_split_promotion_20260622.md",
         "local_runs/offline_no_anchor_split_probe_20260622/best_combo_split_assignments.csv",
@@ -27,14 +27,17 @@
         "local_runs/offline_no_anchor_split_probe_20260622/currentbest_residual_greedy12_split_assignments.csv",
         "local_runs/offline_no_anchor_split_probe_20260622/currentbest_residual_greedy12_full_export.json",
         "local_runs/offline_no_anchor_split_probe_20260622/currentbest_residual_greedy12_full_export.zip",
+        "reports/no_anchor_currentbest_residual_split_merge_refutation_20260622.md",
+        "local_runs/offline_no_anchor_split_probe_20260622/currentbest_residual_top_single_fullscore/",
+        "local_runs/offline_no_anchor_currentbest_edge_diagnostics_20260622_min1/",
         "local_runs/offline_no_anchor_edge_diagnostics_20260622/edge_diagnostics.json",
         "kit/offline_no_anchor_component_edge_diagnostics.py",
         "kit/offline_no_anchor_component_split_probe.py"
     ],
-    "last_direction": "currentbest_residual_greedy12_split_refutation",
-    "last_result": "After promoting the no-anchor 3-component split, a residual greedy12 split probe on top of best_combo_split_assignments.csv improved the eval-only pair proxy from 0.781330/0.849326/0.723413 to 0.785529/0.862643/0.721070, but full-score validation tied the promoted direct full score at 0.661843/0.523137/0.534683. The canonical delivery best remains density_simple + p005_area at 0.664050/0.524893/0.536568. Treat the residual splits as hard negatives for no-GT split admission: pair precision gains alone do not imply pipeline IDF1 gains.",
+    "last_direction": "currentbest_residual_split_and_small_merge_refutation",
+    "last_result": "Exported and full-scored top residual single splits on top of best_combo_split_assignments.csv. Six no-anchor single splits covering component 96000032 and 96000009 all tied direct full at 0.661843/0.523137/0.534683. The most promising rank009 single also tied density_simple at 0.663955/0.524825/0.536460 and density_simple+p005_area at the current best 0.664050/0.524893/0.536568. Reran current-best component-edge diagnostics with min-size-1 candidates; no-GT top50 small-merge pool had 6/50 eval-true edges, and full-scored ranks 1-4, including the first eval-true singleton merge, all tied direct full at 0.661843/0.523137/0.534683. This turns residual single splits and naive visual-neighbor small merges into hard negatives for a full-score-sensitive admission model.",
     "last_updated": "2026-06-22",
     "next_direction": "learn_no_gt_impure_component_split_admission_and_score_more_split_candidates_locally",
-    "stale_count": 4,
-    "status": "active_no_anchor_best_e2e_0p664050_residual_greedy12_refuted_e2e_still_below_0p70"
+    "stale_count": 5,
+    "status": "active_no_anchor_best_e2e_0p664050_residual_split_merge_refuted_e2e_still_below_0p70"
 }

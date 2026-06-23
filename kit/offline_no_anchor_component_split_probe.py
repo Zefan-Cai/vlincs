@@ -141,6 +141,8 @@ def main() -> None:
     ap.add_argument("--seed", type=int, default=0)
     ap.add_argument("--greedy-limit", type=int, default=10)
     ap.add_argument("--greedy-assignment-out", default="")
+    ap.add_argument("--top-assignment-dir", default="", help="optional directory to write top single-split assignment CSVs")
+    ap.add_argument("--top-assignment-limit", type=int, default=0, help="number of top single-split assignment CSVs to write")
     ap.add_argument("--json", required=True)
     args = ap.parse_args()
 
@@ -210,6 +212,17 @@ def main() -> None:
     if args.greedy_assignment_out:
         _write_assignment(df, greedy_pred, args.greedy_assignment_out, "offline_component_split_greedy_candidate")
 
+    top_assignment_outputs = []
+    if args.top_assignment_dir and int(args.top_assignment_limit) > 0:
+        top_dir = Path(args.top_assignment_dir)
+        top_dir.mkdir(parents=True, exist_ok=True)
+        for rank, row in enumerate(rows[: int(args.top_assignment_limit)], start=1):
+            key = (int(row["component"]), str(row["view"]), int(row["k"]))
+            trial = _apply_split(base_pred, int(row["component"]), split_cache[key])
+            path = top_dir / f"rank{rank:03d}_comp{int(row['component'])}_{row['view']}_k{int(row['k'])}.csv"
+            _write_assignment(df, trial, str(path), "offline_component_split_single_candidate")
+            top_assignment_outputs.append({**row, "rank": int(rank), "assignment_csv": str(path)})
+
     out = {
         "assignment_csv": args.assignment_csv,
         "uses_anchors": False,
@@ -222,6 +235,7 @@ def main() -> None:
         "greedy_selected": greedy_selected,
         "greedy_pair": current_pair,
         "greedy_assignment_out": args.greedy_assignment_out,
+        "top_assignment_outputs": top_assignment_outputs,
     }
     Path(args.json).parent.mkdir(parents=True, exist_ok=True)
     Path(args.json).write_text(json.dumps(out, indent=2, sort_keys=True))

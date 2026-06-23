@@ -389,6 +389,7 @@ def main() -> None:
     ap.add_argument("--top-false-split-gt", type=int, default=20)
     ap.add_argument("--candidate-assignments-dir", default="")
     ap.add_argument("--candidate-limit", type=int, default=0)
+    ap.add_argument("--candidate-min-component-size", type=int, default=2)
     ap.add_argument("--edge-csv", default="")
     ap.add_argument("--edge-csv-limit", type=int, default=1000)
     ap.add_argument("--json", required=True)
@@ -431,7 +432,7 @@ def main() -> None:
         for row in rows
         if int(row["is_cannot_link"]) == 0
         and int(row["votes_topk"]) >= max(1, min(2, len(view_edges)))
-        and min(int(row["source_size"]), int(row["target_size"])) >= 2
+        and min(int(row["source_size"]), int(row["target_size"])) >= int(args.candidate_min_component_size)
     ]
     candidate_assignments = _write_candidate_assignments(df, no_gt_candidates, groups, args.candidate_assignments_dir, int(args.candidate_limit))
     if args.edge_csv:
