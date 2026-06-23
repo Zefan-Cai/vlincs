@@ -105,7 +105,7 @@ python kit/export_no_anchor_subpart_visual_case.py --before-assignments local_ru
 
 ## Upload
 
-- Bitbucket: `pending publish to Novateur/vlincs_reid_by_search wisc`
+- Bitbucket: `published to Novateur/vlincs_reid_by_search branch wisc at commit b4694d9 (Promote rank04 small combo p005 gain)`
 - S3: `blocked: aws sts get-caller-identity returned Unable to locate credentials; local large artifacts remain under local_runs/offline_no_anchor_split_probe_20260623/component_graph_fullscore/rank04_plus_small_fragment_combo/`
 
 ## Next

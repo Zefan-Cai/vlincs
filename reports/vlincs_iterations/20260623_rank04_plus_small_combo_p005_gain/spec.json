@@ -156,7 +156,7 @@
       "decision": "valid canonical delivery"
     }
   ],
-  "bitbucket": "pending publish to Novateur/vlincs_reid_by_search wisc",
+  "bitbucket": "published to Novateur/vlincs_reid_by_search branch wisc at commit b4694d9 (Promote rank04 small combo p005 gain)",
   "s3": "blocked: aws sts get-caller-identity returned Unable to locate credentials; local large artifacts remain under local_runs/offline_no_anchor_split_probe_20260623/component_graph_fullscore/rank04_plus_small_fragment_combo/",
   "next": "Use the new positive interaction label to search residual small-fragment combos on top of rank04_plus_small_combo, but downweight near-tie 68->27 unless it composes with a stronger MCAM04 move."
 }
