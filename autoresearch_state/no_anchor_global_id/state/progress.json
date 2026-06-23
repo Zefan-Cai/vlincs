@@ -1,8 +1,8 @@
 {
-  "best_assignment_csv": "local_runs/offline_no_anchor_split_probe_20260623/rank67base_subpart_combo_assignments/combo_rank77_rank36_s43_to38_s27_to79_5seq_assignments.csv",
-  "best_e2e_assa": 0.537198,
-  "best_e2e_hota": 0.525919,
-  "best_e2e_idf1": 0.665246,
+  "best_assignment_csv": "local_runs/offline_no_anchor_split_probe_20260623/component_graph_fullscore/directional_rescue/assignments/rank04_component_graph_high_mass_bridge_source_assignments.csv",
+  "best_e2e_assa": 0.537617,
+  "best_e2e_hota": 0.526871,
+  "best_e2e_idf1": 0.666422,
   "best_model_pair_f1": 0.782244,
   "best_model_pair_precision": 0.850111,
   "best_model_pair_recall": 0.724411,
@@ -12,7 +12,7 @@
   "goal_global_id_pair_f1": 0.7,
   "goal_global_id_pair_precision": 0.7,
   "goal_global_id_pair_recall": 0.7,
-  "iteration": 107,
+  "iteration": 108,
   "last_artifacts": [
     "reports/no_anchor_offline_component_split_promotion_20260622.md",
     "local_runs/offline_no_anchor_split_probe_20260622/best_combo_split_assignments.csv",
@@ -103,12 +103,26 @@
     "local_runs/offline_no_anchor_split_probe_20260623/rank67base_subpart_combo_fullscore/combo_rank77_rank36_s43_to38_s27_to79_5seq_full_export.json",
     "local_runs/offline_no_anchor_split_probe_20260623/rank67base_subpart_combo_delivery/combo_rank77_rank36_s43_to38_s27_to79_5seq_density_simple.json",
     "local_runs/offline_no_anchor_split_probe_20260623/rank67base_subpart_combo_delivery/combo_rank77_rank36_s43_to38_s27_to79_5seq_density_p005_area.json",
-    "reports/vlincs_iterations/20260623_rank67base_combo_rank77_rank36_p005_gain/"
+    "reports/vlincs_iterations/20260623_rank67base_combo_rank77_rank36_p005_gain/",
+    "reports/vlincs_iterations/20260623_component_graph_rank04_p005_gain/",
+    "local_runs/offline_no_anchor_split_probe_20260623/combo_rank77_rank36_component_graph_candidates.json",
+    "local_runs/offline_no_anchor_split_probe_20260623/combo_rank77_rank36_component_graph_directional_rescue.json",
+    "local_runs/offline_no_anchor_split_probe_20260623/combo_rank77_rank36_component_graph_small_fragment.json",
+    "local_runs/offline_no_anchor_split_probe_20260623/combo_rank77_rank36_component_graph_small_fragment_combos.json",
+    "local_runs/offline_no_anchor_split_probe_20260623/component_graph_fullscore/directional_rescue/assignments/rank04_component_graph_high_mass_bridge_source_assignments.csv",
+    "local_runs/offline_no_anchor_split_probe_20260623/component_graph_fullscore/directional_rescue/rank04_density_simple.json",
+    "local_runs/offline_no_anchor_split_probe_20260623/component_graph_fullscore/directional_rescue/rank04_density_p005_area.json",
+    "local_runs/offline_no_anchor_split_probe_20260623/component_graph_fullscore/directional_rescue/rank04_density_p005_area.zip",
+    "kit/compose_no_anchor_component_graph_candidates.py",
+    "kit/filter_no_anchor_component_graph_directional_rescue.py",
+    "kit/filter_no_anchor_component_graph_small_fragment_rule.py",
+    "kit/filter_no_anchor_component_graph_rescue_rule.py",
+    "kit/compose_no_anchor_small_fragment_combos.py"
   ],
-  "last_direction": "rank67base_combo_rank77_rank36_p005_gain",
-  "last_result": "Composed two no-anchor residual repairs on top of rank67: weakvideo rank77 adds two compatible residual component-43 -> component-38 tracklets, and multiview rank36 moves three component-27 -> component-79 tracklets. Direct combo scored 0.663077/0.524175/0.535328; density_simple scored 0.665148/0.525843/0.537081; valid p005_area scored 0.665246/0.525919/0.537198 with config_name=p005_area and dropped_rows=45467, improving the canonical best from 0.665145/0.525833/0.537128. Per-video IDF1 improved on MCAM04/Tc6 by +0.000100 and MCAM08/Tc6 by +0.000197. The new visual exporter now attempts raw frame lookup first and records raw_frame_status; current rank77/rank36 images are explicitly marked unavailable_coordinate_fallback because matching source frames are absent locally and on h100-test-2/3 /mnt/localssd.",
+  "last_direction": "component_graph_rank04_directional_rescue_p005_gain",
+  "last_result": "Component-graph directional rescue on top of rank77+rank36 combo promoted rank04 56->86: 21 MCAM04/Tc6 tracklets moved from gid 96000060/component 56 to gid 960000350/component 86. Direct full improved from 0.663077/0.524175/0.535328 to 0.664229/0.525110/0.535737; density_simple improved from 0.665148/0.525843/0.537081 to 0.666319/0.526792/0.537498; valid p005_area scored 0.666422/0.526871/0.537617 with config_name=p005_area and dropped_rows=45467, improving canonical IDF1 by +0.001176. The gain lands on MCAM04/Tc6 (+0.002773 IDF1). Positive but smaller ablations: small rank02 p005 0.665420 and small combo p005 0.665422; directional rank02 and rank08 were direct-negative.",
   "last_updated": "2026-06-23",
-  "next_direction": "restore_a_durable_raw_frame_mirror_for_rank77_rank36_cases_then_continue_combo_overlay_search_from_rank67base_best",
+  "next_direction": "train_or_hand_tune_component_graph_directional_admission_gate_then_search_rank04_compatible_combos_with_hard_negative_guards",
   "stale_count": 0,
-  "status": "active_no_anchor_best_e2e_0p665246_rank77_rank36_combo_gain_e2e_still_below_0p70"
+  "status": "active_no_anchor_best_e2e_0p666422_component_graph_rank04_gain_e2e_still_below_0p70"
 }

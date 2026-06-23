@@ -1,0 +1,37 @@
+{
+  "selected": [
+    {
+      "combo_score": 0,
+      "group_internal_sim": 0.0,
+      "moved_tracklets": 6,
+      "no_gt_component_graph_score": 0,
+      "rank": 1,
+      "score": 0.0,
+      "selection_rule": "small_fragment_combo",
+      "source_component": "68+57",
+      "source_component_label": "68+57",
+      "source_predicted_global_id": "96000072+96000061",
+      "source_rest_margin_mean": 0.0,
+      "source_seqs": [
+        7622,
+        8582,
+        4526,
+        4580,
+        4625,
+        4859
+      ],
+      "target_best_sim": 0.0,
+      "target_component": "27+46",
+      "target_margin": 0.0,
+      "target_min_view_sim": 0.0,
+      "target_predicted_global_id": "96000029+96000050",
+      "target_sim": 0,
+      "uses_anchors": false,
+      "uses_gt_for_evaluation_only": false,
+      "uses_gt_for_training_or_anchors": false
+    }
+  ],
+  "uses_anchors": false,
+  "uses_gt_for_evaluation_only": false,
+  "uses_gt_for_training_or_anchors": false
+}

@@ -1,0 +1,282 @@
+{
+  "ablations": [
+    {
+      "change": "move 21 MCAM04/Tc6 tracklets into target component 86",
+      "decision": "promote",
+      "name": "directional rank04 56->86",
+      "result": "direct 0.664229 / 0.525110 / 0.535737; density 0.666319 / 0.526792 / 0.537498; p005 0.666422 / 0.526871 / 0.537617"
+    },
+    {
+      "change": "move 4 small-fragment tracklets",
+      "decision": "positive but below rank04",
+      "name": "small fragment rank02 57->46",
+      "result": "p005 0.665420/0.526215/0.537529"
+    },
+    {
+      "change": "compose 68->27 and 57->46 for 6 moved tracklets",
+      "decision": "positive but below rank04",
+      "name": "small-fragment combo rank01",
+      "result": "p005 0.665422/0.526218/0.537532"
+    },
+    {
+      "change": "move 109 tracklets",
+      "decision": "negative; do not run delivery",
+      "name": "directional rank02 30->14",
+      "result": "direct 0.662644/0.523955/0.535174"
+    },
+    {
+      "change": "move 26 tracklets",
+      "decision": "negative; do not run delivery",
+      "name": "directional rank08 79->4",
+      "result": "direct 0.662408/0.523506/0.534731"
+    },
+    {
+      "change": "move 2 tracklets",
+      "decision": "near-tie; tested in small-fragment combo",
+      "name": "small fragment rank01 68->27",
+      "result": "direct 0.663080/0.524178/0.535331"
+    },
+    {
+      "change": "apply rescue filter to same 172 broad candidates",
+      "decision": "no materialized candidate",
+      "name": "low-vote rescue rule",
+      "result": "0 selected"
+    }
+  ],
+  "artifacts": [
+    "local_runs/offline_no_anchor_split_probe_20260623/combo_rank77_rank36_component_graph_candidates.json",
+    "local_runs/offline_no_anchor_split_probe_20260623/combo_rank77_rank36_component_graph_directional_rescue.json",
+    "local_runs/offline_no_anchor_split_probe_20260623/combo_rank77_rank36_component_graph_small_fragment.json",
+    "local_runs/offline_no_anchor_split_probe_20260623/combo_rank77_rank36_component_graph_small_fragment_combos.json",
+    "local_runs/offline_no_anchor_split_probe_20260623/component_graph_fullscore/directional_rescue/assignments/rank04_component_graph_high_mass_bridge_source_assignments.csv",
+    "local_runs/offline_no_anchor_split_probe_20260623/component_graph_fullscore/directional_rescue/rank04_density_p005_area.json",
+    "local_runs/offline_no_anchor_split_probe_20260623/component_graph_fullscore/directional_rescue/rank04_density_p005_area.zip",
+    "reports/vlincs_iterations/20260623_component_graph_rank04_p005_gain/metrics/direct_full.json",
+    "reports/vlincs_iterations/20260623_component_graph_rank04_p005_gain/metrics/density_simple.json",
+    "reports/vlincs_iterations/20260623_component_graph_rank04_p005_gain/metrics/p005_area.json"
+  ],
+  "bitbucket": "prepared for publish to Novateur/vlincs_reid_by_search wisc; commit hash will be recorded after push",
+  "code_paths": [
+    "kit/compose_no_anchor_component_graph_candidates.py",
+    "kit/filter_no_anchor_component_graph_directional_rescue.py",
+    "kit/filter_no_anchor_component_graph_small_fragment_rule.py",
+    "kit/filter_no_anchor_component_graph_rescue_rule.py",
+    "kit/compose_no_anchor_small_fragment_combos.py",
+    "kit/export_no_anchor_scheduler_manifest_assignments.py",
+    "kit/run_no_anchor_scheduler_manifest_sample_fullscore.py",
+    "kit/no_anchor_pervideo_filter_selector.py",
+    "kit/evaluate_submission_detection_filter.py",
+    "kit/export_no_anchor_subpart_visual_case.py",
+    "autoresearch_state/no_anchor_global_id/state/progress.json",
+    "LATEST_NO_ANCHOR_PROGRESS.txt",
+    "reports/vlincs_iterations/20260623_component_graph_rank04_p005_gain/README.md",
+    "reports/vlincs_iterations/20260623_component_graph_rank04_p005_gain/presentation.html"
+  ],
+  "commands": [
+    "python kit/compose_no_anchor_component_graph_candidates.py --assignment-csv local_runs/offline_no_anchor_split_probe_20260623/rank67base_subpart_combo_assignments/combo_rank77_rank36_s43_to38_s27_to79_5seq_assignments.csv --embeddings weakmetric_osnet --embeddings dinov2 --embeddings siglip2 --min-score 0.50 --top-n 220 --json local_runs/offline_no_anchor_split_probe_20260623/combo_rank77_rank36_component_graph_candidates.json ...",
+    "python kit/filter_no_anchor_component_graph_small_fragment_rule.py --candidates-json local_runs/offline_no_anchor_split_probe_20260623/combo_rank77_rank36_component_graph_candidates.json --json local_runs/offline_no_anchor_split_probe_20260623/combo_rank77_rank36_component_graph_small_fragment.json ...",
+    "python kit/filter_no_anchor_component_graph_directional_rescue.py --candidates-json local_runs/offline_no_anchor_split_probe_20260623/combo_rank77_rank36_component_graph_candidates.json --json local_runs/offline_no_anchor_split_probe_20260623/combo_rank77_rank36_component_graph_directional_rescue.json ...",
+    "env DATA_ROOT=/Users/zcai/Codex/vlincs_reid_by_search/local_runs/local_data_root_20260622 python kit/run_no_anchor_scheduler_manifest_sample_fullscore.py --scheduler-json local_runs/offline_no_anchor_split_probe_20260623/combo_rank77_rank36_component_graph_directional_rescue.json --base-assignment-csv local_runs/offline_no_anchor_split_probe_20260623/rank67base_subpart_combo_assignments/combo_rank77_rank36_s43_to38_s27_to79_5seq_assignments.csv --run-dir local_runs/offline_no_anchor_split_probe_20260623/component_graph_fullscore/directional_rescue --selection-ranks 2,4,8 --fallback singleton",
+    "env DATA_ROOT=/Users/zcai/Codex/vlincs_reid_by_search/local_runs/local_data_root_20260622 python kit/no_anchor_pervideo_filter_selector.py --source-zip local_runs/offline_no_anchor_split_probe_20260623/component_graph_fullscore/directional_rescue/rank04_component_graph_high_mass_bridge_source_assignments.zip --policies density_simple --json local_runs/offline_no_anchor_split_probe_20260623/component_graph_fullscore/directional_rescue/rank04_density_simple.json --zip-out local_runs/offline_no_anchor_split_probe_20260623/component_graph_fullscore/directional_rescue/rank04_density_simple.zip",
+    "CONFIG=$(cat local_runs/offline_no_anchor_split_probe_20260623/p005_area_config.txt); env DATA_ROOT=/Users/zcai/Codex/vlincs_reid_by_search/local_runs/local_data_root_20260622 python kit/evaluate_submission_detection_filter.py --submission-zip local_runs/offline_no_anchor_split_probe_20260623/component_graph_fullscore/directional_rescue/rank04_density_simple.zip --config \"$CONFIG\" --json local_runs/offline_no_anchor_split_probe_20260623/component_graph_fullscore/directional_rescue/rank04_density_p005_area.json --zip-out local_runs/offline_no_anchor_split_probe_20260623/component_graph_fullscore/directional_rescue/rank04_density_p005_area.zip",
+    "python kit/export_no_anchor_subpart_visual_case.py --before-assignments <rank67 combo base> --after-assignments <rank04 assignments> --manifest reports/vlincs_iterations/20260623_component_graph_rank04_p005_gain/case_manifests/rank04_component_graph_directional_visual_manifest.json --rank 4 --tracklet-parquet kit/demo_data/ds1/tracklets/*/tracklets.parquet --output-dir reports/vlincs_iterations/20260623_component_graph_rank04_p005_gain/cases/rank04_component_graph_directional"
+  ],
+  "date": "2026-06-23",
+  "environment": [
+    "Repo: /Users/zcai/Codex/vlincs_reid_by_search",
+    "Dataset root: /Users/zcai/Codex/vlincs_reid_by_search/local_runs/local_data_root_20260622",
+    "Tracklet parquets: kit/demo_data/ds1/tracklets/*/tracklets.parquet",
+    "No anchors; GT used only after materialization for full-score evaluation"
+  ],
+  "implementation": "Generated 172 component-graph bridge candidates from the rank77+rank36 combo best using three feature views. The directional reviewer selected 8 non-GT larger-target bridges; rank04 is source component 56 to target component 86, with no-GT graph score 0.800816, target mean similarity 0.797995, best similarity 0.935692, min-view similarity 0.840768, overlap ratio 0.018367, source size 21, target size 107. The assignment exporter materialized only those 21 source tracklets as manifest_reassign; scoring then used the unchanged density_simple and p005_area delivery gates.",
+  "improvement_table": [
+    {
+      "baseline": "0.663077 / 0.524175 / 0.535328",
+      "candidate": "0.664229 / 0.525110 / 0.535737",
+      "decision": "direct positive; continue to delivery",
+      "delta": "+0.001152 IDF1",
+      "stage": "Direct full-score IDF1/HOTA/AssA"
+    },
+    {
+      "baseline": "0.665148 / 0.525843 / 0.537081",
+      "candidate": "0.666319 / 0.526792 / 0.537498",
+      "decision": "delivery positive",
+      "delta": "+0.001171 IDF1",
+      "stage": "density_simple delivery"
+    },
+    {
+      "baseline": "0.665246 / 0.525919 / 0.537198",
+      "candidate": "0.666422 / 0.526871 / 0.537617",
+      "decision": "promote canonical best",
+      "delta": "+0.001176 IDF1",
+      "stage": "density_simple + p005_area"
+    },
+    {
+      "baseline": "45467",
+      "candidate": "45467",
+      "decision": "same valid p005 gate, config_name=p005_area",
+      "delta": "0 dropped_rows",
+      "stage": "p005 validity"
+    }
+  ],
+  "metrics": {
+    "baseline": 0.665246,
+    "candidate": 0.666422,
+    "delta": 0.0011759999999999549,
+    "name": "canonical density_simple+p005_area IDF1"
+  },
+  "module_detail": "M7 generates broad component-graph bridge candidates from assignment state plus weakmetric/OSNet, DINOv2, and SigLIP tracklet features. M8 accepts a directional larger-target bridge 56->86 without anchors or GT. M12 validates that direct, density_simple, and fixed p005_area delivery all improve.",
+  "next": "Use this strong positive label to train/hand-tune a component-graph directional admission gate, then search combinations that include 56->86 while guarding against broad high-mass negative moves such as 30->14 and 79->4.",
+  "no_anchor": true,
+  "per_video_table": [
+    {
+      "baseline": "0.579690",
+      "candidate": "0.582463",
+      "delta": "+0.002773",
+      "note": "changed slice",
+      "video": "MCAM04_2024-03-Tc6"
+    },
+    {
+      "baseline": "0.879281",
+      "candidate": "0.879281",
+      "delta": "+0.000000",
+      "note": "unchanged by component graph bridge",
+      "video": "MCAM00_2024-03-Tc6"
+    },
+    {
+      "baseline": "0.828799",
+      "candidate": "0.828799",
+      "delta": "+0.000000",
+      "note": "unchanged by component graph bridge",
+      "video": "MCAM00_2024-03-Tc8"
+    },
+    {
+      "baseline": "0.690814",
+      "candidate": "0.690814",
+      "delta": "+0.000000",
+      "note": "unchanged by component graph bridge",
+      "video": "MCAM03_2024-03-Tc6"
+    },
+    {
+      "baseline": "0.631016",
+      "candidate": "0.631016",
+      "delta": "+0.000000",
+      "note": "unchanged by component graph bridge",
+      "video": "MCAM03_2024-03-Tc8"
+    },
+    {
+      "baseline": "0.712131",
+      "candidate": "0.712131",
+      "delta": "+0.000000",
+      "note": "unchanged by component graph bridge",
+      "video": "MCAM05_2024-03-Tc6"
+    },
+    {
+      "baseline": "0.790930",
+      "candidate": "0.790930",
+      "delta": "+0.000000",
+      "note": "unchanged by component graph bridge",
+      "video": "MCAM05_2024-03-Tc8"
+    },
+    {
+      "baseline": "0.612570",
+      "candidate": "0.612570",
+      "delta": "+0.000000",
+      "note": "unchanged by component graph bridge",
+      "video": "MCAM06_2024-03-Tc6"
+    },
+    {
+      "baseline": "0.697834",
+      "candidate": "0.697834",
+      "delta": "+0.000000",
+      "note": "unchanged by component graph bridge",
+      "video": "MCAM06_2024-03-Tc8"
+    },
+    {
+      "baseline": "0.775486",
+      "candidate": "0.775486",
+      "delta": "+0.000000",
+      "note": "unchanged by component graph bridge",
+      "video": "MCAM08_2024-03-Tc6"
+    }
+  ],
+  "pipeline_module": "M7 candidate retrieval + M8 graph resolution + M12 delivery validation",
+  "s3": "blocked: aws sts get-caller-identity returned Unable to locate credentials; local large artifacts remain at local_runs/offline_no_anchor_split_probe_20260623/component_graph_fullscore/directional_rescue/rank04_density_p005_area.zip and related JSON/CSV paths",
+  "status": "gain",
+  "summary": "A no-anchor component-graph directional rescue moves 21 MCAM04/Tc6 tracklets from component 56 / gid 96000060 to component 86 / gid 960000350. Valid density_simple+p005_area improves IDF1/HOTA/AssA from 0.665246/0.525919/0.537198 to 0.666422/0.526871/0.537617.",
+  "title": "No-anchor component-graph rank04 p005 gain",
+  "used_in_pipeline": "yes: promoted as the current no-anchor best assignment/delivery candidate after valid p005_area scoring",
+  "visual_cases": [
+    {
+      "failure_reason": "The previous combo kept a coherent residual island in component 56, so delivery forced those tracklets to gid 96000060 rather than the visually closer split-child target.",
+      "html": "cases/rank04_component_graph_directional/case.html",
+      "image": "cases/rank04_component_graph_directional/rank04_bbox_evidence.png",
+      "improvement": "Directional component-graph rescue accepts the high-similarity larger-target bridge and improves direct, density_simple, and p005_area.",
+      "json": "cases/rank04_component_graph_directional/case.json",
+      "summary": "Promoted case: 21 moved MCAM04/Tc6 tracklets, 8 sampled in the visual case, gid 96000060 -> 960000350.",
+      "title": "Rank04 component graph bridge 56->86"
+    },
+    {
+      "failure_reason": "A tiny source component remained isolated as its own forced identity.",
+      "html": "cases/rank02_component_graph_small_fragment/case.html",
+      "image": "cases/rank02_component_graph_small_fragment/rank02_bbox_evidence.png",
+      "improvement": "The small-fragment rule correctly moves only the low-mass source into a stronger target, but its global effect is smaller.",
+      "json": "cases/rank02_component_graph_small_fragment/case.json",
+      "summary": "Positive ablation: 4 moved tracklets, gid 96000061 -> 96000050, but lower p005 gain than rank04.",
+      "title": "Rank02 small fragment 57->46"
+    },
+    {
+      "failure_reason": "Two plausible tiny residual islands were both unresolved, but their combined delivery impact is small.",
+      "html": "cases/rank01_component_graph_small_combo/case.html",
+      "image": "cases/rank01_component_graph_small_combo/rank01_bbox_evidence.png",
+      "improvement": "The combo confirms the family composes without hurting delivery, while the reviewer still promotes rank04 as the stronger move.",
+      "json": "cases/rank01_component_graph_small_combo/case.json",
+      "summary": "Positive ablation: 6 moved tracklets from two small fragments; improves p005 but remains below rank04.",
+      "title": "Rank01 small-fragment combo"
+    }
+  ],
+  "workflow_steps": [
+    {
+      "action": "freeze current no-anchor components and statuses",
+      "input": "rank77+rank36 combo assignment",
+      "module": "M6 graph state",
+      "output": "92 predicted IDs, 7487 assigned tracklets",
+      "step": "1"
+    },
+    {
+      "action": "compose broad component bridge candidates with overlap and multiview thresholds",
+      "input": "weakmetric/OSNet + DINOv2 + SigLIP tracklet features",
+      "module": "M7 candidate retrieval",
+      "output": "172 bridge candidates",
+      "step": "2"
+    },
+    {
+      "action": "small-fragment, directional rescue, and low-vote filters",
+      "input": "candidate rows only, no GT",
+      "module": "M10 reviewer/opponent",
+      "output": "2 small fragments, 8 directional rescues, 0 low-vote rescues",
+      "step": "3"
+    },
+    {
+      "action": "materialize only source component 56 tracklets as manifest_reassign",
+      "input": "directional rank04 56->86",
+      "module": "M8 resolution",
+      "output": "21 MCAM04/Tc6 tracklets move gid 96000060 -> 960000350",
+      "step": "4"
+    },
+    {
+      "action": "score direct, apply density_simple, then valid p005_area config",
+      "input": "direct export zip",
+      "module": "M12 delivery",
+      "output": "0.666422 / 0.526871 / 0.537617",
+      "step": "5"
+    },
+    {
+      "action": "write README, ppt HTML, spec, case artifacts",
+      "input": "metrics, manifests, visual cases",
+      "module": "M12 provenance",
+      "output": "reproducible gain package",
+      "step": "6"
+    }
+  ]
+}

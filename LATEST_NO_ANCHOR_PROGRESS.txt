@@ -2,7 +2,27 @@ VLINCS no-anchor global ID progress
 Date: 2026-06-23
 
 Current best e2e:
-IDF1 / HOTA / AssA = 0.665246 / 0.525919 / 0.537198
+IDF1 / HOTA / AssA = 0.666422 / 0.526871 / 0.537617
+
+Latest component-graph rank04 directional-rescue gain:
+On top of the rank77+rank36 combo best, a no-anchor component-graph proposer
+built 172 broad bridge candidates from assignment state plus weakmetric/OSNet,
+DINOv2, and SigLIP tracklet features. The directional reviewer selected 8
+larger-target high-similarity rescues. Rank04 moves 21 MCAM04/Tc6 tracklets
+from component 56 / gid 96000060 to component 86 / gid 960000350. It uses no
+anchors and no GT as production evidence; GT is used only after materialization
+for scoring. Direct full-score improves from 0.663077/0.524175/0.535328 to
+0.664229/0.525110/0.535737. density_simple improves from
+0.665148/0.525843/0.537081 to 0.666319/0.526792/0.537498. Valid p005_area
+improves from 0.665246/0.525919/0.537198 to 0.666422/0.526871/0.537617 with
+config_name=p005_area and dropped_rows=45467. The gain lands on MCAM04/Tc6
+(+0.002773 IDF1). Positive but smaller ablations: small-fragment rank02 p005
+0.665420 and small-fragment combo p005 0.665422. Directional rank02 (30->14)
+and rank08 (79->4) were direct-negative. The gain package is
+reports/vlincs_iterations/20260623_component_graph_rank04_p005_gain/ and
+contains README.md, presentation.html, spec.json, metrics, and 3 visual cases.
+Case images are explicit coordinate-only fallback because matching raw frames
+are still absent locally.
 
 Latest rank67-base rank77+rank36 combo gain:
 On top of weakvideo rank67, two compatible no-anchor residual repairs were

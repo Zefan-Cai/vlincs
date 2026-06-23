@@ -1,0 +1,30 @@
+<!doctype html>
+<html><head><meta charset="utf-8"><title>Rank01 small-fragment combo ablation</title>
+<style>
+body{font-family:Arial,Helvetica,sans-serif;margin:32px;background:#f6f7f9;color:#17202c}
+main{max-width:1120px;margin:auto} img{max-width:100%;border:1px solid #ccd3dc;background:white}
+.kpi{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin:18px 0}
+.card{background:white;border:1px solid #d7dde5;padding:14px} table{border-collapse:collapse;width:100%;background:white}
+td,th{border:1px solid #d7dde5;padding:8px;text-align:left} code{background:#eef1f5;padding:2px 4px}
+</style></head><body><main>
+<h1>Rank01 small-fragment combo ablation</h1>
+<p>The small-fragment combo applies both 68-&gt;27 and 57-&gt;46 for 6 moved tracklets; it improves p005 but remains below the promoted rank04 bridge.</p>
+<div class="kpi">
+<div class="card"><b>Before</b><br>component 68, gid 96000072, component_size 2</div>
+<div class="card"><b>After</b><br>component 27, gid 96000029, component_size 178, decision_status manifest_reassign</div>
+<div class="card"><b>Evidence</b><br>target_sim=0.0000, target_margin=0.0000, source_rest_margin=0.0000<br><b>Raw frame</b><br>unavailable_coordinate_fallback</div>
+</div>
+<h2>Failure and fix</h2>
+<p><b>Old failure:</b> Two tiny source fragments are both plausible residual false-split islands, but combining them gives only a small delivery gain.</p>
+<p><b>New implementation:</b> The combo tests whether independent low-mass repairs compose cleanly; it is positive evidence for the family but not the strongest promotion.</p>
+<h2>BBox evidence</h2>
+<img src="rank01_bbox_evidence.png" alt="rank15 bbox evidence">
+<h2>Moved tracklets</h2>
+<table><thead><tr><th>seq</th><th>video</th><th>gid</th><th>component</th><th>frames</th><th>dets</th></tr></thead><tbody><tr><td>7622</td><td>vlincs_MS01_MC0001_MCAM08_2024-03-Tc6</td><td>96000072 -> 96000029</td><td>68 -> 27</td><td>16041-16046</td><td>5</td></tr>
+<tr><td>8582</td><td>vlincs_MS01_MC0001_MCAM08_2024-03-Tc6</td><td>96000072 -> 96000029</td><td>68 -> 27</td><td>31703-31710</td><td>7</td></tr>
+<tr><td>4526</td><td>vlincs_MS01_MC0001_MCAM04_2024-03-Tc6</td><td>96000061 -> 96000050</td><td>57 -> 46</td><td>41847-42146</td><td>300</td></tr>
+<tr><td>4580</td><td>vlincs_MS01_MC0001_MCAM04_2024-03-Tc6</td><td>96000061 -> 96000050</td><td>57 -> 46</td><td>42147-42446</td><td>300</td></tr>
+<tr><td>4625</td><td>vlincs_MS01_MC0001_MCAM04_2024-03-Tc6</td><td>96000061 -> 96000050</td><td>57 -> 46</td><td>42447-42746</td><td>300</td></tr>
+<tr><td>4859</td><td>vlincs_MS01_MC0001_MCAM04_2024-03-Tc6</td><td>96000061 -> 96000050</td><td>57 -> 46</td><td>43995-44294</td><td>300</td></tr></tbody></table>
+
+</main></body></html>

@@ -1,0 +1,46 @@
+{
+  "selected": [
+    {
+      "component_graph_direction_score": 0.6515377397191111,
+      "conflicts_to_rest": "",
+      "group_internal_sim": 0.7979953289031982,
+      "moved_tracklets": 21,
+      "no_gt_component_graph_score": 0.8008161958000182,
+      "rank": 4,
+      "same_video_overlap_ratio": 0.018367346938775512,
+      "score": 0.6515377397191111,
+      "selection_rule": "directional_larger_target_high_sim_rescue",
+      "source_component": 56,
+      "source_component_conflict_edges": "",
+      "source_component_label": 56,
+      "source_predicted_global_id": 96000060,
+      "source_quality": 0.7937556153670959,
+      "source_rest_margin_mean": 0.2883132219314575,
+      "source_seqs": [
+        3963,
+        3922,
+        4074,
+        3733,
+        3596,
+        3088,
+        4376,
+        3315
+      ],
+      "source_size": 21,
+      "target_best_sim": 0.9356919527053833,
+      "target_component": 86,
+      "target_margin": 0.2883132219314575,
+      "target_min_view_sim": 0.8407684564590454,
+      "target_predicted_global_id": 960000350,
+      "target_quality": 0.8212017288767721,
+      "target_sim": 0.7979953289031982,
+      "target_size": 107,
+      "uses_anchors": false,
+      "uses_gt_for_evaluation_only": false,
+      "uses_gt_for_training_or_anchors": false
+    }
+  ],
+  "uses_anchors": false,
+  "uses_gt_for_evaluation_only": false,
+  "uses_gt_for_training_or_anchors": false
+}

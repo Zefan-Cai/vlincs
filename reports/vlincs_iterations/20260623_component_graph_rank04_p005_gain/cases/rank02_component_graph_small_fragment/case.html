@@ -1,0 +1,28 @@
+<!doctype html>
+<html><head><meta charset="utf-8"><title>Rank02 small-fragment bridge 57 to 46</title>
+<style>
+body{font-family:Arial,Helvetica,sans-serif;margin:32px;background:#f6f7f9;color:#17202c}
+main{max-width:1120px;margin:auto} img{max-width:100%;border:1px solid #ccd3dc;background:white}
+.kpi{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin:18px 0}
+.card{background:white;border:1px solid #d7dde5;padding:14px} table{border-collapse:collapse;width:100%;background:white}
+td,th{border:1px solid #d7dde5;padding:8px;text-align:left} code{background:#eef1f5;padding:2px 4px}
+</style></head><body><main>
+<h1>Rank02 small-fragment bridge 57 to 46</h1>
+<p>Four MCAM04/Tc6 tracklets move from component 57 / gid 96000061 to component 46 / gid 96000050; this is a positive ablation but smaller than rank04.</p>
+<div class="kpi">
+<div class="card"><b>Before</b><br>component 57, gid 96000061, component_size 4</div>
+<div class="card"><b>After</b><br>component 46, gid 96000050, component_size 122, decision_status manifest_reassign</div>
+<div class="card"><b>Evidence</b><br>target_sim=0.5259, target_margin=0.2869, source_rest_margin=0.2869<br><b>Raw frame</b><br>unavailable_coordinate_fallback</div>
+</div>
+<h2>Failure and fix</h2>
+<p><b>Old failure:</b> A tiny source fragment remained isolated after the current combo and was still forced as its own identity.</p>
+<p><b>New implementation:</b> The small-fragment rule moves only the high-similarity low-mass source into a larger target component; it improves canonical p005 but less than rank04.</p>
+<h2>BBox evidence</h2>
+<img src="rank02_bbox_evidence.png" alt="rank15 bbox evidence">
+<h2>Moved tracklets</h2>
+<table><thead><tr><th>seq</th><th>video</th><th>gid</th><th>component</th><th>frames</th><th>dets</th></tr></thead><tbody><tr><td>4526</td><td>vlincs_MS01_MC0001_MCAM04_2024-03-Tc6</td><td>96000061 -> 96000050</td><td>57 -> 46</td><td>41847-42146</td><td>300</td></tr>
+<tr><td>4580</td><td>vlincs_MS01_MC0001_MCAM04_2024-03-Tc6</td><td>96000061 -> 96000050</td><td>57 -> 46</td><td>42147-42446</td><td>300</td></tr>
+<tr><td>4625</td><td>vlincs_MS01_MC0001_MCAM04_2024-03-Tc6</td><td>96000061 -> 96000050</td><td>57 -> 46</td><td>42447-42746</td><td>300</td></tr>
+<tr><td>4859</td><td>vlincs_MS01_MC0001_MCAM04_2024-03-Tc6</td><td>96000061 -> 96000050</td><td>57 -> 46</td><td>43995-44294</td><td>300</td></tr></tbody></table>
+
+</main></body></html>
