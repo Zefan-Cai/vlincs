@@ -1,0 +1,52 @@
+<!doctype html>
+<html><head><meta charset="utf-8"><title>Rank08 top28 subset improves 37-&gt;86 bridge</title>
+<style>
+body{font-family:Arial,Helvetica,sans-serif;margin:32px;background:#f6f7f9;color:#17202c}
+main{max-width:1120px;margin:auto} img{max-width:100%;border:1px solid #ccd3dc;background:white}
+.kpi{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin:18px 0}
+.card{background:white;border:1px solid #d7dde5;padding:14px} table{border-collapse:collapse;width:100%;background:white}
+td,th{border:1px solid #d7dde5;padding:8px;text-align:left} code{background:#eef1f5;padding:2px 4px}
+</style></head><body><main>
+<h1>Rank08 top28 subset improves 37-&gt;86 bridge</h1>
+<p>Twenty-eight high target-similarity component 37 tracklets move to component 86 / gid 960000350.</p>
+<div class="kpi">
+<div class="card"><b>Before</b><br>component 37, gid 96000040, component_size 69</div>
+<div class="card"><b>After</b><br>component 86, gid 960000350, component_size 156, decision_status manifest_reassign</div>
+<div class="card"><b>Evidence</b><br>target_sim=0.0000, target_margin=0.0000, source_rest_margin=0.0000<br><b>Raw frame</b><br>unavailable_coordinate_fallback</div>
+</div>
+<h2>Failure and fix</h2>
+<p><b>Old failure:</b> The full 69-tracklet 37-&gt;86 bridge improved p005 but introduced small MCAM03/Tc6 and MCAM08/Tc6 losses; subset search asks whether only the strongest source island should attach.</p>
+<p><b>New implementation:</b> The top28 subset keeps the strongest target-similarity tracklets, improves direct score over the full bridge, and reaches a new valid p005_area best.</p>
+<h2>BBox evidence</h2>
+<img src="rank08_bbox_evidence.png" alt="rank15 bbox evidence">
+<h2>Moved tracklets</h2>
+<table><thead><tr><th>seq</th><th>video</th><th>gid</th><th>component</th><th>frames</th><th>dets</th></tr></thead><tbody><tr><td>1201</td><td>vlincs_MS01_MC0001_MCAM03_2024-03-Tc6</td><td>96000040 -> 960000350</td><td>37 -> 86</td><td>26228-26527</td><td>240</td></tr>
+<tr><td>1731</td><td>vlincs_MS01_MC0001_MCAM03_2024-03-Tc8</td><td>96000040 -> 960000350</td><td>37 -> 86</td><td>14604-14700</td><td>92</td></tr>
+<tr><td>2243</td><td>vlincs_MS01_MC0001_MCAM04_2024-03-Tc6</td><td>96000040 -> 960000350</td><td>37 -> 86</td><td>14174-14473</td><td>231</td></tr>
+<tr><td>2250</td><td>vlincs_MS01_MC0001_MCAM04_2024-03-Tc6</td><td>96000040 -> 960000350</td><td>37 -> 86</td><td>14252-14551</td><td>238</td></tr>
+<tr><td>2285</td><td>vlincs_MS01_MC0001_MCAM04_2024-03-Tc6</td><td>96000040 -> 960000350</td><td>37 -> 86</td><td>14552-14851</td><td>286</td></tr>
+<tr><td>2330</td><td>vlincs_MS01_MC0001_MCAM04_2024-03-Tc6</td><td>96000040 -> 960000350</td><td>37 -> 86</td><td>14852-14929</td><td>52</td></tr>
+<tr><td>2334</td><td>vlincs_MS01_MC0001_MCAM04_2024-03-Tc6</td><td>96000040 -> 960000350</td><td>37 -> 86</td><td>14878-14990</td><td>98</td></tr>
+<tr><td>2353</td><td>vlincs_MS01_MC0001_MCAM04_2024-03-Tc6</td><td>96000040 -> 960000350</td><td>37 -> 86</td><td>14971-15270</td><td>281</td></tr>
+<tr><td>2399</td><td>vlincs_MS01_MC0001_MCAM04_2024-03-Tc6</td><td>96000040 -> 960000350</td><td>37 -> 86</td><td>15271-15570</td><td>300</td></tr>
+<tr><td>2433</td><td>vlincs_MS01_MC0001_MCAM04_2024-03-Tc6</td><td>96000040 -> 960000350</td><td>37 -> 86</td><td>15571-15870</td><td>300</td></tr>
+<tr><td>2471</td><td>vlincs_MS01_MC0001_MCAM04_2024-03-Tc6</td><td>96000040 -> 960000350</td><td>37 -> 86</td><td>15871-16170</td><td>298</td></tr>
+<tr><td>2505</td><td>vlincs_MS01_MC0001_MCAM04_2024-03-Tc6</td><td>96000040 -> 960000350</td><td>37 -> 86</td><td>16171-16470</td><td>300</td></tr>
+<tr><td>2543</td><td>vlincs_MS01_MC0001_MCAM04_2024-03-Tc6</td><td>96000040 -> 960000350</td><td>37 -> 86</td><td>16471-16770</td><td>300</td></tr>
+<tr><td>2577</td><td>vlincs_MS01_MC0001_MCAM04_2024-03-Tc6</td><td>96000040 -> 960000350</td><td>37 -> 86</td><td>16771-17070</td><td>300</td></tr>
+<tr><td>2613</td><td>vlincs_MS01_MC0001_MCAM04_2024-03-Tc6</td><td>96000040 -> 960000350</td><td>37 -> 86</td><td>17071-17370</td><td>300</td></tr>
+<tr><td>2644</td><td>vlincs_MS01_MC0001_MCAM04_2024-03-Tc6</td><td>96000040 -> 960000350</td><td>37 -> 86</td><td>17371-17670</td><td>300</td></tr>
+<tr><td>2680</td><td>vlincs_MS01_MC0001_MCAM04_2024-03-Tc6</td><td>96000040 -> 960000350</td><td>37 -> 86</td><td>17671-17970</td><td>296</td></tr>
+<tr><td>2745</td><td>vlincs_MS01_MC0001_MCAM04_2024-03-Tc6</td><td>96000040 -> 960000350</td><td>37 -> 86</td><td>17971-18270</td><td>286</td></tr>
+<tr><td>2847</td><td>vlincs_MS01_MC0001_MCAM04_2024-03-Tc6</td><td>96000040 -> 960000350</td><td>37 -> 86</td><td>18572-18871</td><td>299</td></tr>
+<tr><td>4043</td><td>vlincs_MS01_MC0001_MCAM04_2024-03-Tc6</td><td>96000040 -> 960000350</td><td>37 -> 86</td><td>39303-39602</td><td>300</td></tr>
+<tr><td>4443</td><td>vlincs_MS01_MC0001_MCAM04_2024-03-Tc6</td><td>96000040 -> 960000350</td><td>37 -> 86</td><td>41325-41624</td><td>300</td></tr>
+<tr><td>4494</td><td>vlincs_MS01_MC0001_MCAM04_2024-03-Tc6</td><td>96000040 -> 960000350</td><td>37 -> 86</td><td>41625-41924</td><td>300</td></tr>
+<tr><td>4504</td><td>vlincs_MS01_MC0001_MCAM04_2024-03-Tc6</td><td>96000040 -> 960000350</td><td>37 -> 86</td><td>41660-41959</td><td>178</td></tr>
+<tr><td>4547</td><td>vlincs_MS01_MC0001_MCAM04_2024-03-Tc6</td><td>96000040 -> 960000350</td><td>37 -> 86</td><td>41960-42110</td><td>150</td></tr>
+<tr><td>4690</td><td>vlincs_MS01_MC0001_MCAM04_2024-03-Tc6</td><td>96000040 -> 960000350</td><td>37 -> 86</td><td>42914-43213</td><td>300</td></tr>
+<tr><td>5834</td><td>vlincs_MS01_MC0001_MCAM04_2024-03-Tc6</td><td>96000040 -> 960000350</td><td>37 -> 86</td><td>13574-13873</td><td>300</td></tr>
+<tr><td>5875</td><td>vlincs_MS01_MC0001_MCAM04_2024-03-Tc6</td><td>96000040 -> 960000350</td><td>37 -> 86</td><td>13874-14173</td><td>288</td></tr>
+<tr><td>5890</td><td>vlincs_MS01_MC0001_MCAM04_2024-03-Tc6</td><td>96000040 -> 960000350</td><td>37 -> 86</td><td>13984-14040</td><td>36</td></tr></tbody></table>
+
+</main></body></html>

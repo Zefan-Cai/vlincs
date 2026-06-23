@@ -37,7 +37,7 @@ def _load_rows(path: Path) -> dict[int, dict[str, str]]:
 
 def _load_candidate(path: Path, rank: int) -> dict[str, Any]:
     data = json.loads(path.read_text())
-    for row in data.get("selected", []) + data.get("top_candidates", []):
+    for row in data.get("selected", []) + data.get("top_candidates", []) + data.get("rows", []):
         if isinstance(row, dict) and int(row.get("rank", -1)) == int(rank):
             return row
     raise SystemExit(f"rank {rank} not found in {path}")
@@ -458,6 +458,21 @@ td,th{{border:1px solid #d7dde5;padding:8px;text-align:left}} code{{background:#
     )
 
 
+def _normalize_candidate_for_report(cand: dict[str, Any], first_before: dict[str, str], first_after: dict[str, str]) -> dict[str, Any]:
+    """Expose common evidence fields even when candidate manifests use variant-specific names."""
+    out = dict(cand)
+    out.setdefault("source_component", cand.get("source_component_label", first_before.get("component_label", "")))
+    out.setdefault("target_component", cand.get("target_component", first_after.get("component_label", "")))
+    out.setdefault("source_predicted_global_id", first_before.get("predicted_global_id", ""))
+    out.setdefault("target_predicted_global_id", cand.get("target_predicted_global_id", first_after.get("predicted_global_id", "")))
+    out.setdefault("moved_tracklets", cand.get("subset_size", len(cand.get("source_seqs", []))))
+    out.setdefault("target_sim", cand.get("target_sim_mean", cand.get("target_sim", 0.0)))
+    out.setdefault("target_margin", cand.get("attach_margin_mean", cand.get("target_margin", 0.0)))
+    out.setdefault("source_rest_margin_mean", cand.get("attach_margin_min", cand.get("source_rest_margin_mean", 0.0)))
+    out.setdefault("group_internal_sim", cand.get("target_sim_min", cand.get("group_internal_sim", 0.0)))
+    return out
+
+
 def main() -> None:
     ap = argparse.ArgumentParser(description=__doc__)
     ap.add_argument("--before-assignments", required=True, type=Path)
@@ -479,7 +494,10 @@ def main() -> None:
     before = _load_rows(args.before_assignments)
     after = _load_rows(args.after_assignments)
     cand = _load_candidate(args.manifest, args.rank)
-    seqs = [int(seq) for seq in cand.get("source_seqs", [])]
+    source_seqs = cand.get("source_seqs", [])
+    if not source_seqs and isinstance(cand.get("accepted_preview"), list) and cand["accepted_preview"]:
+        source_seqs = cand["accepted_preview"][0].get("source_seqs", [])
+    seqs = [int(seq) for seq in source_seqs]
     tracklets = []
     for seq in seqs:
         b = before[seq]
@@ -517,7 +535,7 @@ def main() -> None:
         "evidence": f"target_sim={float(cand.get('target_sim', 0.0)):.4f}, target_margin={float(cand.get('target_margin', 0.0)):.4f}, source_rest_margin={float(cand.get('source_rest_margin_mean', 0.0)):.4f}",
         "failure_reason": failure_reason,
         "improvement": improvement,
-        "candidate": cand,
+        "candidate": _normalize_candidate_for_report(cand, first_before, first_after),
         "tracklets": tracklets,
         "montage": montage_name,
         "failure_montage": failure_rel,

@@ -2,6 +2,15 @@ VLINCS no-anchor global ID progress
 Date: 2026-06-23
 
 Current best e2e:
+IDF1 / HOTA / AssA = 0.668146 / 0.528669 / 0.539001
+
+Latest rank08 top28 subset 37->86 gain:
+A side-effect-aware component subset proposer split the previous 69-tracklet component 37 -> 86 bridge. Rank08 moves only the top 28 target-similarity source tracklets into component 86 / gid 960000350. It is no-anchor: assignment evidence uses only current assignments, video/camera metadata, and weakmetric/OSNet + DINOv2 + SigLIP tracklet features; GT appears only after materialization for full-score evaluation. Direct full-score rank08 is the best of 12 tested subset variants at 0.665950/0.526899/0.537108. density_simple reaches 0.668041/0.528586/0.538876. Valid p005_area reaches the new canonical best 0.668146/0.528669/0.539001 with config_name=p005_area and dropped_rows=45467, improving the prior best by +0.000610 IDF1, +0.000459 HOTA, and +0.000329 AssA. The package is reports/vlincs_iterations/20260623_rank01_37to86_top28_p005_gain/ with README.md, presentation.html, spec.json, metrics, 12-ablation table, coordinate-fallback rank08 case, and two real-frame context images from the earlier detailed report. Current rank08 raw frames are still absent locally, so its component case is coordinate-only evidence rather than a path failure.
+
+VLINCS no-anchor global ID progress
+Date: 2026-06-23
+
+Current best e2e:
 IDF1 / HOTA / AssA = 0.667536 / 0.528210 / 0.538672
 
 Latest rank04 small-combo rank01 37->86 gain:
