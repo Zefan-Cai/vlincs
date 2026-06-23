@@ -1,0 +1,253 @@
+{
+  "config_sources": [
+    "@local_runs/offline_no_anchor_split_probe_20260623/p005_area_config.txt"
+  ],
+  "configs": [
+    {
+      "global_area": 0.0,
+      "global_conf": 0.0,
+      "name": "p005_area",
+      "video_area": {
+        "vlincs_MS01_MC0001_MCAM00_2024-03-Tc6": 1566.0,
+        "vlincs_MS01_MC0001_MCAM00_2024-03-Tc8": 13799.4,
+        "vlincs_MS01_MC0001_MCAM03_2024-03-Tc6": 980.0,
+        "vlincs_MS01_MC0001_MCAM03_2024-03-Tc8": 1871.85,
+        "vlincs_MS01_MC0001_MCAM04_2024-03-Tc6": 1320.0,
+        "vlincs_MS01_MC0001_MCAM05_2024-03-Tc6": 3014.3,
+        "vlincs_MS01_MC0001_MCAM05_2024-03-Tc8": 5033.475,
+        "vlincs_MS01_MC0001_MCAM06_2024-03-Tc6": 1792.05,
+        "vlincs_MS01_MC0001_MCAM06_2024-03-Tc8": 1860.95,
+        "vlincs_MS01_MC0001_MCAM08_2024-03-Tc6": 1558.0
+      },
+      "video_conf": {}
+    }
+  ],
+  "rows": [
+    {
+      "assa": 0.5369,
+      "by_video_rows": {
+        "vlincs_MS01_MC0001_MCAM00_2024-03-Tc6": {
+          "area_thr": 1566.0,
+          "conf_thr": 0.0,
+          "dropped_rows": 452,
+          "ids": 71,
+          "input_ids": 74,
+          "input_rows": 43677,
+          "rows": 43225
+        },
+        "vlincs_MS01_MC0001_MCAM00_2024-03-Tc8": {
+          "area_thr": 13799.4,
+          "conf_thr": 0.0,
+          "dropped_rows": 376,
+          "ids": 58,
+          "input_ids": 62,
+          "input_rows": 55158,
+          "rows": 54782
+        },
+        "vlincs_MS01_MC0001_MCAM03_2024-03-Tc6": {
+          "area_thr": 980.0,
+          "conf_thr": 0.0,
+          "dropped_rows": 1615,
+          "ids": 191,
+          "input_ids": 198,
+          "input_rows": 184830,
+          "rows": 183215
+        },
+        "vlincs_MS01_MC0001_MCAM03_2024-03-Tc8": {
+          "area_thr": 1871.85,
+          "conf_thr": 0.0,
+          "dropped_rows": 1345,
+          "ids": 166,
+          "input_ids": 175,
+          "input_rows": 115881,
+          "rows": 114536
+        },
+        "vlincs_MS01_MC0001_MCAM04_2024-03-Tc6": {
+          "area_thr": 1320.0,
+          "conf_thr": 0.0,
+          "dropped_rows": 8093,
+          "ids": 639,
+          "input_ids": 662,
+          "input_rows": 677792,
+          "rows": 669699
+        },
+        "vlincs_MS01_MC0001_MCAM05_2024-03-Tc6": {
+          "area_thr": 3014.3,
+          "conf_thr": 0.0,
+          "dropped_rows": 27615,
+          "ids": 693,
+          "input_ids": 765,
+          "input_rows": 126380,
+          "rows": 98765
+        },
+        "vlincs_MS01_MC0001_MCAM05_2024-03-Tc8": {
+          "area_thr": 5033.475,
+          "conf_thr": 0.0,
+          "dropped_rows": 170,
+          "ids": 46,
+          "input_ids": 51,
+          "input_rows": 19147,
+          "rows": 18977
+        },
+        "vlincs_MS01_MC0001_MCAM06_2024-03-Tc6": {
+          "area_thr": 1792.05,
+          "conf_thr": 0.0,
+          "dropped_rows": 1674,
+          "ids": 139,
+          "input_ids": 142,
+          "input_rows": 49119,
+          "rows": 47445
+        },
+        "vlincs_MS01_MC0001_MCAM06_2024-03-Tc8": {
+          "area_thr": 1860.95,
+          "conf_thr": 0.0,
+          "dropped_rows": 228,
+          "ids": 65,
+          "input_ids": 65,
+          "input_rows": 37712,
+          "rows": 37484
+        },
+        "vlincs_MS01_MC0001_MCAM08_2024-03-Tc6": {
+          "area_thr": 1558.0,
+          "conf_thr": 0.0,
+          "dropped_rows": 3899,
+          "ids": 418,
+          "input_ids": 467,
+          "input_rows": 378345,
+          "rows": 374446
+        }
+      },
+      "config_name": "p005_area",
+      "deta": 0.514544,
+      "detpr": 0.775688,
+      "detre": 0.5818,
+      "dropped_rows": 45467,
+      "global_area": 0.0,
+      "global_conf": 0.0,
+      "hota": 0.525586,
+      "idf1": 0.664898,
+      "input_rows": 1688041,
+      "per_video": {
+        "vlincs_MS01_MC0001_MCAM00_2024-03-Tc6": {
+          "assa": 0.836352,
+          "deta": 0.795662,
+          "detpr": 0.911551,
+          "detre": 0.849217,
+          "hota": 0.815354,
+          "idf1": 0.879281
+        },
+        "vlincs_MS01_MC0001_MCAM00_2024-03-Tc8": {
+          "assa": 0.787663,
+          "deta": 0.715998,
+          "detpr": 0.909123,
+          "detre": 0.761518,
+          "hota": 0.750862,
+          "idf1": 0.828799
+        },
+        "vlincs_MS01_MC0001_MCAM03_2024-03-Tc6": {
+          "assa": 0.625116,
+          "deta": 0.543482,
+          "detpr": 0.814881,
+          "detre": 0.599534,
+          "hota": 0.582676,
+          "idf1": 0.690814
+        },
+        "vlincs_MS01_MC0001_MCAM03_2024-03-Tc8": {
+          "assa": 0.559391,
+          "deta": 0.475624,
+          "detpr": 0.779105,
+          "detre": 0.530233,
+          "hota": 0.515613,
+          "idf1": 0.631016
+        },
+        "vlincs_MS01_MC0001_MCAM04_2024-03-Tc6": {
+          "assa": 0.492553,
+          "deta": 0.425872,
+          "detpr": 0.707379,
+          "detre": 0.490689,
+          "hota": 0.457537,
+          "idf1": 0.579438
+        },
+        "vlincs_MS01_MC0001_MCAM05_2024-03-Tc6": {
+          "assa": 0.638183,
+          "deta": 0.565893,
+          "detpr": 0.823056,
+          "detre": 0.627554,
+          "hota": 0.600938,
+          "idf1": 0.712131
+        },
+        "vlincs_MS01_MC0001_MCAM05_2024-03-Tc8": {
+          "assa": 0.730766,
+          "deta": 0.668144,
+          "detpr": 0.864076,
+          "detre": 0.729201,
+          "hota": 0.698745,
+          "idf1": 0.79093
+        },
+        "vlincs_MS01_MC0001_MCAM06_2024-03-Tc6": {
+          "assa": 0.601784,
+          "deta": 0.450398,
+          "detpr": 0.84292,
+          "detre": 0.481098,
+          "hota": 0.520422,
+          "idf1": 0.61257
+        },
+        "vlincs_MS01_MC0001_MCAM06_2024-03-Tc8": {
+          "assa": 0.615037,
+          "deta": 0.553248,
+          "detpr": 0.792932,
+          "detre": 0.623104,
+          "hota": 0.583172,
+          "idf1": 0.697834
+        },
+        "vlincs_MS01_MC0001_MCAM08_2024-03-Tc6": {
+          "assa": 0.680429,
+          "deta": 0.650841,
+          "detpr": 0.823145,
+          "detre": 0.731353,
+          "hota": 0.665363,
+          "idf1": 0.774539
+        }
+      },
+      "predicted_ids": 2486,
+      "rows": 1642574,
+      "submission_zip": "local_runs/offline_no_anchor_split_probe_20260623/rank15base_rank40_delivery/rank40_subpart_s5_to35_2seq_assignments_density_simple.zip",
+      "unmatched_fp": 253559,
+      "uses_anchors": false,
+      "uses_gt_for_evaluation_only": true,
+      "uses_gt_for_training_or_anchors": false,
+      "video_area": {
+        "vlincs_MS01_MC0001_MCAM00_2024-03-Tc6": 1566.0,
+        "vlincs_MS01_MC0001_MCAM00_2024-03-Tc8": 13799.4,
+        "vlincs_MS01_MC0001_MCAM03_2024-03-Tc6": 980.0,
+        "vlincs_MS01_MC0001_MCAM03_2024-03-Tc8": 1871.85,
+        "vlincs_MS01_MC0001_MCAM04_2024-03-Tc6": 1320.0,
+        "vlincs_MS01_MC0001_MCAM05_2024-03-Tc6": 3014.3,
+        "vlincs_MS01_MC0001_MCAM05_2024-03-Tc8": 5033.475,
+        "vlincs_MS01_MC0001_MCAM06_2024-03-Tc6": 1792.05,
+        "vlincs_MS01_MC0001_MCAM06_2024-03-Tc8": 1860.95,
+        "vlincs_MS01_MC0001_MCAM08_2024-03-Tc6": 1558.0
+      },
+      "video_conf": {},
+      "videos_scored": [
+        "vlincs_MS01_MC0001_MCAM00_2024-03-Tc6",
+        "vlincs_MS01_MC0001_MCAM00_2024-03-Tc8",
+        "vlincs_MS01_MC0001_MCAM03_2024-03-Tc6",
+        "vlincs_MS01_MC0001_MCAM03_2024-03-Tc8",
+        "vlincs_MS01_MC0001_MCAM04_2024-03-Tc6",
+        "vlincs_MS01_MC0001_MCAM05_2024-03-Tc6",
+        "vlincs_MS01_MC0001_MCAM05_2024-03-Tc8",
+        "vlincs_MS01_MC0001_MCAM06_2024-03-Tc6",
+        "vlincs_MS01_MC0001_MCAM06_2024-03-Tc8",
+        "vlincs_MS01_MC0001_MCAM08_2024-03-Tc6"
+      ],
+      "zip_files": 10,
+      "zip_out": "local_runs/offline_no_anchor_split_probe_20260623/rank15base_rank40_delivery/rank40_subpart_s5_to35_2seq_assignments_density_p005_area.zip"
+    }
+  ],
+  "selection_uses_gt_metric": true,
+  "submission_zip": "local_runs/offline_no_anchor_split_probe_20260623/rank15base_rank40_delivery/rank40_subpart_s5_to35_2seq_assignments_density_simple.zip",
+  "uses_anchors": false,
+  "uses_gt_for_evaluation_only": true,
+  "uses_gt_for_training_or_anchors": false
+}

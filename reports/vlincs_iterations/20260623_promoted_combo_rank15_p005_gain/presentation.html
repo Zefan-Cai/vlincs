@@ -38,6 +38,9 @@ p { font-size: 20px; line-height: 1.5; color: var(--muted); max-width: 980px; }
 .grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 18px; margin-top: 24px; }
 .card { border: 1px solid var(--line); background: var(--panel); padding: 22px; border-radius: 8px; }
 .card strong { display: block; font-size: 20px; margin-bottom: 10px; }
+.case { border: 1px solid var(--line); background: var(--panel); padding: 18px; border-radius: 8px; margin-top: 16px; }
+.case h3 { margin: 0 0 8px; font-size: 24px; }
+.case img { max-width: 100%; max-height: 520px; object-fit: contain; border: 1px solid var(--line); background: #fff; }
 .metric { font-size: 38px; color: var(--teal); font-weight: 800; }
 .delta.good { color: var(--good); }
 .delta.bad { color: var(--bad); }
@@ -48,7 +51,6 @@ th { color: var(--teal); font-size: 13px; text-transform: uppercase; letter-spac
 code { background: #edf4f5; border-radius: 4px; padding: 2px 5px; }
 ul { font-size: 19px; line-height: 1.45; color: var(--muted); }
 .small { font-size: 14px; color: var(--muted); }
-
 </style>
 </head>
 <body>
@@ -75,7 +77,7 @@ ul { font-size: 19px; line-height: 1.45; color: var(--muted); }
     <div class="eyebrow">Implementation</div>
     <h2>What changed</h2>
     <p>Added @file and b64: config resolution to kit/evaluate_submission_detection_filter.py before _parse_config. The previous p005 validation was rejected because config_name remained a literal @path and dropped_rows was 0. The valid run now reports config_name=p005_area, dropped_rows=7603, rows=1518065. The promoted assignment is local_runs/offline_no_anchor_split_probe_20260623/promoted_combo_subpart_balanced_assignments/rank15_subpart_s27_to10_3seq_assignments.csv.</p>
-    <ul><li><code>kit/evaluate_submission_detection_filter.py</code></li><li><code>autoresearch_state/no_anchor_global_id/state/progress.json</code></li><li><code>LATEST_NO_ANCHOR_PROGRESS.txt</code></li><li><code>reports/vlincs_iterations/20260623_promoted_combo_rank15_p005_gain/README.md</code></li><li><code>reports/vlincs_iterations/20260623_promoted_combo_rank15_p005_gain/presentation.html</code></li></ul>
+    <ul><li><code>kit/evaluate_submission_detection_filter.py</code></li><li><code>kit/export_no_anchor_subpart_visual_case.py</code></li><li><code>autoresearch_state/no_anchor_global_id/state/progress.json</code></li><li><code>LATEST_NO_ANCHOR_PROGRESS.txt</code></li><li><code>reports/vlincs_iterations/20260623_promoted_combo_rank15_p005_gain/README.md</code></li><li><code>reports/vlincs_iterations/20260623_promoted_combo_rank15_p005_gain/presentation.html</code></li></ul>
   </section>
   <section class="slide">
     <div class="eyebrow">Ablations</div>
@@ -86,6 +88,11 @@ ul { font-size: 19px; line-height: 1.45; color: var(--muted); }
 <tr><td>multiview rank01 11-&gt;82</td><td>move 14 tracklets</td><td>direct 0.661582/0.522185/0.533090</td><td>reject</td></tr>
 <tr><td>rank16 82-&gt;80 duplicate family</td><td>move 8 tracklets</td><td>direct tied 0.662638/0.523746/0.534926</td><td>hard neutral</td></tr>
 <tr><td>literal @path p005</td><td>old scorer parsed --config @file as a raw string</td><td>config_name=@... and dropped_rows=0</td><td>invalid; fixed scorer and reran</td></tr></tbody></table>
+  </section>
+  <section class="slide">
+    <div class="eyebrow">Visual cases</div>
+    <h2>Failure mode and fix</h2>
+    <div class="case"><h3>Rank15 false-split island visual case</h3><p>Three edge/border tracklets were previously kept in component 27 / gid 96000029 and are moved to component 10 / gid 96000011. The case shows sampled bbox positions and the before/after identity assignment.</p><img src="cases/rank15_subpart_visual/rank15_bbox_evidence.png" alt="Rank15 false-split island visual case"><ul><li><code>cases/rank15_subpart_visual/case.html</code></li><li><code>cases/rank15_subpart_visual/case.json</code></li></ul></div>
   </section>
   <section class="slide">
     <div class="eyebrow">Provenance</div>

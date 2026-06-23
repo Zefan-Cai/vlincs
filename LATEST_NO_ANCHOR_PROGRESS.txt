@@ -2,7 +2,24 @@ VLINCS no-anchor global ID progress
 Date: 2026-06-23
 
 Current best e2e:
-IDF1 / HOTA / AssA = 0.664887 / 0.525553 / 0.536870
+IDF1 / HOTA / AssA = 0.664898 / 0.525586 / 0.536900
+
+Latest rank15-base reviewer gain:
+After rank15 became the base, three no-anchor subpart proposer queues were
+regenerated from the new assignment namespace. The referee was rerun with old
+and new manifests plus 5 matched full-score labels; it ranked 307 candidates.
+Four rank15-base candidates were direct full-scored. weakvideo rank24 10->78
+was negative at 0.661507/0.522457/0.533721. weakvideo rank52 36->90 was
+negative at 0.662645/0.523759/0.534952. weakvideo rank73 8->30 tied the
+rank15-base direct score at 0.662686/0.523800/0.534983. multiview rank40
+5->35 moved two MCAM08 tracklets from gid 96000005/component 5 to gid
+96000038/component 35 and improved direct full slightly to
+0.662694/0.523807/0.534999. Delivery validation showed density_simple alone
+was not enough (0.664798/0.525510/0.536783), but valid p005_area scored
+0.664898/0.525586/0.536900 with config_name=p005_area and dropped_rows=45467.
+This is a second tiny canonical gain. The gain packages now include visual case
+artifacts: rank15 bbox evidence explains the previous false-split island, and
+the new reusable visual-case exporter will be required for future gains.
 
 Latest promoted-combo reviewer gain:
 The promoted-combo base was expanded with a no-anchor subpart reviewer round.

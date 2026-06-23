@@ -1,8 +1,8 @@
 {
-    "best_assignment_csv": "local_runs/offline_no_anchor_split_probe_20260623/promoted_combo_subpart_balanced_assignments/rank15_subpart_s27_to10_3seq_assignments.csv",
-    "best_e2e_assa": 0.53687,
-    "best_e2e_hota": 0.525553,
-    "best_e2e_idf1": 0.664887,
+    "best_assignment_csv": "local_runs/offline_no_anchor_split_probe_20260623/rank15base_subpart_multiview_assignments/rank40_subpart_s5_to35_2seq_assignments.csv",
+    "best_e2e_assa": 0.5369,
+    "best_e2e_hota": 0.525586,
+    "best_e2e_idf1": 0.664898,
     "best_model_pair_f1": 0.782244,
     "best_model_pair_precision": 0.850111,
     "best_model_pair_recall": 0.724411,
@@ -12,7 +12,7 @@
     "goal_global_id_pair_f1": 0.7,
     "goal_global_id_pair_precision": 0.7,
     "goal_global_id_pair_recall": 0.7,
-    "iteration": 102,
+    "iteration": 103,
     "last_artifacts": [
         "reports/no_anchor_offline_component_split_promotion_20260622.md",
         "local_runs/offline_no_anchor_split_probe_20260622/best_combo_split_assignments.csv",
@@ -56,12 +56,24 @@
         "local_runs/offline_no_anchor_split_probe_20260623/promoted_combo_subpart_reviewer_p005/balanced_rank15_s27_to10_3seq_density_simple.json",
         "local_runs/offline_no_anchor_split_probe_20260623/promoted_combo_subpart_reviewer_p005/balanced_rank15_s27_to10_3seq_density_simple.zip",
         "local_runs/offline_no_anchor_split_probe_20260623/promoted_combo_subpart_reviewer_p005/balanced_rank15_s27_to10_3seq_density_p005_area_fixed.json",
-        "local_runs/offline_no_anchor_split_probe_20260623/promoted_combo_subpart_reviewer_p005/balanced_rank15_s27_to10_3seq_density_p005_area_fixed.zip"
+        "local_runs/offline_no_anchor_split_probe_20260623/promoted_combo_subpart_reviewer_p005/balanced_rank15_s27_to10_3seq_density_p005_area_fixed.zip",
+        "kit/export_no_anchor_subpart_visual_case.py",
+        "reports/vlincs_iterations/20260623_promoted_combo_rank15_p005_gain/cases/rank15_subpart_visual/",
+        "local_runs/offline_no_anchor_split_probe_20260623/rank15base_subpart_balanced_manifest.json",
+        "local_runs/offline_no_anchor_split_probe_20260623/rank15base_subpart_multiview_manifest.json",
+        "local_runs/offline_no_anchor_split_probe_20260623/rank15base_subpart_weakvideo_manifest.json",
+        "local_runs/offline_no_anchor_split_probe_20260623/rank15base_subpart_reviewer_ranked_with_oldlabels.json",
+        "local_runs/offline_no_anchor_split_probe_20260623/rank15base_subpart_reviewer_fullscore/",
+        "local_runs/offline_no_anchor_split_probe_20260623/rank15base_subpart_multiview_assignments/rank40_subpart_s5_to35_2seq_assignments.csv",
+        "local_runs/offline_no_anchor_split_probe_20260623/rank15base_rank40_delivery/rank40_subpart_s5_to35_2seq_assignments_full_export.json",
+        "local_runs/offline_no_anchor_split_probe_20260623/rank15base_rank40_delivery/rank40_subpart_s5_to35_2seq_assignments_density_simple.json",
+        "local_runs/offline_no_anchor_split_probe_20260623/rank15base_rank40_delivery/rank40_subpart_s5_to35_2seq_assignments_density_p005_area.json",
+        "local_runs/offline_no_anchor_split_probe_20260623/rank15base_rank40_delivery/rank40_subpart_s5_to35_2seq_assignments_density_p005_area.zip"
     ],
-    "last_direction": "promoted_combo_subpart_reviewer_rank15_p005_config_fix",
-    "last_result": "Fixed evaluate_submission_detection_filter.py so @config files are resolved before parsing; the previous literal @path p005 run was rejected because it dropped 0 rows. Promoted no-anchor balanced reviewer rank15, moving 3 tracklets from source component 27 to target component 10 on top of the current promoted combo. Direct full improved slightly from 0.662638/0.523746/0.534926 to 0.662686/0.523800/0.534983. Valid canonical density_simple+p005_area now has config_name=p005_area, dropped_rows=7603, and improved from 0.664835/0.525495/0.536810 to 0.664887/0.525553/0.536870.",
+    "last_direction": "rank15base_multiview_rank40_p005_tiny_gain_with_visual_case",
+    "last_result": "Regenerated no-anchor subpart candidates on top of the rank15 promoted base, ranked 307 old+new candidates with 5 full-score labels, and full-scored four rank15-base candidates. weakvideo rank24 10->78 was negative at 0.661507, weakvideo rank52 36->90 was negative at 0.662645, weakvideo rank73 8->30 tied 0.662686, and multiview rank40 5->35 moved 2 MCAM08 tracklets for a tiny direct gain to 0.662694. Delivery validation scored density_simple 0.664798 and valid p005_area 0.664898/0.525586/0.536900 with config_name=p005_area and dropped_rows=45467, improving the canonical best from 0.664887/0.525553/0.536870. Added a reusable visual-case exporter and attached bbox visual evidence to the gain package.",
     "last_updated": "2026-06-23",
-    "next_direction": "use_the_rank15_tiny_gain_as_a_positive_side_effect_label_and_search_for_multi_edge_combos_with_larger_canonical_margin",
+    "next_direction": "fold_rank40_direct_and_p005_labels_into_the_referee_and_search_for_compatible_multi_edge_combos_with_larger_than_tiny_margin",
     "stale_count": 0,
-    "status": "active_no_anchor_best_e2e_0p664887_rank15_subpart_tiny_gain_e2e_still_below_0p70"
+    "status": "active_no_anchor_best_e2e_0p664898_rank40_subpart_tiny_gain_e2e_still_below_0p70"
 }

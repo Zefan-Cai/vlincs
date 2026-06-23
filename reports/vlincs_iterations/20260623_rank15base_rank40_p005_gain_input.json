@@ -1,0 +1,94 @@
+{
+  "title": "No-anchor rank15-base rank40 p005 gain",
+  "date": "2026-06-23",
+  "pipeline_module": "M8 graph resolution + M12 delivery calibration",
+  "module_detail": "M8 uses the full-score-sensitive reviewer to propose a tiny multiview subpart reassignment on top of the rank15 base. M12 validates the change through density_simple and p005_area delivery filtering.",
+  "used_in_pipeline": "yes: promoted as the current no-anchor best assignment and canonical delivery zip",
+  "status": "gain",
+  "no_anchor": true,
+  "summary": "Multiview rank40 moves 2 MCAM08 tracklets from source component 5 / gid 96000005 to target component 35 / gid 96000038. Direct full improves only slightly to 0.662694, density_simple is below current best, but valid p005_area reaches the new canonical best 0.664898/0.525586/0.536900.",
+  "metrics": {
+    "name": "canonical density_simple+p005_area IDF1",
+    "baseline": 0.664887,
+    "candidate": 0.664898,
+    "delta": 0.000011
+  },
+  "implementation": "Regenerated balanced, multiview, and weakvideo no-anchor subpart candidates from the rank15 assignment namespace. The reviewer was rerun with old+new manifests and post-hoc full-score labels. Added kit/export_no_anchor_subpart_visual_case.py so gain packages include bbox evidence cases. The promoted assignment is local_runs/offline_no_anchor_split_probe_20260623/rank15base_subpart_multiview_assignments/rank40_subpart_s5_to35_2seq_assignments.csv.",
+  "environment": [
+    "Repo: /Users/zcai/Codex/vlincs_reid_by_search",
+    "Dataset root: /Users/zcai/Codex/vlincs_reid_by_search/local_runs/local_data_root_20260622",
+    "Tracklet parquets: kit/demo_data/ds1/tracklets/*/tracklets.parquet",
+    "No anchors; GT used only for evaluation/selection"
+  ],
+  "commands": [
+    "python kit/propose_no_anchor_subpart_repair_candidates.py --assignment-csv local_runs/offline_no_anchor_split_probe_20260623/promoted_combo_subpart_balanced_assignments/rank15_subpart_s27_to10_3seq_assignments.csv ...",
+    "python kit/rank_no_anchor_subpart_candidates_by_fullscore_labels.py --manifest promoted_combo... --manifest rank15base... --label-summary local_runs/offline_no_anchor_split_probe_20260623/rank15base_subpart_fullscore_label_summary.json --baseline-idf1 0.662686 ...",
+    "env DATA_ROOT=/Users/zcai/Codex/vlincs_reid_by_search/local_runs/local_data_root_20260622 python kit/evaluate_sample_assignments_full.py --tracklet-parquet kit/demo_data/ds1/tracklets/*/tracklets.parquet --assignments local_runs/offline_no_anchor_split_probe_20260623/rank15base_subpart_multiview_assignments/rank40_subpart_s5_to35_2seq_assignments.csv --fallback singleton --json local_runs/offline_no_anchor_split_probe_20260623/rank15base_rank40_delivery/rank40_subpart_s5_to35_2seq_assignments_full_export.json --zip-out local_runs/offline_no_anchor_split_probe_20260623/rank15base_rank40_delivery/rank40_subpart_s5_to35_2seq_assignments_full_export.zip",
+    "python kit/no_anchor_pervideo_filter_selector.py --source-zip local_runs/offline_no_anchor_split_probe_20260623/rank15base_rank40_delivery/rank40_subpart_s5_to35_2seq_assignments_full_export.zip --policies density_simple --json local_runs/offline_no_anchor_split_probe_20260623/rank15base_rank40_delivery/rank40_subpart_s5_to35_2seq_assignments_density_simple.json --zip-out local_runs/offline_no_anchor_split_probe_20260623/rank15base_rank40_delivery/rank40_subpart_s5_to35_2seq_assignments_density_simple.zip",
+    "python kit/evaluate_submission_detection_filter.py --submission-zip local_runs/offline_no_anchor_split_probe_20260623/rank15base_rank40_delivery/rank40_subpart_s5_to35_2seq_assignments_density_simple.zip --config @local_runs/offline_no_anchor_split_probe_20260623/p005_area_config.txt --json local_runs/offline_no_anchor_split_probe_20260623/rank15base_rank40_delivery/rank40_subpart_s5_to35_2seq_assignments_density_p005_area.json --zip-out local_runs/offline_no_anchor_split_probe_20260623/rank15base_rank40_delivery/rank40_subpart_s5_to35_2seq_assignments_density_p005_area.zip"
+  ],
+  "code_paths": [
+    "kit/export_no_anchor_subpart_visual_case.py",
+    "kit/evaluate_submission_detection_filter.py",
+    "autoresearch_state/no_anchor_global_id/state/progress.json",
+    "LATEST_NO_ANCHOR_PROGRESS.txt",
+    "reports/vlincs_iterations/20260623_rank15base_rank40_p005_gain/README.md",
+    "reports/vlincs_iterations/20260623_rank15base_rank40_p005_gain/presentation.html"
+  ],
+  "artifacts": [
+    "local_runs/offline_no_anchor_split_probe_20260623/rank15base_subpart_balanced_manifest.json",
+    "local_runs/offline_no_anchor_split_probe_20260623/rank15base_subpart_multiview_manifest.json",
+    "local_runs/offline_no_anchor_split_probe_20260623/rank15base_subpart_weakvideo_manifest.json",
+    "local_runs/offline_no_anchor_split_probe_20260623/rank15base_subpart_reviewer_ranked_with_oldlabels.json",
+    "local_runs/offline_no_anchor_split_probe_20260623/rank15base_subpart_multiview_assignments/rank40_subpart_s5_to35_2seq_assignments.csv",
+    "local_runs/offline_no_anchor_split_probe_20260623/rank15base_rank40_delivery/rank40_subpart_s5_to35_2seq_assignments_density_p005_area.json",
+    "local_runs/offline_no_anchor_split_probe_20260623/rank15base_rank40_delivery/rank40_subpart_s5_to35_2seq_assignments_density_p005_area.zip",
+    "reports/vlincs_iterations/20260623_rank15base_rank40_p005_gain/metrics/direct_full.json",
+    "reports/vlincs_iterations/20260623_rank15base_rank40_p005_gain/metrics/density_simple.json",
+    "reports/vlincs_iterations/20260623_rank15base_rank40_p005_gain/metrics/p005_area.json"
+  ],
+  "visual_cases": [
+    {
+      "title": "Rank40 MCAM08 false-split island visual case",
+      "summary": "Two MCAM08 tracklets move from component 5 / gid 96000005 to component 35 / gid 96000038. The bbox evidence shows the tiny visual island that delivery p005 rewards after density filtering.",
+      "image": "cases/rank40_subpart_visual/rank40_bbox_evidence.png",
+      "html": "cases/rank40_subpart_visual/case.html",
+      "json": "cases/rank40_subpart_visual/case.json"
+    }
+  ],
+  "ablations": [
+    {
+      "name": "multiview rank40 5->35",
+      "change": "move 2 MCAM08 tracklets",
+      "result": "direct 0.662694/0.523807/0.534999; density 0.664798/0.525510/0.536783; p005 0.664898/0.525586/0.536900",
+      "decision": "promote"
+    },
+    {
+      "name": "weakvideo rank24 10->78",
+      "change": "move 10 tracklets",
+      "result": "direct 0.661507/0.522457/0.533721",
+      "decision": "reject"
+    },
+    {
+      "name": "weakvideo rank52 36->90",
+      "change": "move 3 tracklets",
+      "result": "direct 0.662645/0.523759/0.534952",
+      "decision": "reject"
+    },
+    {
+      "name": "weakvideo rank73 8->30",
+      "change": "move 3 tracklets",
+      "result": "direct tied 0.662686/0.523800/0.534983",
+      "decision": "hard neutral"
+    },
+    {
+      "name": "ranker old+new labels",
+      "change": "307 candidates, 5 matched full-score labels",
+      "result": "LOOCV RMSE 0.000022; enough for scheduling but still tiny margins",
+      "decision": "keep as scheduler signal, not as proof"
+    }
+  ],
+  "bitbucket": "target branch wisc; commit after artifact generation",
+  "s3": "blocked locally: aws sts get-caller-identity failed with Unable to locate credentials",
+  "next": "Fold rank40 p005 and rejected rank15-base candidates into the side-effect label pool, then search compatible multi-edge combos with a larger canonical margin."
+}

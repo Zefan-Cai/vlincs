@@ -27,6 +27,7 @@
   ],
   "code_paths": [
     "kit/evaluate_submission_detection_filter.py",
+    "kit/export_no_anchor_subpart_visual_case.py",
     "autoresearch_state/no_anchor_global_id/state/progress.json",
     "LATEST_NO_ANCHOR_PROGRESS.txt",
     "reports/vlincs_iterations/20260623_promoted_combo_rank15_p005_gain/README.md",
@@ -43,6 +44,15 @@
     "local_runs/offline_no_anchor_split_probe_20260623/promoted_combo_subpart_reviewer_p005/balanced_rank15_s27_to10_3seq_density_p005_area_fixed.zip",
     "reports/vlincs_iterations/20260623_promoted_combo_rank15_p005_gain/metrics/direct_full.json",
     "reports/vlincs_iterations/20260623_promoted_combo_rank15_p005_gain/metrics/p005_area_fixed.json"
+  ],
+  "visual_cases": [
+    {
+      "title": "Rank15 false-split island visual case",
+      "summary": "Three edge/border tracklets were previously kept in component 27 / gid 96000029 and are moved to component 10 / gid 96000011. The case shows sampled bbox positions and the before/after identity assignment.",
+      "image": "cases/rank15_subpart_visual/rank15_bbox_evidence.png",
+      "html": "cases/rank15_subpart_visual/case.html",
+      "json": "cases/rank15_subpart_visual/case.json"
+    }
   ],
   "ablations": [
     {

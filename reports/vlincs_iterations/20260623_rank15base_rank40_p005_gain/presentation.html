@@ -1,0 +1,112 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>No-anchor rank15-base rank40 p005 gain</title>
+<style>:root {
+  --ink: #17242c;
+  --muted: #586a73;
+  --teal: #0f7f89;
+  --line: #d7e2e6;
+  --panel: #f4f8f9;
+  --good: #127a4a;
+  --bad: #a33b3b;
+  --warn: #a66b00;
+}
+
+* { box-sizing: border-box; }
+body {
+  margin: 0;
+  color: var(--ink);
+  font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  background: #ffffff;
+}
+.deck { width: min(1180px, calc(100vw - 56px)); margin: 0 auto; padding: 28px 0 56px; }
+.slide {
+  min-height: 540px;
+  border-top: 1px solid var(--line);
+  padding: 44px 0 36px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+.eyebrow { color: var(--teal); font-weight: 800; letter-spacing: .14em; text-transform: uppercase; font-size: 15px; }
+h1 { font-family: Georgia, serif; font-size: 56px; line-height: 1.02; margin: 16px 0 18px; }
+h2 { font-family: Georgia, serif; font-size: 42px; line-height: 1.08; margin: 10px 0 18px; }
+p { font-size: 20px; line-height: 1.5; color: var(--muted); max-width: 980px; }
+.grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 18px; margin-top: 24px; }
+.card { border: 1px solid var(--line); background: var(--panel); padding: 22px; border-radius: 8px; }
+.card strong { display: block; font-size: 20px; margin-bottom: 10px; }
+.case { border: 1px solid var(--line); background: var(--panel); padding: 18px; border-radius: 8px; margin-top: 16px; }
+.case h3 { margin: 0 0 8px; font-size: 24px; }
+.case img { max-width: 100%; max-height: 520px; object-fit: contain; border: 1px solid var(--line); background: #fff; }
+.metric { font-size: 38px; color: var(--teal); font-weight: 800; }
+.delta.good { color: var(--good); }
+.delta.bad { color: var(--bad); }
+.delta.warn { color: var(--warn); }
+table { width: 100%; border-collapse: collapse; font-size: 15px; margin-top: 18px; }
+th, td { border-bottom: 1px solid var(--line); text-align: left; padding: 10px 8px; vertical-align: top; }
+th { color: var(--teal); font-size: 13px; text-transform: uppercase; letter-spacing: .08em; }
+code { background: #edf4f5; border-radius: 4px; padding: 2px 5px; }
+ul { font-size: 19px; line-height: 1.45; color: var(--muted); }
+.small { font-size: 14px; color: var(--muted); }
+</style>
+</head>
+<body>
+<main class="deck">
+  <section class="slide">
+    <div class="eyebrow">VLINCS no-anchor iteration</div>
+    <h1>No-anchor rank15-base rank40 p005 gain</h1>
+    <p>Multiview rank40 moves 2 MCAM08 tracklets from source component 5 / gid 96000005 to target component 35 / gid 96000038. Direct full improves only slightly to 0.662694, density_simple is below current best, but valid p005_area reaches the new canonical best 0.664898/0.525586/0.536900.</p>
+    <div class="grid">
+      <div class="card"><strong>Metric</strong><div class="metric">0.664898</div><span>canonical density_simple+p005_area IDF1</span></div>
+      <div class="card"><strong>Delta</strong><div class="metric delta good">0.000011</div><span>vs baseline 0.664887</span></div>
+    </div>
+  </section>
+  <section class="slide">
+    <div class="eyebrow">Pipeline module</div>
+    <h2>M8 graph resolution + M12 delivery calibration</h2>
+    <p>M8 uses the full-score-sensitive reviewer to propose a tiny multiview subpart reassignment on top of the rank15 base. M12 validates the change through density_simple and p005_area delivery filtering.</p>
+    <div class="grid">
+      <div class="card"><strong>Used in pipeline</strong>yes: promoted as the current no-anchor best assignment and canonical delivery zip</div>
+      <div class="card"><strong>No-anchor status</strong>True</div>
+    </div>
+  </section>
+  <section class="slide">
+    <div class="eyebrow">Implementation</div>
+    <h2>What changed</h2>
+    <p>Regenerated balanced, multiview, and weakvideo no-anchor subpart candidates from the rank15 assignment namespace. The reviewer was rerun with old+new manifests and post-hoc full-score labels. Added kit/export_no_anchor_subpart_visual_case.py so gain packages include bbox evidence cases. The promoted assignment is local_runs/offline_no_anchor_split_probe_20260623/rank15base_subpart_multiview_assignments/rank40_subpart_s5_to35_2seq_assignments.csv.</p>
+    <ul><li><code>kit/export_no_anchor_subpart_visual_case.py</code></li><li><code>kit/evaluate_submission_detection_filter.py</code></li><li><code>autoresearch_state/no_anchor_global_id/state/progress.json</code></li><li><code>LATEST_NO_ANCHOR_PROGRESS.txt</code></li><li><code>reports/vlincs_iterations/20260623_rank15base_rank40_p005_gain/README.md</code></li><li><code>reports/vlincs_iterations/20260623_rank15base_rank40_p005_gain/presentation.html</code></li></ul>
+  </section>
+  <section class="slide">
+    <div class="eyebrow">Ablations</div>
+    <h2>All tried variants</h2>
+    <table><thead><tr><th>Name</th><th>Change</th><th>Result</th><th>Decision</th></tr></thead><tbody><tr><td>multiview rank40 5-&gt;35</td><td>move 2 MCAM08 tracklets</td><td>direct 0.662694/0.523807/0.534999; density 0.664798/0.525510/0.536783; p005 0.664898/0.525586/0.536900</td><td>promote</td></tr>
+<tr><td>weakvideo rank24 10-&gt;78</td><td>move 10 tracklets</td><td>direct 0.661507/0.522457/0.533721</td><td>reject</td></tr>
+<tr><td>weakvideo rank52 36-&gt;90</td><td>move 3 tracklets</td><td>direct 0.662645/0.523759/0.534952</td><td>reject</td></tr>
+<tr><td>weakvideo rank73 8-&gt;30</td><td>move 3 tracklets</td><td>direct tied 0.662686/0.523800/0.534983</td><td>hard neutral</td></tr>
+<tr><td>ranker old+new labels</td><td>307 candidates, 5 matched full-score labels</td><td>LOOCV RMSE 0.000022; enough for scheduling but still tiny margins</td><td>keep as scheduler signal, not as proof</td></tr></tbody></table>
+  </section>
+  <section class="slide">
+    <div class="eyebrow">Visual cases</div>
+    <h2>Failure mode and fix</h2>
+    <div class="case"><h3>Rank40 MCAM08 false-split island visual case</h3><p>Two MCAM08 tracklets move from component 5 / gid 96000005 to component 35 / gid 96000038. The bbox evidence shows the tiny visual island that delivery p005 rewards after density filtering.</p><img src="cases/rank40_subpart_visual/rank40_bbox_evidence.png" alt="Rank40 MCAM08 false-split island visual case"><ul><li><code>cases/rank40_subpart_visual/case.html</code></li><li><code>cases/rank40_subpart_visual/case.json</code></li></ul></div>
+  </section>
+  <section class="slide">
+    <div class="eyebrow">Provenance</div>
+    <h2>Reproduce and inspect</h2>
+    <div class="grid">
+      <div class="card"><strong>Commands</strong><ul><li><code>python kit/propose_no_anchor_subpart_repair_candidates.py --assignment-csv local_runs/offline_no_anchor_split_probe_20260623/promoted_combo_subpart_balanced_assignments/rank15_subpart_s27_to10_3seq_assignments.csv ...</code></li><li><code>python kit/rank_no_anchor_subpart_candidates_by_fullscore_labels.py --manifest promoted_combo... --manifest rank15base... --label-summary local_runs/offline_no_anchor_split_probe_20260623/rank15base_subpart_fullscore_label_summary.json --baseline-idf1 0.662686 ...</code></li><li><code>env DATA_ROOT=/Users/zcai/Codex/vlincs_reid_by_search/local_runs/local_data_root_20260622 python kit/evaluate_sample_assignments_full.py --tracklet-parquet kit/demo_data/ds1/tracklets/*/tracklets.parquet --assignments local_runs/offline_no_anchor_split_probe_20260623/rank15base_subpart_multiview_assignments/rank40_subpart_s5_to35_2seq_assignments.csv --fallback singleton --json local_runs/offline_no_anchor_split_probe_20260623/rank15base_rank40_delivery/rank40_subpart_s5_to35_2seq_assignments_full_export.json --zip-out local_runs/offline_no_anchor_split_probe_20260623/rank15base_rank40_delivery/rank40_subpart_s5_to35_2seq_assignments_full_export.zip</code></li><li><code>python kit/no_anchor_pervideo_filter_selector.py --source-zip local_runs/offline_no_anchor_split_probe_20260623/rank15base_rank40_delivery/rank40_subpart_s5_to35_2seq_assignments_full_export.zip --policies density_simple --json local_runs/offline_no_anchor_split_probe_20260623/rank15base_rank40_delivery/rank40_subpart_s5_to35_2seq_assignments_density_simple.json --zip-out local_runs/offline_no_anchor_split_probe_20260623/rank15base_rank40_delivery/rank40_subpart_s5_to35_2seq_assignments_density_simple.zip</code></li><li><code>python kit/evaluate_submission_detection_filter.py --submission-zip local_runs/offline_no_anchor_split_probe_20260623/rank15base_rank40_delivery/rank40_subpart_s5_to35_2seq_assignments_density_simple.zip --config @local_runs/offline_no_anchor_split_probe_20260623/p005_area_config.txt --json local_runs/offline_no_anchor_split_probe_20260623/rank15base_rank40_delivery/rank40_subpart_s5_to35_2seq_assignments_density_p005_area.json --zip-out local_runs/offline_no_anchor_split_probe_20260623/rank15base_rank40_delivery/rank40_subpart_s5_to35_2seq_assignments_density_p005_area.zip</code></li></ul></div>
+      <div class="card"><strong>Artifacts</strong><ul><li><code>local_runs/offline_no_anchor_split_probe_20260623/rank15base_subpart_balanced_manifest.json</code></li><li><code>local_runs/offline_no_anchor_split_probe_20260623/rank15base_subpart_multiview_manifest.json</code></li><li><code>local_runs/offline_no_anchor_split_probe_20260623/rank15base_subpart_weakvideo_manifest.json</code></li><li><code>local_runs/offline_no_anchor_split_probe_20260623/rank15base_subpart_reviewer_ranked_with_oldlabels.json</code></li><li><code>local_runs/offline_no_anchor_split_probe_20260623/rank15base_subpart_multiview_assignments/rank40_subpart_s5_to35_2seq_assignments.csv</code></li><li><code>local_runs/offline_no_anchor_split_probe_20260623/rank15base_rank40_delivery/rank40_subpart_s5_to35_2seq_assignments_density_p005_area.json</code></li><li><code>local_runs/offline_no_anchor_split_probe_20260623/rank15base_rank40_delivery/rank40_subpart_s5_to35_2seq_assignments_density_p005_area.zip</code></li><li><code>reports/vlincs_iterations/20260623_rank15base_rank40_p005_gain/metrics/direct_full.json</code></li><li><code>reports/vlincs_iterations/20260623_rank15base_rank40_p005_gain/metrics/density_simple.json</code></li><li><code>reports/vlincs_iterations/20260623_rank15base_rank40_p005_gain/metrics/p005_area.json</code></li></ul></div>
+    </div>
+    <p class="small">Bitbucket: target branch wisc; commit after artifact generation<br>S3: blocked locally: aws sts get-caller-identity failed with Unable to locate credentials</p>
+  </section>
+  <section class="slide">
+    <div class="eyebrow">Next auto-research action</div>
+    <h2>Reviewer/Opponent update</h2>
+    <p>Fold rank40 p005 and rejected rank15-base candidates into the side-effect label pool, then search compatible multi-edge combos with a larger canonical margin.</p>
+  </section>
+</main>
+</body>
+</html>
