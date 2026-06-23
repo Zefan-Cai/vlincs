@@ -1,0 +1,88 @@
+{
+  "title": "No-anchor promoted-combo rank15 p005 gain",
+  "date": "2026-06-23",
+  "pipeline_module": "M8 graph resolution + M12 delivery calibration",
+  "module_detail": "M8 proposes a small subpart reassignment on the current no-anchor global-ID component graph. M12 validates that the production delivery wrapper, density_simple plus p005_area, still improves after detection filtering.",
+  "used_in_pipeline": "yes: promoted as the current no-anchor best assignment and canonical delivery zip",
+  "status": "gain",
+  "no_anchor": true,
+  "summary": "Balanced reviewer rank15 moves 3 tracklets from source component 27 to target component 10 on top of the current promoted-combo assignment. It gives a tiny but valid canonical gain after fixing p005 @config parsing: IDF1/HOTA/AssA 0.664887/0.525553/0.536870, up from 0.664835/0.525495/0.536810.",
+  "metrics": {
+    "name": "canonical density_simple+p005_area IDF1",
+    "baseline": 0.664835,
+    "candidate": 0.664887,
+    "delta": 0.000052
+  },
+  "implementation": "Added @file and b64: config resolution to kit/evaluate_submission_detection_filter.py before _parse_config. The previous p005 validation was rejected because config_name remained a literal @path and dropped_rows was 0. The valid run now reports config_name=p005_area, dropped_rows=7603, rows=1518065. The promoted assignment is local_runs/offline_no_anchor_split_probe_20260623/promoted_combo_subpart_balanced_assignments/rank15_subpart_s27_to10_3seq_assignments.csv.",
+  "environment": [
+    "Repo: /Users/zcai/Codex/vlincs_reid_by_search",
+    "Dataset root: /Users/zcai/Codex/vlincs_reid_by_search/local_runs/local_data_root_20260622",
+    "Python local venv/tooling already used by DS1 scorer",
+    "No anchors; GT used only for evaluation/selection"
+  ],
+  "commands": [
+    "python -m py_compile kit/evaluate_submission_detection_filter.py",
+    "python - <<'PY'\nfrom kit.evaluate_submission_detection_filter import _resolve_config_text, _parse_config\ntext, source = _resolve_config_text('@local_runs/offline_no_anchor_split_probe_20260623/p005_area_config.txt')\ncfg = _parse_config(text)\nassert cfg['name'] == 'p005_area'\nassert len(cfg['video_area']) == 10\nPY",
+    "env DATA_ROOT=/Users/zcai/Codex/vlincs_reid_by_search/local_runs/local_data_root_20260622 python kit/evaluate_submission_detection_filter.py --submission-zip local_runs/offline_no_anchor_split_probe_20260623/promoted_combo_subpart_reviewer_p005/balanced_rank15_s27_to10_3seq_density_simple.zip --config @local_runs/offline_no_anchor_split_probe_20260623/p005_area_config.txt --json local_runs/offline_no_anchor_split_probe_20260623/promoted_combo_subpart_reviewer_p005/balanced_rank15_s27_to10_3seq_density_p005_area_fixed.json --zip-out local_runs/offline_no_anchor_split_probe_20260623/promoted_combo_subpart_reviewer_p005/balanced_rank15_s27_to10_3seq_density_p005_area_fixed.zip"
+  ],
+  "code_paths": [
+    "kit/evaluate_submission_detection_filter.py",
+    "autoresearch_state/no_anchor_global_id/state/progress.json",
+    "LATEST_NO_ANCHOR_PROGRESS.txt",
+    "reports/vlincs_iterations/20260623_promoted_combo_rank15_p005_gain/README.md",
+    "reports/vlincs_iterations/20260623_promoted_combo_rank15_p005_gain/presentation.html"
+  ],
+  "artifacts": [
+    "local_runs/offline_no_anchor_split_probe_20260623/promoted_combo_subpart_balanced_manifest.json",
+    "local_runs/offline_no_anchor_split_probe_20260623/promoted_combo_subpart_multiview_manifest.json",
+    "local_runs/offline_no_anchor_split_probe_20260623/promoted_combo_subpart_weakvideo_manifest.json",
+    "local_runs/offline_no_anchor_split_probe_20260623/promoted_combo_subpart_reviewer_ranked.json",
+    "local_runs/offline_no_anchor_split_probe_20260623/promoted_combo_subpart_balanced_assignments/rank15_subpart_s27_to10_3seq_assignments.csv",
+    "local_runs/offline_no_anchor_split_probe_20260623/promoted_combo_subpart_reviewer_fullscore/balanced_rank15_s27_to10_3seq_full_export.json",
+    "local_runs/offline_no_anchor_split_probe_20260623/promoted_combo_subpart_reviewer_p005/balanced_rank15_s27_to10_3seq_density_p005_area_fixed.json",
+    "local_runs/offline_no_anchor_split_probe_20260623/promoted_combo_subpart_reviewer_p005/balanced_rank15_s27_to10_3seq_density_p005_area_fixed.zip",
+    "reports/vlincs_iterations/20260623_promoted_combo_rank15_p005_gain/metrics/direct_full.json",
+    "reports/vlincs_iterations/20260623_promoted_combo_rank15_p005_gain/metrics/p005_area_fixed.json"
+  ],
+  "ablations": [
+    {
+      "name": "balanced rank15 27->10",
+      "change": "move 3 tracklets",
+      "result": "direct 0.662686/0.523800/0.534983; canonical p005 0.664887/0.525553/0.536870",
+      "decision": "promote"
+    },
+    {
+      "name": "weakvideo rank01 51->54",
+      "change": "move 10 tracklets",
+      "result": "direct 0.662518/0.523563/0.534759",
+      "decision": "reject"
+    },
+    {
+      "name": "multiview rank03 8->81",
+      "change": "move 7 tracklets",
+      "result": "direct tied 0.662638/0.523746/0.534926",
+      "decision": "hard neutral"
+    },
+    {
+      "name": "multiview rank01 11->82",
+      "change": "move 14 tracklets",
+      "result": "direct 0.661582/0.522185/0.533090",
+      "decision": "reject"
+    },
+    {
+      "name": "rank16 82->80 duplicate family",
+      "change": "move 8 tracklets",
+      "result": "direct tied 0.662638/0.523746/0.534926",
+      "decision": "hard neutral"
+    },
+    {
+      "name": "literal @path p005",
+      "change": "old scorer parsed --config @file as a raw string",
+      "result": "config_name=@... and dropped_rows=0",
+      "decision": "invalid; fixed scorer and reran"
+    }
+  ],
+  "bitbucket": "target branch wisc; commit after artifact generation",
+  "s3": "blocked locally: aws sts get-caller-identity failed with Unable to locate credentials",
+  "next": "Treat rank15 as a positive full-score-side-effect label. Search compatible multi-edge combos with larger margin, and keep p005 validation gated on config_name=p005_area plus nonzero expected dropped_rows."
+}

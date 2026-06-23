@@ -1,33 +1,214 @@
 VLINCS no-anchor global ID progress
-Date: 2026-06-22
+Date: 2026-06-23
 
 Current best e2e:
-IDF1 / HOTA / AssA = 0.657887 / 0.520944 / 0.535983
+IDF1 / HOTA / AssA = 0.664887 / 0.525553 / 0.536870
+
+Latest promoted-combo reviewer gain:
+The promoted-combo base was expanded with a no-anchor subpart reviewer round.
+Three proposer queues were generated from the current assignment namespace:
+balanced, multiview, and weakvideo. The reviewer ranked 156 candidates with 5
+matched historical/full-score labels. Four diverse candidates were full-scored:
+balanced rank15 27->10 moved 3 tracklets and improved direct full from
+0.662638/0.523746/0.534926 to 0.662686/0.523800/0.534983; weakvideo rank01
+51->54 scored 0.662518/0.523563/0.534759; multiview rank03 8->81 tied
+0.662638/0.523746/0.534926; multiview rank01 11->82 was negative at
+0.661582/0.522185/0.533090. While validating the delivery score, the p005
+config-file path was found to be parsed literally as "@path"; that invalid run
+had config_name=@... and dropped_rows=0, so it was rejected. The scorer now
+resolves @file and b64: configs before parsing. The valid density_simple +
+p005_area run has config_name=p005_area, dropped_rows=7603, rows=1518065, and
+improves canonical delivery from 0.664835/0.525495/0.536810 to
+0.664887/0.525553/0.536870. This is a tiny but real canonical gain and a
+positive side-effect label for future multi-edge combo search.
+
+Latest regenerated subpart promotion:
+The current split-best assignment had predicted_global_id=92 components but
+only 83 component_label groups, because the promoted 35/48/20 component split
+updated IDs without refreshing labels. A no-op manifest replay refreshed the
+component labels, then a no-anchor subpart proposer regenerated candidates
+from the current namespace using assignment evidence plus weakmetric/OSNet and
+DINOv2 features. The promoted combo applies two split-child repairs:
+rank02 moves 14 tracklets from 960000350 to 960000351, and rank09 moves 5
+tracklets from 960000350 to 960000480. Direct full improved from
+0.661843/0.523137/0.534683 to 0.662638/0.523746/0.534926. The fixed
+density_simple + p005_area delivery score improved from
+0.664050/0.524893/0.536568 to 0.664835/0.525495/0.536810. Pair proxy for the
+combo is 0.782244/0.850111/0.724411. Rank09 is an important hard label for the
+admission model: pair F1 decreased slightly on its own, but direct full score
+improved, so pair-only ranking is insufficient.
+
+Latest residual split refutation:
+After promoting the 3-component split, a residual greedy12 split probe was run
+on top of best_combo_split_assignments.csv. The eval-only pair proxy improved
+from 0.781330/0.849326/0.723413 to 0.785529/0.862643/0.721070 by adding
+smaller splits such as 96000032 SigLIP k=4, 96000009 weakmetric k=6,
+96000040 SigLIP k=6, and 96000019 SigLIP k=6. Full-score validation did not
+improve: direct full remained 0.661843/0.523137/0.534683, identical to the
+promoted 3-component split at 6 decimals. This is now a hard negative for the
+split admission model: pair precision gains alone are not enough to predict
+pipeline IDF1 gain.
+
+Latest top-single / small-merge refutation:
+Top residual single splits were exported and full-scored individually. The six
+tested no-anchor single splits, covering component 96000032 variants and
+component 96000009 variants, all tied direct full at
+0.661843/0.523137/0.534683. The best-looking single, rank009 96000009
+weakmetric k=5, also tied delivery after density_simple and p005_area:
+0.663955/0.524825/0.536460 and 0.664050/0.524893/0.536568. Current-best edge
+diagnostics were rerun with min-size-1 fragment candidates. The no-GT top50
+small-merge pool had only 6/50 eval-true edges; top no-GT rank001-rank004,
+including the first eval-true singleton merge, all tied direct full at
+0.661843/0.523137/0.534683. This closes the naive residual split and naive
+targeted re-merge branches.
+
+Latest historical near-miss projection:
+The old high-mass `21->60` peel near-miss branch was projected onto the current
+0.664050 split-best assignment by replaying the old candidate deltas on the
+current assignment. The representative size22/size16/size10 candidates all
+became negative on the new base: direct full scored
+0.661628/0.522908/0.534521, 0.661687/0.522985/0.534582, and
+0.661316/0.522591/0.534283. This refutes reusing the old near-miss branch
+without regenerating candidates from the current split-best state.
+
+Latest component-split promotion:
+The current rank58 assignment was scored locally without DB by using
+kit/demo_data/ds1 tracklet parquets plus DS1 GT downloaded from S3. The scorer
+first reproduced the previous direct full score exactly:
+0.655836/0.519304/0.534154. A no-anchor split/admission edit then split three
+impure components: 96000035 with SigLIP k=2, 96000048 with weakmetric k=4, and
+96000020 with weakmetric k=6. Pair F1/precision/recall improved from
+0.773980/0.823426/0.730136 to 0.781330/0.849326/0.723413. Direct full improved
+to 0.661843/0.523137/0.534683. The existing density_simple wrapper scored
+0.663955/0.524825/0.536460, and the canonical p005_area delivery score is the
+new best 0.664050/0.524893/0.536568. MCAM04/Tc6 direct IDF1 improved from
+0.564208 to 0.577029. An extended greedy split improved pair proxy to 0.784701
+but did not improve direct full beyond the 3-component split, so the simpler
+3-component split is promoted.
+
+Latest teacher-consensus run:
+h100-test-3 teacher-consensus rank58 tested three no-anchor teacher families:
+structural-policy variants, subpart-promoted variants, and time-agglomeration
+variants. All canonical density_simple + p005_area delivery scores tied the
+current best at 0.658025/0.521057/0.536049. No merge edge was accepted:
+subpart_promoted rejected 3403/3403 edges by threshold, timeagglom_diverse
+rejected 3320 by threshold and 1 by cannot-link conflict, and structural_policy
+rejected 3402 by threshold and 1 by teacher condition. This refutes
+teacher-consensus merge as a promotion source for the current rank58
+neighborhood; the teacher outputs are better used as hard-negative/referee
+signals.
+
+Latest current-best error audit:
+The current best rank58 assignment was audited with no anchors and GT used only
+for evaluation. Pair F1/precision/recall is 0.773980/0.823426/0.730136, while
+the direct full export score is IDF1/HOTA/AssA 0.655836/0.519304/0.534154
+before the canonical density_simple + p005_area delivery wrapper. The canonical
+best remains 0.658025/0.521057/0.536049. Top false splits concentrate on GT IDs
+9, 36, 11, 52, and 43; top false merges concentrate on predicted components
+96000035, 96000048, 96000021, and 96000026. MCAM04/Tc6 is the worst high-mass
+per-video slice. Broad teacher-consensus merging is therefore still unsafe; next
+direction is targeted component edge diagnostics plus local split/admission
+guards on impure components. The edge-diagnostic script was prepared, but
+h100-test-2 and h100-test-3 entered stopping state before completion.
+
+Previous structural run:
+h100-test-3 structural v2 tested rank58-base cannot-link split, cannot-link NMS singleton, and state-policy delivery variants. None improved the density_simple + p005_area delivery score. cannotlink_split and cannotlink_nms_singleton both tied the current best at 0.658025/0.521057/0.536049. state_policy improved the pair proxy to F1/precision/recall 0.775522/0.827771/0.729478, but p005 delivery still tied 0.658025/0.521057/0.536049. The conflict_subcluster_weakmetric_dino stage is still running remotely, so it is not yet a promotion.
 
 Current best model-side pair metrics:
 F1 / precision / recall = 0.775234 / 0.820504 / 0.734698
 
 Latest promoted edit:
-side-effect blacklisted subpart combo: 32 -> 15 plus 47 -> 2330, moved 14 tracklets, from weakmetric+dino no-anchor candidate search.
+subpart referee self-play peel: 21 -> 2330, rank58 size10, moved 10 tracklets, on top of the previous 32->15 + 47->2330 current best.
 
 Latest ablation:
-High-mass candidates were generated from the r47+r49 current best with min group size 10 and max group size 34. Direct top-6 full scoring did not improve the current best: 32->41 tied at 0.657887, while 21->60, 55->2330, 26->24, 28->31, and 49->19 were negative. A targeted 21->60 peel test scored size16 at 0.657877, size22 at 0.657810, and size10 at 0.657498. The size16 near miss is only 0.000010 below best, so it is a strong hard-negative/near-tie side-effect label, not a promotion.
+A rank58-base residual subpart sweep generated 253 no-anchor candidates from weakmetric+DINO, SigLIP+DINO, and DINO+weakmetric views. Sixteen p005-area full-score tests failed to beat the rank58 best. The best residual candidate was weakmetric 29->2330 with IDF1/HOTA/AssA 0.657971/0.521239/0.536131, still below 0.658025/0.521057/0.536049. Several candidates collapsed to the same 0.657938 plateau, and large residual moves such as 21->19 and 55->58 were harmful. This refutes continuing the same residual subpart branch; next direction is rank58-base component graph/admission/cannot-link structural repair.
 
 Previous ablation:
+A strict no-anchor subpart side-effect referee was trained from exact-stem full-score labels and used as a self-play scheduler. Batch 2 promoted 21->2330 rank58 size10 to 0.658025/0.521057/0.536049. Batch 3 tested nearby alternatives from the old base; none beat rank58: 21->24 rank63 and 21->2330 rank86 reached 0.657976, 21->19 rank70 reached 0.657735, and 21->2330 rank150 reached 0.657697. Next step is to treat rank58 as the new base and regenerate residual/compatible moves rather than keep testing old-base alternatives.
+
+Previous ablation:
+High-mass candidates were generated from the r47+r49 current best with min group size 10 and max group size 34. Direct top-6 full scoring did not improve the current best: 32->41 tied at 0.657887, while 21->60, 55->2330, 26->24, 28->31, and 49->19 were negative. A targeted 21->60 peel test scored size16 at 0.657877, size22 at 0.657810, and size10 at 0.657498. The size16 near miss is only 0.000010 below best, so it is a strong hard-negative/near-tie side-effect label, not a promotion.
+
+Earlier ablation:
 Three no-anchor subpart pools were generated from the previous best assignment and filtered with accumulated side-effect blacklists. Six novel singles were full-scored: 32->15 promoted to 0.657860, 47->2330 promoted to 0.657680, 24->31 and 31->24 tied, while 11->19 and 44->29 were negative. Five combo ablations showed 32->15 + 47->2330 is compatible and promotes the e2e best to 0.657887; adding 24->31 or 31->24 ties the same score.
 
 Goal status:
 Global-id model target is above 0.70. End-to-end IDF1 remains below 0.70.
 
 Open first:
-reports/no_anchor_highmass_from_r47r49_refutation_20260622.md
+reports/no_anchor_offline_component_split_promotion_20260622.md
+reports/no_anchor_current_best_error_audit_20260622.md
+reports/no_anchor_publish_sync_20260622.md
+reports/no_anchor_teacher_consensus_rank58_refutation_20260622.md
+reports/no_anchor_rank58_structural_sync_20260622.md
+reports/no_anchor_rank58_residual_refutation_20260622.md
+reports/no_anchor_currentbest_residual_greedy12_refutation_20260622.md
+reports/no_anchor_currentbest_residual_split_merge_refutation_20260622.md
+reports/no_anchor_currentbest_historical_nearmiss_projection_refutation_20260622.md
 
 Current-best detail:
+reports/no_anchor_offline_component_split_promotion_20260622.md
+reports/no_anchor_current_best_error_audit_20260622.md
+reports/no_anchor_publish_sync_20260622.md
+reports/no_anchor_teacher_consensus_rank58_refutation_20260622.md
+reports/no_anchor_rank58_structural_sync_20260622.md
+reports/no_anchor_rank58_residual_refutation_20260622.md
+reports/no_anchor_subpart_referee_selfplay_20260622.md
 reports/no_anchor_sideeffect_blacklisted_subpart_promotion_20260622.md
 reports/no_anchor_filter_sweep_currentbest_20260622.md
 reports/no_anchor_currentbest_subpart_multiview_combo_refutation_20260622.md
+reports/no_anchor_currentbest_residual_greedy12_refutation_20260622.md
+reports/no_anchor_currentbest_residual_split_merge_refutation_20260622.md
+reports/no_anchor_currentbest_historical_nearmiss_projection_refutation_20260622.md
 
 Key artifacts:
+reports/no_anchor_offline_component_split_promotion_20260622.md
+local_runs/offline_no_anchor_split_probe_20260622/best_combo_split_assignments.csv
+local_runs/offline_no_anchor_split_probe_20260622/best_combo_split_full_export.json
+local_runs/offline_no_anchor_split_probe_20260622/best_combo_split_density_simple.json
+local_runs/offline_no_anchor_split_probe_20260622/best_combo_split_density_p005_area.json
+local_runs/offline_no_anchor_split_probe_20260622/best_combo_split_density_p005_area.zip
+local_runs/offline_no_anchor_split_probe_20260622/greedy10_split_probe.json
+local_runs/offline_no_anchor_split_probe_20260622/script_split_probe.json
+reports/no_anchor_currentbest_residual_greedy12_refutation_20260622.md
+local_runs/offline_no_anchor_split_probe_20260622/currentbest_residual_split_probe.json
+local_runs/offline_no_anchor_split_probe_20260622/currentbest_residual_greedy12_split_assignments.csv
+local_runs/offline_no_anchor_split_probe_20260622/currentbest_residual_greedy12_full_export.json
+local_runs/offline_no_anchor_split_probe_20260622/currentbest_residual_greedy12_full_export.zip
+reports/no_anchor_currentbest_residual_split_merge_refutation_20260622.md
+local_runs/offline_no_anchor_split_probe_20260622/currentbest_residual_top_single_fullscore/
+local_runs/offline_no_anchor_currentbest_edge_diagnostics_20260622_min1/
+reports/no_anchor_currentbest_historical_nearmiss_projection_refutation_20260622.md
+local_runs/offline_no_anchor_split_probe_20260622/currentbest_projected_historical_nearmiss/
+local_runs/offline_no_anchor_split_probe_20260622/currentbest_projected_historical_nearmiss_fullscore/
+local_runs/offline_no_anchor_edge_diagnostics_20260622/edge_diagnostics.json
+kit/offline_no_anchor_component_edge_diagnostics.py
+kit/offline_no_anchor_component_split_probe.py
+reports/no_anchor_current_best_error_audit_20260622.md
+local_runs/remote_h100_test_3_20260622/no_anchor_current_best_error_audit_20260622/current_best_error_audit_top80_full.json
+local_runs/remote_h100_test_3_20260622/no_anchor_current_best_error_audit_20260622/run_current_best_error_audit.log
+local_runs/remote_h100_test_3_20260622/no_anchor_current_best_edge_diagnostics_20260622/run_edge_diagnostics.sh
+reports/no_anchor_publish_sync_20260622.md
+reports/no_anchor_teacher_consensus_rank58_refutation_20260622.md
+local_runs/remote_h100_test_3_20260622/no_anchor_teacher_consensus_rank58_20260622/key_artifacts.tgz
+local_runs/remote_h100_test_3_20260622/no_anchor_teacher_consensus_rank58_20260622/p005_teacher_consensus_summary.json
+local_runs/remote_h100_test_3_20260622/no_anchor_teacher_consensus_rank58_20260622/subpart_promoted.json
+local_runs/remote_h100_test_3_20260622/no_anchor_teacher_consensus_rank58_20260622/timeagglom_diverse.json
+local_runs/remote_h100_test_3_20260622/no_anchor_teacher_consensus_rank58_20260622/structural_policy.json
+reports/no_anchor_rank58_structural_sync_20260622.md
+local_runs/remote_h100_test_3_20260622/no_anchor_rank58_structural_20260622_v2/key_artifacts_current.tgz
+local_runs/remote_h100_test_3_20260622/no_anchor_rank58_structural_20260622_v2/p005/state_policy_best_density_p005_area.json
+local_runs/remote_h100_test_3_20260622/no_anchor_rank58_structural_20260622_v2/state_policy_sweep.json
+local_runs/remote_h100_test_3_20260622/no_anchor_rank58_structural_20260622_v2/p005/cannotlink_split_best_density_p005_area.json
+local_runs/remote_h100_test_3_20260622/no_anchor_rank58_structural_20260622_v2/p005/cannotlink_nms_singleton_best_density_p005_area.json
+reports/no_anchor_rank58_residual_refutation_20260622.md
+local_runs/remote_h100_test_3_20260622/no_anchor_rank58_residual_fullscore_20260622/p005_rank58_residual_summary_with_followup.json
+local_runs/remote_h100_test_3_20260622/no_anchor_rank58_residual_subpart_20260622/referee_ranked_rank58_residual_after_fullscore.json
+reports/no_anchor_subpart_referee_selfplay_20260622.md
+local_runs/remote_h100_test_3_20260622/no_anchor_subpart_referee_from_fullscore_labels_20260622/referee_ranked_candidates_v3_after_promotion.json
+local_runs/remote_h100_test_3_20260622/no_anchor_subpart_referee_v2_fullscore_20260622/p005_referee_v2_fullscore_summary.json
+local_runs/remote_h100_test_3_20260622/no_anchor_subpart_referee_v3_fullscore_20260622/p005_referee_v3_fullscore_summary.json
+kit/rank_no_anchor_subpart_candidates_by_fullscore_labels.py
 reports/no_anchor_highmass_from_r47r49_refutation_20260622.md
 local_runs/remote_h100_test_3_20260622/no_anchor_highmass_from_r47r49_20260622/p005_fullscore_top6_summary.json
 local_runs/remote_h100_test_3_20260622/no_anchor_highmass_from_r47r49_20260622/p005_peel21_fullscore_summary.json
@@ -39,6 +220,12 @@ S3:
 s3://dit-scale-up/zcai/vlincs/LATEST_NO_ANCHOR_PROGRESS.txt
 s3://dit-scale-up/zcai/vlincs/core_snapshot_20260622/
 s3://dit-scale-up/zcai/vlincs/research_snapshot_current/
+s3://dit-scale-up/zcai/vlincs/local_runs_current/
+s3://dit-scale-up/zcai/vlincs/reports_current/
+s3://dit-scale-up/zcai/vlincs/autoresearch_state_current/
+s3://dit-scale-up/zcai/vlincs/remote_runs_h100-test-3_20260622/no_anchor_teacher_consensus_rank58_20260622/
+s3://dit-scale-up/zcai/vlincs/remote_runs_h100-test-3_20260622/no_anchor_rank58_structural_20260622_v2/
+s3://dit-scale-up/zcai/vlincs/remote_runs_h100-test-3_20260622/no_anchor_subpart_referee_selfplay_20260622/
 s3://dit-scale-up/zcai/vlincs/remote_runs_h100-test-3_20260622/no_anchor_highmass_from_r47r49_20260622/
 s3://dit-scale-up/zcai/vlincs/remote_runs_h100-test-3_20260622/no_anchor_sideeffect_blacklisted_subpart_search_20260622/
 

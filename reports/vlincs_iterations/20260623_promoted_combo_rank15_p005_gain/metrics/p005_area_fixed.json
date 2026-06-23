@@ -1,0 +1,253 @@
+{
+  "config_sources": [
+    "@local_runs/offline_no_anchor_split_probe_20260623/p005_area_config.txt"
+  ],
+  "configs": [
+    {
+      "global_area": 0.0,
+      "global_conf": 0.0,
+      "name": "p005_area",
+      "video_area": {
+        "vlincs_MS01_MC0001_MCAM00_2024-03-Tc6": 1566.0,
+        "vlincs_MS01_MC0001_MCAM00_2024-03-Tc8": 13799.4,
+        "vlincs_MS01_MC0001_MCAM03_2024-03-Tc6": 980.0,
+        "vlincs_MS01_MC0001_MCAM03_2024-03-Tc8": 1871.85,
+        "vlincs_MS01_MC0001_MCAM04_2024-03-Tc6": 1320.0,
+        "vlincs_MS01_MC0001_MCAM05_2024-03-Tc6": 3014.3,
+        "vlincs_MS01_MC0001_MCAM05_2024-03-Tc8": 5033.475,
+        "vlincs_MS01_MC0001_MCAM06_2024-03-Tc6": 1792.05,
+        "vlincs_MS01_MC0001_MCAM06_2024-03-Tc8": 1860.95,
+        "vlincs_MS01_MC0001_MCAM08_2024-03-Tc6": 1558.0
+      },
+      "video_conf": {}
+    }
+  ],
+  "rows": [
+    {
+      "assa": 0.53687,
+      "by_video_rows": {
+        "vlincs_MS01_MC0001_MCAM00_2024-03-Tc6": {
+          "area_thr": 1566.0,
+          "conf_thr": 0.0,
+          "dropped_rows": 210,
+          "ids": 35,
+          "input_ids": 35,
+          "input_rows": 42626,
+          "rows": 42416
+        },
+        "vlincs_MS01_MC0001_MCAM00_2024-03-Tc8": {
+          "area_thr": 13799.4,
+          "conf_thr": 0.0,
+          "dropped_rows": 275,
+          "ids": 34,
+          "input_ids": 34,
+          "input_rows": 54909,
+          "rows": 54634
+        },
+        "vlincs_MS01_MC0001_MCAM03_2024-03-Tc6": {
+          "area_thr": 980.0,
+          "conf_thr": 0.0,
+          "dropped_rows": 902,
+          "ids": 50,
+          "input_ids": 50,
+          "input_rows": 180764,
+          "rows": 179862
+        },
+        "vlincs_MS01_MC0001_MCAM03_2024-03-Tc8": {
+          "area_thr": 1871.85,
+          "conf_thr": 0.0,
+          "dropped_rows": 549,
+          "ids": 56,
+          "input_ids": 56,
+          "input_rows": 109786,
+          "rows": 109237
+        },
+        "vlincs_MS01_MC0001_MCAM04_2024-03-Tc6": {
+          "area_thr": 1320.0,
+          "conf_thr": 0.0,
+          "dropped_rows": 3266,
+          "ids": 58,
+          "input_ids": 58,
+          "input_rows": 657666,
+          "rows": 654400
+        },
+        "vlincs_MS01_MC0001_MCAM05_2024-03-Tc6": {
+          "area_thr": 3014.3,
+          "conf_thr": 0.0,
+          "dropped_rows": 80,
+          "ids": 29,
+          "input_ids": 29,
+          "input_rows": 15936,
+          "rows": 15856
+        },
+        "vlincs_MS01_MC0001_MCAM05_2024-03-Tc8": {
+          "area_thr": 5033.475,
+          "conf_thr": 0.0,
+          "dropped_rows": 95,
+          "ids": 31,
+          "input_ids": 31,
+          "input_rows": 18954,
+          "rows": 18859
+        },
+        "vlincs_MS01_MC0001_MCAM06_2024-03-Tc6": {
+          "area_thr": 1792.05,
+          "conf_thr": 0.0,
+          "dropped_rows": 177,
+          "ids": 32,
+          "input_ids": 32,
+          "input_rows": 35206,
+          "rows": 35029
+        },
+        "vlincs_MS01_MC0001_MCAM06_2024-03-Tc8": {
+          "area_thr": 1860.95,
+          "conf_thr": 0.0,
+          "dropped_rows": 188,
+          "ids": 33,
+          "input_ids": 33,
+          "input_rows": 37420,
+          "rows": 37232
+        },
+        "vlincs_MS01_MC0001_MCAM08_2024-03-Tc6": {
+          "area_thr": 1558.0,
+          "conf_thr": 0.0,
+          "dropped_rows": 1861,
+          "ids": 61,
+          "input_ids": 61,
+          "input_rows": 372401,
+          "rows": 370540
+        }
+      },
+      "config_name": "p005_area",
+      "deta": 0.514508,
+      "detpr": 0.776176,
+      "detre": 0.58151,
+      "dropped_rows": 7603,
+      "global_area": 0.0,
+      "global_conf": 0.0,
+      "hota": 0.525553,
+      "idf1": 0.664887,
+      "input_rows": 1525668,
+      "per_video": {
+        "vlincs_MS01_MC0001_MCAM00_2024-03-Tc6": {
+          "assa": 0.836352,
+          "deta": 0.795662,
+          "detpr": 0.911551,
+          "detre": 0.849217,
+          "hota": 0.815354,
+          "idf1": 0.879281
+        },
+        "vlincs_MS01_MC0001_MCAM00_2024-03-Tc8": {
+          "assa": 0.787663,
+          "deta": 0.715998,
+          "detpr": 0.909123,
+          "detre": 0.761518,
+          "hota": 0.750862,
+          "idf1": 0.828799
+        },
+        "vlincs_MS01_MC0001_MCAM03_2024-03-Tc6": {
+          "assa": 0.625124,
+          "deta": 0.543466,
+          "detpr": 0.815046,
+          "detre": 0.599435,
+          "hota": 0.582671,
+          "idf1": 0.690808
+        },
+        "vlincs_MS01_MC0001_MCAM03_2024-03-Tc8": {
+          "assa": 0.559391,
+          "deta": 0.475624,
+          "detpr": 0.779105,
+          "detre": 0.530233,
+          "hota": 0.515613,
+          "idf1": 0.631016
+        },
+        "vlincs_MS01_MC0001_MCAM04_2024-03-Tc6": {
+          "assa": 0.492592,
+          "deta": 0.425774,
+          "detpr": 0.70802,
+          "detre": 0.490327,
+          "hota": 0.457503,
+          "idf1": 0.579401
+        },
+        "vlincs_MS01_MC0001_MCAM05_2024-03-Tc6": {
+          "assa": 0.638183,
+          "deta": 0.565893,
+          "detpr": 0.823056,
+          "detre": 0.627554,
+          "hota": 0.600938,
+          "idf1": 0.712131
+        },
+        "vlincs_MS01_MC0001_MCAM05_2024-03-Tc8": {
+          "assa": 0.730766,
+          "deta": 0.668144,
+          "detpr": 0.864076,
+          "detre": 0.729201,
+          "hota": 0.698745,
+          "idf1": 0.79093
+        },
+        "vlincs_MS01_MC0001_MCAM06_2024-03-Tc6": {
+          "assa": 0.601719,
+          "deta": 0.450571,
+          "detpr": 0.842123,
+          "detre": 0.481512,
+          "hota": 0.520493,
+          "idf1": 0.612695
+        },
+        "vlincs_MS01_MC0001_MCAM06_2024-03-Tc8": {
+          "assa": 0.615037,
+          "deta": 0.553248,
+          "detpr": 0.792932,
+          "detre": 0.623104,
+          "hota": 0.583172,
+          "idf1": 0.697834
+        },
+        "vlincs_MS01_MC0001_MCAM08_2024-03-Tc6": {
+          "assa": 0.680415,
+          "deta": 0.650849,
+          "detpr": 0.823884,
+          "detre": 0.730765,
+          "hota": 0.665362,
+          "idf1": 0.774536
+        }
+      },
+      "predicted_ids": 419,
+      "rows": 1518065,
+      "submission_zip": "local_runs/offline_no_anchor_split_probe_20260623/promoted_combo_subpart_reviewer_p005/balanced_rank15_s27_to10_3seq_density_simple.zip",
+      "unmatched_fp": 131600,
+      "uses_anchors": false,
+      "uses_gt_for_evaluation_only": true,
+      "uses_gt_for_training_or_anchors": false,
+      "video_area": {
+        "vlincs_MS01_MC0001_MCAM00_2024-03-Tc6": 1566.0,
+        "vlincs_MS01_MC0001_MCAM00_2024-03-Tc8": 13799.4,
+        "vlincs_MS01_MC0001_MCAM03_2024-03-Tc6": 980.0,
+        "vlincs_MS01_MC0001_MCAM03_2024-03-Tc8": 1871.85,
+        "vlincs_MS01_MC0001_MCAM04_2024-03-Tc6": 1320.0,
+        "vlincs_MS01_MC0001_MCAM05_2024-03-Tc6": 3014.3,
+        "vlincs_MS01_MC0001_MCAM05_2024-03-Tc8": 5033.475,
+        "vlincs_MS01_MC0001_MCAM06_2024-03-Tc6": 1792.05,
+        "vlincs_MS01_MC0001_MCAM06_2024-03-Tc8": 1860.95,
+        "vlincs_MS01_MC0001_MCAM08_2024-03-Tc6": 1558.0
+      },
+      "video_conf": {},
+      "videos_scored": [
+        "vlincs_MS01_MC0001_MCAM00_2024-03-Tc6",
+        "vlincs_MS01_MC0001_MCAM00_2024-03-Tc8",
+        "vlincs_MS01_MC0001_MCAM03_2024-03-Tc6",
+        "vlincs_MS01_MC0001_MCAM03_2024-03-Tc8",
+        "vlincs_MS01_MC0001_MCAM04_2024-03-Tc6",
+        "vlincs_MS01_MC0001_MCAM05_2024-03-Tc6",
+        "vlincs_MS01_MC0001_MCAM05_2024-03-Tc8",
+        "vlincs_MS01_MC0001_MCAM06_2024-03-Tc6",
+        "vlincs_MS01_MC0001_MCAM06_2024-03-Tc8",
+        "vlincs_MS01_MC0001_MCAM08_2024-03-Tc6"
+      ],
+      "zip_files": 10,
+      "zip_out": "local_runs/offline_no_anchor_split_probe_20260623/promoted_combo_subpart_reviewer_p005/balanced_rank15_s27_to10_3seq_density_p005_area_fixed.zip"
+    }
+  ],
+  "selection_uses_gt_metric": true,
+  "submission_zip": "local_runs/offline_no_anchor_split_probe_20260623/promoted_combo_subpart_reviewer_p005/balanced_rank15_s27_to10_3seq_density_simple.zip",
+  "uses_anchors": false,
+  "uses_gt_for_evaluation_only": true,
+  "uses_gt_for_training_or_anchors": false
+}

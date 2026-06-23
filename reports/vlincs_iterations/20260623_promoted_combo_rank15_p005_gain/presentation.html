@@ -1,0 +1,112 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>No-anchor promoted-combo rank15 p005 gain</title>
+<style>:root {
+  --ink: #17242c;
+  --muted: #586a73;
+  --teal: #0f7f89;
+  --line: #d7e2e6;
+  --panel: #f4f8f9;
+  --good: #127a4a;
+  --bad: #a33b3b;
+  --warn: #a66b00;
+}
+
+* { box-sizing: border-box; }
+body {
+  margin: 0;
+  color: var(--ink);
+  font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  background: #ffffff;
+}
+.deck { width: min(1180px, calc(100vw - 56px)); margin: 0 auto; padding: 28px 0 56px; }
+.slide {
+  min-height: 540px;
+  border-top: 1px solid var(--line);
+  padding: 44px 0 36px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+.eyebrow { color: var(--teal); font-weight: 800; letter-spacing: .14em; text-transform: uppercase; font-size: 15px; }
+h1 { font-family: Georgia, serif; font-size: 56px; line-height: 1.02; margin: 16px 0 18px; }
+h2 { font-family: Georgia, serif; font-size: 42px; line-height: 1.08; margin: 10px 0 18px; }
+p { font-size: 20px; line-height: 1.5; color: var(--muted); max-width: 980px; }
+.grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 18px; margin-top: 24px; }
+.card { border: 1px solid var(--line); background: var(--panel); padding: 22px; border-radius: 8px; }
+.card strong { display: block; font-size: 20px; margin-bottom: 10px; }
+.metric { font-size: 38px; color: var(--teal); font-weight: 800; }
+.delta.good { color: var(--good); }
+.delta.bad { color: var(--bad); }
+.delta.warn { color: var(--warn); }
+table { width: 100%; border-collapse: collapse; font-size: 15px; margin-top: 18px; }
+th, td { border-bottom: 1px solid var(--line); text-align: left; padding: 10px 8px; vertical-align: top; }
+th { color: var(--teal); font-size: 13px; text-transform: uppercase; letter-spacing: .08em; }
+code { background: #edf4f5; border-radius: 4px; padding: 2px 5px; }
+ul { font-size: 19px; line-height: 1.45; color: var(--muted); }
+.small { font-size: 14px; color: var(--muted); }
+
+</style>
+</head>
+<body>
+<main class="deck">
+  <section class="slide">
+    <div class="eyebrow">VLINCS no-anchor iteration</div>
+    <h1>No-anchor promoted-combo rank15 p005 gain</h1>
+    <p>Balanced reviewer rank15 moves 3 tracklets from source component 27 to target component 10 on top of the current promoted-combo assignment. It gives a tiny but valid canonical gain after fixing p005 @config parsing: IDF1/HOTA/AssA 0.664887/0.525553/0.536870, up from 0.664835/0.525495/0.536810.</p>
+    <div class="grid">
+      <div class="card"><strong>Metric</strong><div class="metric">0.664887</div><span>canonical density_simple+p005_area IDF1</span></div>
+      <div class="card"><strong>Delta</strong><div class="metric delta good">0.000052</div><span>vs baseline 0.664835</span></div>
+    </div>
+  </section>
+  <section class="slide">
+    <div class="eyebrow">Pipeline module</div>
+    <h2>M8 graph resolution + M12 delivery calibration</h2>
+    <p>M8 proposes a small subpart reassignment on the current no-anchor global-ID component graph. M12 validates that the production delivery wrapper, density_simple plus p005_area, still improves after detection filtering.</p>
+    <div class="grid">
+      <div class="card"><strong>Used in pipeline</strong>yes: promoted as the current no-anchor best assignment and canonical delivery zip</div>
+      <div class="card"><strong>No-anchor status</strong>True</div>
+    </div>
+  </section>
+  <section class="slide">
+    <div class="eyebrow">Implementation</div>
+    <h2>What changed</h2>
+    <p>Added @file and b64: config resolution to kit/evaluate_submission_detection_filter.py before _parse_config. The previous p005 validation was rejected because config_name remained a literal @path and dropped_rows was 0. The valid run now reports config_name=p005_area, dropped_rows=7603, rows=1518065. The promoted assignment is local_runs/offline_no_anchor_split_probe_20260623/promoted_combo_subpart_balanced_assignments/rank15_subpart_s27_to10_3seq_assignments.csv.</p>
+    <ul><li><code>kit/evaluate_submission_detection_filter.py</code></li><li><code>autoresearch_state/no_anchor_global_id/state/progress.json</code></li><li><code>LATEST_NO_ANCHOR_PROGRESS.txt</code></li><li><code>reports/vlincs_iterations/20260623_promoted_combo_rank15_p005_gain/README.md</code></li><li><code>reports/vlincs_iterations/20260623_promoted_combo_rank15_p005_gain/presentation.html</code></li></ul>
+  </section>
+  <section class="slide">
+    <div class="eyebrow">Ablations</div>
+    <h2>All tried variants</h2>
+    <table><thead><tr><th>Name</th><th>Change</th><th>Result</th><th>Decision</th></tr></thead><tbody><tr><td>balanced rank15 27-&gt;10</td><td>move 3 tracklets</td><td>direct 0.662686/0.523800/0.534983; canonical p005 0.664887/0.525553/0.536870</td><td>promote</td></tr>
+<tr><td>weakvideo rank01 51-&gt;54</td><td>move 10 tracklets</td><td>direct 0.662518/0.523563/0.534759</td><td>reject</td></tr>
+<tr><td>multiview rank03 8-&gt;81</td><td>move 7 tracklets</td><td>direct tied 0.662638/0.523746/0.534926</td><td>hard neutral</td></tr>
+<tr><td>multiview rank01 11-&gt;82</td><td>move 14 tracklets</td><td>direct 0.661582/0.522185/0.533090</td><td>reject</td></tr>
+<tr><td>rank16 82-&gt;80 duplicate family</td><td>move 8 tracklets</td><td>direct tied 0.662638/0.523746/0.534926</td><td>hard neutral</td></tr>
+<tr><td>literal @path p005</td><td>old scorer parsed --config @file as a raw string</td><td>config_name=@... and dropped_rows=0</td><td>invalid; fixed scorer and reran</td></tr></tbody></table>
+  </section>
+  <section class="slide">
+    <div class="eyebrow">Provenance</div>
+    <h2>Reproduce and inspect</h2>
+    <div class="grid">
+      <div class="card"><strong>Commands</strong><ul><li><code>python -m py_compile kit/evaluate_submission_detection_filter.py</code></li><li><code>python - &lt;&lt;&#x27;PY&#x27;
+from kit.evaluate_submission_detection_filter import _resolve_config_text, _parse_config
+text, source = _resolve_config_text(&#x27;@local_runs/offline_no_anchor_split_probe_20260623/p005_area_config.txt&#x27;)
+cfg = _parse_config(text)
+assert cfg[&#x27;name&#x27;] == &#x27;p005_area&#x27;
+assert len(cfg[&#x27;video_area&#x27;]) == 10
+PY</code></li><li><code>env DATA_ROOT=/Users/zcai/Codex/vlincs_reid_by_search/local_runs/local_data_root_20260622 python kit/evaluate_submission_detection_filter.py --submission-zip local_runs/offline_no_anchor_split_probe_20260623/promoted_combo_subpart_reviewer_p005/balanced_rank15_s27_to10_3seq_density_simple.zip --config @local_runs/offline_no_anchor_split_probe_20260623/p005_area_config.txt --json local_runs/offline_no_anchor_split_probe_20260623/promoted_combo_subpart_reviewer_p005/balanced_rank15_s27_to10_3seq_density_p005_area_fixed.json --zip-out local_runs/offline_no_anchor_split_probe_20260623/promoted_combo_subpart_reviewer_p005/balanced_rank15_s27_to10_3seq_density_p005_area_fixed.zip</code></li></ul></div>
+      <div class="card"><strong>Artifacts</strong><ul><li><code>local_runs/offline_no_anchor_split_probe_20260623/promoted_combo_subpart_balanced_manifest.json</code></li><li><code>local_runs/offline_no_anchor_split_probe_20260623/promoted_combo_subpart_multiview_manifest.json</code></li><li><code>local_runs/offline_no_anchor_split_probe_20260623/promoted_combo_subpart_weakvideo_manifest.json</code></li><li><code>local_runs/offline_no_anchor_split_probe_20260623/promoted_combo_subpart_reviewer_ranked.json</code></li><li><code>local_runs/offline_no_anchor_split_probe_20260623/promoted_combo_subpart_balanced_assignments/rank15_subpart_s27_to10_3seq_assignments.csv</code></li><li><code>local_runs/offline_no_anchor_split_probe_20260623/promoted_combo_subpart_reviewer_fullscore/balanced_rank15_s27_to10_3seq_full_export.json</code></li><li><code>local_runs/offline_no_anchor_split_probe_20260623/promoted_combo_subpart_reviewer_p005/balanced_rank15_s27_to10_3seq_density_p005_area_fixed.json</code></li><li><code>local_runs/offline_no_anchor_split_probe_20260623/promoted_combo_subpart_reviewer_p005/balanced_rank15_s27_to10_3seq_density_p005_area_fixed.zip</code></li><li><code>reports/vlincs_iterations/20260623_promoted_combo_rank15_p005_gain/metrics/direct_full.json</code></li><li><code>reports/vlincs_iterations/20260623_promoted_combo_rank15_p005_gain/metrics/p005_area_fixed.json</code></li></ul></div>
+    </div>
+    <p class="small">Bitbucket: target branch wisc; commit after artifact generation<br>S3: blocked locally: aws sts get-caller-identity failed with Unable to locate credentials</p>
+  </section>
+  <section class="slide">
+    <div class="eyebrow">Next auto-research action</div>
+    <h2>Reviewer/Opponent update</h2>
+    <p>Treat rank15 as a positive full-score-side-effect label. Search compatible multi-edge combos with larger margin, and keep p005 validation gated on config_name=p005_area plus nonzero expected dropped_rows.</p>
+  </section>
+</main>
+</body>
+</html>

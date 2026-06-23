@@ -4,6 +4,7 @@
 from __future__ import annotations
 
 import argparse
+import base64
 import json
 import sys
 from pathlib import Path
@@ -61,6 +62,17 @@ def _parse_config(text: str) -> dict[str, object]:
         else:
             raise ValueError(f"unknown config key {key!r}")
     return cfg
+
+
+def _resolve_config_text(text: str) -> tuple[str, str]:
+    raw = str(text)
+    if raw.startswith("@"):
+        path = Path(raw[1:])
+        return path.read_text(encoding="utf-8").strip(), raw
+    if raw.startswith("b64:"):
+        decoded = base64.b64decode(raw[4:]).decode("utf-8").strip()
+        return decoded, "b64:<redacted>"
+    return raw, raw
 
 
 def _filter_comp(comp: dict[str, pd.DataFrame], cfg: dict[str, object]) -> tuple[dict[str, pd.DataFrame], dict[str, object]]:
@@ -121,10 +133,15 @@ def main() -> None:
     args = ap.parse_args()
 
     source = _load_zip(Path(args.submission_zip))
+    resolved_configs = []
+    for text in args.config:
+        config_text, config_source = _resolve_config_text(text)
+        resolved_configs.append({"source": config_source, "config": _parse_config(config_text)})
+
     rows = []
     comp_by_name = {}
-    for text in args.config:
-        cfg = _parse_config(text)
+    for item in resolved_configs:
+        cfg = item["config"]
         comp, info = _filter_comp(source, cfg)
         comp_by_name[str(info["config_name"])] = comp
         scored = _score(comp)
@@ -143,7 +160,8 @@ def main() -> None:
         rows[0].update(_export_zip(comp_by_name[str(rows[0]["config_name"])], args.zip_out))
     result = {
         "submission_zip": str(args.submission_zip),
-        "configs": [_parse_config(text) for text in args.config],
+        "configs": [item["config"] for item in resolved_configs],
+        "config_sources": [item["source"] for item in resolved_configs],
         "rows": rows,
         "uses_anchors": False,
         "uses_gt_for_training_or_anchors": False,
