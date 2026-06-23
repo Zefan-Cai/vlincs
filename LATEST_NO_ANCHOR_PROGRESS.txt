@@ -2,7 +2,21 @@ VLINCS no-anchor global ID progress
 Date: 2026-06-23
 
 Current best e2e:
-IDF1 / HOTA / AssA = 0.664898 / 0.525586 / 0.536900
+IDF1 / HOTA / AssA = 0.665029 / 0.525739 / 0.537061
+
+Latest rank40-base reviewer gain:
+After rank40 became the base, balanced/multiview/weakvideo subpart candidates
+were regenerated again and ranked with 9 matched full-score labels. The
+ranker fit had LOOCV RMSE 0.000011 and ranked 469 old+new candidates. Four
+rank40-base candidates were direct full-scored: multiview rank47 22->38 tied
+0.662694/0.523807/0.534999, multiview rank21 82->80 tied the same, multiview
+rank44 30->85 tied the same, and multiview rank46 27->29 moved two MCAM08
+tracklets from gid 96000029/component 27 to gid 96000031/component 29. Rank46
+improved direct full to 0.662835/0.523970/0.535170. Delivery validation also
+improved: density_simple scored 0.664929/0.525663/0.536945 and valid p005_area
+scored 0.665029/0.525739/0.537061 with config_name=p005_area and
+dropped_rows=45467. This is the third tiny canonical gain in the same residual
+subpart branch.
 
 Latest rank15-base reviewer gain:
 After rank15 became the base, three no-anchor subpart proposer queues were

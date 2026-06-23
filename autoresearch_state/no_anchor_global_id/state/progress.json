@@ -1,8 +1,8 @@
 {
-    "best_assignment_csv": "local_runs/offline_no_anchor_split_probe_20260623/rank15base_subpart_multiview_assignments/rank40_subpart_s5_to35_2seq_assignments.csv",
-    "best_e2e_assa": 0.5369,
-    "best_e2e_hota": 0.525586,
-    "best_e2e_idf1": 0.664898,
+    "best_assignment_csv": "local_runs/offline_no_anchor_split_probe_20260623/rank40base_subpart_multiview_assignments/rank46_subpart_s27_to29_2seq_assignments.csv",
+    "best_e2e_assa": 0.537061,
+    "best_e2e_hota": 0.525739,
+    "best_e2e_idf1": 0.665029,
     "best_model_pair_f1": 0.782244,
     "best_model_pair_precision": 0.850111,
     "best_model_pair_recall": 0.724411,
@@ -12,7 +12,7 @@
     "goal_global_id_pair_f1": 0.7,
     "goal_global_id_pair_precision": 0.7,
     "goal_global_id_pair_recall": 0.7,
-    "iteration": 103,
+    "iteration": 104,
     "last_artifacts": [
         "reports/no_anchor_offline_component_split_promotion_20260622.md",
         "local_runs/offline_no_anchor_split_probe_20260622/best_combo_split_assignments.csv",
@@ -68,12 +68,22 @@
         "local_runs/offline_no_anchor_split_probe_20260623/rank15base_rank40_delivery/rank40_subpart_s5_to35_2seq_assignments_full_export.json",
         "local_runs/offline_no_anchor_split_probe_20260623/rank15base_rank40_delivery/rank40_subpart_s5_to35_2seq_assignments_density_simple.json",
         "local_runs/offline_no_anchor_split_probe_20260623/rank15base_rank40_delivery/rank40_subpart_s5_to35_2seq_assignments_density_p005_area.json",
-        "local_runs/offline_no_anchor_split_probe_20260623/rank15base_rank40_delivery/rank40_subpart_s5_to35_2seq_assignments_density_p005_area.zip"
+        "local_runs/offline_no_anchor_split_probe_20260623/rank15base_rank40_delivery/rank40_subpart_s5_to35_2seq_assignments_density_p005_area.zip",
+        "local_runs/offline_no_anchor_split_probe_20260623/rank40base_subpart_balanced_manifest.json",
+        "local_runs/offline_no_anchor_split_probe_20260623/rank40base_subpart_multiview_manifest.json",
+        "local_runs/offline_no_anchor_split_probe_20260623/rank40base_subpart_weakvideo_manifest.json",
+        "local_runs/offline_no_anchor_split_probe_20260623/rank40base_subpart_reviewer_ranked_with_oldlabels.json",
+        "local_runs/offline_no_anchor_split_probe_20260623/rank40base_subpart_reviewer_fullscore/",
+        "local_runs/offline_no_anchor_split_probe_20260623/rank40base_subpart_multiview_assignments/rank46_subpart_s27_to29_2seq_assignments.csv",
+        "local_runs/offline_no_anchor_split_probe_20260623/rank40base_rank46_delivery/rank46_subpart_s27_to29_2seq_assignments_full_export.json",
+        "local_runs/offline_no_anchor_split_probe_20260623/rank40base_rank46_delivery/rank46_subpart_s27_to29_2seq_assignments_density_simple.json",
+        "local_runs/offline_no_anchor_split_probe_20260623/rank40base_rank46_delivery/rank46_subpart_s27_to29_2seq_assignments_density_p005_area.json",
+        "local_runs/offline_no_anchor_split_probe_20260623/rank40base_rank46_delivery/rank46_subpart_s27_to29_2seq_assignments_density_p005_area.zip"
     ],
-    "last_direction": "rank15base_multiview_rank40_p005_tiny_gain_with_visual_case",
-    "last_result": "Regenerated no-anchor subpart candidates on top of the rank15 promoted base, ranked 307 old+new candidates with 5 full-score labels, and full-scored four rank15-base candidates. weakvideo rank24 10->78 was negative at 0.661507, weakvideo rank52 36->90 was negative at 0.662645, weakvideo rank73 8->30 tied 0.662686, and multiview rank40 5->35 moved 2 MCAM08 tracklets for a tiny direct gain to 0.662694. Delivery validation scored density_simple 0.664798 and valid p005_area 0.664898/0.525586/0.536900 with config_name=p005_area and dropped_rows=45467, improving the canonical best from 0.664887/0.525553/0.536870. Added a reusable visual-case exporter and attached bbox visual evidence to the gain package.",
+    "last_direction": "rank40base_multiview_rank46_p005_gain",
+    "last_result": "Regenerated no-anchor subpart candidates on top of the rank40 base, ranked 469 old+new candidates with 9 matched full-score labels, and direct full-scored four diverse rank40-base candidates. rank47 22->38 tied 0.662694, rank21 82->80 tied 0.662694, rank44 30->85 tied 0.662694, and multiview rank46 27->29 moved 2 MCAM08 tracklets for a direct gain to 0.662835/0.523970/0.535170. Delivery validation scored density_simple 0.664929/0.525663/0.536945 and valid p005_area 0.665029/0.525739/0.537061 with config_name=p005_area and dropped_rows=45467, improving the canonical best from 0.664898/0.525586/0.536900.",
     "last_updated": "2026-06-23",
-    "next_direction": "fold_rank40_direct_and_p005_labels_into_the_referee_and_search_for_compatible_multi_edge_combos_with_larger_than_tiny_margin",
+    "next_direction": "fold_rank46_into_the_referee_and_search_remaining_component_27_or_mcam08_residual_islands_then_try_multi_edge_combos",
     "stale_count": 0,
-    "status": "active_no_anchor_best_e2e_0p664898_rank40_subpart_tiny_gain_e2e_still_below_0p70"
+    "status": "active_no_anchor_best_e2e_0p665029_rank46_subpart_gain_e2e_still_below_0p70"
 }
