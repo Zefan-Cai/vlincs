@@ -1,0 +1,2691 @@
+{
+  "after_state": "component 86, gid 960000350, component_size 160, decision_status manifest_reassign",
+  "before_state": "component 37, gid 96000040, component_size 69",
+  "candidate": {
+    "accepted_preview": [
+      {
+        "source_component_label": 37,
+        "source_seqs": [
+          1201,
+          1714,
+          1731,
+          2243,
+          2250,
+          2285,
+          2330,
+          2334,
+          2353,
+          2376,
+          2399,
+          2433,
+          2471,
+          2505,
+          2543,
+          2577,
+          2613,
+          2644,
+          2680,
+          2745,
+          2812,
+          2847,
+          4043,
+          4443,
+          4494,
+          4504,
+          4547,
+          4608,
+          4690,
+          5834,
+          5875,
+          5890
+        ],
+        "subset_rule": "top32_target_sim",
+        "target_component": 86,
+        "target_predicted_global_id": 960000350
+      }
+    ],
+    "attach_margin_mean": -0.23092395905405283,
+    "attach_margin_min": -0.2970759868621826,
+    "group_internal_sim": 0.47127747535705566,
+    "mode": "component_subset_attach",
+    "moved_tracklets": 32,
+    "rank": 6,
+    "reason": "top 32 source tracklets by target-centroid similarity",
+    "score": 0.4731161390538121,
+    "source_component": 37,
+    "source_component_label": 37,
+    "source_predicted_global_id": "96000040",
+    "source_rest_margin_mean": -0.2970759868621826,
+    "source_size": 69,
+    "subset_cameras": {
+      "MCAM03": 3,
+      "MCAM04": 29
+    },
+    "subset_dets": 7796,
+    "subset_size": 32,
+    "subset_videos": {
+      "vlincs_MS01_MC0001_MCAM03_2024-03-Tc6": 1,
+      "vlincs_MS01_MC0001_MCAM03_2024-03-Tc8": 2,
+      "vlincs_MS01_MC0001_MCAM04_2024-03-Tc6": 29
+    },
+    "target_component": 86,
+    "target_margin": -0.23092395905405283,
+    "target_predicted_global_id": 960000350,
+    "target_sim": 0.5121409790590405,
+    "target_sim_max": 0.5505223274230957,
+    "target_sim_mean": 0.5121409790590405,
+    "target_sim_min": 0.47127747535705566,
+    "target_size": 128,
+    "uses_anchors": false,
+    "uses_gt_for_evaluation_only": false,
+    "uses_gt_for_training_or_anchors": false,
+    "variant_name": "top32_target_sim"
+  },
+  "evidence": "target_sim=0.0000, target_margin=0.0000, source_rest_margin=0.0000",
+  "failure_montage": "",
+  "failure_reason": "Top28 fixed the weak tail problem but left four compatible high-similarity component-37 tracklets outside component 86.",
+  "improvement": "Top32 recovers those four nearby tracklets, improves direct and density_simple over top28, and reaches a small new valid p005_area best.",
+  "montage": "rank06_bbox_evidence.png",
+  "raw_frame_dir": "",
+  "raw_frame_status": "unavailable_coordinate_fallback",
+  "summary": "Thirty-two high target-similarity component 37 tracklets move to component 86 / gid 960000350.",
+  "title": "Rank06 top32 subset improves the top28 boundary",
+  "tracklets": [
+    {
+      "after": {
+        "avg_conf": "0.425058",
+        "camera": "MCAM03",
+        "component_external_prob_max": "0.0",
+        "component_internal_edges": "0",
+        "component_internal_prob_median": "0.0",
+        "component_internal_score_median": "0.0",
+        "component_label": "86",
+        "component_margin_prob": "0.0",
+        "component_size": "160",
+        "decision_status": "manifest_reassign",
+        "end_frame": "26527",
+        "n_dets": "240",
+        "predicted_global_id": "960000350",
+        "prediction_confidence": "0.700000",
+        "seq": "1201",
+        "start_frame": "26228",
+        "tracklet_key": "vlincs_MS01_MC0001_MCAM03_2024-03-Tc6:654:0",
+        "video": "vlincs_MS01_MC0001_MCAM03_2024-03-Tc6"
+      },
+      "before": {
+        "avg_conf": "0.425058",
+        "camera": "MCAM03",
+        "component_external_prob_max": "0.0",
+        "component_internal_edges": "0",
+        "component_internal_prob_median": "0.0",
+        "component_internal_score_median": "0.0",
+        "component_label": "37",
+        "component_margin_prob": "0.0",
+        "component_size": "69",
+        "decision_status": "forced_component",
+        "end_frame": "26527",
+        "n_dets": "240",
+        "predicted_global_id": "96000040",
+        "prediction_confidence": "0.700000",
+        "seq": "1201",
+        "start_frame": "26228",
+        "tracklet_key": "vlincs_MS01_MC0001_MCAM03_2024-03-Tc6:654:0",
+        "video": "vlincs_MS01_MC0001_MCAM03_2024-03-Tc6"
+      },
+      "sampled_boxes": [
+        {
+          "bbox_xyxy": [
+            1212.9774,
+            116.912735,
+            1261.6477,
+            354.89706
+          ],
+          "frame_idx": 26228,
+          "score": 0.8568451404571533,
+          "tracklet_key": "vlincs_MS01_MC0001_MCAM03_2024-03-Tc6:654:0",
+          "video_key": "vlincs_MS01_MC0001_MCAM03_2024-03-Tc6"
+        },
+        {
+          "bbox_xyxy": [
+            1169.2933,
+            117.39491,
+            1247.3013,
+            346.78802
+          ],
+          "frame_idx": 26367,
+          "score": 0.16037309169769287,
+          "tracklet_key": "vlincs_MS01_MC0001_MCAM03_2024-03-Tc6:654:0",
+          "video_key": "vlincs_MS01_MC0001_MCAM03_2024-03-Tc6"
+        },
+        {
+          "bbox_xyxy": [
+            1116.9902,
+            79.090546,
+            1201.381,
+            289.5087
+          ],
+          "frame_idx": 26527,
+          "score": 0.3680269718170166,
+          "tracklet_key": "vlincs_MS01_MC0001_MCAM03_2024-03-Tc6:654:0",
+          "video_key": "vlincs_MS01_MC0001_MCAM03_2024-03-Tc6"
+        }
+      ],
+      "seq": 1201
+    },
+    {
+      "after": {
+        "avg_conf": "0.355242",
+        "camera": "MCAM03",
+        "component_external_prob_max": "0.0",
+        "component_internal_edges": "0",
+        "component_internal_prob_median": "0.0",
+        "component_internal_score_median": "0.0",
+        "component_label": "86",
+        "component_margin_prob": "0.0",
+        "component_size": "160",
+        "decision_status": "manifest_reassign",
+        "end_frame": "14303",
+        "n_dets": "294",
+        "predicted_global_id": "960000350",
+        "prediction_confidence": "0.700000",
+        "seq": "1714",
+        "start_frame": "14004",
+        "tracklet_key": "vlincs_MS01_MC0001_MCAM03_2024-03-Tc8:249:0",
+        "video": "vlincs_MS01_MC0001_MCAM03_2024-03-Tc8"
+      },
+      "before": {
+        "avg_conf": "0.355242",
+        "camera": "MCAM03",
+        "component_external_prob_max": "0.0",
+        "component_internal_edges": "0",
+        "component_internal_prob_median": "0.0",
+        "component_internal_score_median": "0.0",
+        "component_label": "37",
+        "component_margin_prob": "0.0",
+        "component_size": "69",
+        "decision_status": "forced_component",
+        "end_frame": "14303",
+        "n_dets": "294",
+        "predicted_global_id": "96000040",
+        "prediction_confidence": "0.700000",
+        "seq": "1714",
+        "start_frame": "14004",
+        "tracklet_key": "vlincs_MS01_MC0001_MCAM03_2024-03-Tc8:249:0",
+        "video": "vlincs_MS01_MC0001_MCAM03_2024-03-Tc8"
+      },
+      "sampled_boxes": [
+        {
+          "bbox_xyxy": [
+            1021.0112,
+            158.72375,
+            1079.5421,
+            240.12054
+          ],
+          "frame_idx": 14004,
+          "score": 0.29349958896636963,
+          "tracklet_key": "vlincs_MS01_MC0001_MCAM03_2024-03-Tc8:249:0",
+          "video_key": "vlincs_MS01_MC0001_MCAM03_2024-03-Tc8"
+        },
+        {
+          "bbox_xyxy": [
+            1016.44366,
+            151.05838,
+            1079.5051,
+            265.66254
+          ],
+          "frame_idx": 14153,
+          "score": 0.4234393835067749,
+          "tracklet_key": "vlincs_MS01_MC0001_MCAM03_2024-03-Tc8:249:0",
+          "video_key": "vlincs_MS01_MC0001_MCAM03_2024-03-Tc8"
+        },
+        {
+          "bbox_xyxy": [
+            993.9263,
+            151.93825,
+            1080.485,
+            266.14523
+          ],
+          "frame_idx": 14303,
+          "score": 0.6964450478553772,
+          "tracklet_key": "vlincs_MS01_MC0001_MCAM03_2024-03-Tc8:249:0",
+          "video_key": "vlincs_MS01_MC0001_MCAM03_2024-03-Tc8"
+        }
+      ],
+      "seq": 1714
+    },
+    {
+      "after": {
+        "avg_conf": "0.44025",
+        "camera": "MCAM03",
+        "component_external_prob_max": "0.0",
+        "component_internal_edges": "0",
+        "component_internal_prob_median": "0.0",
+        "component_internal_score_median": "0.0",
+        "component_label": "86",
+        "component_margin_prob": "0.0",
+        "component_size": "160",
+        "decision_status": "manifest_reassign",
+        "end_frame": "14700",
+        "n_dets": "92",
+        "predicted_global_id": "960000350",
+        "prediction_confidence": "0.700000",
+        "seq": "1731",
+        "start_frame": "14604",
+        "tracklet_key": "vlincs_MS01_MC0001_MCAM03_2024-03-Tc8:264:0",
+        "video": "vlincs_MS01_MC0001_MCAM03_2024-03-Tc8"
+      },
+      "before": {
+        "avg_conf": "0.44025",
+        "camera": "MCAM03",
+        "component_external_prob_max": "0.0",
+        "component_internal_edges": "0",
+        "component_internal_prob_median": "0.0",
+        "component_internal_score_median": "0.0",
+        "component_label": "37",
+        "component_margin_prob": "0.0",
+        "component_size": "69",
+        "decision_status": "forced_component",
+        "end_frame": "14700",
+        "n_dets": "92",
+        "predicted_global_id": "96000040",
+        "prediction_confidence": "0.700000",
+        "seq": "1731",
+        "start_frame": "14604",
+        "tracklet_key": "vlincs_MS01_MC0001_MCAM03_2024-03-Tc8:264:0",
+        "video": "vlincs_MS01_MC0001_MCAM03_2024-03-Tc8"
+      },
+      "sampled_boxes": [
+        {
+          "bbox_xyxy": [
+            993.54126,
+            159.36684,
+            1079.4542,
+            265.73755
+          ],
+          "frame_idx": 14604,
+          "score": 0.7579643130302429,
+          "tracklet_key": "vlincs_MS01_MC0001_MCAM03_2024-03-Tc8:264:0",
+          "video_key": "vlincs_MS01_MC0001_MCAM03_2024-03-Tc8"
+        },
+        {
+          "bbox_xyxy": [
+            993.6445,
+            157.77307,
+            1077.3854,
+            264.39108
+          ],
+          "frame_idx": 14651,
+          "score": 0.1866626739501953,
+          "tracklet_key": "vlincs_MS01_MC0001_MCAM03_2024-03-Tc8:264:0",
+          "video_key": "vlincs_MS01_MC0001_MCAM03_2024-03-Tc8"
+        },
+        {
+          "bbox_xyxy": [
+            993.7424,
+            160.28767,
+            1059.7133,
+            239.48773
+          ],
+          "frame_idx": 14700,
+          "score": 0.14317968487739563,
+          "tracklet_key": "vlincs_MS01_MC0001_MCAM03_2024-03-Tc8:264:0",
+          "video_key": "vlincs_MS01_MC0001_MCAM03_2024-03-Tc8"
+        }
+      ],
+      "seq": 1731
+    },
+    {
+      "after": {
+        "avg_conf": "0.512107",
+        "camera": "MCAM04",
+        "component_external_prob_max": "0.0",
+        "component_internal_edges": "0",
+        "component_internal_prob_median": "0.0",
+        "component_internal_score_median": "0.0",
+        "component_label": "86",
+        "component_margin_prob": "0.0",
+        "component_size": "160",
+        "decision_status": "manifest_reassign",
+        "end_frame": "14473",
+        "n_dets": "231",
+        "predicted_global_id": "960000350",
+        "prediction_confidence": "0.700000",
+        "seq": "2243",
+        "start_frame": "14174",
+        "tracklet_key": "vlincs_MS01_MC0001_MCAM04_2024-03-Tc6:1022:0",
+        "video": "vlincs_MS01_MC0001_MCAM04_2024-03-Tc6"
+      },
+      "before": {
+        "avg_conf": "0.512107",
+        "camera": "MCAM04",
+        "component_external_prob_max": "0.0",
+        "component_internal_edges": "0",
+        "component_internal_prob_median": "0.0",
+        "component_internal_score_median": "0.0",
+        "component_label": "37",
+        "component_margin_prob": "0.0",
+        "component_size": "69",
+        "decision_status": "forced_component",
+        "end_frame": "14473",
+        "n_dets": "231",
+        "predicted_global_id": "96000040",
+        "prediction_confidence": "0.700000",
+        "seq": "2243",
+        "start_frame": "14174",
+        "tracklet_key": "vlincs_MS01_MC0001_MCAM04_2024-03-Tc6:1022:0",
+        "video": "vlincs_MS01_MC0001_MCAM04_2024-03-Tc6"
+      },
+      "sampled_boxes": [
+        {
+          "bbox_xyxy": [
+            2116.9058,
+            1127.8285,
+            2217.058,
+            1293.001
+          ],
+          "frame_idx": 14174,
+          "score": 0.6644287109375,
+          "tracklet_key": "vlincs_MS01_MC0001_MCAM04_2024-03-Tc6:1022:0",
+          "video_key": "vlincs_MS01_MC0001_MCAM04_2024-03-Tc6"
+        },
+        {
+          "bbox_xyxy": [
+            2116.372,
+            1123.7794,
+            2216.457,
+            1294.5905
+          ],
+          "frame_idx": 14310,
+          "score": 0.7049734592437744,
+          "tracklet_key": "vlincs_MS01_MC0001_MCAM04_2024-03-Tc6:1022:0",
+          "video_key": "vlincs_MS01_MC0001_MCAM04_2024-03-Tc6"
+        },
+        {
+          "bbox_xyxy": [
+            2116.7727,
+            1120.8022,
+            2231.26,
+            1321.5388
+          ],
+          "frame_idx": 14473,
+          "score": 0.13385045528411865,
+          "tracklet_key": "vlincs_MS01_MC0001_MCAM04_2024-03-Tc6:1022:0",
+          "video_key": "vlincs_MS01_MC0001_MCAM04_2024-03-Tc6"
+        }
+      ],
+      "seq": 2243
+    },
+    {
+      "after": {
+        "avg_conf": "0.545521",
+        "camera": "MCAM04",
+        "component_external_prob_max": "0.0",
+        "component_internal_edges": "0",
+        "component_internal_prob_median": "0.0",
+        "component_internal_score_median": "0.0",
+        "component_label": "86",
+        "component_margin_prob": "0.0",
+        "component_size": "160",
+        "decision_status": "manifest_reassign",
+        "end_frame": "14551",
+        "n_dets": "238",
+        "predicted_global_id": "960000350",
+        "prediction_confidence": "0.700000",
+        "seq": "2250",
+        "start_frame": "14252",
+        "tracklet_key": "vlincs_MS01_MC0001_MCAM04_2024-03-Tc6:1029:0",
+        "video": "vlincs_MS01_MC0001_MCAM04_2024-03-Tc6"
+      },
+      "before": {
+        "avg_conf": "0.545521",
+        "camera": "MCAM04",
+        "component_external_prob_max": "0.0",
+        "component_internal_edges": "0",
+        "component_internal_prob_median": "0.0",
+        "component_internal_score_median": "0.0",
+        "component_label": "37",
+        "component_margin_prob": "0.0",
+        "component_size": "69",
+        "decision_status": "forced_component",
+        "end_frame": "14551",
+        "n_dets": "238",
+        "predicted_global_id": "96000040",
+        "prediction_confidence": "0.700000",
+        "seq": "2250",
+        "start_frame": "14252",
+        "tracklet_key": "vlincs_MS01_MC0001_MCAM04_2024-03-Tc6:1029:0",
+        "video": "vlincs_MS01_MC0001_MCAM04_2024-03-Tc6"
+      },
+      "sampled_boxes": [
+        {
+          "bbox_xyxy": [
+            2117.1487,
+            1126.6809,
+            2204.6265,
+            1293.5752
+          ],
+          "frame_idx": 14252,
+          "score": 0.5777082443237305,
+          "tracklet_key": "vlincs_MS01_MC0001_MCAM04_2024-03-Tc6:1029:0",
+          "video_key": "vlincs_MS01_MC0001_MCAM04_2024-03-Tc6"
+        },
+        {
+          "bbox_xyxy": [
+            2116.2039,
+            1130.0565,
+            2196.6333,
+            1291.8373
+          ],
+          "frame_idx": 14432,
+          "score": 0.4992861747741699,
+          "tracklet_key": "vlincs_MS01_MC0001_MCAM04_2024-03-Tc6:1029:0",
+          "video_key": "vlincs_MS01_MC0001_MCAM04_2024-03-Tc6"
+        },
+        {
+          "bbox_xyxy": [
+            2116.6338,
+            1122.6937,
+            2227.3323,
+            1292.6238
+          ],
+          "frame_idx": 14551,
+          "score": 0.6623958945274353,
+          "tracklet_key": "vlincs_MS01_MC0001_MCAM04_2024-03-Tc6:1029:0",
+          "video_key": "vlincs_MS01_MC0001_MCAM04_2024-03-Tc6"
+        }
+      ],
+      "seq": 2250
+    },
+    {
+      "after": {
+        "avg_conf": "0.518106",
+        "camera": "MCAM04",
+        "component_external_prob_max": "0.0",
+        "component_internal_edges": "0",
+        "component_internal_prob_median": "0.0",
+        "component_internal_score_median": "0.0",
+        "component_label": "86",
+        "component_margin_prob": "0.0",
+        "component_size": "160",
+        "decision_status": "manifest_reassign",
+        "end_frame": "14851",
+        "n_dets": "286",
+        "predicted_global_id": "960000350",
+        "prediction_confidence": "0.700000",
+        "seq": "2285",
+        "start_frame": "14552",
+        "tracklet_key": "vlincs_MS01_MC0001_MCAM04_2024-03-Tc6:1060:0",
+        "video": "vlincs_MS01_MC0001_MCAM04_2024-03-Tc6"
+      },
+      "before": {
+        "avg_conf": "0.518106",
+        "camera": "MCAM04",
+        "component_external_prob_max": "0.0",
+        "component_internal_edges": "0",
+        "component_internal_prob_median": "0.0",
+        "component_internal_score_median": "0.0",
+        "component_label": "37",
+        "component_margin_prob": "0.0",
+        "component_size": "69",
+        "decision_status": "forced_component",
+        "end_frame": "14851",
+        "n_dets": "286",
+        "predicted_global_id": "96000040",
+        "prediction_confidence": "0.700000",
+        "seq": "2285",
+        "start_frame": "14552",
+        "tracklet_key": "vlincs_MS01_MC0001_MCAM04_2024-03-Tc6:1060:0",
+        "video": "vlincs_MS01_MC0001_MCAM04_2024-03-Tc6"
+      },
+      "sampled_boxes": [
+        {
+          "bbox_xyxy": [
+            2116.7065,
+            1121.0283,
+            2227.228,
+            1292.0685
+          ],
+          "frame_idx": 14552,
+          "score": 0.47056838870048523,
+          "tracklet_key": "vlincs_MS01_MC0001_MCAM04_2024-03-Tc6:1060:0",
+          "video_key": "vlincs_MS01_MC0001_MCAM04_2024-03-Tc6"
+        },
+        {
+          "bbox_xyxy": [
+            2117.102,
+            1118.6565,
+            2216.1477,
+            1286.1089
+          ],
+          "frame_idx": 14708,
+          "score": 0.6069164872169495,
+          "tracklet_key": "vlincs_MS01_MC0001_MCAM04_2024-03-Tc6:1060:0",
+          "video_key": "vlincs_MS01_MC0001_MCAM04_2024-03-Tc6"
+        },
+        {
+          "bbox_xyxy": [
+            2117.1318,
+            1127.7485,
+            2213.8643,
+            1290.0647
+          ],
+          "frame_idx": 14851,
+          "score": 0.5908940434455872,
+          "tracklet_key": "vlincs_MS01_MC0001_MCAM04_2024-03-Tc6:1060:0",
+          "video_key": "vlincs_MS01_MC0001_MCAM04_2024-03-Tc6"
+        }
+      ],
+      "seq": 2285
+    },
+    {
+      "after": {
+        "avg_conf": "0.528761",
+        "camera": "MCAM04",
+        "component_external_prob_max": "0.0",
+        "component_internal_edges": "0",
+        "component_internal_prob_median": "0.0",
+        "component_internal_score_median": "0.0",
+        "component_label": "86",
+        "component_margin_prob": "0.0",
+        "component_size": "160",
+        "decision_status": "manifest_reassign",
+        "end_frame": "14929",
+        "n_dets": "52",
+        "predicted_global_id": "960000350",
+        "prediction_confidence": "0.700000",
+        "seq": "2330",
+        "start_frame": "14852",
+        "tracklet_key": "vlincs_MS01_MC0001_MCAM04_2024-03-Tc6:1100:0",
+        "video": "vlincs_MS01_MC0001_MCAM04_2024-03-Tc6"
+      },
+      "before": {
+        "avg_conf": "0.528761",
+        "camera": "MCAM04",
+        "component_external_prob_max": "0.0",
+        "component_internal_edges": "0",
+        "component_internal_prob_median": "0.0",
+        "component_internal_score_median": "0.0",
+        "component_label": "37",
+        "component_margin_prob": "0.0",
+        "component_size": "69",
+        "decision_status": "forced_component",
+        "end_frame": "14929",
+        "n_dets": "52",
+        "predicted_global_id": "96000040",
+        "prediction_confidence": "0.700000",
+        "seq": "2330",
+        "start_frame": "14852",
+        "tracklet_key": "vlincs_MS01_MC0001_MCAM04_2024-03-Tc6:1100:0",
+        "video": "vlincs_MS01_MC0001_MCAM04_2024-03-Tc6"
+      },
+      "sampled_boxes": [
+        {
+          "bbox_xyxy": [
+            2117.1353,
+            1127.758,
+            2213.4585,
+            1289.5713
+          ],
+          "frame_idx": 14852,
+          "score": 0.5340012311935425,
+          "tracklet_key": "vlincs_MS01_MC0001_MCAM04_2024-03-Tc6:1100:0",
+          "video_key": "vlincs_MS01_MC0001_MCAM04_2024-03-Tc6"
+        },
+        {
+          "bbox_xyxy": [
+            2117.4263,
+            1129.0253,
+            2202.8818,
+            1280.1375
+          ],
+          "frame_idx": 14878,
+          "score": 0.6616295576095581,
+          "tracklet_key": "vlincs_MS01_MC0001_MCAM04_2024-03-Tc6:1100:0",
+          "video_key": "vlincs_MS01_MC0001_MCAM04_2024-03-Tc6"
+        },
+        {
+          "bbox_xyxy": [
+            2116.4175,
+            1123.8345,
+            2201.3396,
+            1297.938
+          ],
+          "frame_idx": 14929,
+          "score": 0.17189961671829224,
+          "tracklet_key": "vlincs_MS01_MC0001_MCAM04_2024-03-Tc6:1100:0",
+          "video_key": "vlincs_MS01_MC0001_MCAM04_2024-03-Tc6"
+        }
+      ],
+      "seq": 2330
+    },
+    {
+      "after": {
+        "avg_conf": "0.654107",
+        "camera": "MCAM04",
+        "component_external_prob_max": "0.0",
+        "component_internal_edges": "0",
+        "component_internal_prob_median": "0.0",
+        "component_internal_score_median": "0.0",
+        "component_label": "86",
+        "component_margin_prob": "0.0",
+        "component_size": "160",
+        "decision_status": "manifest_reassign",
+        "end_frame": "14990",
+        "n_dets": "98",
+        "predicted_global_id": "960000350",
+        "prediction_confidence": "0.700000",
+        "seq": "2334",
+        "start_frame": "14878",
+        "tracklet_key": "vlincs_MS01_MC0001_MCAM04_2024-03-Tc6:1104:0",
+        "video": "vlincs_MS01_MC0001_MCAM04_2024-03-Tc6"
+      },
+      "before": {
+        "avg_conf": "0.654107",
+        "camera": "MCAM04",
+        "component_external_prob_max": "0.0",
+        "component_internal_edges": "0",
+        "component_internal_prob_median": "0.0",
+        "component_internal_score_median": "0.0",
+        "component_label": "37",
+        "component_margin_prob": "0.0",
+        "component_size": "69",
+        "decision_status": "forced_component",
+        "end_frame": "14990",
+        "n_dets": "98",
+        "predicted_global_id": "96000040",
+        "prediction_confidence": "0.700000",
+        "seq": "2334",
+        "start_frame": "14878",
+        "tracklet_key": "vlincs_MS01_MC0001_MCAM04_2024-03-Tc6:1104:0",
+        "video": "vlincs_MS01_MC0001_MCAM04_2024-03-Tc6"
+      },
+      "sampled_boxes": [
+        {
+          "bbox_xyxy": [
+            2117.3123,
+            1128.41,
+            2202.6003,
+            1291.8702
+          ],
+          "frame_idx": 14878,
+          "score": 0.599190890789032,
+          "tracklet_key": "vlincs_MS01_MC0001_MCAM04_2024-03-Tc6:1104:0",
+          "video_key": "vlincs_MS01_MC0001_MCAM04_2024-03-Tc6"
+        },
+        {
+          "bbox_xyxy": [
+            2117.806,
+            1122.9213,
+            2215.6887,
+            1279.8026
+          ],
+          "frame_idx": 14937,
+          "score": 0.7277958393096924,
+          "tracklet_key": "vlincs_MS01_MC0001_MCAM04_2024-03-Tc6:1104:0",
+          "video_key": "vlincs_MS01_MC0001_MCAM04_2024-03-Tc6"
+        },
+        {
+          "bbox_xyxy": [
+            2116.7854,
+            1118.3163,
+            2209.5847,
+            1294.8488
+          ],
+          "frame_idx": 14990,
+          "score": 0.1708633154630661,
+          "tracklet_key": "vlincs_MS01_MC0001_MCAM04_2024-03-Tc6:1104:0",
+          "video_key": "vlincs_MS01_MC0001_MCAM04_2024-03-Tc6"
+        }
+      ],
+      "seq": 2334
+    },
+    {
+      "after": {
+        "avg_conf": "0.67498",
+        "camera": "MCAM04",
+        "component_external_prob_max": "0.0",
+        "component_internal_edges": "0",
+        "component_internal_prob_median": "0.0",
+        "component_internal_score_median": "0.0",
+        "component_label": "86",
+        "component_margin_prob": "0.0",
+        "component_size": "160",
+        "decision_status": "manifest_reassign",
+        "end_frame": "15270",
+        "n_dets": "281",
+        "predicted_global_id": "960000350",
+        "prediction_confidence": "0.700000",
+        "seq": "2353",
+        "start_frame": "14971",
+        "tracklet_key": "vlincs_MS01_MC0001_MCAM04_2024-03-Tc6:1121:0",
+        "video": "vlincs_MS01_MC0001_MCAM04_2024-03-Tc6"
+      },
+      "before": {
+        "avg_conf": "0.67498",
+        "camera": "MCAM04",
+        "component_external_prob_max": "0.0",
+        "component_internal_edges": "0",
+        "component_internal_prob_median": "0.0",
+        "component_internal_score_median": "0.0",
+        "component_label": "37",
+        "component_margin_prob": "0.0",
+        "component_size": "69",
+        "decision_status": "forced_component",
+        "end_frame": "15270",
+        "n_dets": "281",
+        "predicted_global_id": "96000040",
+        "prediction_confidence": "0.700000",
+        "seq": "2353",
+        "start_frame": "14971",
+        "tracklet_key": "vlincs_MS01_MC0001_MCAM04_2024-03-Tc6:1121:0",
+        "video": "vlincs_MS01_MC0001_MCAM04_2024-03-Tc6"
+      },
+      "sampled_boxes": [
+        {
+          "bbox_xyxy": [
+            2117.4514,
+            1121.1559,
+            2215.013,
+            1290.7365
+          ],
+          "frame_idx": 14971,
+          "score": 0.5535802245140076,
+          "tracklet_key": "vlincs_MS01_MC0001_MCAM04_2024-03-Tc6:1121:0",
+          "video_key": "vlincs_MS01_MC0001_MCAM04_2024-03-Tc6"
+        },
+        {
+          "bbox_xyxy": [
+            2116.4707,
+            1117.9666,
+            2197.6753,
+            1290.0256
+          ],
+          "frame_idx": 15124,
+          "score": 0.6306158304214478,
+          "tracklet_key": "vlincs_MS01_MC0001_MCAM04_2024-03-Tc6:1121:0",
+          "video_key": "vlincs_MS01_MC0001_MCAM04_2024-03-Tc6"
+        },
+        {
+          "bbox_xyxy": [
+            2118.2937,
+            1119.4825,
+            2215.067,
+            1277.086
+          ],
+          "frame_idx": 15270,
+          "score": 0.7348340749740601,
+          "tracklet_key": "vlincs_MS01_MC0001_MCAM04_2024-03-Tc6:1121:0",
+          "video_key": "vlincs_MS01_MC0001_MCAM04_2024-03-Tc6"
+        }
+      ],
+      "seq": 2353
+    },
+    {
+      "after": {
+        "avg_conf": "0.584661",
+        "camera": "MCAM04",
+        "component_external_prob_max": "0.0",
+        "component_internal_edges": "0",
+        "component_internal_prob_median": "0.0",
+        "component_internal_score_median": "0.0",
+        "component_label": "86",
+        "component_margin_prob": "0.0",
+        "component_size": "160",
+        "decision_status": "manifest_reassign",
+        "end_frame": "15142",
+        "n_dets": "14",
+        "predicted_global_id": "960000350",
+        "prediction_confidence": "0.700000",
+        "seq": "2376",
+        "start_frame": "15129",
+        "tracklet_key": "vlincs_MS01_MC0001_MCAM04_2024-03-Tc6:1142:0",
+        "video": "vlincs_MS01_MC0001_MCAM04_2024-03-Tc6"
+      },
+      "before": {
+        "avg_conf": "0.584661",
+        "camera": "MCAM04",
+        "component_external_prob_max": "0.0",
+        "component_internal_edges": "0",
+        "component_internal_prob_median": "0.0",
+        "component_internal_score_median": "0.0",
+        "component_label": "37",
+        "component_margin_prob": "0.0",
+        "component_size": "69",
+        "decision_status": "forced_component",
+        "end_frame": "15142",
+        "n_dets": "14",
+        "predicted_global_id": "96000040",
+        "prediction_confidence": "0.700000",
+        "seq": "2376",
+        "start_frame": "15129",
+        "tracklet_key": "vlincs_MS01_MC0001_MCAM04_2024-03-Tc6:1142:0",
+        "video": "vlincs_MS01_MC0001_MCAM04_2024-03-Tc6"
+      },
+      "sampled_boxes": [
+        {
+          "bbox_xyxy": [
+            2117.0925,
+            1128.5118,
+            2197.91,
+            1284.5515
+          ],
+          "frame_idx": 15129,
+          "score": 0.6129187345504761,
+          "tracklet_key": "vlincs_MS01_MC0001_MCAM04_2024-03-Tc6:1142:0",
+          "video_key": "vlincs_MS01_MC0001_MCAM04_2024-03-Tc6"
+        },
+        {
+          "bbox_xyxy": [
+            2117.895,
+            1133.9487,
+            2198.6843,
+            1276.0286
+          ],
+          "frame_idx": 15135,
+          "score": 0.5569058060646057,
+          "tracklet_key": "vlincs_MS01_MC0001_MCAM04_2024-03-Tc6:1142:0",
+          "video_key": "vlincs_MS01_MC0001_MCAM04_2024-03-Tc6"
+        },
+        {
+          "bbox_xyxy": [
+            2118.0435,
+            1125.6594,
+            2206.8892,
+            1275.738
+          ],
+          "frame_idx": 15142,
+          "score": 0.505598783493042,
+          "tracklet_key": "vlincs_MS01_MC0001_MCAM04_2024-03-Tc6:1142:0",
+          "video_key": "vlincs_MS01_MC0001_MCAM04_2024-03-Tc6"
+        }
+      ],
+      "seq": 2376
+    },
+    {
+      "after": {
+        "avg_conf": "0.666123",
+        "camera": "MCAM04",
+        "component_external_prob_max": "0.0",
+        "component_internal_edges": "0",
+        "component_internal_prob_median": "0.0",
+        "component_internal_score_median": "0.0",
+        "component_label": "86",
+        "component_margin_prob": "0.0",
+        "component_size": "160",
+        "decision_status": "manifest_reassign",
+        "end_frame": "15570",
+        "n_dets": "300",
+        "predicted_global_id": "960000350",
+        "prediction_confidence": "0.700000",
+        "seq": "2399",
+        "start_frame": "15271",
+        "tracklet_key": "vlincs_MS01_MC0001_MCAM04_2024-03-Tc6:1163:0",
+        "video": "vlincs_MS01_MC0001_MCAM04_2024-03-Tc6"
+      },
+      "before": {
+        "avg_conf": "0.666123",
+        "camera": "MCAM04",
+        "component_external_prob_max": "0.0",
+        "component_internal_edges": "0",
+        "component_internal_prob_median": "0.0",
+        "component_internal_score_median": "0.0",
+        "component_label": "37",
+        "component_margin_prob": "0.0",
+        "component_size": "69",
+        "decision_status": "forced_component",
+        "end_frame": "15570",
+        "n_dets": "300",
+        "predicted_global_id": "96000040",
+        "prediction_confidence": "0.700000",
+        "seq": "2399",
+        "start_frame": "15271",
+        "tracklet_key": "vlincs_MS01_MC0001_MCAM04_2024-03-Tc6:1163:0",
+        "video": "vlincs_MS01_MC0001_MCAM04_2024-03-Tc6"
+      },
+      "sampled_boxes": [
+        {
+          "bbox_xyxy": [
+            2118.3535,
+            1119.4932,
+            2215.1497,
+            1276.946
+          ],
+          "frame_idx": 15271,
+          "score": 0.7311394214630127,
+          "tracklet_key": "vlincs_MS01_MC0001_MCAM04_2024-03-Tc6:1163:0",
+          "video_key": "vlincs_MS01_MC0001_MCAM04_2024-03-Tc6"
+        },
+        {
+          "bbox_xyxy": [
+            2118.3667,
+            1135.3887,
+            2215.566,
+            1278.1989
+          ],
+          "frame_idx": 15421,
+          "score": 0.5830334424972534,
+          "tracklet_key": "vlincs_MS01_MC0001_MCAM04_2024-03-Tc6:1163:0",
+          "video_key": "vlincs_MS01_MC0001_MCAM04_2024-03-Tc6"
+        },
+        {
+          "bbox_xyxy": [
+            2117.7595,
+            1134.609,
+            2217.4746,
+            1280.3308
+          ],
+          "frame_idx": 15570,
+          "score": 0.7201797962188721,
+          "tracklet_key": "vlincs_MS01_MC0001_MCAM04_2024-03-Tc6:1163:0",
+          "video_key": "vlincs_MS01_MC0001_MCAM04_2024-03-Tc6"
+        }
+      ],
+      "seq": 2399
+    },
+    {
+      "after": {
+        "avg_conf": "0.684039",
+        "camera": "MCAM04",
+        "component_external_prob_max": "0.0",
+        "component_internal_edges": "0",
+        "component_internal_prob_median": "0.0",
+        "component_internal_score_median": "0.0",
+        "component_label": "86",
+        "component_margin_prob": "0.0",
+        "component_size": "160",
+        "decision_status": "manifest_reassign",
+        "end_frame": "15870",
+        "n_dets": "300",
+        "predicted_global_id": "960000350",
+        "prediction_confidence": "0.700000",
+        "seq": "2433",
+        "start_frame": "15571",
+        "tracklet_key": "vlincs_MS01_MC0001_MCAM04_2024-03-Tc6:1194:0",
+        "video": "vlincs_MS01_MC0001_MCAM04_2024-03-Tc6"
+      },
+      "before": {
+        "avg_conf": "0.684039",
+        "camera": "MCAM04",
+        "component_external_prob_max": "0.0",
+        "component_internal_edges": "0",
+        "component_internal_prob_median": "0.0",
+        "component_internal_score_median": "0.0",
+        "component_label": "37",
+        "component_margin_prob": "0.0",
+        "component_size": "69",
+        "decision_status": "forced_component",
+        "end_frame": "15870",
+        "n_dets": "300",
+        "predicted_global_id": "96000040",
+        "prediction_confidence": "0.700000",
+        "seq": "2433",
+        "start_frame": "15571",
+        "tracklet_key": "vlincs_MS01_MC0001_MCAM04_2024-03-Tc6:1194:0",
+        "video": "vlincs_MS01_MC0001_MCAM04_2024-03-Tc6"
+      },
+      "sampled_boxes": [
+        {
+          "bbox_xyxy": [
+            2117.7556,
+            1134.4221,
+            2217.445,
+            1280.3894
+          ],
+          "frame_idx": 15571,
+          "score": 0.70525062084198,
+          "tracklet_key": "vlincs_MS01_MC0001_MCAM04_2024-03-Tc6:1194:0",
+          "video_key": "vlincs_MS01_MC0001_MCAM04_2024-03-Tc6"
+        },
+        {
+          "bbox_xyxy": [
+            2117.3647,
+            1128.1989,
+            2215.406,
+            1288.5789
+          ],
+          "frame_idx": 15721,
+          "score": 0.7113903164863586,
+          "tracklet_key": "vlincs_MS01_MC0001_MCAM04_2024-03-Tc6:1194:0",
+          "video_key": "vlincs_MS01_MC0001_MCAM04_2024-03-Tc6"
+        },
+        {
+          "bbox_xyxy": [
+            2120.0042,
+            1118.6401,
+            2225.4578,
+            1275.8488
+          ],
+          "frame_idx": 15870,
+          "score": 0.7262390851974487,
+          "tracklet_key": "vlincs_MS01_MC0001_MCAM04_2024-03-Tc6:1194:0",
+          "video_key": "vlincs_MS01_MC0001_MCAM04_2024-03-Tc6"
+        }
+      ],
+      "seq": 2433
+    },
+    {
+      "after": {
+        "avg_conf": "0.713496",
+        "camera": "MCAM04",
+        "component_external_prob_max": "0.0",
+        "component_internal_edges": "0",
+        "component_internal_prob_median": "0.0",
+        "component_internal_score_median": "0.0",
+        "component_label": "86",
+        "component_margin_prob": "0.0",
+        "component_size": "160",
+        "decision_status": "manifest_reassign",
+        "end_frame": "16170",
+        "n_dets": "298",
+        "predicted_global_id": "960000350",
+        "prediction_confidence": "0.700000",
+        "seq": "2471",
+        "start_frame": "15871",
+        "tracklet_key": "vlincs_MS01_MC0001_MCAM04_2024-03-Tc6:1228:0",
+        "video": "vlincs_MS01_MC0001_MCAM04_2024-03-Tc6"
+      },
+      "before": {
+        "avg_conf": "0.713496",
+        "camera": "MCAM04",
+        "component_external_prob_max": "0.0",
+        "component_internal_edges": "0",
+        "component_internal_prob_median": "0.0",
+        "component_internal_score_median": "0.0",
+        "component_label": "37",
+        "component_margin_prob": "0.0",
+        "component_size": "69",
+        "decision_status": "forced_component",
+        "end_frame": "16170",
+        "n_dets": "298",
+        "predicted_global_id": "96000040",
+        "prediction_confidence": "0.700000",
+        "seq": "2471",
+        "start_frame": "15871",
+        "tracklet_key": "vlincs_MS01_MC0001_MCAM04_2024-03-Tc6:1228:0",
+        "video": "vlincs_MS01_MC0001_MCAM04_2024-03-Tc6"
+      },
+      "sampled_boxes": [
+        {
+          "bbox_xyxy": [
+            2119.7705,
+            1119.5466,
+            2225.4124,
+            1275.8643
+          ],
+          "frame_idx": 15871,
+          "score": 0.7243751287460327,
+          "tracklet_key": "vlincs_MS01_MC0001_MCAM04_2024-03-Tc6:1228:0",
+          "video_key": "vlincs_MS01_MC0001_MCAM04_2024-03-Tc6"
+        },
+        {
+          "bbox_xyxy": [
+            2117.103,
+            1119.9733,
+            2223.8088,
+            1285.0292
+          ],
+          "frame_idx": 16021,
+          "score": 0.7568965554237366,
+          "tracklet_key": "vlincs_MS01_MC0001_MCAM04_2024-03-Tc6:1228:0",
+          "video_key": "vlincs_MS01_MC0001_MCAM04_2024-03-Tc6"
+        },
+        {
+          "bbox_xyxy": [
+            2118.062,
+            1122.156,
+            2224.912,
+            1279.2876
+          ],
+          "frame_idx": 16170,
+          "score": 0.683354914188385,
+          "tracklet_key": "vlincs_MS01_MC0001_MCAM04_2024-03-Tc6:1228:0",
+          "video_key": "vlincs_MS01_MC0001_MCAM04_2024-03-Tc6"
+        }
+      ],
+      "seq": 2471
+    },
+    {
+      "after": {
+        "avg_conf": "0.673604",
+        "camera": "MCAM04",
+        "component_external_prob_max": "0.0",
+        "component_internal_edges": "0",
+        "component_internal_prob_median": "0.0",
+        "component_internal_score_median": "0.0",
+        "component_label": "86",
+        "component_margin_prob": "0.0",
+        "component_size": "160",
+        "decision_status": "manifest_reassign",
+        "end_frame": "16470",
+        "n_dets": "300",
+        "predicted_global_id": "960000350",
+        "prediction_confidence": "0.700000",
+        "seq": "2505",
+        "start_frame": "16171",
+        "tracklet_key": "vlincs_MS01_MC0001_MCAM04_2024-03-Tc6:1259:0",
+        "video": "vlincs_MS01_MC0001_MCAM04_2024-03-Tc6"
+      },
+      "before": {
+        "avg_conf": "0.673604",
+        "camera": "MCAM04",
+        "component_external_prob_max": "0.0",
+        "component_internal_edges": "0",
+        "component_internal_prob_median": "0.0",
+        "component_internal_score_median": "0.0",
+        "component_label": "37",
+        "component_margin_prob": "0.0",
+        "component_size": "69",
+        "decision_status": "forced_component",
+        "end_frame": "16470",
+        "n_dets": "300",
+        "predicted_global_id": "96000040",
+        "prediction_confidence": "0.700000",
+        "seq": "2505",
+        "start_frame": "16171",
+        "tracklet_key": "vlincs_MS01_MC0001_MCAM04_2024-03-Tc6:1259:0",
+        "video": "vlincs_MS01_MC0001_MCAM04_2024-03-Tc6"
+      },
+      "sampled_boxes": [
+        {
+          "bbox_xyxy": [
+            2118.1826,
+            1121.792,
+            2224.8083,
+            1278.118
+          ],
+          "frame_idx": 16171,
+          "score": 0.6798478364944458,
+          "tracklet_key": "vlincs_MS01_MC0001_MCAM04_2024-03-Tc6:1259:0",
+          "video_key": "vlincs_MS01_MC0001_MCAM04_2024-03-Tc6"
+        },
+        {
+          "bbox_xyxy": [
+            2120.9854,
+            1122.6953,
+            2224.1282,
+            1275.9844
+          ],
+          "frame_idx": 16321,
+          "score": 0.6896572113037109,
+          "tracklet_key": "vlincs_MS01_MC0001_MCAM04_2024-03-Tc6:1259:0",
+          "video_key": "vlincs_MS01_MC0001_MCAM04_2024-03-Tc6"
+        },
+        {
+          "bbox_xyxy": [
+            2117.1135,
+            1122.4897,
+            2224.191,
+            1293.959
+          ],
+          "frame_idx": 16470,
+          "score": 0.6650611758232117,
+          "tracklet_key": "vlincs_MS01_MC0001_MCAM04_2024-03-Tc6:1259:0",
+          "video_key": "vlincs_MS01_MC0001_MCAM04_2024-03-Tc6"
+        }
+      ],
+      "seq": 2505
+    },
+    {
+      "after": {
+        "avg_conf": "0.648887",
+        "camera": "MCAM04",
+        "component_external_prob_max": "0.0",
+        "component_internal_edges": "0",
+        "component_internal_prob_median": "0.0",
+        "component_internal_score_median": "0.0",
+        "component_label": "86",
+        "component_margin_prob": "0.0",
+        "component_size": "160",
+        "decision_status": "manifest_reassign",
+        "end_frame": "16770",
+        "n_dets": "300",
+        "predicted_global_id": "960000350",
+        "prediction_confidence": "0.700000",
+        "seq": "2543",
+        "start_frame": "16471",
+        "tracklet_key": "vlincs_MS01_MC0001_MCAM04_2024-03-Tc6:1293:0",
+        "video": "vlincs_MS01_MC0001_MCAM04_2024-03-Tc6"
+      },
+      "before": {
+        "avg_conf": "0.648887",
+        "camera": "MCAM04",
+        "component_external_prob_max": "0.0",
+        "component_internal_edges": "0",
+        "component_internal_prob_median": "0.0",
+        "component_internal_score_median": "0.0",
+        "component_label": "37",
+        "component_margin_prob": "0.0",
+        "component_size": "69",
+        "decision_status": "forced_component",
+        "end_frame": "16770",
+        "n_dets": "300",
+        "predicted_global_id": "96000040",
+        "prediction_confidence": "0.700000",
+        "seq": "2543",
+        "start_frame": "16471",
+        "tracklet_key": "vlincs_MS01_MC0001_MCAM04_2024-03-Tc6:1293:0",
+        "video": "vlincs_MS01_MC0001_MCAM04_2024-03-Tc6"
+      },
+      "sampled_boxes": [
+        {
+          "bbox_xyxy": [
+            2117.1748,
+            1123.177,
+            2224.036,
+            1286.7372
+          ],
+          "frame_idx": 16471,
+          "score": 0.7319095730781555,
+          "tracklet_key": "vlincs_MS01_MC0001_MCAM04_2024-03-Tc6:1293:0",
+          "video_key": "vlincs_MS01_MC0001_MCAM04_2024-03-Tc6"
+        },
+        {
+          "bbox_xyxy": [
+            2120.197,
+            1125.718,
+            2223.6055,
+            1272.0444
+          ],
+          "frame_idx": 16621,
+          "score": 0.5477790236473083,
+          "tracklet_key": "vlincs_MS01_MC0001_MCAM04_2024-03-Tc6:1293:0",
+          "video_key": "vlincs_MS01_MC0001_MCAM04_2024-03-Tc6"
+        },
+        {
+          "bbox_xyxy": [
+            2118.3188,
+            1120.6564,
+            2223.3303,
+            1281.4634
+          ],
+          "frame_idx": 16770,
+          "score": 0.6884318590164185,
+          "tracklet_key": "vlincs_MS01_MC0001_MCAM04_2024-03-Tc6:1293:0",
+          "video_key": "vlincs_MS01_MC0001_MCAM04_2024-03-Tc6"
+        }
+      ],
+      "seq": 2543
+    },
+    {
+      "after": {
+        "avg_conf": "0.633905",
+        "camera": "MCAM04",
+        "component_external_prob_max": "0.0",
+        "component_internal_edges": "0",
+        "component_internal_prob_median": "0.0",
+        "component_internal_score_median": "0.0",
+        "component_label": "86",
+        "component_margin_prob": "0.0",
+        "component_size": "160",
+        "decision_status": "manifest_reassign",
+        "end_frame": "17070",
+        "n_dets": "300",
+        "predicted_global_id": "960000350",
+        "prediction_confidence": "0.700000",
+        "seq": "2577",
+        "start_frame": "16771",
+        "tracklet_key": "vlincs_MS01_MC0001_MCAM04_2024-03-Tc6:1323:0",
+        "video": "vlincs_MS01_MC0001_MCAM04_2024-03-Tc6"
+      },
+      "before": {
+        "avg_conf": "0.633905",
+        "camera": "MCAM04",
+        "component_external_prob_max": "0.0",
+        "component_internal_edges": "0",
+        "component_internal_prob_median": "0.0",
+        "component_internal_score_median": "0.0",
+        "component_label": "37",
+        "component_margin_prob": "0.0",
+        "component_size": "69",
+        "decision_status": "forced_component",
+        "end_frame": "17070",
+        "n_dets": "300",
+        "predicted_global_id": "96000040",
+        "prediction_confidence": "0.700000",
+        "seq": "2577",
+        "start_frame": "16771",
+        "tracklet_key": "vlincs_MS01_MC0001_MCAM04_2024-03-Tc6:1323:0",
+        "video": "vlincs_MS01_MC0001_MCAM04_2024-03-Tc6"
+      },
+      "sampled_boxes": [
+        {
+          "bbox_xyxy": [
+            2118.2607,
+            1120.7726,
+            2223.3145,
+            1281.7987
+          ],
+          "frame_idx": 16771,
+          "score": 0.6838959455490112,
+          "tracklet_key": "vlincs_MS01_MC0001_MCAM04_2024-03-Tc6:1323:0",
+          "video_key": "vlincs_MS01_MC0001_MCAM04_2024-03-Tc6"
+        },
+        {
+          "bbox_xyxy": [
+            2116.9956,
+            1120.9967,
+            2224.49,
+            1285.2643
+          ],
+          "frame_idx": 16921,
+          "score": 0.6721755862236023,
+          "tracklet_key": "vlincs_MS01_MC0001_MCAM04_2024-03-Tc6:1323:0",
+          "video_key": "vlincs_MS01_MC0001_MCAM04_2024-03-Tc6"
+        },
+        {
+          "bbox_xyxy": [
+            2118.814,
+            1123.918,
+            2223.7964,
+            1275.8406
+          ],
+          "frame_idx": 17070,
+          "score": 0.6826460361480713,
+          "tracklet_key": "vlincs_MS01_MC0001_MCAM04_2024-03-Tc6:1323:0",
+          "video_key": "vlincs_MS01_MC0001_MCAM04_2024-03-Tc6"
+        }
+      ],
+      "seq": 2577
+    },
+    {
+      "after": {
+        "avg_conf": "0.545131",
+        "camera": "MCAM04",
+        "component_external_prob_max": "0.0",
+        "component_internal_edges": "0",
+        "component_internal_prob_median": "0.0",
+        "component_internal_score_median": "0.0",
+        "component_label": "86",
+        "component_margin_prob": "0.0",
+        "component_size": "160",
+        "decision_status": "manifest_reassign",
+        "end_frame": "17370",
+        "n_dets": "300",
+        "predicted_global_id": "960000350",
+        "prediction_confidence": "0.700000",
+        "seq": "2613",
+        "start_frame": "17071",
+        "tracklet_key": "vlincs_MS01_MC0001_MCAM04_2024-03-Tc6:1356:0",
+        "video": "vlincs_MS01_MC0001_MCAM04_2024-03-Tc6"
+      },
+      "before": {
+        "avg_conf": "0.545131",
+        "camera": "MCAM04",
+        "component_external_prob_max": "0.0",
+        "component_internal_edges": "0",
+        "component_internal_prob_median": "0.0",
+        "component_internal_score_median": "0.0",
+        "component_label": "37",
+        "component_margin_prob": "0.0",
+        "component_size": "69",
+        "decision_status": "forced_component",
+        "end_frame": "17370",
+        "n_dets": "300",
+        "predicted_global_id": "96000040",
+        "prediction_confidence": "0.700000",
+        "seq": "2613",
+        "start_frame": "17071",
+        "tracklet_key": "vlincs_MS01_MC0001_MCAM04_2024-03-Tc6:1356:0",
+        "video": "vlincs_MS01_MC0001_MCAM04_2024-03-Tc6"
+      },
+      "sampled_boxes": [
+        {
+          "bbox_xyxy": [
+            2118.6985,
+            1123.9485,
+            2223.8452,
+            1276.0914
+          ],
+          "frame_idx": 17071,
+          "score": 0.6826481223106384,
+          "tracklet_key": "vlincs_MS01_MC0001_MCAM04_2024-03-Tc6:1356:0",
+          "video_key": "vlincs_MS01_MC0001_MCAM04_2024-03-Tc6"
+        },
+        {
+          "bbox_xyxy": [
+            2118.703,
+            1122.5789,
+            2224.0825,
+            1279.6829
+          ],
+          "frame_idx": 17221,
+          "score": 0.6173220872879028,
+          "tracklet_key": "vlincs_MS01_MC0001_MCAM04_2024-03-Tc6:1356:0",
+          "video_key": "vlincs_MS01_MC0001_MCAM04_2024-03-Tc6"
+        },
+        {
+          "bbox_xyxy": [
+            2118.0288,
+            1127.1138,
+            2223.9004,
+            1282.643
+          ],
+          "frame_idx": 17370,
+          "score": 0.4210151731967926,
+          "tracklet_key": "vlincs_MS01_MC0001_MCAM04_2024-03-Tc6:1356:0",
+          "video_key": "vlincs_MS01_MC0001_MCAM04_2024-03-Tc6"
+        }
+      ],
+      "seq": 2613
+    },
+    {
+      "after": {
+        "avg_conf": "0.659799",
+        "camera": "MCAM04",
+        "component_external_prob_max": "0.0",
+        "component_internal_edges": "0",
+        "component_internal_prob_median": "0.0",
+        "component_internal_score_median": "0.0",
+        "component_label": "86",
+        "component_margin_prob": "0.0",
+        "component_size": "160",
+        "decision_status": "manifest_reassign",
+        "end_frame": "17670",
+        "n_dets": "300",
+        "predicted_global_id": "960000350",
+        "prediction_confidence": "0.700000",
+        "seq": "2644",
+        "start_frame": "17371",
+        "tracklet_key": "vlincs_MS01_MC0001_MCAM04_2024-03-Tc6:1384:0",
+        "video": "vlincs_MS01_MC0001_MCAM04_2024-03-Tc6"
+      },
+      "before": {
+        "avg_conf": "0.659799",
+        "camera": "MCAM04",
+        "component_external_prob_max": "0.0",
+        "component_internal_edges": "0",
+        "component_internal_prob_median": "0.0",
+        "component_internal_score_median": "0.0",
+        "component_label": "37",
+        "component_margin_prob": "0.0",
+        "component_size": "69",
+        "decision_status": "forced_component",
+        "end_frame": "17670",
+        "n_dets": "300",
+        "predicted_global_id": "96000040",
+        "prediction_confidence": "0.700000",
+        "seq": "2644",
+        "start_frame": "17371",
+        "tracklet_key": "vlincs_MS01_MC0001_MCAM04_2024-03-Tc6:1384:0",
+        "video": "vlincs_MS01_MC0001_MCAM04_2024-03-Tc6"
+      },
+      "sampled_boxes": [
+        {
+          "bbox_xyxy": [
+            2118.0784,
+            1126.6552,
+            2224.007,
+            1282.5168
+          ],
+          "frame_idx": 17371,
+          "score": 0.4075445234775543,
+          "tracklet_key": "vlincs_MS01_MC0001_MCAM04_2024-03-Tc6:1384:0",
+          "video_key": "vlincs_MS01_MC0001_MCAM04_2024-03-Tc6"
+        },
+        {
+          "bbox_xyxy": [
+            2116.638,
+            1122.716,
+            2225.446,
+            1285.0138
+          ],
+          "frame_idx": 17521,
+          "score": 0.7448017001152039,
+          "tracklet_key": "vlincs_MS01_MC0001_MCAM04_2024-03-Tc6:1384:0",
+          "video_key": "vlincs_MS01_MC0001_MCAM04_2024-03-Tc6"
+        },
+        {
+          "bbox_xyxy": [
+            2117.9465,
+            1123.78,
+            2224.9954,
+            1297.9718
+          ],
+          "frame_idx": 17670,
+          "score": 0.5805656909942627,
+          "tracklet_key": "vlincs_MS01_MC0001_MCAM04_2024-03-Tc6:1384:0",
+          "video_key": "vlincs_MS01_MC0001_MCAM04_2024-03-Tc6"
+        }
+      ],
+      "seq": 2644
+    },
+    {
+      "after": {
+        "avg_conf": "0.454952",
+        "camera": "MCAM04",
+        "component_external_prob_max": "0.0",
+        "component_internal_edges": "0",
+        "component_internal_prob_median": "0.0",
+        "component_internal_score_median": "0.0",
+        "component_label": "86",
+        "component_margin_prob": "0.0",
+        "component_size": "160",
+        "decision_status": "manifest_reassign",
+        "end_frame": "17970",
+        "n_dets": "296",
+        "predicted_global_id": "960000350",
+        "prediction_confidence": "0.700000",
+        "seq": "2680",
+        "start_frame": "17671",
+        "tracklet_key": "vlincs_MS01_MC0001_MCAM04_2024-03-Tc6:1416:0",
+        "video": "vlincs_MS01_MC0001_MCAM04_2024-03-Tc6"
+      },
+      "before": {
+        "avg_conf": "0.454952",
+        "camera": "MCAM04",
+        "component_external_prob_max": "0.0",
+        "component_internal_edges": "0",
+        "component_internal_prob_median": "0.0",
+        "component_internal_score_median": "0.0",
+        "component_label": "37",
+        "component_margin_prob": "0.0",
+        "component_size": "69",
+        "decision_status": "forced_component",
+        "end_frame": "17970",
+        "n_dets": "296",
+        "predicted_global_id": "96000040",
+        "prediction_confidence": "0.700000",
+        "seq": "2680",
+        "start_frame": "17671",
+        "tracklet_key": "vlincs_MS01_MC0001_MCAM04_2024-03-Tc6:1416:0",
+        "video": "vlincs_MS01_MC0001_MCAM04_2024-03-Tc6"
+      },
+      "sampled_boxes": [
+        {
+          "bbox_xyxy": [
+            2118.036,
+            1122.1647,
+            2224.9124,
+            1297.7994
+          ],
+          "frame_idx": 17671,
+          "score": 0.5953439474105835,
+          "tracklet_key": "vlincs_MS01_MC0001_MCAM04_2024-03-Tc6:1416:0",
+          "video_key": "vlincs_MS01_MC0001_MCAM04_2024-03-Tc6"
+        },
+        {
+          "bbox_xyxy": [
+            2118.262,
+            1125.1027,
+            2227.1797,
+            1277.1409
+          ],
+          "frame_idx": 17819,
+          "score": 0.11442234367132187,
+          "tracklet_key": "vlincs_MS01_MC0001_MCAM04_2024-03-Tc6:1416:0",
+          "video_key": "vlincs_MS01_MC0001_MCAM04_2024-03-Tc6"
+        },
+        {
+          "bbox_xyxy": [
+            2119.816,
+            1125.7318,
+            2225.1123,
+            1275.5519
+          ],
+          "frame_idx": 17970,
+          "score": 0.5022182464599609,
+          "tracklet_key": "vlincs_MS01_MC0001_MCAM04_2024-03-Tc6:1416:0",
+          "video_key": "vlincs_MS01_MC0001_MCAM04_2024-03-Tc6"
+        }
+      ],
+      "seq": 2680
+    },
+    {
+      "after": {
+        "avg_conf": "0.57224",
+        "camera": "MCAM04",
+        "component_external_prob_max": "0.0",
+        "component_internal_edges": "0",
+        "component_internal_prob_median": "0.0",
+        "component_internal_score_median": "0.0",
+        "component_label": "86",
+        "component_margin_prob": "0.0",
+        "component_size": "160",
+        "decision_status": "manifest_reassign",
+        "end_frame": "18270",
+        "n_dets": "286",
+        "predicted_global_id": "960000350",
+        "prediction_confidence": "0.700000",
+        "seq": "2745",
+        "start_frame": "17971",
+        "tracklet_key": "vlincs_MS01_MC0001_MCAM04_2024-03-Tc6:1475:0",
+        "video": "vlincs_MS01_MC0001_MCAM04_2024-03-Tc6"
+      },
+      "before": {
+        "avg_conf": "0.57224",
+        "camera": "MCAM04",
+        "component_external_prob_max": "0.0",
+        "component_internal_edges": "0",
+        "component_internal_prob_median": "0.0",
+        "component_internal_score_median": "0.0",
+        "component_label": "37",
+        "component_margin_prob": "0.0",
+        "component_size": "69",
+        "decision_status": "forced_component",
+        "end_frame": "18270",
+        "n_dets": "286",
+        "predicted_global_id": "96000040",
+        "prediction_confidence": "0.700000",
+        "seq": "2745",
+        "start_frame": "17971",
+        "tracklet_key": "vlincs_MS01_MC0001_MCAM04_2024-03-Tc6:1475:0",
+        "video": "vlincs_MS01_MC0001_MCAM04_2024-03-Tc6"
+      },
+      "sampled_boxes": [
+        {
+          "bbox_xyxy": [
+            2119.6763,
+            1126.1449,
+            2225.213,
+            1275.8616
+          ],
+          "frame_idx": 17971,
+          "score": 0.5258833765983582,
+          "tracklet_key": "vlincs_MS01_MC0001_MCAM04_2024-03-Tc6:1475:0",
+          "video_key": "vlincs_MS01_MC0001_MCAM04_2024-03-Tc6"
+        },
+        {
+          "bbox_xyxy": [
+            2119.3843,
+            1125.5009,
+            2226.6785,
+            1276.8176
+          ],
+          "frame_idx": 18127,
+          "score": 0.5558407306671143,
+          "tracklet_key": "vlincs_MS01_MC0001_MCAM04_2024-03-Tc6:1475:0",
+          "video_key": "vlincs_MS01_MC0001_MCAM04_2024-03-Tc6"
+        },
+        {
+          "bbox_xyxy": [
+            2116.552,
+            1123.6649,
+            2225.1145,
+            1285.2698
+          ],
+          "frame_idx": 18270,
+          "score": 0.8039588332176208,
+          "tracklet_key": "vlincs_MS01_MC0001_MCAM04_2024-03-Tc6:1475:0",
+          "video_key": "vlincs_MS01_MC0001_MCAM04_2024-03-Tc6"
+        }
+      ],
+      "seq": 2745
+    },
+    {
+      "after": {
+        "avg_conf": "0.444759",
+        "camera": "MCAM04",
+        "component_external_prob_max": "0.0",
+        "component_internal_edges": "0",
+        "component_internal_prob_median": "0.0",
+        "component_internal_score_median": "0.0",
+        "component_label": "86",
+        "component_margin_prob": "0.0",
+        "component_size": "160",
+        "decision_status": "manifest_reassign",
+        "end_frame": "18566",
+        "n_dets": "241",
+        "predicted_global_id": "960000350",
+        "prediction_confidence": "0.700000",
+        "seq": "2812",
+        "start_frame": "18271",
+        "tracklet_key": "vlincs_MS01_MC0001_MCAM04_2024-03-Tc6:1535:0",
+        "video": "vlincs_MS01_MC0001_MCAM04_2024-03-Tc6"
+      },
+      "before": {
+        "avg_conf": "0.444759",
+        "camera": "MCAM04",
+        "component_external_prob_max": "0.0",
+        "component_internal_edges": "0",
+        "component_internal_prob_median": "0.0",
+        "component_internal_score_median": "0.0",
+        "component_label": "37",
+        "component_margin_prob": "0.0",
+        "component_size": "69",
+        "decision_status": "forced_component",
+        "end_frame": "18566",
+        "n_dets": "241",
+        "predicted_global_id": "96000040",
+        "prediction_confidence": "0.700000",
+        "seq": "2812",
+        "start_frame": "18271",
+        "tracklet_key": "vlincs_MS01_MC0001_MCAM04_2024-03-Tc6:1535:0",
+        "video": "vlincs_MS01_MC0001_MCAM04_2024-03-Tc6"
+      },
+      "sampled_boxes": [
+        {
+          "bbox_xyxy": [
+            2116.5098,
+            1123.4993,
+            2225.1047,
+            1285.5192
+          ],
+          "frame_idx": 18271,
+          "score": 0.8124837875366211,
+          "tracklet_key": "vlincs_MS01_MC0001_MCAM04_2024-03-Tc6:1535:0",
+          "video_key": "vlincs_MS01_MC0001_MCAM04_2024-03-Tc6"
+        },
+        {
+          "bbox_xyxy": [
+            2120.8774,
+            1127.057,
+            2225.1853,
+            1276.7745
+          ],
+          "frame_idx": 18391,
+          "score": 0.10621181130409241,
+          "tracklet_key": "vlincs_MS01_MC0001_MCAM04_2024-03-Tc6:1535:0",
+          "video_key": "vlincs_MS01_MC0001_MCAM04_2024-03-Tc6"
+        },
+        {
+          "bbox_xyxy": [
+            2116.111,
+            1124.3953,
+            2225.6074,
+            1290.1112
+          ],
+          "frame_idx": 18566,
+          "score": 0.1508152186870575,
+          "tracklet_key": "vlincs_MS01_MC0001_MCAM04_2024-03-Tc6:1535:0",
+          "video_key": "vlincs_MS01_MC0001_MCAM04_2024-03-Tc6"
+        }
+      ],
+      "seq": 2812
+    },
+    {
+      "after": {
+        "avg_conf": "0.544668",
+        "camera": "MCAM04",
+        "component_external_prob_max": "0.0",
+        "component_internal_edges": "0",
+        "component_internal_prob_median": "0.0",
+        "component_internal_score_median": "0.0",
+        "component_label": "86",
+        "component_margin_prob": "0.0",
+        "component_size": "160",
+        "decision_status": "manifest_reassign",
+        "end_frame": "18871",
+        "n_dets": "299",
+        "predicted_global_id": "960000350",
+        "prediction_confidence": "0.700000",
+        "seq": "2847",
+        "start_frame": "18572",
+        "tracklet_key": "vlincs_MS01_MC0001_MCAM04_2024-03-Tc6:1567:0",
+        "video": "vlincs_MS01_MC0001_MCAM04_2024-03-Tc6"
+      },
+      "before": {
+        "avg_conf": "0.544668",
+        "camera": "MCAM04",
+        "component_external_prob_max": "0.0",
+        "component_internal_edges": "0",
+        "component_internal_prob_median": "0.0",
+        "component_internal_score_median": "0.0",
+        "component_label": "37",
+        "component_margin_prob": "0.0",
+        "component_size": "69",
+        "decision_status": "forced_component",
+        "end_frame": "18871",
+        "n_dets": "299",
+        "predicted_global_id": "96000040",
+        "prediction_confidence": "0.700000",
+        "seq": "2847",
+        "start_frame": "18572",
+        "tracklet_key": "vlincs_MS01_MC0001_MCAM04_2024-03-Tc6:1567:0",
+        "video": "vlincs_MS01_MC0001_MCAM04_2024-03-Tc6"
+      },
+      "sampled_boxes": [
+        {
+          "bbox_xyxy": [
+            2116.1272,
+            1124.803,
+            2225.8318,
+            1293.0488
+          ],
+          "frame_idx": 18572,
+          "score": 0.16811689734458923,
+          "tracklet_key": "vlincs_MS01_MC0001_MCAM04_2024-03-Tc6:1567:0",
+          "video_key": "vlincs_MS01_MC0001_MCAM04_2024-03-Tc6"
+        },
+        {
+          "bbox_xyxy": [
+            2116.1123,
+            1128.9359,
+            2228.0457,
+            1287.5881
+          ],
+          "frame_idx": 18722,
+          "score": 0.6300925016403198,
+          "tracklet_key": "vlincs_MS01_MC0001_MCAM04_2024-03-Tc6:1567:0",
+          "video_key": "vlincs_MS01_MC0001_MCAM04_2024-03-Tc6"
+        },
+        {
+          "bbox_xyxy": [
+            2116.9368,
+            1125.6598,
+            2225.2979,
+            1285.9615
+          ],
+          "frame_idx": 18871,
+          "score": 0.7137449979782104,
+          "tracklet_key": "vlincs_MS01_MC0001_MCAM04_2024-03-Tc6:1567:0",
+          "video_key": "vlincs_MS01_MC0001_MCAM04_2024-03-Tc6"
+        }
+      ],
+      "seq": 2847
+    },
+    {
+      "after": {
+        "avg_conf": "0.390115",
+        "camera": "MCAM04",
+        "component_external_prob_max": "0.0",
+        "component_internal_edges": "0",
+        "component_internal_prob_median": "0.0",
+        "component_internal_score_median": "0.0",
+        "component_label": "86",
+        "component_margin_prob": "0.0",
+        "component_size": "160",
+        "decision_status": "manifest_reassign",
+        "end_frame": "39602",
+        "n_dets": "300",
+        "predicted_global_id": "960000350",
+        "prediction_confidence": "0.700000",
+        "seq": "4043",
+        "start_frame": "39303",
+        "tracklet_key": "vlincs_MS01_MC0001_MCAM04_2024-03-Tc6:2643:0",
+        "video": "vlincs_MS01_MC0001_MCAM04_2024-03-Tc6"
+      },
+      "before": {
+        "avg_conf": "0.390115",
+        "camera": "MCAM04",
+        "component_external_prob_max": "0.0",
+        "component_internal_edges": "0",
+        "component_internal_prob_median": "0.0",
+        "component_internal_score_median": "0.0",
+        "component_label": "37",
+        "component_margin_prob": "0.0",
+        "component_size": "69",
+        "decision_status": "forced_component",
+        "end_frame": "39602",
+        "n_dets": "300",
+        "predicted_global_id": "96000040",
+        "prediction_confidence": "0.700000",
+        "seq": "4043",
+        "start_frame": "39303",
+        "tracklet_key": "vlincs_MS01_MC0001_MCAM04_2024-03-Tc6:2643:0",
+        "video": "vlincs_MS01_MC0001_MCAM04_2024-03-Tc6"
+      },
+      "sampled_boxes": [
+        {
+          "bbox_xyxy": [
+            2013.1263,
+            1061.5908,
+            2102.9185,
+            1346.977
+          ],
+          "frame_idx": 39303,
+          "score": 0.4114696979522705,
+          "tracklet_key": "vlincs_MS01_MC0001_MCAM04_2024-03-Tc6:2643:0",
+          "video_key": "vlincs_MS01_MC0001_MCAM04_2024-03-Tc6"
+        },
+        {
+          "bbox_xyxy": [
+            2003.5164,
+            1061.7155,
+            2111.4846,
+            1359.0397
+          ],
+          "frame_idx": 39453,
+          "score": 0.254533052444458,
+          "tracklet_key": "vlincs_MS01_MC0001_MCAM04_2024-03-Tc6:2643:0",
+          "video_key": "vlincs_MS01_MC0001_MCAM04_2024-03-Tc6"
+        },
+        {
+          "bbox_xyxy": [
+            1997.2935,
+            1061.7494,
+            2094.6677,
+            1355.1218
+          ],
+          "frame_idx": 39602,
+          "score": 0.3799612522125244,
+          "tracklet_key": "vlincs_MS01_MC0001_MCAM04_2024-03-Tc6:2643:0",
+          "video_key": "vlincs_MS01_MC0001_MCAM04_2024-03-Tc6"
+        }
+      ],
+      "seq": 4043
+    },
+    {
+      "after": {
+        "avg_conf": "0.504847",
+        "camera": "MCAM04",
+        "component_external_prob_max": "0.0",
+        "component_internal_edges": "0",
+        "component_internal_prob_median": "0.0",
+        "component_internal_score_median": "0.0",
+        "component_label": "86",
+        "component_margin_prob": "0.0",
+        "component_size": "160",
+        "decision_status": "manifest_reassign",
+        "end_frame": "41624",
+        "n_dets": "300",
+        "predicted_global_id": "960000350",
+        "prediction_confidence": "0.700000",
+        "seq": "4443",
+        "start_frame": "41325",
+        "tracklet_key": "vlincs_MS01_MC0001_MCAM04_2024-03-Tc6:3002:0",
+        "video": "vlincs_MS01_MC0001_MCAM04_2024-03-Tc6"
+      },
+      "before": {
+        "avg_conf": "0.504847",
+        "camera": "MCAM04",
+        "component_external_prob_max": "0.0",
+        "component_internal_edges": "0",
+        "component_internal_prob_median": "0.0",
+        "component_internal_score_median": "0.0",
+        "component_label": "37",
+        "component_margin_prob": "0.0",
+        "component_size": "69",
+        "decision_status": "forced_component",
+        "end_frame": "41624",
+        "n_dets": "300",
+        "predicted_global_id": "96000040",
+        "prediction_confidence": "0.700000",
+        "seq": "4443",
+        "start_frame": "41325",
+        "tracklet_key": "vlincs_MS01_MC0001_MCAM04_2024-03-Tc6:3002:0",
+        "video": "vlincs_MS01_MC0001_MCAM04_2024-03-Tc6"
+      },
+      "sampled_boxes": [
+        {
+          "bbox_xyxy": [
+            2048.1953,
+            995.1019,
+            2114.8813,
+            1169.9147
+          ],
+          "frame_idx": 41325,
+          "score": 0.5337446928024292,
+          "tracklet_key": "vlincs_MS01_MC0001_MCAM04_2024-03-Tc6:3002:0",
+          "video_key": "vlincs_MS01_MC0001_MCAM04_2024-03-Tc6"
+        },
+        {
+          "bbox_xyxy": [
+            2049.1677,
+            996.68854,
+            2114.0112,
+            1170.7092
+          ],
+          "frame_idx": 41475,
+          "score": 0.49616968631744385,
+          "tracklet_key": "vlincs_MS01_MC0001_MCAM04_2024-03-Tc6:3002:0",
+          "video_key": "vlincs_MS01_MC0001_MCAM04_2024-03-Tc6"
+        },
+        {
+          "bbox_xyxy": [
+            2052.1824,
+            995.6735,
+            2116.7183,
+            1169.7322
+          ],
+          "frame_idx": 41624,
+          "score": 0.507984459400177,
+          "tracklet_key": "vlincs_MS01_MC0001_MCAM04_2024-03-Tc6:3002:0",
+          "video_key": "vlincs_MS01_MC0001_MCAM04_2024-03-Tc6"
+        }
+      ],
+      "seq": 4443
+    },
+    {
+      "after": {
+        "avg_conf": "0.507702",
+        "camera": "MCAM04",
+        "component_external_prob_max": "0.0",
+        "component_internal_edges": "0",
+        "component_internal_prob_median": "0.0",
+        "component_internal_score_median": "0.0",
+        "component_label": "86",
+        "component_margin_prob": "0.0",
+        "component_size": "160",
+        "decision_status": "manifest_reassign",
+        "end_frame": "41924",
+        "n_dets": "300",
+        "predicted_global_id": "960000350",
+        "prediction_confidence": "0.700000",
+        "seq": "4494",
+        "start_frame": "41625",
+        "tracklet_key": "vlincs_MS01_MC0001_MCAM04_2024-03-Tc6:3049:0",
+        "video": "vlincs_MS01_MC0001_MCAM04_2024-03-Tc6"
+      },
+      "before": {
+        "avg_conf": "0.507702",
+        "camera": "MCAM04",
+        "component_external_prob_max": "0.0",
+        "component_internal_edges": "0",
+        "component_internal_prob_median": "0.0",
+        "component_internal_score_median": "0.0",
+        "component_label": "37",
+        "component_margin_prob": "0.0",
+        "component_size": "69",
+        "decision_status": "forced_component",
+        "end_frame": "41924",
+        "n_dets": "300",
+        "predicted_global_id": "96000040",
+        "prediction_confidence": "0.700000",
+        "seq": "4494",
+        "start_frame": "41625",
+        "tracklet_key": "vlincs_MS01_MC0001_MCAM04_2024-03-Tc6:3049:0",
+        "video": "vlincs_MS01_MC0001_MCAM04_2024-03-Tc6"
+      },
+      "sampled_boxes": [
+        {
+          "bbox_xyxy": [
+            2051.8945,
+            995.51105,
+            2117.083,
+            1169.9598
+          ],
+          "frame_idx": 41625,
+          "score": 0.5179771184921265,
+          "tracklet_key": "vlincs_MS01_MC0001_MCAM04_2024-03-Tc6:3049:0",
+          "video_key": "vlincs_MS01_MC0001_MCAM04_2024-03-Tc6"
+        },
+        {
+          "bbox_xyxy": [
+            2037.0853,
+            973.4937,
+            2115.9062,
+            1171.5509
+          ],
+          "frame_idx": 41775,
+          "score": 0.5547693967819214,
+          "tracklet_key": "vlincs_MS01_MC0001_MCAM04_2024-03-Tc6:3049:0",
+          "video_key": "vlincs_MS01_MC0001_MCAM04_2024-03-Tc6"
+        },
+        {
+          "bbox_xyxy": [
+            2025.0476,
+            978.55475,
+            2073.1277,
+            1173.0487
+          ],
+          "frame_idx": 41924,
+          "score": 0.6225088238716125,
+          "tracklet_key": "vlincs_MS01_MC0001_MCAM04_2024-03-Tc6:3049:0",
+          "video_key": "vlincs_MS01_MC0001_MCAM04_2024-03-Tc6"
+        }
+      ],
+      "seq": 4494
+    },
+    {
+      "after": {
+        "avg_conf": "0.415039",
+        "camera": "MCAM04",
+        "component_external_prob_max": "0.0",
+        "component_internal_edges": "0",
+        "component_internal_prob_median": "0.0",
+        "component_internal_score_median": "0.0",
+        "component_label": "86",
+        "component_margin_prob": "0.0",
+        "component_size": "160",
+        "decision_status": "manifest_reassign",
+        "end_frame": "41959",
+        "n_dets": "178",
+        "predicted_global_id": "960000350",
+        "prediction_confidence": "0.700000",
+        "seq": "4504",
+        "start_frame": "41660",
+        "tracklet_key": "vlincs_MS01_MC0001_MCAM04_2024-03-Tc6:3058:0",
+        "video": "vlincs_MS01_MC0001_MCAM04_2024-03-Tc6"
+      },
+      "before": {
+        "avg_conf": "0.415039",
+        "camera": "MCAM04",
+        "component_external_prob_max": "0.0",
+        "component_internal_edges": "0",
+        "component_internal_prob_median": "0.0",
+        "component_internal_score_median": "0.0",
+        "component_label": "37",
+        "component_margin_prob": "0.0",
+        "component_size": "69",
+        "decision_status": "forced_component",
+        "end_frame": "41959",
+        "n_dets": "178",
+        "predicted_global_id": "96000040",
+        "prediction_confidence": "0.700000",
+        "seq": "4504",
+        "start_frame": "41660",
+        "tracklet_key": "vlincs_MS01_MC0001_MCAM04_2024-03-Tc6:3058:0",
+        "video": "vlincs_MS01_MC0001_MCAM04_2024-03-Tc6"
+      },
+      "sampled_boxes": [
+        {
+          "bbox_xyxy": [
+            2025.5253,
+            980.88293,
+            2068.4797,
+            1172.2312
+          ],
+          "frame_idx": 41660,
+          "score": 0.6655194759368896,
+          "tracklet_key": "vlincs_MS01_MC0001_MCAM04_2024-03-Tc6:3058:0",
+          "video_key": "vlincs_MS01_MC0001_MCAM04_2024-03-Tc6"
+        },
+        {
+          "bbox_xyxy": [
+            2049.1262,
+            996.7513,
+            2117.94,
+            1170.2838
+          ],
+          "frame_idx": 41861,
+          "score": 0.540254533290863,
+          "tracklet_key": "vlincs_MS01_MC0001_MCAM04_2024-03-Tc6:3058:0",
+          "video_key": "vlincs_MS01_MC0001_MCAM04_2024-03-Tc6"
+        },
+        {
+          "bbox_xyxy": [
+            2055.956,
+            993.05835,
+            2126.9658,
+            1170.0599
+          ],
+          "frame_idx": 41959,
+          "score": 0.4384714663028717,
+          "tracklet_key": "vlincs_MS01_MC0001_MCAM04_2024-03-Tc6:3058:0",
+          "video_key": "vlincs_MS01_MC0001_MCAM04_2024-03-Tc6"
+        }
+      ],
+      "seq": 4504
+    },
+    {
+      "after": {
+        "avg_conf": "0.455904",
+        "camera": "MCAM04",
+        "component_external_prob_max": "0.0",
+        "component_internal_edges": "0",
+        "component_internal_prob_median": "0.0",
+        "component_internal_score_median": "0.0",
+        "component_label": "86",
+        "component_margin_prob": "0.0",
+        "component_size": "160",
+        "decision_status": "manifest_reassign",
+        "end_frame": "42110",
+        "n_dets": "150",
+        "predicted_global_id": "960000350",
+        "prediction_confidence": "0.700000",
+        "seq": "4547",
+        "start_frame": "41960",
+        "tracklet_key": "vlincs_MS01_MC0001_MCAM04_2024-03-Tc6:3097:0",
+        "video": "vlincs_MS01_MC0001_MCAM04_2024-03-Tc6"
+      },
+      "before": {
+        "avg_conf": "0.455904",
+        "camera": "MCAM04",
+        "component_external_prob_max": "0.0",
+        "component_internal_edges": "0",
+        "component_internal_prob_median": "0.0",
+        "component_internal_score_median": "0.0",
+        "component_label": "37",
+        "component_margin_prob": "0.0",
+        "component_size": "69",
+        "decision_status": "forced_component",
+        "end_frame": "42110",
+        "n_dets": "150",
+        "predicted_global_id": "96000040",
+        "prediction_confidence": "0.700000",
+        "seq": "4547",
+        "start_frame": "41960",
+        "tracklet_key": "vlincs_MS01_MC0001_MCAM04_2024-03-Tc6:3097:0",
+        "video": "vlincs_MS01_MC0001_MCAM04_2024-03-Tc6"
+      },
+      "sampled_boxes": [
+        {
+          "bbox_xyxy": [
+            2056.2947,
+            992.9883,
+            2127.295,
+            1169.9752
+          ],
+          "frame_idx": 41960,
+          "score": 0.42755356431007385,
+          "tracklet_key": "vlincs_MS01_MC0001_MCAM04_2024-03-Tc6:3097:0",
+          "video_key": "vlincs_MS01_MC0001_MCAM04_2024-03-Tc6"
+        },
+        {
+          "bbox_xyxy": [
+            2055.95,
+            993.0742,
+            2122.663,
+            1169.7567
+          ],
+          "frame_idx": 42035,
+          "score": 0.4819605350494385,
+          "tracklet_key": "vlincs_MS01_MC0001_MCAM04_2024-03-Tc6:3097:0",
+          "video_key": "vlincs_MS01_MC0001_MCAM04_2024-03-Tc6"
+        },
+        {
+          "bbox_xyxy": [
+            2038.8716,
+            979.8462,
+            2086.7764,
+            1170.6045
+          ],
+          "frame_idx": 42110,
+          "score": 0.47882965207099915,
+          "tracklet_key": "vlincs_MS01_MC0001_MCAM04_2024-03-Tc6:3097:0",
+          "video_key": "vlincs_MS01_MC0001_MCAM04_2024-03-Tc6"
+        }
+      ],
+      "seq": 4547
+    },
+    {
+      "after": {
+        "avg_conf": "0.411883",
+        "camera": "MCAM04",
+        "component_external_prob_max": "0.0",
+        "component_internal_edges": "0",
+        "component_internal_prob_median": "0.0",
+        "component_internal_score_median": "0.0",
+        "component_label": "86",
+        "component_margin_prob": "0.0",
+        "component_size": "160",
+        "decision_status": "manifest_reassign",
+        "end_frame": "42613",
+        "n_dets": "298",
+        "predicted_global_id": "960000350",
+        "prediction_confidence": "0.700000",
+        "seq": "4608",
+        "start_frame": "42314",
+        "tracklet_key": "vlincs_MS01_MC0001_MCAM04_2024-03-Tc6:3151:0",
+        "video": "vlincs_MS01_MC0001_MCAM04_2024-03-Tc6"
+      },
+      "before": {
+        "avg_conf": "0.411883",
+        "camera": "MCAM04",
+        "component_external_prob_max": "0.0",
+        "component_internal_edges": "0",
+        "component_internal_prob_median": "0.0",
+        "component_internal_score_median": "0.0",
+        "component_label": "37",
+        "component_margin_prob": "0.0",
+        "component_size": "69",
+        "decision_status": "forced_component",
+        "end_frame": "42613",
+        "n_dets": "298",
+        "predicted_global_id": "96000040",
+        "prediction_confidence": "0.700000",
+        "seq": "4608",
+        "start_frame": "42314",
+        "tracklet_key": "vlincs_MS01_MC0001_MCAM04_2024-03-Tc6:3151:0",
+        "video": "vlincs_MS01_MC0001_MCAM04_2024-03-Tc6"
+      },
+      "sampled_boxes": [
+        {
+          "bbox_xyxy": [
+            2055.3005,
+            997.50854,
+            2125.126,
+            1235.9331
+          ],
+          "frame_idx": 42314,
+          "score": 0.13780231773853302,
+          "tracklet_key": "vlincs_MS01_MC0001_MCAM04_2024-03-Tc6:3151:0",
+          "video_key": "vlincs_MS01_MC0001_MCAM04_2024-03-Tc6"
+        },
+        {
+          "bbox_xyxy": [
+            2062.16,
+            991.27234,
+            2138.477,
+            1169.8341
+          ],
+          "frame_idx": 42462,
+          "score": 0.5278632044792175,
+          "tracklet_key": "vlincs_MS01_MC0001_MCAM04_2024-03-Tc6:3151:0",
+          "video_key": "vlincs_MS01_MC0001_MCAM04_2024-03-Tc6"
+        },
+        {
+          "bbox_xyxy": [
+            2061.2253,
+            996.2726,
+            2129.4421,
+            1170.065
+          ],
+          "frame_idx": 42613,
+          "score": 0.610751211643219,
+          "tracklet_key": "vlincs_MS01_MC0001_MCAM04_2024-03-Tc6:3151:0",
+          "video_key": "vlincs_MS01_MC0001_MCAM04_2024-03-Tc6"
+        }
+      ],
+      "seq": 4608
+    },
+    {
+      "after": {
+        "avg_conf": "0.554327",
+        "camera": "MCAM04",
+        "component_external_prob_max": "0.0",
+        "component_internal_edges": "0",
+        "component_internal_prob_median": "0.0",
+        "component_internal_score_median": "0.0",
+        "component_label": "86",
+        "component_margin_prob": "0.0",
+        "component_size": "160",
+        "decision_status": "manifest_reassign",
+        "end_frame": "43213",
+        "n_dets": "300",
+        "predicted_global_id": "960000350",
+        "prediction_confidence": "0.700000",
+        "seq": "4690",
+        "start_frame": "42914",
+        "tracklet_key": "vlincs_MS01_MC0001_MCAM04_2024-03-Tc6:3225:0",
+        "video": "vlincs_MS01_MC0001_MCAM04_2024-03-Tc6"
+      },
+      "before": {
+        "avg_conf": "0.554327",
+        "camera": "MCAM04",
+        "component_external_prob_max": "0.0",
+        "component_internal_edges": "0",
+        "component_internal_prob_median": "0.0",
+        "component_internal_score_median": "0.0",
+        "component_label": "37",
+        "component_margin_prob": "0.0",
+        "component_size": "69",
+        "decision_status": "forced_component",
+        "end_frame": "43213",
+        "n_dets": "300",
+        "predicted_global_id": "96000040",
+        "prediction_confidence": "0.700000",
+        "seq": "4690",
+        "start_frame": "42914",
+        "tracklet_key": "vlincs_MS01_MC0001_MCAM04_2024-03-Tc6:3225:0",
+        "video": "vlincs_MS01_MC0001_MCAM04_2024-03-Tc6"
+      },
+      "sampled_boxes": [
+        {
+          "bbox_xyxy": [
+            2056.9036,
+            996.01624,
+            2126.2368,
+            1170.0258
+          ],
+          "frame_idx": 42914,
+          "score": 0.4395213723182678,
+          "tracklet_key": "vlincs_MS01_MC0001_MCAM04_2024-03-Tc6:3225:0",
+          "video_key": "vlincs_MS01_MC0001_MCAM04_2024-03-Tc6"
+        },
+        {
+          "bbox_xyxy": [
+            2060.6228,
+            997.4698,
+            2133.2393,
+            1170.5587
+          ],
+          "frame_idx": 43064,
+          "score": 0.5514730215072632,
+          "tracklet_key": "vlincs_MS01_MC0001_MCAM04_2024-03-Tc6:3225:0",
+          "video_key": "vlincs_MS01_MC0001_MCAM04_2024-03-Tc6"
+        },
+        {
+          "bbox_xyxy": [
+            2060.0278,
+            993.0376,
+            2141.9253,
+            1169.6979
+          ],
+          "frame_idx": 43213,
+          "score": 0.6828196048736572,
+          "tracklet_key": "vlincs_MS01_MC0001_MCAM04_2024-03-Tc6:3225:0",
+          "video_key": "vlincs_MS01_MC0001_MCAM04_2024-03-Tc6"
+        }
+      ],
+      "seq": 4690
+    },
+    {
+      "after": {
+        "avg_conf": "0.732785",
+        "camera": "MCAM04",
+        "component_external_prob_max": "0.0",
+        "component_internal_edges": "0",
+        "component_internal_prob_median": "0.0",
+        "component_internal_score_median": "0.0",
+        "component_label": "86",
+        "component_margin_prob": "0.0",
+        "component_size": "160",
+        "decision_status": "manifest_reassign",
+        "end_frame": "13873",
+        "n_dets": "300",
+        "predicted_global_id": "960000350",
+        "prediction_confidence": "0.700000",
+        "seq": "5834",
+        "start_frame": "13574",
+        "tracklet_key": "vlincs_MS01_MC0001_MCAM04_2024-03-Tc6:947:0",
+        "video": "vlincs_MS01_MC0001_MCAM04_2024-03-Tc6"
+      },
+      "before": {
+        "avg_conf": "0.732785",
+        "camera": "MCAM04",
+        "component_external_prob_max": "0.0",
+        "component_internal_edges": "0",
+        "component_internal_prob_median": "0.0",
+        "component_internal_score_median": "0.0",
+        "component_label": "37",
+        "component_margin_prob": "0.0",
+        "component_size": "69",
+        "decision_status": "forced_component",
+        "end_frame": "13873",
+        "n_dets": "300",
+        "predicted_global_id": "96000040",
+        "prediction_confidence": "0.700000",
+        "seq": "5834",
+        "start_frame": "13574",
+        "tracklet_key": "vlincs_MS01_MC0001_MCAM04_2024-03-Tc6:947:0",
+        "video": "vlincs_MS01_MC0001_MCAM04_2024-03-Tc6"
+      },
+      "sampled_boxes": [
+        {
+          "bbox_xyxy": [
+            2115.6904,
+            1124.4423,
+            2215.017,
+            1296.9133
+          ],
+          "frame_idx": 13574,
+          "score": 0.8352638483047485,
+          "tracklet_key": "vlincs_MS01_MC0001_MCAM04_2024-03-Tc6:947:0",
+          "video_key": "vlincs_MS01_MC0001_MCAM04_2024-03-Tc6"
+        },
+        {
+          "bbox_xyxy": [
+            2116.7415,
+            1123.7461,
+            2202.889,
+            1292.3187
+          ],
+          "frame_idx": 13724,
+          "score": 0.6198812127113342,
+          "tracklet_key": "vlincs_MS01_MC0001_MCAM04_2024-03-Tc6:947:0",
+          "video_key": "vlincs_MS01_MC0001_MCAM04_2024-03-Tc6"
+        },
+        {
+          "bbox_xyxy": [
+            2117.884,
+            1128.2742,
+            2217.2158,
+            1278.9601
+          ],
+          "frame_idx": 13873,
+          "score": 0.6782488822937012,
+          "tracklet_key": "vlincs_MS01_MC0001_MCAM04_2024-03-Tc6:947:0",
+          "video_key": "vlincs_MS01_MC0001_MCAM04_2024-03-Tc6"
+        }
+      ],
+      "seq": 5834
+    },
+    {
+      "after": {
+        "avg_conf": "0.647489",
+        "camera": "MCAM04",
+        "component_external_prob_max": "0.0",
+        "component_internal_edges": "0",
+        "component_internal_prob_median": "0.0",
+        "component_internal_score_median": "0.0",
+        "component_label": "86",
+        "component_margin_prob": "0.0",
+        "component_size": "160",
+        "decision_status": "manifest_reassign",
+        "end_frame": "14173",
+        "n_dets": "288",
+        "predicted_global_id": "960000350",
+        "prediction_confidence": "0.700000",
+        "seq": "5875",
+        "start_frame": "13874",
+        "tracklet_key": "vlincs_MS01_MC0001_MCAM04_2024-03-Tc6:984:0",
+        "video": "vlincs_MS01_MC0001_MCAM04_2024-03-Tc6"
+      },
+      "before": {
+        "avg_conf": "0.647489",
+        "camera": "MCAM04",
+        "component_external_prob_max": "0.0",
+        "component_internal_edges": "0",
+        "component_internal_prob_median": "0.0",
+        "component_internal_score_median": "0.0",
+        "component_label": "37",
+        "component_margin_prob": "0.0",
+        "component_size": "69",
+        "decision_status": "forced_component",
+        "end_frame": "14173",
+        "n_dets": "288",
+        "predicted_global_id": "96000040",
+        "prediction_confidence": "0.700000",
+        "seq": "5875",
+        "start_frame": "13874",
+        "tracklet_key": "vlincs_MS01_MC0001_MCAM04_2024-03-Tc6:984:0",
+        "video": "vlincs_MS01_MC0001_MCAM04_2024-03-Tc6"
+      },
+      "sampled_boxes": [
+        {
+          "bbox_xyxy": [
+            2117.7917,
+            1128.0242,
+            2216.7607,
+            1280.236
+          ],
+          "frame_idx": 13874,
+          "score": 0.6919093728065491,
+          "tracklet_key": "vlincs_MS01_MC0001_MCAM04_2024-03-Tc6:984:0",
+          "video_key": "vlincs_MS01_MC0001_MCAM04_2024-03-Tc6"
+        },
+        {
+          "bbox_xyxy": [
+            2117.8665,
+            1124.5242,
+            2200.9065,
+            1289.7379
+          ],
+          "frame_idx": 14018,
+          "score": 0.6942569613456726,
+          "tracklet_key": "vlincs_MS01_MC0001_MCAM04_2024-03-Tc6:984:0",
+          "video_key": "vlincs_MS01_MC0001_MCAM04_2024-03-Tc6"
+        },
+        {
+          "bbox_xyxy": [
+            2117.2493,
+            1127.9567,
+            2216.7715,
+            1288.2828
+          ],
+          "frame_idx": 14173,
+          "score": 0.7122003436088562,
+          "tracklet_key": "vlincs_MS01_MC0001_MCAM04_2024-03-Tc6:984:0",
+          "video_key": "vlincs_MS01_MC0001_MCAM04_2024-03-Tc6"
+        }
+      ],
+      "seq": 5875
+    },
+    {
+      "after": {
+        "avg_conf": "0.496282",
+        "camera": "MCAM04",
+        "component_external_prob_max": "0.0",
+        "component_internal_edges": "0",
+        "component_internal_prob_median": "0.0",
+        "component_internal_score_median": "0.0",
+        "component_label": "86",
+        "component_margin_prob": "0.0",
+        "component_size": "160",
+        "decision_status": "manifest_reassign",
+        "end_frame": "14040",
+        "n_dets": "36",
+        "predicted_global_id": "960000350",
+        "prediction_confidence": "0.700000",
+        "seq": "5890",
+        "start_frame": "13984",
+        "tracklet_key": "vlincs_MS01_MC0001_MCAM04_2024-03-Tc6:998:0",
+        "video": "vlincs_MS01_MC0001_MCAM04_2024-03-Tc6"
+      },
+      "before": {
+        "avg_conf": "0.496282",
+        "camera": "MCAM04",
+        "component_external_prob_max": "0.0",
+        "component_internal_edges": "0",
+        "component_internal_prob_median": "0.0",
+        "component_internal_score_median": "0.0",
+        "component_label": "37",
+        "component_margin_prob": "0.0",
+        "component_size": "69",
+        "decision_status": "forced_component",
+        "end_frame": "14040",
+        "n_dets": "36",
+        "predicted_global_id": "96000040",
+        "prediction_confidence": "0.700000",
+        "seq": "5890",
+        "start_frame": "13984",
+        "tracklet_key": "vlincs_MS01_MC0001_MCAM04_2024-03-Tc6:998:0",
+        "video": "vlincs_MS01_MC0001_MCAM04_2024-03-Tc6"
+      },
+      "sampled_boxes": [
+        {
+          "bbox_xyxy": [
+            2117.311,
+            1125.1025,
+            2202.3555,
+            1290.9558
+          ],
+          "frame_idx": 13984,
+          "score": 0.5411791205406189,
+          "tracklet_key": "vlincs_MS01_MC0001_MCAM04_2024-03-Tc6:998:0",
+          "video_key": "vlincs_MS01_MC0001_MCAM04_2024-03-Tc6"
+        },
+        {
+          "bbox_xyxy": [
+            2117.903,
+            1125.0941,
+            2201.0464,
+            1288.7831
+          ],
+          "frame_idx": 14021,
+          "score": 0.5085357427597046,
+          "tracklet_key": "vlincs_MS01_MC0001_MCAM04_2024-03-Tc6:998:0",
+          "video_key": "vlincs_MS01_MC0001_MCAM04_2024-03-Tc6"
+        },
+        {
+          "bbox_xyxy": [
+            2161.3818,
+            1127.5547,
+            2200.5278,
+            1238.7942
+          ],
+          "frame_idx": 14040,
+          "score": 0.10819502919912338,
+          "tracklet_key": "vlincs_MS01_MC0001_MCAM04_2024-03-Tc6:998:0",
+          "video_key": "vlincs_MS01_MC0001_MCAM04_2024-03-Tc6"
+        }
+      ],
+      "seq": 5890
+    }
+  ],
+  "uses_anchors": false,
+  "uses_gt_for_evaluation_only": false,
+  "uses_gt_for_training_or_anchors": false,
+  "video_root": ""
+}

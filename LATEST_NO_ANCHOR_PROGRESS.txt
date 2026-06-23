@@ -2,6 +2,15 @@ VLINCS no-anchor global ID progress
 Date: 2026-06-23
 
 Current best e2e:
+IDF1 / HOTA / AssA = 0.668198 / 0.528747 / 0.539071
+
+Latest rank06 top32 subset 37->86 gain:
+After promoting top28, a local top-k neighborhood search tested top22/top24/top26/top30/top32/top34. Top32 is the best direct boundary point at 0.666005/0.526982/0.537182. It moves 32 high target-similarity component 37 tracklets into component 86 / gid 960000350, recovering four compatible tracklets that top28 left out. density_simple reaches 0.668093/0.528665/0.538947. Valid p005_area reaches the new canonical best 0.668198/0.528747/0.539071 with config_name=p005_area and dropped_rows=45467, improving top28 by +0.000052 IDF1, +0.000078 HOTA, and +0.000070 AssA. The package is reports/vlincs_iterations/20260623_rank01_37to86_top32_p005_gain/ with README.md, presentation.html, spec.json, metrics, six direct ablations, coordinate-fallback top32 case, and two real-frame context images. Current top32 raw frames are still absent locally, so its component case is coordinate-only evidence rather than a path failure.
+
+VLINCS no-anchor global ID progress
+Date: 2026-06-23
+
+Current best e2e:
 IDF1 / HOTA / AssA = 0.668146 / 0.528669 / 0.539001
 
 Latest rank08 top28 subset 37->86 gain:
