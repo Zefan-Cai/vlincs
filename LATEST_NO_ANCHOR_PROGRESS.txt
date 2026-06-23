@@ -2,7 +2,23 @@ VLINCS no-anchor global ID progress
 Date: 2026-06-22
 
 Current best e2e:
-IDF1 / HOTA / AssA = 0.664050 / 0.524893 / 0.536568
+IDF1 / HOTA / AssA = 0.664835 / 0.525495 / 0.536810
+
+Latest regenerated subpart promotion:
+The current split-best assignment had predicted_global_id=92 components but
+only 83 component_label groups, because the promoted 35/48/20 component split
+updated IDs without refreshing labels. A no-op manifest replay refreshed the
+component labels, then a no-anchor subpart proposer regenerated candidates
+from the current namespace using assignment evidence plus weakmetric/OSNet and
+DINOv2 features. The promoted combo applies two split-child repairs:
+rank02 moves 14 tracklets from 960000350 to 960000351, and rank09 moves 5
+tracklets from 960000350 to 960000480. Direct full improved from
+0.661843/0.523137/0.534683 to 0.662638/0.523746/0.534926. The fixed
+density_simple + p005_area delivery score improved from
+0.664050/0.524893/0.536568 to 0.664835/0.525495/0.536810. Pair proxy for the
+combo is 0.782244/0.850111/0.724411. Rank09 is an important hard label for the
+admission model: pair F1 decreased slightly on its own, but direct full score
+improved, so pair-only ranking is insufficient.
 
 Latest residual split refutation:
 After promoting the 3-component split, a residual greedy12 split probe was run
