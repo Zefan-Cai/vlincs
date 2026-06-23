@@ -1,8 +1,8 @@
 {
-  "best_assignment_csv": "local_runs/offline_no_anchor_split_probe_20260623/component_graph_fullscore/rank04_plus_small_fragment_combo/assignments/rank01_small_fragment_combo_combo_rank77_rank36_component_graph_small_fragment_assignments.csv",
-  "best_e2e_assa": 0.53795,
-  "best_e2e_hota": 0.527169,
-  "best_e2e_idf1": 0.666597,
+  "best_assignment_csv": "local_runs/offline_no_anchor_split_probe_20260623/component_graph_fullscore/rank04_small_combo_next_component_probe/assignments/rank01_component_graph_high_mass_bridge_source_assignments.csv",
+  "best_e2e_assa": 0.538672,
+  "best_e2e_hota": 0.52821,
+  "best_e2e_idf1": 0.667536,
   "best_model_pair_f1": 0.782244,
   "best_model_pair_precision": 0.850111,
   "best_model_pair_recall": 0.724411,
@@ -12,7 +12,7 @@
   "goal_global_id_pair_f1": 0.7,
   "goal_global_id_pair_precision": 0.7,
   "goal_global_id_pair_recall": 0.7,
-  "iteration": 109,
+  "iteration": 110,
   "last_artifacts": [
     "reports/no_anchor_offline_component_split_promotion_20260622.md",
     "local_runs/offline_no_anchor_split_probe_20260622/best_combo_split_assignments.csv",
@@ -127,12 +127,21 @@
     "local_runs/offline_no_anchor_split_probe_20260623/component_graph_fullscore/rank04_plus_small_fragment_combo/rank01_density_simple.json",
     "local_runs/offline_no_anchor_split_probe_20260623/component_graph_fullscore/rank04_plus_small_fragment_combo/rank01_density_p005_area.json",
     "local_runs/offline_no_anchor_split_probe_20260623/component_graph_fullscore/rank04_plus_small_fragment_combo/rank01_density_p005_area.zip",
-    "local_runs/offline_no_anchor_split_probe_20260623/component_graph_fullscore/rank04_plus_small_fragment_combo/assignments/rank01_small_fragment_combo_combo_rank77_rank36_component_graph_small_fragment_assignments.csv"
+    "local_runs/offline_no_anchor_split_probe_20260623/component_graph_fullscore/rank04_plus_small_fragment_combo/assignments/rank01_small_fragment_combo_combo_rank77_rank36_component_graph_small_fragment_assignments.csv",
+    "reports/vlincs_iterations/20260623_rank04_small_combo_rank01_37to86_p005_gain/",
+    "local_runs/offline_no_anchor_split_probe_20260623/rank04_plus_small_combo_component_graph_candidates.json",
+    "local_runs/offline_no_anchor_split_probe_20260623/rank04_plus_small_combo_component_graph_directional_rescue.json",
+    "local_runs/offline_no_anchor_split_probe_20260623/rank04_plus_small_combo_component_graph_small_fragment.json",
+    "local_runs/offline_no_anchor_split_probe_20260623/component_graph_fullscore/rank04_small_combo_next_component_probe/summary.json",
+    "local_runs/offline_no_anchor_split_probe_20260623/component_graph_fullscore/rank04_small_combo_next_component_probe/rank01_density_simple.json",
+    "local_runs/offline_no_anchor_split_probe_20260623/component_graph_fullscore/rank04_small_combo_next_component_probe/rank01_density_p005_area.json",
+    "local_runs/offline_no_anchor_split_probe_20260623/component_graph_fullscore/rank04_small_combo_next_component_probe/rank01_density_p005_area.zip",
+    "local_runs/offline_no_anchor_split_probe_20260623/component_graph_fullscore/rank04_small_combo_next_component_probe/assignments/rank01_component_graph_high_mass_bridge_source_assignments.csv"
   ],
-  "last_direction": "rank04_plus_small_fragment_combo_p005_gain",
-  "last_result": "On top of component-graph rank04, replayed no-anchor small-fragment candidates from production manifests. Rank02 57->46 moved four MCAM04/Tc6 residual tracklets and improved direct to 0.664401/0.525406/0.536068, density_simple to 0.666492/0.527088/0.537828, and valid p005_area to 0.666595/0.527166/0.537947. The combo adds near-tie 68->27 for two more tracklets and reaches the new best p005_area 0.666597/0.527169/0.537950 with config_name=p005_area and dropped_rows=45467. Gain over previous canonical best is +0.000175 IDF1, +0.000298 HOTA, +0.000333 AssA.",
+  "last_direction": "rank04_small_combo_rank01_37to86_p005_gain",
+  "last_result": "On top of the rank04+small-combo best, regenerated no-anchor component-graph candidates from production assignment state plus weakmetric/OSNet, DINOv2, and SigLIP tracklet features. The strict small-fragment filter selected 0 candidates and the directional filter only recovered stale hard-negative 79->4, so the reviewer direct-scored non-stale raw ranks 1, 7, and 8. Rank01 moves 69 component 37 tracklets into component 86 / gid 960000350 and improves direct full to 0.665296/0.526390/0.536737, density_simple to 0.667439/0.528134/0.538552, and valid p005_area to the new best 0.667536/0.528210/0.538672 with config_name=p005_area and dropped_rows=45467. Rank07 91->90 and rank08 90->91 tied direct full at 0.664403/0.525408/0.536070 and were not promoted. Gain over previous canonical best is +0.000939 IDF1, +0.001041 HOTA, +0.000722 AssA.",
   "last_updated": "2026-06-23",
-  "next_direction": "search_rank04_plus_small_combo_residual_small_fragment_and_component_graph_interactions_with_near_tie_penalty_and_MCAM04_focus",
+  "next_direction": "search_side_effect_aware_37to86_variants_split_component37_before_attach",
   "stale_count": 0,
-  "status": "active_no_anchor_best_e2e_0p666597_rank04_plus_small_combo_gain_e2e_still_below_0p70"
+  "status": "active_no_anchor_best_e2e_0p667536_rank01_37to86_gain_e2e_still_below_0p70"
 }

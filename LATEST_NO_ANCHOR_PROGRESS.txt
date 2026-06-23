@@ -2,7 +2,26 @@ VLINCS no-anchor global ID progress
 Date: 2026-06-23
 
 Current best e2e:
-IDF1 / HOTA / AssA = 0.666597 / 0.527169 / 0.537950
+IDF1 / HOTA / AssA = 0.667536 / 0.528210 / 0.538672
+
+Latest rank04 small-combo rank01 37->86 gain:
+On top of the rank04+small-combo best, component-graph candidates were
+regenerated from the current no-anchor assignment plus weakmetric/OSNet,
+DINOv2, and SigLIP tracklet features. The strict small-fragment filter selected
+0 candidates and the directional filter only recovered stale hard-negative
+79->4, so the reviewer direct-scored high-scoring non-stale raw ranks 1, 7,
+and 8. Rank01 moves 69 component 37 tracklets into component 86 /
+gid 960000350. It improves direct full to 0.665296/0.526390/0.536737,
+density_simple to 0.667439/0.528134/0.538552, and valid p005_area to the new
+best 0.667536/0.528210/0.538672 with config_name=p005_area and
+dropped_rows=45467. Gain over the previous canonical best is +0.000939 IDF1,
++0.001041 HOTA, and +0.000722 AssA. Per-video p005 gains are strongest on
+MCAM03/Tc8 (+0.006781 IDF1) and MCAM04/Tc6 (+0.002065 IDF1), with small losses
+on MCAM03/Tc6 (-0.001128) and MCAM08/Tc6 (-0.000779). The package is
+reports/vlincs_iterations/20260623_rank04_small_combo_rank01_37to86_p005_gain/
+with README.md, presentation.html, spec.json, metrics, and 3 bbox-coordinate
+case studies. Raw frames are still absent locally, so case panels are
+coordinate-only fallback evidence rather than real-pixel crops.
 
 Latest rank04 plus small-fragment combo gain:
 After rank04 became the base, the no-anchor small-fragment manifests were

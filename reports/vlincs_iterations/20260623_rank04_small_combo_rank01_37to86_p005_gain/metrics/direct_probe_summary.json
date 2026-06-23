@@ -1,0 +1,1431 @@
+{
+  "base_assignment_csv": "local_runs/offline_no_anchor_split_probe_20260623/component_graph_fullscore/rank04_plus_small_fragment_combo/assignments/rank01_small_fragment_combo_combo_rank77_rank36_component_graph_small_fragment_assignments.csv",
+  "best_idf1": 0.665296,
+  "gt_available": true,
+  "manifest_json": "local_runs/offline_no_anchor_split_probe_20260623/component_graph_fullscore/rank04_small_combo_next_component_probe/manifest_assignments.json",
+  "outputs": [
+    {
+      "accepted_preview_count": 1,
+      "assa": 0.536737,
+      "assigned_tracklets": 7487,
+      "assignment_status_counts": {
+        "forced_component": 7363,
+        "forced_singleton": 28,
+        "manifest_reassign": 96
+      },
+      "deta": 0.516286,
+      "detpr": 0.767157,
+      "detre": 0.587315,
+      "fallback": "singleton",
+      "gt_available": true,
+      "hota": 0.52639,
+      "idf1": 0.665296,
+      "input_rows": 1723070,
+      "input_tracklets": 9734,
+      "missing_assignment_tracklets": 2247,
+      "missing_source_seqs": [],
+      "mode": "component_graph_high_mass_bridge",
+      "moved_preview": [
+        {
+          "from_component": 37,
+          "from_predicted_global_id": 96000040,
+          "seq": 389,
+          "to_component": 86,
+          "to_predicted_global_id": 960000350
+        },
+        {
+          "from_component": 37,
+          "from_predicted_global_id": 96000040,
+          "seq": 986,
+          "to_component": 86,
+          "to_predicted_global_id": 960000350
+        },
+        {
+          "from_component": 37,
+          "from_predicted_global_id": 96000040,
+          "seq": 1125,
+          "to_component": 86,
+          "to_predicted_global_id": 960000350
+        },
+        {
+          "from_component": 37,
+          "from_predicted_global_id": 96000040,
+          "seq": 1201,
+          "to_component": 86,
+          "to_predicted_global_id": 960000350
+        },
+        {
+          "from_component": 37,
+          "from_predicted_global_id": 96000040,
+          "seq": 1681,
+          "to_component": 86,
+          "to_predicted_global_id": 960000350
+        },
+        {
+          "from_component": 37,
+          "from_predicted_global_id": 96000040,
+          "seq": 1683,
+          "to_component": 86,
+          "to_predicted_global_id": 960000350
+        },
+        {
+          "from_component": 37,
+          "from_predicted_global_id": 96000040,
+          "seq": 1685,
+          "to_component": 86,
+          "to_predicted_global_id": 960000350
+        },
+        {
+          "from_component": 37,
+          "from_predicted_global_id": 96000040,
+          "seq": 1686,
+          "to_component": 86,
+          "to_predicted_global_id": 960000350
+        },
+        {
+          "from_component": 37,
+          "from_predicted_global_id": 96000040,
+          "seq": 1696,
+          "to_component": 86,
+          "to_predicted_global_id": 960000350
+        },
+        {
+          "from_component": 37,
+          "from_predicted_global_id": 96000040,
+          "seq": 1710,
+          "to_component": 86,
+          "to_predicted_global_id": 960000350
+        },
+        {
+          "from_component": 37,
+          "from_predicted_global_id": 96000040,
+          "seq": 1712,
+          "to_component": 86,
+          "to_predicted_global_id": 960000350
+        },
+        {
+          "from_component": 37,
+          "from_predicted_global_id": 96000040,
+          "seq": 1714,
+          "to_component": 86,
+          "to_predicted_global_id": 960000350
+        },
+        {
+          "from_component": 37,
+          "from_predicted_global_id": 96000040,
+          "seq": 1722,
+          "to_component": 86,
+          "to_predicted_global_id": 960000350
+        },
+        {
+          "from_component": 37,
+          "from_predicted_global_id": 96000040,
+          "seq": 1724,
+          "to_component": 86,
+          "to_predicted_global_id": 960000350
+        },
+        {
+          "from_component": 37,
+          "from_predicted_global_id": 96000040,
+          "seq": 1730,
+          "to_component": 86,
+          "to_predicted_global_id": 960000350
+        },
+        {
+          "from_component": 37,
+          "from_predicted_global_id": 96000040,
+          "seq": 1731,
+          "to_component": 86,
+          "to_predicted_global_id": 960000350
+        },
+        {
+          "from_component": 37,
+          "from_predicted_global_id": 96000040,
+          "seq": 1788,
+          "to_component": 86,
+          "to_predicted_global_id": 960000350
+        },
+        {
+          "from_component": 37,
+          "from_predicted_global_id": 96000040,
+          "seq": 1789,
+          "to_component": 86,
+          "to_predicted_global_id": 960000350
+        },
+        {
+          "from_component": 37,
+          "from_predicted_global_id": 96000040,
+          "seq": 2243,
+          "to_component": 86,
+          "to_predicted_global_id": 960000350
+        },
+        {
+          "from_component": 37,
+          "from_predicted_global_id": 96000040,
+          "seq": 2250,
+          "to_component": 86,
+          "to_predicted_global_id": 960000350
+        },
+        {
+          "from_component": 37,
+          "from_predicted_global_id": 96000040,
+          "seq": 2285,
+          "to_component": 86,
+          "to_predicted_global_id": 960000350
+        },
+        {
+          "from_component": 37,
+          "from_predicted_global_id": 96000040,
+          "seq": 2330,
+          "to_component": 86,
+          "to_predicted_global_id": 960000350
+        },
+        {
+          "from_component": 37,
+          "from_predicted_global_id": 96000040,
+          "seq": 2334,
+          "to_component": 86,
+          "to_predicted_global_id": 960000350
+        },
+        {
+          "from_component": 37,
+          "from_predicted_global_id": 96000040,
+          "seq": 2353,
+          "to_component": 86,
+          "to_predicted_global_id": 960000350
+        },
+        {
+          "from_component": 37,
+          "from_predicted_global_id": 96000040,
+          "seq": 2376,
+          "to_component": 86,
+          "to_predicted_global_id": 960000350
+        },
+        {
+          "from_component": 37,
+          "from_predicted_global_id": 96000040,
+          "seq": 2399,
+          "to_component": 86,
+          "to_predicted_global_id": 960000350
+        },
+        {
+          "from_component": 37,
+          "from_predicted_global_id": 96000040,
+          "seq": 2433,
+          "to_component": 86,
+          "to_predicted_global_id": 960000350
+        },
+        {
+          "from_component": 37,
+          "from_predicted_global_id": 96000040,
+          "seq": 2461,
+          "to_component": 86,
+          "to_predicted_global_id": 960000350
+        },
+        {
+          "from_component": 37,
+          "from_predicted_global_id": 96000040,
+          "seq": 2471,
+          "to_component": 86,
+          "to_predicted_global_id": 960000350
+        },
+        {
+          "from_component": 37,
+          "from_predicted_global_id": 96000040,
+          "seq": 2505,
+          "to_component": 86,
+          "to_predicted_global_id": 960000350
+        },
+        {
+          "from_component": 37,
+          "from_predicted_global_id": 96000040,
+          "seq": 2543,
+          "to_component": 86,
+          "to_predicted_global_id": 960000350
+        },
+        {
+          "from_component": 37,
+          "from_predicted_global_id": 96000040,
+          "seq": 2577,
+          "to_component": 86,
+          "to_predicted_global_id": 960000350
+        },
+        {
+          "from_component": 37,
+          "from_predicted_global_id": 96000040,
+          "seq": 2613,
+          "to_component": 86,
+          "to_predicted_global_id": 960000350
+        },
+        {
+          "from_component": 37,
+          "from_predicted_global_id": 96000040,
+          "seq": 2644,
+          "to_component": 86,
+          "to_predicted_global_id": 960000350
+        },
+        {
+          "from_component": 37,
+          "from_predicted_global_id": 96000040,
+          "seq": 2680,
+          "to_component": 86,
+          "to_predicted_global_id": 960000350
+        },
+        {
+          "from_component": 37,
+          "from_predicted_global_id": 96000040,
+          "seq": 2745,
+          "to_component": 86,
+          "to_predicted_global_id": 960000350
+        },
+        {
+          "from_component": 37,
+          "from_predicted_global_id": 96000040,
+          "seq": 2812,
+          "to_component": 86,
+          "to_predicted_global_id": 960000350
+        },
+        {
+          "from_component": 37,
+          "from_predicted_global_id": 96000040,
+          "seq": 2847,
+          "to_component": 86,
+          "to_predicted_global_id": 960000350
+        },
+        {
+          "from_component": 37,
+          "from_predicted_global_id": 96000040,
+          "seq": 3538,
+          "to_component": 86,
+          "to_predicted_global_id": 960000350
+        },
+        {
+          "from_component": 37,
+          "from_predicted_global_id": 96000040,
+          "seq": 3886,
+          "to_component": 86,
+          "to_predicted_global_id": 960000350
+        },
+        {
+          "from_component": 37,
+          "from_predicted_global_id": 96000040,
+          "seq": 3929,
+          "to_component": 86,
+          "to_predicted_global_id": 960000350
+        },
+        {
+          "from_component": 37,
+          "from_predicted_global_id": 96000040,
+          "seq": 3967,
+          "to_component": 86,
+          "to_predicted_global_id": 960000350
+        },
+        {
+          "from_component": 37,
+          "from_predicted_global_id": 96000040,
+          "seq": 4002,
+          "to_component": 86,
+          "to_predicted_global_id": 960000350
+        },
+        {
+          "from_component": 37,
+          "from_predicted_global_id": 96000040,
+          "seq": 4043,
+          "to_component": 86,
+          "to_predicted_global_id": 960000350
+        },
+        {
+          "from_component": 37,
+          "from_predicted_global_id": 96000040,
+          "seq": 4079,
+          "to_component": 86,
+          "to_predicted_global_id": 960000350
+        },
+        {
+          "from_component": 37,
+          "from_predicted_global_id": 96000040,
+          "seq": 4338,
+          "to_component": 86,
+          "to_predicted_global_id": 960000350
+        },
+        {
+          "from_component": 37,
+          "from_predicted_global_id": 96000040,
+          "seq": 4443,
+          "to_component": 86,
+          "to_predicted_global_id": 960000350
+        },
+        {
+          "from_component": 37,
+          "from_predicted_global_id": 96000040,
+          "seq": 4494,
+          "to_component": 86,
+          "to_predicted_global_id": 960000350
+        },
+        {
+          "from_component": 37,
+          "from_predicted_global_id": 96000040,
+          "seq": 4504,
+          "to_component": 86,
+          "to_predicted_global_id": 960000350
+        },
+        {
+          "from_component": 37,
+          "from_predicted_global_id": 96000040,
+          "seq": 4522,
+          "to_component": 86,
+          "to_predicted_global_id": 960000350
+        }
+      ],
+      "moved_tracklets": 69,
+      "output_csv": "local_runs/offline_no_anchor_split_probe_20260623/component_graph_fullscore/rank04_small_combo_next_component_probe/assignments/rank01_component_graph_high_mass_bridge_source_assignments.csv",
+      "pair_f1": null,
+      "pair_precision": null,
+      "pair_recall": null,
+      "per_video": {
+        "vlincs_MS01_MC0001_MCAM00_2024-03-Tc6": {
+          "assa": 0.835905,
+          "deta": 0.79496,
+          "detpr": 0.910942,
+          "detre": 0.84865,
+          "hota": 0.81476,
+          "idf1": 0.878694
+        },
+        "vlincs_MS01_MC0001_MCAM00_2024-03-Tc8": {
+          "assa": 0.786603,
+          "deta": 0.71421,
+          "detpr": 0.905473,
+          "detre": 0.761913,
+          "hota": 0.749417,
+          "idf1": 0.827513
+        },
+        "vlincs_MS01_MC0001_MCAM03_2024-03-Tc6": {
+          "assa": 0.623534,
+          "deta": 0.539948,
+          "detpr": 0.805802,
+          "detre": 0.598963,
+          "hota": 0.579993,
+          "idf1": 0.687155
+        },
+        "vlincs_MS01_MC0001_MCAM03_2024-03-Tc8": {
+          "assa": 0.554564,
+          "deta": 0.48271,
+          "detpr": 0.77133,
+          "detre": 0.540888,
+          "hota": 0.517109,
+          "idf1": 0.635875
+        },
+        "vlincs_MS01_MC0001_MCAM04_2024-03-Tc6": {
+          "assa": 0.496312,
+          "deta": 0.431256,
+          "detpr": 0.698563,
+          "detre": 0.500267,
+          "hota": 0.462155,
+          "idf1": 0.583015
+        },
+        "vlincs_MS01_MC0001_MCAM05_2024-03-Tc6": {
+          "assa": 0.638352,
+          "deta": 0.565886,
+          "detpr": 0.820234,
+          "detre": 0.628564,
+          "hota": 0.601013,
+          "idf1": 0.711721
+        },
+        "vlincs_MS01_MC0001_MCAM05_2024-03-Tc8": {
+          "assa": 0.728795,
+          "deta": 0.666277,
+          "detpr": 0.860223,
+          "detre": 0.729116,
+          "hota": 0.696826,
+          "idf1": 0.789262
+        },
+        "vlincs_MS01_MC0001_MCAM06_2024-03-Tc6": {
+          "assa": 0.598228,
+          "deta": 0.448135,
+          "detpr": 0.835881,
+          "detre": 0.480085,
+          "hota": 0.517614,
+          "idf1": 0.609885
+        },
+        "vlincs_MS01_MC0001_MCAM06_2024-03-Tc8": {
+          "assa": 0.614314,
+          "deta": 0.551932,
+          "detpr": 0.790347,
+          "detre": 0.622104,
+          "hota": 0.582124,
+          "idf1": 0.696205
+        },
+        "vlincs_MS01_MC0001_MCAM08_2024-03-Tc6": {
+          "assa": 0.67885,
+          "deta": 0.648285,
+          "detpr": 0.81506,
+          "detre": 0.733077,
+          "hota": 0.663279,
+          "idf1": 0.771898
+        }
+      },
+      "predicted_full_idf1": null,
+      "predicted_ids": 2335,
+      "result_json": "local_runs/offline_no_anchor_split_probe_20260623/component_graph_fullscore/rank04_small_combo_next_component_probe/rank01_component_graph_high_mass_bridge_source_assignments_sample_full.json",
+      "scored_rows": 1723070,
+      "selection_rank": 1,
+      "skipped_empty_source_components": [],
+      "source_file": null,
+      "source_rank": null,
+      "target_component_repairs": [],
+      "target_components": [
+        86
+      ],
+      "target_predicted_global_ids": [
+        960000350
+      ],
+      "unmatched_fp": 286294,
+      "uses_anchors": false,
+      "uses_gt_for_evaluation_only": true,
+      "uses_gt_for_training_or_anchors": false,
+      "videos_scored": [
+        "vlincs_MS01_MC0001_MCAM00_2024-03-Tc6",
+        "vlincs_MS01_MC0001_MCAM00_2024-03-Tc8",
+        "vlincs_MS01_MC0001_MCAM03_2024-03-Tc6",
+        "vlincs_MS01_MC0001_MCAM03_2024-03-Tc8",
+        "vlincs_MS01_MC0001_MCAM04_2024-03-Tc6",
+        "vlincs_MS01_MC0001_MCAM05_2024-03-Tc6",
+        "vlincs_MS01_MC0001_MCAM05_2024-03-Tc8",
+        "vlincs_MS01_MC0001_MCAM06_2024-03-Tc6",
+        "vlincs_MS01_MC0001_MCAM06_2024-03-Tc8",
+        "vlincs_MS01_MC0001_MCAM08_2024-03-Tc6"
+      ],
+      "zip_files": 10,
+      "zip_out": "local_runs/offline_no_anchor_split_probe_20260623/component_graph_fullscore/rank04_small_combo_next_component_probe/rank01_component_graph_high_mass_bridge_source_assignments.zip"
+    },
+    {
+      "accepted_preview_count": 1,
+      "assa": 0.53607,
+      "assigned_tracklets": 7487,
+      "assignment_status_counts": {
+        "forced_component": 7378,
+        "forced_singleton": 28,
+        "manifest_reassign": 81
+      },
+      "deta": 0.514997,
+      "detpr": 0.769455,
+      "detre": 0.584591,
+      "fallback": "singleton",
+      "gt_available": true,
+      "hota": 0.525408,
+      "idf1": 0.664403,
+      "input_rows": 1723070,
+      "input_tracklets": 9734,
+      "missing_assignment_tracklets": 2247,
+      "missing_source_seqs": [],
+      "mode": "component_graph_high_mass_bridge",
+      "moved_preview": [
+        {
+          "from_component": 91,
+          "from_predicted_global_id": 960000483,
+          "seq": 596,
+          "to_component": 90,
+          "to_predicted_global_id": 960000482
+        },
+        {
+          "from_component": 91,
+          "from_predicted_global_id": 960000483,
+          "seq": 609,
+          "to_component": 90,
+          "to_predicted_global_id": 960000482
+        },
+        {
+          "from_component": 91,
+          "from_predicted_global_id": 960000483,
+          "seq": 620,
+          "to_component": 90,
+          "to_predicted_global_id": 960000482
+        },
+        {
+          "from_component": 91,
+          "from_predicted_global_id": 960000483,
+          "seq": 632,
+          "to_component": 90,
+          "to_predicted_global_id": 960000482
+        },
+        {
+          "from_component": 91,
+          "from_predicted_global_id": 960000483,
+          "seq": 633,
+          "to_component": 90,
+          "to_predicted_global_id": 960000482
+        },
+        {
+          "from_component": 91,
+          "from_predicted_global_id": 960000483,
+          "seq": 634,
+          "to_component": 90,
+          "to_predicted_global_id": 960000482
+        },
+        {
+          "from_component": 91,
+          "from_predicted_global_id": 960000483,
+          "seq": 645,
+          "to_component": 90,
+          "to_predicted_global_id": 960000482
+        },
+        {
+          "from_component": 91,
+          "from_predicted_global_id": 960000483,
+          "seq": 647,
+          "to_component": 90,
+          "to_predicted_global_id": 960000482
+        },
+        {
+          "from_component": 91,
+          "from_predicted_global_id": 960000483,
+          "seq": 656,
+          "to_component": 90,
+          "to_predicted_global_id": 960000482
+        },
+        {
+          "from_component": 91,
+          "from_predicted_global_id": 960000483,
+          "seq": 658,
+          "to_component": 90,
+          "to_predicted_global_id": 960000482
+        },
+        {
+          "from_component": 91,
+          "from_predicted_global_id": 960000483,
+          "seq": 671,
+          "to_component": 90,
+          "to_predicted_global_id": 960000482
+        },
+        {
+          "from_component": 91,
+          "from_predicted_global_id": 960000483,
+          "seq": 672,
+          "to_component": 90,
+          "to_predicted_global_id": 960000482
+        },
+        {
+          "from_component": 91,
+          "from_predicted_global_id": 960000483,
+          "seq": 682,
+          "to_component": 90,
+          "to_predicted_global_id": 960000482
+        },
+        {
+          "from_component": 91,
+          "from_predicted_global_id": 960000483,
+          "seq": 683,
+          "to_component": 90,
+          "to_predicted_global_id": 960000482
+        },
+        {
+          "from_component": 91,
+          "from_predicted_global_id": 960000483,
+          "seq": 695,
+          "to_component": 90,
+          "to_predicted_global_id": 960000482
+        },
+        {
+          "from_component": 91,
+          "from_predicted_global_id": 960000483,
+          "seq": 698,
+          "to_component": 90,
+          "to_predicted_global_id": 960000482
+        },
+        {
+          "from_component": 91,
+          "from_predicted_global_id": 960000483,
+          "seq": 701,
+          "to_component": 90,
+          "to_predicted_global_id": 960000482
+        },
+        {
+          "from_component": 91,
+          "from_predicted_global_id": 960000483,
+          "seq": 705,
+          "to_component": 90,
+          "to_predicted_global_id": 960000482
+        },
+        {
+          "from_component": 91,
+          "from_predicted_global_id": 960000483,
+          "seq": 709,
+          "to_component": 90,
+          "to_predicted_global_id": 960000482
+        },
+        {
+          "from_component": 91,
+          "from_predicted_global_id": 960000483,
+          "seq": 713,
+          "to_component": 90,
+          "to_predicted_global_id": 960000482
+        },
+        {
+          "from_component": 91,
+          "from_predicted_global_id": 960000483,
+          "seq": 720,
+          "to_component": 90,
+          "to_predicted_global_id": 960000482
+        },
+        {
+          "from_component": 91,
+          "from_predicted_global_id": 960000483,
+          "seq": 724,
+          "to_component": 90,
+          "to_predicted_global_id": 960000482
+        },
+        {
+          "from_component": 91,
+          "from_predicted_global_id": 960000483,
+          "seq": 737,
+          "to_component": 90,
+          "to_predicted_global_id": 960000482
+        },
+        {
+          "from_component": 91,
+          "from_predicted_global_id": 960000483,
+          "seq": 749,
+          "to_component": 90,
+          "to_predicted_global_id": 960000482
+        },
+        {
+          "from_component": 91,
+          "from_predicted_global_id": 960000483,
+          "seq": 750,
+          "to_component": 90,
+          "to_predicted_global_id": 960000482
+        },
+        {
+          "from_component": 91,
+          "from_predicted_global_id": 960000483,
+          "seq": 762,
+          "to_component": 90,
+          "to_predicted_global_id": 960000482
+        },
+        {
+          "from_component": 91,
+          "from_predicted_global_id": 960000483,
+          "seq": 763,
+          "to_component": 90,
+          "to_predicted_global_id": 960000482
+        },
+        {
+          "from_component": 91,
+          "from_predicted_global_id": 960000483,
+          "seq": 764,
+          "to_component": 90,
+          "to_predicted_global_id": 960000482
+        },
+        {
+          "from_component": 91,
+          "from_predicted_global_id": 960000483,
+          "seq": 863,
+          "to_component": 90,
+          "to_predicted_global_id": 960000482
+        },
+        {
+          "from_component": 91,
+          "from_predicted_global_id": 960000483,
+          "seq": 956,
+          "to_component": 90,
+          "to_predicted_global_id": 960000482
+        },
+        {
+          "from_component": 91,
+          "from_predicted_global_id": 960000483,
+          "seq": 958,
+          "to_component": 90,
+          "to_predicted_global_id": 960000482
+        },
+        {
+          "from_component": 91,
+          "from_predicted_global_id": 960000483,
+          "seq": 963,
+          "to_component": 90,
+          "to_predicted_global_id": 960000482
+        },
+        {
+          "from_component": 91,
+          "from_predicted_global_id": 960000483,
+          "seq": 1054,
+          "to_component": 90,
+          "to_predicted_global_id": 960000482
+        },
+        {
+          "from_component": 91,
+          "from_predicted_global_id": 960000483,
+          "seq": 1055,
+          "to_component": 90,
+          "to_predicted_global_id": 960000482
+        },
+        {
+          "from_component": 91,
+          "from_predicted_global_id": 960000483,
+          "seq": 1096,
+          "to_component": 90,
+          "to_predicted_global_id": 960000482
+        },
+        {
+          "from_component": 91,
+          "from_predicted_global_id": 960000483,
+          "seq": 1105,
+          "to_component": 90,
+          "to_predicted_global_id": 960000482
+        },
+        {
+          "from_component": 91,
+          "from_predicted_global_id": 960000483,
+          "seq": 1139,
+          "to_component": 90,
+          "to_predicted_global_id": 960000482
+        },
+        {
+          "from_component": 91,
+          "from_predicted_global_id": 960000483,
+          "seq": 1150,
+          "to_component": 90,
+          "to_predicted_global_id": 960000482
+        },
+        {
+          "from_component": 91,
+          "from_predicted_global_id": 960000483,
+          "seq": 1154,
+          "to_component": 90,
+          "to_predicted_global_id": 960000482
+        },
+        {
+          "from_component": 91,
+          "from_predicted_global_id": 960000483,
+          "seq": 1177,
+          "to_component": 90,
+          "to_predicted_global_id": 960000482
+        },
+        {
+          "from_component": 91,
+          "from_predicted_global_id": 960000483,
+          "seq": 1318,
+          "to_component": 90,
+          "to_predicted_global_id": 960000482
+        },
+        {
+          "from_component": 91,
+          "from_predicted_global_id": 960000483,
+          "seq": 1462,
+          "to_component": 90,
+          "to_predicted_global_id": 960000482
+        },
+        {
+          "from_component": 91,
+          "from_predicted_global_id": 960000483,
+          "seq": 1518,
+          "to_component": 90,
+          "to_predicted_global_id": 960000482
+        },
+        {
+          "from_component": 91,
+          "from_predicted_global_id": 960000483,
+          "seq": 1547,
+          "to_component": 90,
+          "to_predicted_global_id": 960000482
+        },
+        {
+          "from_component": 91,
+          "from_predicted_global_id": 960000483,
+          "seq": 1870,
+          "to_component": 90,
+          "to_predicted_global_id": 960000482
+        },
+        {
+          "from_component": 91,
+          "from_predicted_global_id": 960000483,
+          "seq": 1881,
+          "to_component": 90,
+          "to_predicted_global_id": 960000482
+        },
+        {
+          "from_component": 91,
+          "from_predicted_global_id": 960000483,
+          "seq": 1985,
+          "to_component": 90,
+          "to_predicted_global_id": 960000482
+        },
+        {
+          "from_component": 91,
+          "from_predicted_global_id": 960000483,
+          "seq": 2107,
+          "to_component": 90,
+          "to_predicted_global_id": 960000482
+        },
+        {
+          "from_component": 91,
+          "from_predicted_global_id": 960000483,
+          "seq": 7170,
+          "to_component": 90,
+          "to_predicted_global_id": 960000482
+        },
+        {
+          "from_component": 91,
+          "from_predicted_global_id": 960000483,
+          "seq": 7191,
+          "to_component": 90,
+          "to_predicted_global_id": 960000482
+        }
+      ],
+      "moved_tracklets": 54,
+      "output_csv": "local_runs/offline_no_anchor_split_probe_20260623/component_graph_fullscore/rank04_small_combo_next_component_probe/assignments/rank07_component_graph_high_mass_bridge_source_assignments.csv",
+      "pair_f1": null,
+      "pair_precision": null,
+      "pair_recall": null,
+      "per_video": {
+        "vlincs_MS01_MC0001_MCAM00_2024-03-Tc6": {
+          "assa": 0.835905,
+          "deta": 0.79496,
+          "detpr": 0.910942,
+          "detre": 0.84865,
+          "hota": 0.81476,
+          "idf1": 0.878694
+        },
+        "vlincs_MS01_MC0001_MCAM00_2024-03-Tc8": {
+          "assa": 0.786603,
+          "deta": 0.715036,
+          "detpr": 0.906797,
+          "detre": 0.761913,
+          "hota": 0.74985,
+          "idf1": 0.828065
+        },
+        "vlincs_MS01_MC0001_MCAM03_2024-03-Tc6": {
+          "assa": 0.623537,
+          "deta": 0.541376,
+          "detpr": 0.808966,
+          "detre": 0.598963,
+          "hota": 0.580758,
+          "idf1": 0.688302
+        },
+        "vlincs_MS01_MC0001_MCAM03_2024-03-Tc8": {
+          "assa": 0.55781,
+          "deta": 0.47418,
+          "detpr": 0.775138,
+          "detre": 0.529394,
+          "hota": 0.514098,
+          "idf1": 0.62912
+        },
+        "vlincs_MS01_MC0001_MCAM04_2024-03-Tc6": {
+          "assa": 0.493746,
+          "deta": 0.428784,
+          "detpr": 0.7005,
+          "detre": 0.496339,
+          "hota": 0.459628,
+          "idf1": 0.581006
+        },
+        "vlincs_MS01_MC0001_MCAM05_2024-03-Tc6": {
+          "assa": 0.638352,
+          "deta": 0.565886,
+          "detpr": 0.820234,
+          "detre": 0.628564,
+          "hota": 0.601013,
+          "idf1": 0.711721
+        },
+        "vlincs_MS01_MC0001_MCAM05_2024-03-Tc8": {
+          "assa": 0.728795,
+          "deta": 0.666277,
+          "detpr": 0.860223,
+          "detre": 0.729116,
+          "hota": 0.696826,
+          "idf1": 0.789262
+        },
+        "vlincs_MS01_MC0001_MCAM06_2024-03-Tc6": {
+          "assa": 0.598228,
+          "deta": 0.448875,
+          "detpr": 0.838449,
+          "detre": 0.480085,
+          "hota": 0.518041,
+          "idf1": 0.610567
+        },
+        "vlincs_MS01_MC0001_MCAM06_2024-03-Tc8": {
+          "assa": 0.614314,
+          "deta": 0.551932,
+          "detpr": 0.790347,
+          "detre": 0.622104,
+          "hota": 0.582124,
+          "idf1": 0.696205
+        },
+        "vlincs_MS01_MC0001_MCAM08_2024-03-Tc6": {
+          "assa": 0.679518,
+          "deta": 0.649518,
+          "detpr": 0.816994,
+          "detre": 0.733077,
+          "hota": 0.664237,
+          "idf1": 0.772764
+        }
+      },
+      "predicted_full_idf1": null,
+      "predicted_ids": 2335,
+      "result_json": "local_runs/offline_no_anchor_split_probe_20260623/component_graph_fullscore/rank04_small_combo_next_component_probe/rank07_component_graph_high_mass_bridge_source_assignments_sample_full.json",
+      "scored_rows": 1723070,
+      "selection_rank": 7,
+      "skipped_empty_source_components": [],
+      "source_file": null,
+      "source_rank": null,
+      "target_component_repairs": [],
+      "target_components": [
+        90
+      ],
+      "target_predicted_global_ids": [
+        960000482
+      ],
+      "unmatched_fp": 300678,
+      "uses_anchors": false,
+      "uses_gt_for_evaluation_only": true,
+      "uses_gt_for_training_or_anchors": false,
+      "videos_scored": [
+        "vlincs_MS01_MC0001_MCAM00_2024-03-Tc6",
+        "vlincs_MS01_MC0001_MCAM00_2024-03-Tc8",
+        "vlincs_MS01_MC0001_MCAM03_2024-03-Tc6",
+        "vlincs_MS01_MC0001_MCAM03_2024-03-Tc8",
+        "vlincs_MS01_MC0001_MCAM04_2024-03-Tc6",
+        "vlincs_MS01_MC0001_MCAM05_2024-03-Tc6",
+        "vlincs_MS01_MC0001_MCAM05_2024-03-Tc8",
+        "vlincs_MS01_MC0001_MCAM06_2024-03-Tc6",
+        "vlincs_MS01_MC0001_MCAM06_2024-03-Tc8",
+        "vlincs_MS01_MC0001_MCAM08_2024-03-Tc6"
+      ],
+      "zip_files": 10,
+      "zip_out": "local_runs/offline_no_anchor_split_probe_20260623/component_graph_fullscore/rank04_small_combo_next_component_probe/rank07_component_graph_high_mass_bridge_source_assignments.zip"
+    },
+    {
+      "accepted_preview_count": 1,
+      "assa": 0.53607,
+      "assigned_tracklets": 7487,
+      "assignment_status_counts": {
+        "forced_component": 7392,
+        "forced_singleton": 28,
+        "manifest_reassign": 67
+      },
+      "deta": 0.514997,
+      "detpr": 0.769455,
+      "detre": 0.584591,
+      "fallback": "singleton",
+      "gt_available": true,
+      "hota": 0.525408,
+      "idf1": 0.664403,
+      "input_rows": 1723070,
+      "input_tracklets": 9734,
+      "missing_assignment_tracklets": 2247,
+      "missing_source_seqs": [],
+      "mode": "component_graph_high_mass_bridge",
+      "moved_preview": [
+        {
+          "from_component": 90,
+          "from_predicted_global_id": 960000482,
+          "seq": 858,
+          "to_component": 91,
+          "to_predicted_global_id": 960000483
+        },
+        {
+          "from_component": 90,
+          "from_predicted_global_id": 960000482,
+          "seq": 861,
+          "to_component": 91,
+          "to_predicted_global_id": 960000483
+        },
+        {
+          "from_component": 90,
+          "from_predicted_global_id": 960000482,
+          "seq": 903,
+          "to_component": 91,
+          "to_predicted_global_id": 960000483
+        },
+        {
+          "from_component": 90,
+          "from_predicted_global_id": 960000482,
+          "seq": 920,
+          "to_component": 91,
+          "to_predicted_global_id": 960000483
+        },
+        {
+          "from_component": 90,
+          "from_predicted_global_id": 960000482,
+          "seq": 975,
+          "to_component": 91,
+          "to_predicted_global_id": 960000483
+        },
+        {
+          "from_component": 90,
+          "from_predicted_global_id": 960000482,
+          "seq": 977,
+          "to_component": 91,
+          "to_predicted_global_id": 960000483
+        },
+        {
+          "from_component": 90,
+          "from_predicted_global_id": 960000482,
+          "seq": 997,
+          "to_component": 91,
+          "to_predicted_global_id": 960000483
+        },
+        {
+          "from_component": 90,
+          "from_predicted_global_id": 960000482,
+          "seq": 999,
+          "to_component": 91,
+          "to_predicted_global_id": 960000483
+        },
+        {
+          "from_component": 90,
+          "from_predicted_global_id": 960000482,
+          "seq": 1005,
+          "to_component": 91,
+          "to_predicted_global_id": 960000483
+        },
+        {
+          "from_component": 90,
+          "from_predicted_global_id": 960000482,
+          "seq": 1167,
+          "to_component": 91,
+          "to_predicted_global_id": 960000483
+        },
+        {
+          "from_component": 90,
+          "from_predicted_global_id": 960000482,
+          "seq": 1172,
+          "to_component": 91,
+          "to_predicted_global_id": 960000483
+        },
+        {
+          "from_component": 90,
+          "from_predicted_global_id": 960000482,
+          "seq": 1178,
+          "to_component": 91,
+          "to_predicted_global_id": 960000483
+        },
+        {
+          "from_component": 90,
+          "from_predicted_global_id": 960000482,
+          "seq": 1654,
+          "to_component": 91,
+          "to_predicted_global_id": 960000483
+        },
+        {
+          "from_component": 90,
+          "from_predicted_global_id": 960000482,
+          "seq": 2832,
+          "to_component": 91,
+          "to_predicted_global_id": 960000483
+        },
+        {
+          "from_component": 90,
+          "from_predicted_global_id": 960000482,
+          "seq": 3519,
+          "to_component": 91,
+          "to_predicted_global_id": 960000483
+        },
+        {
+          "from_component": 90,
+          "from_predicted_global_id": 960000482,
+          "seq": 3793,
+          "to_component": 91,
+          "to_predicted_global_id": 960000483
+        },
+        {
+          "from_component": 90,
+          "from_predicted_global_id": 960000482,
+          "seq": 3874,
+          "to_component": 91,
+          "to_predicted_global_id": 960000483
+        },
+        {
+          "from_component": 90,
+          "from_predicted_global_id": 960000482,
+          "seq": 3942,
+          "to_component": 91,
+          "to_predicted_global_id": 960000483
+        },
+        {
+          "from_component": 90,
+          "from_predicted_global_id": 960000482,
+          "seq": 3957,
+          "to_component": 91,
+          "to_predicted_global_id": 960000483
+        },
+        {
+          "from_component": 90,
+          "from_predicted_global_id": 960000482,
+          "seq": 4027,
+          "to_component": 91,
+          "to_predicted_global_id": 960000483
+        },
+        {
+          "from_component": 90,
+          "from_predicted_global_id": 960000482,
+          "seq": 4035,
+          "to_component": 91,
+          "to_predicted_global_id": 960000483
+        },
+        {
+          "from_component": 90,
+          "from_predicted_global_id": 960000482,
+          "seq": 4041,
+          "to_component": 91,
+          "to_predicted_global_id": 960000483
+        },
+        {
+          "from_component": 90,
+          "from_predicted_global_id": 960000482,
+          "seq": 4084,
+          "to_component": 91,
+          "to_predicted_global_id": 960000483
+        },
+        {
+          "from_component": 90,
+          "from_predicted_global_id": 960000482,
+          "seq": 4733,
+          "to_component": 91,
+          "to_predicted_global_id": 960000483
+        },
+        {
+          "from_component": 90,
+          "from_predicted_global_id": 960000482,
+          "seq": 6741,
+          "to_component": 91,
+          "to_predicted_global_id": 960000483
+        },
+        {
+          "from_component": 90,
+          "from_predicted_global_id": 960000482,
+          "seq": 6773,
+          "to_component": 91,
+          "to_predicted_global_id": 960000483
+        },
+        {
+          "from_component": 90,
+          "from_predicted_global_id": 960000482,
+          "seq": 6813,
+          "to_component": 91,
+          "to_predicted_global_id": 960000483
+        },
+        {
+          "from_component": 90,
+          "from_predicted_global_id": 960000482,
+          "seq": 6829,
+          "to_component": 91,
+          "to_predicted_global_id": 960000483
+        },
+        {
+          "from_component": 90,
+          "from_predicted_global_id": 960000482,
+          "seq": 6839,
+          "to_component": 91,
+          "to_predicted_global_id": 960000483
+        },
+        {
+          "from_component": 90,
+          "from_predicted_global_id": 960000482,
+          "seq": 6846,
+          "to_component": 91,
+          "to_predicted_global_id": 960000483
+        },
+        {
+          "from_component": 90,
+          "from_predicted_global_id": 960000482,
+          "seq": 6848,
+          "to_component": 91,
+          "to_predicted_global_id": 960000483
+        },
+        {
+          "from_component": 90,
+          "from_predicted_global_id": 960000482,
+          "seq": 6901,
+          "to_component": 91,
+          "to_predicted_global_id": 960000483
+        },
+        {
+          "from_component": 90,
+          "from_predicted_global_id": 960000482,
+          "seq": 6964,
+          "to_component": 91,
+          "to_predicted_global_id": 960000483
+        },
+        {
+          "from_component": 90,
+          "from_predicted_global_id": 960000482,
+          "seq": 7133,
+          "to_component": 91,
+          "to_predicted_global_id": 960000483
+        },
+        {
+          "from_component": 90,
+          "from_predicted_global_id": 960000482,
+          "seq": 7198,
+          "to_component": 91,
+          "to_predicted_global_id": 960000483
+        },
+        {
+          "from_component": 90,
+          "from_predicted_global_id": 960000482,
+          "seq": 7345,
+          "to_component": 91,
+          "to_predicted_global_id": 960000483
+        },
+        {
+          "from_component": 90,
+          "from_predicted_global_id": 960000482,
+          "seq": 7356,
+          "to_component": 91,
+          "to_predicted_global_id": 960000483
+        },
+        {
+          "from_component": 90,
+          "from_predicted_global_id": 960000482,
+          "seq": 7975,
+          "to_component": 91,
+          "to_predicted_global_id": 960000483
+        },
+        {
+          "from_component": 90,
+          "from_predicted_global_id": 960000482,
+          "seq": 8183,
+          "to_component": 91,
+          "to_predicted_global_id": 960000483
+        },
+        {
+          "from_component": 90,
+          "from_predicted_global_id": 960000482,
+          "seq": 8501,
+          "to_component": 91,
+          "to_predicted_global_id": 960000483
+        }
+      ],
+      "moved_tracklets": 40,
+      "output_csv": "local_runs/offline_no_anchor_split_probe_20260623/component_graph_fullscore/rank04_small_combo_next_component_probe/assignments/rank08_component_graph_high_mass_bridge_source_assignments.csv",
+      "pair_f1": null,
+      "pair_precision": null,
+      "pair_recall": null,
+      "per_video": {
+        "vlincs_MS01_MC0001_MCAM00_2024-03-Tc6": {
+          "assa": 0.835905,
+          "deta": 0.79496,
+          "detpr": 0.910942,
+          "detre": 0.84865,
+          "hota": 0.81476,
+          "idf1": 0.878694
+        },
+        "vlincs_MS01_MC0001_MCAM00_2024-03-Tc8": {
+          "assa": 0.786603,
+          "deta": 0.715036,
+          "detpr": 0.906797,
+          "detre": 0.761913,
+          "hota": 0.74985,
+          "idf1": 0.828065
+        },
+        "vlincs_MS01_MC0001_MCAM03_2024-03-Tc6": {
+          "assa": 0.623537,
+          "deta": 0.541376,
+          "detpr": 0.808966,
+          "detre": 0.598963,
+          "hota": 0.580758,
+          "idf1": 0.688302
+        },
+        "vlincs_MS01_MC0001_MCAM03_2024-03-Tc8": {
+          "assa": 0.55781,
+          "deta": 0.47418,
+          "detpr": 0.775138,
+          "detre": 0.529394,
+          "hota": 0.514098,
+          "idf1": 0.62912
+        },
+        "vlincs_MS01_MC0001_MCAM04_2024-03-Tc6": {
+          "assa": 0.493746,
+          "deta": 0.428784,
+          "detpr": 0.7005,
+          "detre": 0.496339,
+          "hota": 0.459628,
+          "idf1": 0.581006
+        },
+        "vlincs_MS01_MC0001_MCAM05_2024-03-Tc6": {
+          "assa": 0.638352,
+          "deta": 0.565886,
+          "detpr": 0.820234,
+          "detre": 0.628564,
+          "hota": 0.601013,
+          "idf1": 0.711721
+        },
+        "vlincs_MS01_MC0001_MCAM05_2024-03-Tc8": {
+          "assa": 0.728795,
+          "deta": 0.666277,
+          "detpr": 0.860223,
+          "detre": 0.729116,
+          "hota": 0.696826,
+          "idf1": 0.789262
+        },
+        "vlincs_MS01_MC0001_MCAM06_2024-03-Tc6": {
+          "assa": 0.598228,
+          "deta": 0.448875,
+          "detpr": 0.838449,
+          "detre": 0.480085,
+          "hota": 0.518041,
+          "idf1": 0.610567
+        },
+        "vlincs_MS01_MC0001_MCAM06_2024-03-Tc8": {
+          "assa": 0.614314,
+          "deta": 0.551932,
+          "detpr": 0.790347,
+          "detre": 0.622104,
+          "hota": 0.582124,
+          "idf1": 0.696205
+        },
+        "vlincs_MS01_MC0001_MCAM08_2024-03-Tc6": {
+          "assa": 0.679518,
+          "deta": 0.649518,
+          "detpr": 0.816994,
+          "detre": 0.733077,
+          "hota": 0.664237,
+          "idf1": 0.772764
+        }
+      },
+      "predicted_full_idf1": null,
+      "predicted_ids": 2335,
+      "result_json": "local_runs/offline_no_anchor_split_probe_20260623/component_graph_fullscore/rank04_small_combo_next_component_probe/rank08_component_graph_high_mass_bridge_source_assignments_sample_full.json",
+      "scored_rows": 1723070,
+      "selection_rank": 8,
+      "skipped_empty_source_components": [],
+      "source_file": null,
+      "source_rank": null,
+      "target_component_repairs": [],
+      "target_components": [
+        91
+      ],
+      "target_predicted_global_ids": [
+        960000483
+      ],
+      "unmatched_fp": 300678,
+      "uses_anchors": false,
+      "uses_gt_for_evaluation_only": true,
+      "uses_gt_for_training_or_anchors": false,
+      "videos_scored": [
+        "vlincs_MS01_MC0001_MCAM00_2024-03-Tc6",
+        "vlincs_MS01_MC0001_MCAM00_2024-03-Tc8",
+        "vlincs_MS01_MC0001_MCAM03_2024-03-Tc6",
+        "vlincs_MS01_MC0001_MCAM03_2024-03-Tc8",
+        "vlincs_MS01_MC0001_MCAM04_2024-03-Tc6",
+        "vlincs_MS01_MC0001_MCAM05_2024-03-Tc6",
+        "vlincs_MS01_MC0001_MCAM05_2024-03-Tc8",
+        "vlincs_MS01_MC0001_MCAM06_2024-03-Tc6",
+        "vlincs_MS01_MC0001_MCAM06_2024-03-Tc8",
+        "vlincs_MS01_MC0001_MCAM08_2024-03-Tc6"
+      ],
+      "zip_files": 10,
+      "zip_out": "local_runs/offline_no_anchor_split_probe_20260623/component_graph_fullscore/rank04_small_combo_next_component_probe/rank08_component_graph_high_mass_bridge_source_assignments.zip"
+    }
+  ],
+  "results_jsonl": "local_runs/offline_no_anchor_split_probe_20260623/component_graph_fullscore/rank04_small_combo_next_component_probe/sample_full_results.jsonl",
+  "run_dir": "local_runs/offline_no_anchor_split_probe_20260623/component_graph_fullscore/rank04_small_combo_next_component_probe",
+  "scheduler_json": "local_runs/offline_no_anchor_split_probe_20260623/rank04_plus_small_combo_component_graph_candidates.json",
+  "selection_ranks": [
+    1,
+    7,
+    8
+  ],
+  "uses_anchors": false,
+  "uses_gt_for_evaluation_only": true,
+  "uses_gt_for_training_or_anchors": false
+}
