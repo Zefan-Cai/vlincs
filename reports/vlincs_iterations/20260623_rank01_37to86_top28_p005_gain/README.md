@@ -116,8 +116,8 @@ python /Users/zcai/.codex/skills/vlincs-open-world-reid/scripts/make_iteration_a
 
 ## Upload
 
-- Bitbucket: `pending publish to Novateur/vlincs_reid_by_search wisc`
-- S3: `pending; will attempt aws sts/sync, otherwise record missing-credential blocker`
+- Bitbucket: `pushed to Novateur/vlincs_reid_by_search wisc in commit 87fea21c4f44c1cfe708c9833df442b2c8a7f3ad`
+- S3: `blocked: `aws sts get-caller-identity` returned `Unable to locate credentials`; local package remains at reports/vlincs_iterations/20260623_rank01_37to86_top28_p005_gain/; target prefix would be s3://dit-scale-up/zcai/vlincs/reports/vlincs_iterations/20260623_rank01_37to86_top28_p005_gain/`
 
 ## Next
 
