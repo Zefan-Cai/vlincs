@@ -2,9 +2,9 @@
 """Export a visual evidence case for a no-anchor subpart reassignment.
 
 The case uses assignment CSVs, candidate manifests, and tracklet parquet boxes.
-It does not use anchors.  Raw videos are optional; when unavailable, it renders
-the true bbox trajectory on a fixed video-coordinate canvas so the case still
-shows the identity evidence that drove the graph edit.
+It does not use anchors. Raw videos are optional; when unavailable, it renders
+zoomed coordinate panels around each bbox plus a full-frame locator so small
+boxes remain reviewable.
 """
 
 from __future__ import annotations
@@ -23,6 +23,10 @@ from PIL import Image, ImageDraw, ImageFont
 
 CANVAS_W = 2560
 CANVAS_H = 1440
+GREEN = (31, 208, 126)
+YELLOW = (255, 197, 71)
+RED = (193, 76, 76)
+MUTED = (96, 110, 128)
 
 
 def _load_rows(path: Path) -> dict[int, dict[str, str]]:
@@ -45,6 +49,99 @@ def _font(size: int = 22) -> ImageFont.ImageFont:
         except OSError:
             pass
     return ImageFont.load_default()
+
+
+def _wrap_text(draw: ImageDraw.ImageDraw, text: str, font: ImageFont.ImageFont, max_width: int, max_lines: int = 2) -> list[str]:
+    words = text.split()
+    lines: list[str] = []
+    current = ""
+    consumed = 0
+    for word in words:
+        trial = f"{current} {word}".strip()
+        if draw.textlength(trial, font=font) <= max_width:
+            current = trial
+            consumed += 1
+            continue
+        if current:
+            lines.append(current)
+        current = word
+        consumed += 1
+        if len(lines) >= max_lines:
+            break
+    if current and len(lines) < max_lines:
+        lines.append(current)
+    if consumed < len(words) and lines:
+        while draw.textlength(lines[-1] + "...", font=font) > max_width and len(lines[-1]) > 4:
+            lines[-1] = lines[-1][:-1]
+        lines[-1] = lines[-1].rstrip() + "..."
+    return lines
+
+
+def _crop_window(bbox: list[float], aspect: float) -> tuple[float, float, float, float]:
+    bx1, by1, bx2, by2 = bbox
+    bw = max(1.0, bx2 - bx1)
+    bh = max(1.0, by2 - by1)
+    cx = (bx1 + bx2) / 2.0
+    cy = (by1 + by2) / 2.0
+    crop_h = max(155.0, bh * 2.35)
+    crop_w = max(220.0, bw * 4.0)
+    if crop_w / crop_h < aspect:
+        crop_w = crop_h * aspect
+    else:
+        crop_h = crop_w / aspect
+    crop_w = min(float(CANVAS_W), crop_w)
+    crop_h = min(float(CANVAS_H), crop_h)
+    x1 = max(0.0, min(cx - crop_w / 2.0, float(CANVAS_W) - crop_w))
+    y1 = max(0.0, min(cy - crop_h / 2.0, float(CANVAS_H) - crop_h))
+    return x1, y1, x1 + crop_w, y1 + crop_h
+
+
+def _map_point(px: float, py: float, crop: tuple[float, float, float, float], plot: tuple[int, int, int, int]) -> tuple[float, float]:
+    cx1, cy1, cx2, cy2 = crop
+    px1, py1, px2, py2 = plot
+    return (
+        px1 + (px - cx1) * (px2 - px1) / max(cx2 - cx1, 1.0),
+        py1 + (py - cy1) * (py2 - py1) / max(cy2 - cy1, 1.0),
+    )
+
+
+def _draw_zoom_grid(draw: ImageDraw.ImageDraw, plot: tuple[int, int, int, int]) -> None:
+    px1, py1, px2, py2 = plot
+    for i in range(1, 4):
+        xx = px1 + i * (px2 - px1) / 4.0
+        draw.line([(xx, py1), (xx, py2)], fill=(43, 53, 68), width=1)
+    for i in range(1, 3):
+        yy = py1 + i * (py2 - py1) / 3.0
+        draw.line([(px1, yy), (px2, yy)], fill=(43, 53, 68), width=1)
+
+
+def _draw_locator(draw: ImageDraw.ImageDraw, plot: tuple[int, int, int, int], crop: tuple[float, float, float, float], bbox: list[float]) -> None:
+    _, py1, px2, _ = plot
+    inset_w = 132
+    inset_h = int(inset_w * CANVAS_H / CANVAS_W)
+    ix2 = px2 - 12
+    iy1 = py1 + 12
+    ix1 = ix2 - inset_w
+    iy2 = iy1 + inset_h
+    draw.rectangle([ix1 - 3, iy1 - 3, ix2 + 3, iy2 + 3], fill=(18, 24, 33), outline=(202, 210, 221))
+    draw.rectangle([ix1, iy1, ix2, iy2], fill=(30, 38, 50), outline=(145, 157, 173))
+
+    def loc_rect(rect: tuple[float, float, float, float] | list[float]) -> list[float]:
+        x1, y1, x2, y2 = rect
+        sx = inset_w / CANVAS_W
+        sy = inset_h / CANVAS_H
+        return [ix1 + x1 * sx, iy1 + y1 * sy, ix1 + x2 * sx, iy1 + y2 * sy]
+
+    draw.rectangle(loc_rect(crop), outline=YELLOW, width=2)
+    draw.rectangle(loc_rect(bbox), outline=GREEN, width=2)
+
+
+def _draw_bbox_rect(draw: ImageDraw.ImageDraw, rect: list[float], color: tuple[int, int, int], width: int = 6) -> None:
+    for offset in range(width):
+        draw.rectangle(
+            [rect[0] - offset, rect[1] - offset, rect[2] + offset, rect[3] + offset],
+            outline=color,
+        )
 
 
 def _sample_boxes(tracklet_parquets: list[Path], tracklet_key: str, n: int) -> list[dict[str, Any]]:
@@ -79,11 +176,23 @@ def _sample_boxes(tracklet_parquets: list[Path], tracklet_key: str, n: int) -> l
     return rows
 
 
-def _draw_panel(draw: ImageDraw.ImageDraw, x: int, y: int, w: int, h: int, title: str, box: dict[str, Any], before: dict[str, str], after: dict[str, str]) -> None:
+def _draw_panel(
+    draw: ImageDraw.ImageDraw,
+    x: int,
+    y: int,
+    w: int,
+    h: int,
+    title: str,
+    box: dict[str, Any],
+    before: dict[str, str],
+    after: dict[str, str],
+    track_boxes: list[dict[str, Any]],
+) -> None:
     font = _font(18)
     small = _font(15)
+    tiny = _font(13)
     draw.rectangle([x, y, x + w, y + h], fill=(245, 247, 250), outline=(42, 54, 71), width=2)
-    header_h = 58
+    header_h = 62
     draw.rectangle([x, y, x + w, y + header_h], fill=(23, 31, 42))
     draw.text((x + 12, y + 10), title, fill=(255, 255, 255), font=font)
     draw.text((x + 12, y + 34), f"frame {box['frame_idx']}  det {box['score']:.3f}", fill=(196, 208, 220), font=small)
@@ -91,20 +200,40 @@ def _draw_panel(draw: ImageDraw.ImageDraw, x: int, y: int, w: int, h: int, title
     plot_x = x + 16
     plot_y = y + header_h + 14
     plot_w = w - 32
-    plot_h = h - header_h - 104
-    draw.rectangle([plot_x, plot_y, plot_x + plot_w, plot_y + plot_h], fill=(28, 35, 45), outline=(80, 90, 105))
-    sx = plot_w / CANVAS_W
-    sy = plot_h / CANVAS_H
+    plot_h = h - header_h - 126
+    plot = (plot_x, plot_y, plot_x + plot_w, plot_y + plot_h)
+    draw.rectangle(plot, fill=(28, 35, 45), outline=(80, 90, 105))
     bx1, by1, bx2, by2 = box["bbox_xyxy"]
-    rect = [plot_x + bx1 * sx, plot_y + by1 * sy, plot_x + bx2 * sx, plot_y + by2 * sy]
-    draw.rectangle(rect, outline=(44, 203, 122), width=4)
-    draw.text((rect[0] + 4, max(plot_y + 4, rect[1] - 20)), "bbox", fill=(44, 203, 122), font=small)
-    draw.text((plot_x + 8, plot_y + 8), "video coordinate canvas", fill=(143, 155, 170), font=small)
+    crop = _crop_window([bx1, by1, bx2, by2], plot_w / max(plot_h, 1))
+    _draw_zoom_grid(draw, plot)
+    _draw_locator(draw, plot, crop, [bx1, by1, bx2, by2])
 
-    base_y = y + h - 82
-    draw.text((x + 12, base_y), f"before: comp {before['component_label']} / gid {before['predicted_global_id']}", fill=(174, 65, 65), font=small)
-    draw.text((x + 12, base_y + 22), f"after:  comp {after['component_label']} / gid {after['predicted_global_id']}", fill=(28, 132, 81), font=small)
+    centers = []
+    for sample in track_boxes:
+        sx1, sy1, sx2, sy2 = sample["bbox_xyxy"]
+        center = ((sx1 + sx2) / 2.0, (sy1 + sy2) / 2.0)
+        px, py = _map_point(center[0], center[1], crop, plot)
+        if plot_x - 12 <= px <= plot_x + plot_w + 12 and plot_y - 12 <= py <= plot_y + plot_h + 12:
+            centers.append((px, py, int(sample["frame_idx"])))
+    if len(centers) > 1:
+        draw.line([(px, py) for px, py, _ in centers], fill=YELLOW, width=3)
+    for px, py, frame_idx in centers:
+        draw.ellipse([px - 5, py - 5, px + 5, py + 5], fill=YELLOW, outline=(18, 24, 33), width=2)
+        draw.text((px + 6, py - 6), str(frame_idx), fill=(255, 226, 145), font=tiny)
+
+    rx1, ry1 = _map_point(bx1, by1, crop, plot)
+    rx2, ry2 = _map_point(bx2, by2, crop, plot)
+    rect = [rx1, ry1, rx2, ry2]
+    _draw_bbox_rect(draw, rect, GREEN, width=6)
+    draw.text((max(plot_x + 8, rect[0] + 6), max(plot_y + 8, rect[1] - 22)), "zoomed bbox", fill=GREEN, font=small)
+    draw.text((plot_x + 10, plot_y + 10), "bbox-centered coordinate zoom; inset shows full-frame location", fill=(190, 202, 216), font=tiny)
+    draw.text((plot_x + 10, plot_y + plot_h - 22), f"zoom crop xyxy {crop[0]:.0f},{crop[1]:.0f},{crop[2]:.0f},{crop[3]:.0f}", fill=(173, 184, 198), font=tiny)
+
+    base_y = y + h - 104
+    draw.text((x + 12, base_y), f"before: comp {before['component_label']} / gid {before['predicted_global_id']}", fill=RED, font=small)
+    draw.text((x + 12, base_y + 22), f"after:  comp {after['component_label']} / gid {after['predicted_global_id']}", fill=(25, 135, 82), font=small)
     draw.text((x + 12, base_y + 44), f"{after['camera']}  frames {after['start_frame']}-{after['end_frame']}  n={after['n_dets']}", fill=(55, 65, 78), font=small)
+    draw.text((x + 12, base_y + 66), f"bbox xyxy {bx1:.1f}, {by1:.1f}, {bx2:.1f}, {by2:.1f}", fill=MUTED, font=tiny)
 
 
 def _make_montage(out_path: Path, case: dict[str, Any]) -> None:
@@ -113,25 +242,33 @@ def _make_montage(out_path: Path, case: dict[str, Any]) -> None:
         for box in item["sampled_boxes"]:
             panels.append((item, box))
     cols = 3
-    panel_w = 560
-    panel_h = 390
+    panel_w = 640
+    panel_h = 470
     margin = 28
-    header_h = 190
+    header_h = 214
     rows = (len(panels) + cols - 1) // cols
     img = Image.new("RGB", (cols * panel_w + (cols + 1) * margin, header_h + rows * panel_h + (rows + 1) * margin), (238, 241, 245))
     draw = ImageDraw.Draw(img)
     title_font = _font(34)
     body_font = _font(20)
     draw.text((margin, 24), str(case["title"]), fill=(24, 31, 42), font=title_font)
-    draw.text((margin, 72), case["summary"], fill=(48, 58, 72), font=body_font)
-    draw.text((margin, 106), case["failure_reason"], fill=(90, 66, 34), font=body_font)
-    draw.text((margin, 140), case["improvement"], fill=(28, 100, 64), font=body_font)
+    yy = 72
+    max_text_w = img.width - margin * 2
+    for text, color in (
+        (case["summary"], (48, 58, 72)),
+        (case["failure_reason"], (90, 66, 34)),
+        (case["improvement"], (28, 100, 64)),
+    ):
+        for line in _wrap_text(draw, text, body_font, max_text_w, max_lines=2):
+            draw.text((margin, yy), line, fill=color, font=body_font)
+            yy += 28
+        yy += 4
     for idx, (item, box) in enumerate(panels):
         row = idx // cols
         col = idx % cols
         x = margin + col * (panel_w + margin)
         y = header_h + margin + row * (panel_h + margin)
-        _draw_panel(draw, x, y, panel_w, panel_h, f"seq {item['seq']}", box, item["before"], item["after"])
+        _draw_panel(draw, x, y, panel_w, panel_h, f"seq {item['seq']}", box, item["before"], item["after"], item["sampled_boxes"])
     out_path.parent.mkdir(parents=True, exist_ok=True)
     img.save(out_path)
 

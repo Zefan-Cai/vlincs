@@ -1,0 +1,26 @@
+<!doctype html>
+<html><head><meta charset="utf-8"><title>Rank47 peels a source-4 residual island toward component 38</title>
+<style>
+body{font-family:Arial,Helvetica,sans-serif;margin:32px;background:#f6f7f9;color:#17202c}
+main{max-width:1120px;margin:auto} img{max-width:100%;border:1px solid #ccd3dc;background:white}
+.kpi{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin:18px 0}
+.card{background:white;border:1px solid #d7dde5;padding:14px} table{border-collapse:collapse;width:100%;background:white}
+td,th{border:1px solid #d7dde5;padding:8px;text-align:left} code{background:#eef1f5;padding:2px 4px}
+</style></head><body><main>
+<h1>Rank47 peels a source-4 residual island toward component 38</h1>
+<p>Two tracklets move from component 4 / gid 96000004 to component 38 / gid 96000041 on top of the rank46 base.</p>
+<div class="kpi">
+<div class="card"><b>Before</b><br>component 4, gid 96000004, component_size 195</div>
+<div class="card"><b>After</b><br>component 38, gid 96000041, component_size 43, decision_status subpart_reassign</div>
+<div class="card"><b>Evidence</b><br>target_sim=0.5547, target_margin=-0.0982, source_rest_margin=0.1920</div>
+</div>
+<h2>Failure and fix</h2>
+<p><b>Old failure:</b> After rank46, source component 4 still carried a small pair whose target similarity to component 38 was higher than the source-rest margin, but the earlier reviewer had treated related 22-&gt;38 and 30-&gt;85 moves as hard-neutral ties.</p>
+<p><b>New implementation:</b> The updated opponent filters stale tied families, then tests the new 4-&gt;38 family; direct, density_simple, and p005_area all improve, so the local repair becomes the next canonical best.</p>
+<h2>BBox evidence</h2>
+<img src="rank47_bbox_evidence.png" alt="rank15 bbox evidence">
+<h2>Moved tracklets</h2>
+<table><thead><tr><th>seq</th><th>video</th><th>gid</th><th>component</th><th>frames</th><th>dets</th></tr></thead><tbody><tr><td>4503</td><td>vlincs_MS01_MC0001_MCAM04_2024-03-Tc6</td><td>96000004 -> 96000041</td><td>4 -> 38</td><td>41648-41947</td><td>202</td></tr>
+<tr><td>5509</td><td>vlincs_MS01_MC0001_MCAM04_2024-03-Tc6</td><td>96000004 -> 96000041</td><td>4 -> 38</td><td>12000-12299</td><td>244</td></tr></tbody></table>
+
+</main></body></html>

@@ -1,0 +1,299 @@
+{
+  "ablations": [
+    {
+      "change": "move 4 MCAM04/MCAM08 tracklets",
+      "decision": "promote",
+      "name": "weakvideo rank67 43->38",
+      "result": "direct 0.662969/0.524082/0.535252; density 0.665046/0.525758/0.537012; p005 0.665145/0.525833/0.537128"
+    },
+    {
+      "change": "move 2 tracklets",
+      "decision": "hard neutral label",
+      "name": "multiview rank47 90->85",
+      "result": "direct tied 0.662902/0.524042/0.535239"
+    },
+    {
+      "change": "move 6 tracklets",
+      "decision": "hard neutral label",
+      "name": "balanced rank17 82->80",
+      "result": "direct tied 0.662902/0.524042/0.535239"
+    },
+    {
+      "change": "move 2 tracklets",
+      "decision": "hard neutral label",
+      "name": "balanced rank28 30->85",
+      "result": "direct tied 0.662902/0.524042/0.535239"
+    },
+    {
+      "change": "move 2 tracklets",
+      "decision": "hard neutral label",
+      "name": "multiview rank40 90->81",
+      "result": "direct tied 0.662902/0.524042/0.535239"
+    },
+    {
+      "change": "784 candidates, 35 matched labels",
+      "decision": "add labels and continue with weakvideo/residual-island family",
+      "name": "rank47base reviewer",
+      "result": "LOOCV RMSE 0.000139; rank corr 0.773; model predicted all rank47base candidates as weak/negative, but weakvideo rank67 was a small direct-positive surprise"
+    }
+  ],
+  "artifacts": [
+    "local_runs/offline_no_anchor_split_probe_20260623/rank47base_subpart_balanced_manifest.json",
+    "local_runs/offline_no_anchor_split_probe_20260623/rank47base_subpart_multiview_manifest.json",
+    "local_runs/offline_no_anchor_split_probe_20260623/rank47base_subpart_weakvideo_manifest.json",
+    "local_runs/offline_no_anchor_split_probe_20260623/rank47base_subpart_reviewer_ranked_with_oldlabels.json",
+    "local_runs/offline_no_anchor_split_probe_20260623/rank47base_subpart_weakvideo_assignments/rank67_subpart_s43_to38_4seq_assignments.csv",
+    "local_runs/offline_no_anchor_split_probe_20260623/rank47base_subpart_reviewer_fullscore/weakvideo_rank67_s43_to38_4seq_full_export.json",
+    "local_runs/offline_no_anchor_split_probe_20260623/rank47base_subpart_reviewer_delivery/weakvideo_rank67_s43_to38_4seq_density_simple_withenv.json",
+    "local_runs/offline_no_anchor_split_probe_20260623/rank47base_subpart_reviewer_delivery/weakvideo_rank67_s43_to38_4seq_density_p005_area.json",
+    "local_runs/offline_no_anchor_split_probe_20260623/rank47base_subpart_reviewer_delivery/weakvideo_rank67_s43_to38_4seq_density_p005_area.zip"
+  ],
+  "bitbucket": "committed to Bitbucket wisc in this package; final commit hash reported by Codex after push",
+  "code_paths": [
+    "kit/propose_no_anchor_subpart_repair_candidates.py",
+    "kit/rank_no_anchor_subpart_candidates_by_fullscore_labels.py",
+    "kit/evaluate_sample_assignments_full.py",
+    "kit/no_anchor_pervideo_filter_selector.py",
+    "kit/evaluate_submission_detection_filter.py",
+    "kit/export_no_anchor_subpart_visual_case.py",
+    "autoresearch_state/no_anchor_global_id/state/progress.json",
+    "reports/vlincs_iterations/20260623_rank47base_weakvideo_rank67_p005_gain/"
+  ],
+  "commands": [
+    "python kit/propose_no_anchor_subpart_repair_candidates.py --assignment-csv local_runs/offline_no_anchor_split_probe_20260623/rank46base_subpart_multiview_assignments/rank47_subpart_s4_to38_2seq_assignments.csv --feature-npz local_runs/s3_feature_cache_20260622/ds1_tracklet_weakmetric_osnet_s7_fused_w002_20260620_w0p1.npz ... --json rank47base_subpart_{balanced,multiview,weakvideo}_manifest.json",
+    "python kit/rank_no_anchor_subpart_candidates_by_fullscore_labels.py --manifest promoted/rank15/rank40/rank46/rank47base manifests --label-summary promoted/rank15/rank40/rank46 labels --baseline-idf1 0.662902 --output-json local_runs/offline_no_anchor_split_probe_20260623/rank47base_subpart_reviewer_ranked_with_oldlabels.json",
+    "env DATA_ROOT=/Users/zcai/Codex/vlincs_reid_by_search/local_runs/local_data_root_20260622 python kit/evaluate_sample_assignments_full.py --assignments local_runs/offline_no_anchor_split_probe_20260623/rank47base_subpart_weakvideo_assignments/rank67_subpart_s43_to38_4seq_assignments.csv --fallback singleton --json local_runs/offline_no_anchor_split_probe_20260623/rank47base_subpart_reviewer_fullscore/weakvideo_rank67_s43_to38_4seq_full_export.json --zip-out ...zip",
+    "env DATA_ROOT=/Users/zcai/Codex/vlincs_reid_by_search/local_runs/local_data_root_20260622 python kit/no_anchor_pervideo_filter_selector.py --source-zip local_runs/offline_no_anchor_split_probe_20260623/rank47base_subpart_reviewer_fullscore/weakvideo_rank67_s43_to38_4seq_full_export.zip --policies density_simple --json local_runs/offline_no_anchor_split_probe_20260623/rank47base_subpart_reviewer_delivery/weakvideo_rank67_s43_to38_4seq_density_simple_withenv.json --zip-out ...zip",
+    "env DATA_ROOT=/Users/zcai/Codex/vlincs_reid_by_search/local_runs/local_data_root_20260622 python kit/evaluate_submission_detection_filter.py --submission-zip local_runs/offline_no_anchor_split_probe_20260623/rank47base_subpart_reviewer_delivery/weakvideo_rank67_s43_to38_4seq_density_simple_withenv.zip --config @local_runs/offline_no_anchor_split_probe_20260623/p005_area_config.txt --json local_runs/offline_no_anchor_split_probe_20260623/rank47base_subpart_reviewer_delivery/weakvideo_rank67_s43_to38_4seq_density_p005_area.json --zip-out ...zip",
+    "python kit/export_no_anchor_subpart_visual_case.py --before-assignments rank47_current_best.csv --after-assignments rank67_subpart_s43_to38_4seq_assignments.csv --manifest rank47base_subpart_weakvideo_manifest.json --rank 67 ..."
+  ],
+  "date": "2026-06-23",
+  "environment": [
+    "Repo: /Users/zcai/Codex/vlincs_reid_by_search",
+    "Dataset root: /Users/zcai/Codex/vlincs_reid_by_search/local_runs/local_data_root_20260622",
+    "Tracklet parquets: kit/demo_data/ds1/tracklets/*/tracklets.parquet",
+    "Feature cache: local_runs/s3_feature_cache_20260622",
+    "No anchors; GT used only for post-hoc scoring/evaluation labels"
+  ],
+  "implementation": "Generated rank47base balanced, multiview, and weakvideo no-anchor subpart candidates from current assignment and feature NPZs. The reviewer ranked 784 old+new candidates with 35 prior full-score labels, then direct-scored five diverse rank47base candidates. Only weakvideo rank67 was direct-positive; it then passed density_simple and valid p005_area delivery.",
+  "improvement_table": [
+    {
+      "baseline": "0.662902 / 0.524042 / 0.535239",
+      "candidate": "0.662969 / 0.524082 / 0.535252",
+      "decision": "direct positive; continue to delivery",
+      "delta": "+0.000067 IDF1",
+      "stage": "Direct full-score IDF1/HOTA/AssA"
+    },
+    {
+      "baseline": "0.664983 / 0.525721 / 0.536999",
+      "candidate": "0.665046 / 0.525758 / 0.537012",
+      "decision": "delivery positive",
+      "delta": "+0.000063 IDF1",
+      "stage": "density_simple delivery"
+    },
+    {
+      "baseline": "0.665084 / 0.525797 / 0.537115",
+      "candidate": "0.665145 / 0.525833 / 0.537128",
+      "decision": "promote canonical best",
+      "delta": "+0.000061 IDF1",
+      "stage": "density_simple + p005_area"
+    },
+    {
+      "baseline": "1642574",
+      "candidate": "1642574",
+      "decision": "same p005 gate; comparable",
+      "delta": "0",
+      "stage": "Filtered rows"
+    }
+  ],
+  "metrics": {
+    "baseline": 0.665084,
+    "candidate": 0.665145,
+    "delta": 6.1e-05,
+    "name": "canonical density_simple+p005_area IDF1"
+  },
+  "module_detail": "M7 adds a weakvideo residual-island proposer on the rank47 base; M10 spends a small direct full-score budget using prior side-effect labels; M8 commits only four compatible tracklets; M12 validates density_simple and p005_area delivery.",
+  "next": "Fold rank67 label into the reviewer, search compatible weakvideo residual islands around component 43/38, and test small combos only after direct or density signals.",
+  "no_anchor": true,
+  "per_video_table": [
+    {
+      "baseline": "0.879281",
+      "candidate": "0.879281",
+      "delta": "+0.000000",
+      "note": "unchanged by local repair",
+      "video": "MCAM00_2024-03-Tc6"
+    },
+    {
+      "baseline": "0.828799",
+      "candidate": "0.828799",
+      "delta": "+0.000000",
+      "note": "unchanged by local repair",
+      "video": "MCAM00_2024-03-Tc8"
+    },
+    {
+      "baseline": "0.690814",
+      "candidate": "0.690814",
+      "delta": "+0.000000",
+      "note": "unchanged by local repair",
+      "video": "MCAM03_2024-03-Tc6"
+    },
+    {
+      "baseline": "0.631016",
+      "candidate": "0.631016",
+      "delta": "+0.000000",
+      "note": "unchanged by local repair",
+      "video": "MCAM03_2024-03-Tc8"
+    },
+    {
+      "baseline": "0.579537",
+      "candidate": "0.579590",
+      "delta": "+0.000053",
+      "note": "main affected slice",
+      "video": "MCAM04_2024-03-Tc6"
+    },
+    {
+      "baseline": "0.712131",
+      "candidate": "0.712131",
+      "delta": "+0.000000",
+      "note": "unchanged by local repair",
+      "video": "MCAM05_2024-03-Tc6"
+    },
+    {
+      "baseline": "0.790930",
+      "candidate": "0.790930",
+      "delta": "+0.000000",
+      "note": "unchanged by local repair",
+      "video": "MCAM05_2024-03-Tc8"
+    },
+    {
+      "baseline": "0.612570",
+      "candidate": "0.612570",
+      "delta": "+0.000000",
+      "note": "unchanged by local repair",
+      "video": "MCAM06_2024-03-Tc6"
+    },
+    {
+      "baseline": "0.697834",
+      "candidate": "0.697834",
+      "delta": "+0.000000",
+      "note": "unchanged by local repair",
+      "video": "MCAM06_2024-03-Tc8"
+    },
+    {
+      "baseline": "0.775155",
+      "candidate": "0.775289",
+      "delta": "+0.000134",
+      "note": "main affected slice",
+      "video": "MCAM08_2024-03-Tc6"
+    }
+  ],
+  "pipeline_module": "M7 candidate retrieval + M10 scheduler + M8 graph resolution + M12 delivery calibration",
+  "s3": "blocked: `aws sts get-caller-identity` failed locally with \"Unable to locate credentials\"; artifacts remain under reports/vlincs_iterations/20260623_rank47base_weakvideo_rank67_p005_gain and local_runs/offline_no_anchor_split_probe_20260623/rank47base_subpart_reviewer_delivery/",
+  "status": "gain",
+  "summary": "Weakvideo rank67 moves 4 MCAM04/MCAM08 tracklets from component 43 / gid 96000046 to component 38 / gid 96000041. Direct full improves to 0.662969 and canonical density_simple+p005_area improves from 0.665084/0.525797/0.537115 to 0.665145/0.525833/0.537128.",
+  "title": "No-anchor rank47-base weakvideo rank67 p005 gain",
+  "used_in_pipeline": "yes: promoted as current no-anchor best assignment and canonical p005 delivery zip",
+  "visual_cases": [
+    {
+      "failure_reason": "After rank47, component 43 still held a cross-camera residual island whose weakvideo evidence was closer to component 38, leaving the delivery output split across two forced global IDs.",
+      "html": "cases/rank67_subpart_visual/case.html",
+      "images": [
+        "cases/rank67_subpart_visual/rank67_bbox_evidence.png"
+      ],
+      "improvement": "The weakvideo proposer isolates only the four compatible tracklets, keeps the larger source component intact, and the canonical density_simple+p005_area delivery score improves.",
+      "json": "cases/rank67_subpart_visual/case.json",
+      "summary": "Four weakvideo tracklets move from component 43 / gid 96000046 to component 38 / gid 96000041 on top of the rank47 base.",
+      "title": "Rank67 repairs a weakvideo MCAM04/MCAM08 residual island"
+    },
+    {
+      "failure_reason": "Before rank47, component 4 retained a small island that shared the target global ID evidence with component 38.",
+      "html": "cases/rank47_subpart_visual/case.html",
+      "images": [
+        "cases/rank47_subpart_visual/rank47_bbox_evidence.png"
+      ],
+      "improvement": "Rank47 committed the two-tracklet island and established the rank47 base for this follow-up.",
+      "json": "cases/rank47_subpart_visual/case.json",
+      "summary": "Two MCAM04 tracklets moved from component 4 / gid 96000004 to component 38 / gid 96000041, becoming the previous canonical best.",
+      "title": "Rank47 context: MCAM04 residual move"
+    },
+    {
+      "failure_reason": "The graph still held a small high-similarity MCAM08 residual island after rank40.",
+      "html": "cases/rank46_subpart_visual/case.html",
+      "images": [
+        "cases/rank46_subpart_visual/rank46_bbox_evidence.png"
+      ],
+      "improvement": "The reviewer committed only that local residual island and improved both density_simple and p005_area.",
+      "json": "cases/rank46_subpart_visual/case.json",
+      "summary": "Two MCAM08 tracklets moved from component 27 / gid 96000029 to component 29 / gid 96000031.",
+      "title": "Rank46 context: MCAM08 residual island"
+    },
+    {
+      "failure_reason": "A high-internal-similarity pair remained in the source component despite delivery preferring the target component.",
+      "html": "cases/rank40_subpart_visual/case.html",
+      "images": [
+        "cases/rank40_subpart_visual/rank40_bbox_evidence.png",
+        "cases/rank40_subpart_visual/tracking_recall_failure_gt_m0038_montage.png"
+      ],
+      "improvement": "The multiview subpart repair committed only two compatible MCAM08 tracklets.",
+      "json": "cases/rank40_subpart_visual/case.json",
+      "summary": "Two MCAM08 tracklets moved from component 5 / gid 96000005 to component 35 / gid 96000038.",
+      "title": "Rank40 context: tiny MCAM08 false-split island"
+    },
+    {
+      "failure_reason": "Low/edge-quality MCAM04/MCAM08 fragments were left in a larger source component.",
+      "html": "cases/rank15_subpart_visual/case.html",
+      "images": [
+        "cases/rank15_subpart_visual/rank15_bbox_evidence.png",
+        "cases/rank15_subpart_visual/tracking_precision_failure_pred_m0044_montage.png"
+      ],
+      "improvement": "The subpart repair tested a small conflict-supported group instead of moving the full component.",
+      "json": "cases/rank15_subpart_visual/case.json",
+      "summary": "Three edge/border tracklets moved from component 27 / gid 96000029 to component 10 / gid 96000011.",
+      "title": "Rank15 context: early false-split island"
+    }
+  ],
+  "workflow_steps": [
+    {
+      "action": "freeze no-anchor base components and forced/provisional statuses",
+      "input": "rank47 canonical best assignment",
+      "module": "M6 graph state",
+      "output": "rank47base candidate state",
+      "step": "1"
+    },
+    {
+      "action": "generate balanced, multiview, weakvideo residual island queues",
+      "input": "weakmetric+OSNet, DINOv2, SigLIP features",
+      "module": "M7 candidate retrieval",
+      "output": "30 balanced + 47 multiview + 80 weakvideo selected candidates",
+      "step": "2"
+    },
+    {
+      "action": "rank candidates, de-duplicate stale families, choose five diverse rank47base direct scorers",
+      "input": "784 candidates + 35 post-hoc full-score labels",
+      "module": "M10 scheduler/opponent",
+      "output": "one direct-positive candidate: weakvideo rank67",
+      "step": "3"
+    },
+    {
+      "action": "commit only seq 3848/5154/5672/8475 to target gid 96000041",
+      "input": "source component 43, target component 38, four source tracklets",
+      "module": "M8 resolution",
+      "output": "assignment CSV with 13 total subpart_reassign rows",
+      "step": "4"
+    },
+    {
+      "action": "apply density_simple and valid p005_area detection filter",
+      "input": "direct export zip",
+      "module": "M12 delivery",
+      "output": "canonical IDF1/HOTA/AssA 0.665145 / 0.525833 / 0.537128",
+      "step": "5"
+    },
+    {
+      "action": "write README, ppt HTML, spec, visual evidence",
+      "input": "metrics, manifests, case exporter",
+      "module": "M12 provenance",
+      "output": "reproducible gain package for Bitbucket wisc",
+      "step": "6"
+    }
+  ]
+}

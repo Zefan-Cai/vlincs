@@ -1,8 +1,8 @@
 {
-  "best_assignment_csv": "local_runs/offline_no_anchor_split_probe_20260623/rank46base_subpart_multiview_assignments/rank47_subpart_s4_to38_2seq_assignments.csv",
-  "best_e2e_assa": 0.537115,
-  "best_e2e_hota": 0.525797,
-  "best_e2e_idf1": 0.665084,
+  "best_assignment_csv": "local_runs/offline_no_anchor_split_probe_20260623/rank47base_subpart_weakvideo_assignments/rank67_subpart_s43_to38_4seq_assignments.csv",
+  "best_e2e_assa": 0.537128,
+  "best_e2e_hota": 0.525833,
+  "best_e2e_idf1": 0.665145,
   "best_model_pair_f1": 0.782244,
   "best_model_pair_precision": 0.850111,
   "best_model_pair_recall": 0.724411,
@@ -12,7 +12,7 @@
   "goal_global_id_pair_f1": 0.7,
   "goal_global_id_pair_precision": 0.7,
   "goal_global_id_pair_recall": 0.7,
-  "iteration": 105,
+  "iteration": 106,
   "last_artifacts": [
     "reports/no_anchor_offline_component_split_promotion_20260622.md",
     "local_runs/offline_no_anchor_split_probe_20260622/best_combo_split_assignments.csv",
@@ -88,12 +88,21 @@
     "local_runs/offline_no_anchor_split_probe_20260623/rank46base_subpart_reviewer_fullscore/multiview_rank47_s4_to38_2seq_full_export.json",
     "local_runs/offline_no_anchor_split_probe_20260623/rank46base_subpart_reviewer_delivery/multiview_rank47_s4_to38_2seq_density_simple.json",
     "local_runs/offline_no_anchor_split_probe_20260623/rank46base_subpart_reviewer_delivery/multiview_rank47_s4_to38_2seq_density_p005_area.json",
-    "reports/vlincs_iterations/20260623_rank46base_rank47_p005_gain/"
+    "reports/vlincs_iterations/20260623_rank46base_rank47_p005_gain/",
+    "local_runs/offline_no_anchor_split_probe_20260623/rank47base_subpart_balanced_manifest.json",
+    "local_runs/offline_no_anchor_split_probe_20260623/rank47base_subpart_multiview_manifest.json",
+    "local_runs/offline_no_anchor_split_probe_20260623/rank47base_subpart_weakvideo_manifest.json",
+    "local_runs/offline_no_anchor_split_probe_20260623/rank47base_subpart_reviewer_ranked_with_oldlabels.json",
+    "local_runs/offline_no_anchor_split_probe_20260623/rank47base_subpart_weakvideo_assignments/rank67_subpart_s43_to38_4seq_assignments.csv",
+    "local_runs/offline_no_anchor_split_probe_20260623/rank47base_subpart_reviewer_fullscore/weakvideo_rank67_s43_to38_4seq_full_export.json",
+    "local_runs/offline_no_anchor_split_probe_20260623/rank47base_subpart_reviewer_delivery/weakvideo_rank67_s43_to38_4seq_density_simple_withenv.json",
+    "local_runs/offline_no_anchor_split_probe_20260623/rank47base_subpart_reviewer_delivery/weakvideo_rank67_s43_to38_4seq_density_p005_area.json",
+    "reports/vlincs_iterations/20260623_rank47base_weakvideo_rank67_p005_gain/"
   ],
-  "last_direction": "rank40base_multiview_rank46_p005_gain",
-  "last_result": "Regenerated no-anchor subpart candidates on top of the rank40 base, ranked 469 old+new candidates with 9 matched full-score labels, and direct full-scored four diverse rank40-base candidates. rank47 22->38 tied 0.662694, rank21 82->80 tied 0.662694, rank44 30->85 tied 0.662694, and multiview rank46 27->29 moved 2 MCAM08 tracklets for a direct gain to 0.662835/0.523970/0.535170. Delivery validation scored density_simple 0.664929/0.525663/0.536945 and valid p005_area 0.665029/0.525739/0.537061 with config_name=p005_area and dropped_rows=45467, improving the canonical best from 0.664898/0.525586/0.536900.",
+  "last_direction": "rank47base_weakvideo_rank67_p005_gain",
+  "last_result": "Generated rank47base balanced/multiview/weakvideo no-anchor subpart candidates, ranked 784 old+new candidates with 35 matched post-hoc full-score labels, direct-scored five diverse candidates, and promoted weakvideo rank67. Rank67 moves four MCAM04/MCAM08 tracklets from component 43 / gid 96000046 to component 38 / gid 96000041. Direct full scored 0.662969/0.524082/0.535252; density_simple scored 0.665046/0.525758/0.537012; valid p005_area scored 0.665145/0.525833/0.537128 with config_name=p005_area, improving the canonical best from 0.665084/0.525797/0.537115. Visual cases were regenerated with bbox-centered coordinate zooms because local raw frames are not present.",
   "last_updated": "2026-06-23",
-  "next_direction": "fold_rank46_into_the_referee_and_search_remaining_component_27_or_mcam08_residual_islands_then_try_multi_edge_combos",
+  "next_direction": "fold_rank67_into_the_reviewer_and_search_remaining_weakvideo_residual_islands_then_fetch_remote_raw_frames_for_pixel_case_evidence",
   "stale_count": 0,
-  "status": "active_no_anchor_best_e2e_0p665029_rank46_subpart_gain_e2e_still_below_0p70"
+  "status": "active_no_anchor_best_e2e_0p665145_rank67_weakvideo_gain_e2e_still_below_0p70"
 }
