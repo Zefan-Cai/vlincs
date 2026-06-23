@@ -209,7 +209,7 @@ def main() -> None:
 
     args.output_dir.mkdir(parents=True, exist_ok=True)
     failure_rel = ""
-    if args.failure_montage and args.failure_montage.exists():
+    if args.failure_montage and args.failure_montage.is_file():
         dst = args.output_dir / args.failure_montage.name
         shutil.copy2(args.failure_montage, dst)
         failure_rel = dst.name

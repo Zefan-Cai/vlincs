@@ -2,7 +2,21 @@ VLINCS no-anchor global ID progress
 Date: 2026-06-23
 
 Current best e2e:
-IDF1 / HOTA / AssA = 0.665029 / 0.525739 / 0.537061
+IDF1 / HOTA / AssA = 0.665084 / 0.525797 / 0.537115
+
+Latest rank46-base reviewer gain:
+After rank46 became the base, balanced/multiview/weakvideo subpart candidates
+were regenerated again and ranked against old post-hoc full-score labels.
+Eight rank46-base multiview candidates were direct full-scored. Four stale or
+related families tied the rank46 direct score at 0.662835/0.523970/0.535170:
+22->38, 82->80 size6, 82->80 size5, and 30->85. Two new families were direct
+positive: 27->79 scored 0.662875/0.524014/0.535223 and 4->38 scored
+0.662902/0.524042/0.535239. Delivery validation promoted 4->38: density_simple
+scored 0.664983/0.525721/0.536999 and valid p005_area scored
+0.665084/0.525797/0.537115 with config_name=p005_area and dropped_rows=45467.
+The per-video canonical gain lands on MCAM04/Tc6, whose IDF1 improves from
+0.579438 to 0.579537. The report package uses the new PPT format with method
+flow, main improvement table, ablation table, and four visual case studies.
 
 Latest rank40-base reviewer gain:
 After rank40 became the base, balanced/multiview/weakvideo subpart candidates
