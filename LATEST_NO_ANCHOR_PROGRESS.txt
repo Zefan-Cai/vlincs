@@ -2,7 +2,24 @@ VLINCS no-anchor global ID progress
 Date: 2026-06-23
 
 Current best e2e:
-IDF1 / HOTA / AssA = 0.665145 / 0.525833 / 0.537128
+IDF1 / HOTA / AssA = 0.665246 / 0.525919 / 0.537198
+
+Latest rank67-base rank77+rank36 combo gain:
+On top of weakvideo rank67, two compatible no-anchor residual repairs were
+composed with kit/compose_no_anchor_assignment_overlays.py. weakvideo rank77
+adds two more component 43 / gid 96000046 tracklets to component 38 /
+gid 96000041. multiview rank36 moves three component 27 / gid 96000029
+tracklets to component 79 / gid 96000083. Direct combo full-score is
+0.663077/0.524175/0.535328; density_simple is
+0.665148/0.525843/0.537081; valid p005_area is
+0.665246/0.525919/0.537198 with config_name=p005_area and
+dropped_rows=45467. This improves the previous canonical best by
++0.000101 IDF1, +0.000086 HOTA, and +0.000070 AssA. The per-video gain lands
+on MCAM04/Tc6 (+0.000100 IDF1) and MCAM08/Tc6 (+0.000197 IDF1). The visual
+report now uses a raw-frame-first exporter and writes raw_frame_status in each
+case JSON. Current rank77/rank36 panels are not path failures; matching source
+frames are absent locally and on current h100-test-2/3 /mnt/localssd, so the
+case images are explicitly marked coordinate-only fallback.
 
 Latest rank47-base weakvideo gain:
 After rank47 became the base, balanced/multiview/weakvideo subpart candidates

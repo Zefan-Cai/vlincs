@@ -1,0 +1,231 @@
+{
+  "after_state": "component 38, gid 96000041, component_size 49, decision_status subpart_reassign",
+  "before_state": "component 43, gid 96000046, component_size 96",
+  "candidate": {
+    "assignment_csv": "local_runs/offline_no_anchor_split_probe_20260623/rank67base_subpart_weakvideo_assignments/rank77_subpart_s43_to38_2seq_assignments.csv",
+    "conflicts_to_rest": 4,
+    "focus_video_hits": 1,
+    "group_internal_sim": 0.46268510818481445,
+    "moved_preview": [
+      {
+        "from_component": 43,
+        "from_predicted_global_id": 96000046,
+        "seq": 4099,
+        "to_component": 38,
+        "to_predicted_global_id": 96000041
+      },
+      {
+        "from_component": 43,
+        "from_predicted_global_id": 96000046,
+        "seq": 9728,
+        "to_component": 38,
+        "to_predicted_global_id": 96000041
+      }
+    ],
+    "moved_tracklets": 2,
+    "rank": 77,
+    "score": 2.564200017644305,
+    "source_component": 43,
+    "source_component_conflict_edges": 34,
+    "source_component_size": 96,
+    "source_predicted_global_id": 96000046,
+    "source_rest_cross_max": 0.7207252383232117,
+    "source_rest_cross_mean": 0.3116442561149597,
+    "source_rest_margin_max": -0.2580401301383972,
+    "source_rest_margin_mean": 0.15104085206985474,
+    "source_seqs": [
+      4099,
+      9728
+    ],
+    "source_videos": {
+      "vlincs_MS01_MC0001_MCAM04_2024-03-Tc6": 1,
+      "vlincs_MS01_MC0001_MCAM08_2024-03-Tc6": 1
+    },
+    "target_component": 38,
+    "target_component_size": 47,
+    "target_margin": -0.00710606575012207,
+    "target_predicted_global_id": 96000041,
+    "target_rank_for_group": 1,
+    "target_sim": 0.7136191725730896,
+    "uses_anchors": false,
+    "uses_gt_for_evaluation_only": false,
+    "uses_gt_for_training_or_anchors": false
+  },
+  "evidence": "target_sim=0.7136, target_margin=-0.0071, source_rest_margin=0.1510",
+  "failure_montage": "",
+  "failure_reason": "Rank67 fixed four compatible tracklets, but component 43 still retained a smaller residual island visually closer to component 38.",
+  "improvement": "Rank77 adds only the two compatible residual tracklets; in combo with rank36 it becomes the promoted canonical p005 assignment.",
+  "montage": "rank77_bbox_evidence.png",
+  "raw_frame_dir": "/Users/zcai/Codex/videolincs/local_runs/yolo_reference_labels_iou050_mcam04_08_frame12000_18000_20260616/report_frames/raw",
+  "raw_frame_status": "unavailable_coordinate_fallback",
+  "summary": "Two additional weakvideo tracklets move from component 43 / gid 96000046 to component 38 / gid 96000041 after the rank67 base.",
+  "title": "Rank77 extends the component-43 to component-38 repair",
+  "tracklets": [
+    {
+      "after": {
+        "avg_conf": "0.465792",
+        "camera": "MCAM04",
+        "component_external_prob_max": "0.0",
+        "component_internal_edges": "0",
+        "component_internal_prob_median": "0.0",
+        "component_internal_score_median": "0.0",
+        "component_label": "38",
+        "component_margin_prob": "0.0",
+        "component_size": "49",
+        "decision_status": "subpart_reassign",
+        "end_frame": "40053",
+        "n_dets": "219",
+        "predicted_global_id": "96000041",
+        "prediction_confidence": "0.72",
+        "seq": "4099",
+        "start_frame": "39754",
+        "tracklet_key": "vlincs_MS01_MC0001_MCAM04_2024-03-Tc6:2694:0",
+        "video": "vlincs_MS01_MC0001_MCAM04_2024-03-Tc6"
+      },
+      "before": {
+        "avg_conf": "0.465792",
+        "camera": "MCAM04",
+        "component_external_prob_max": "0.0",
+        "component_internal_edges": "0",
+        "component_internal_prob_median": "0.0",
+        "component_internal_score_median": "0.0",
+        "component_label": "43",
+        "component_margin_prob": "0.0",
+        "component_size": "96",
+        "decision_status": "forced_component",
+        "end_frame": "40053",
+        "n_dets": "219",
+        "predicted_global_id": "96000046",
+        "prediction_confidence": "0.700000",
+        "seq": "4099",
+        "start_frame": "39754",
+        "tracklet_key": "vlincs_MS01_MC0001_MCAM04_2024-03-Tc6:2694:0",
+        "video": "vlincs_MS01_MC0001_MCAM04_2024-03-Tc6"
+      },
+      "sampled_boxes": [
+        {
+          "bbox_xyxy": [
+            1987.251,
+            1015.68274,
+            2026.9801,
+            1094.8427
+          ],
+          "frame_idx": 39754,
+          "score": 0.30082783102989197,
+          "tracklet_key": "vlincs_MS01_MC0001_MCAM04_2024-03-Tc6:2694:0",
+          "video_key": "vlincs_MS01_MC0001_MCAM04_2024-03-Tc6"
+        },
+        {
+          "bbox_xyxy": [
+            2038.0369,
+            1040.34,
+            2076.6716,
+            1130.659
+          ],
+          "frame_idx": 39913,
+          "score": 0.49360454082489014,
+          "tracklet_key": "vlincs_MS01_MC0001_MCAM04_2024-03-Tc6:2694:0",
+          "video_key": "vlincs_MS01_MC0001_MCAM04_2024-03-Tc6"
+        },
+        {
+          "bbox_xyxy": [
+            1943.2904,
+            992.62775,
+            1999.3195,
+            1120.2135
+          ],
+          "frame_idx": 40053,
+          "score": 0.6841742396354675,
+          "tracklet_key": "vlincs_MS01_MC0001_MCAM04_2024-03-Tc6:2694:0",
+          "video_key": "vlincs_MS01_MC0001_MCAM04_2024-03-Tc6"
+        }
+      ],
+      "seq": 4099
+    },
+    {
+      "after": {
+        "avg_conf": "0.676779",
+        "camera": "MCAM08",
+        "component_external_prob_max": "0.0",
+        "component_internal_edges": "0",
+        "component_internal_prob_median": "0.0",
+        "component_internal_score_median": "0.0",
+        "component_label": "38",
+        "component_margin_prob": "0.0",
+        "component_size": "49",
+        "decision_status": "subpart_reassign",
+        "end_frame": "14362",
+        "n_dets": "166",
+        "predicted_global_id": "96000041",
+        "prediction_confidence": "0.72",
+        "seq": "9728",
+        "start_frame": "14197",
+        "tracklet_key": "vlincs_MS01_MC0001_MCAM08_2024-03-Tc6:996:0",
+        "video": "vlincs_MS01_MC0001_MCAM08_2024-03-Tc6"
+      },
+      "before": {
+        "avg_conf": "0.676779",
+        "camera": "MCAM08",
+        "component_external_prob_max": "0.0",
+        "component_internal_edges": "0",
+        "component_internal_prob_median": "0.0",
+        "component_internal_score_median": "0.0",
+        "component_label": "43",
+        "component_margin_prob": "0.0",
+        "component_size": "96",
+        "decision_status": "forced_component",
+        "end_frame": "14362",
+        "n_dets": "166",
+        "predicted_global_id": "96000046",
+        "prediction_confidence": "0.700000",
+        "seq": "9728",
+        "start_frame": "14197",
+        "tracklet_key": "vlincs_MS01_MC0001_MCAM08_2024-03-Tc6:996:0",
+        "video": "vlincs_MS01_MC0001_MCAM08_2024-03-Tc6"
+      },
+      "sampled_boxes": [
+        {
+          "bbox_xyxy": [
+            106.00509,
+            194.13393,
+            223.49014,
+            345.1988
+          ],
+          "frame_idx": 14197,
+          "score": 0.19338493049144745,
+          "tracklet_key": "vlincs_MS01_MC0001_MCAM08_2024-03-Tc6:996:0",
+          "video_key": "vlincs_MS01_MC0001_MCAM08_2024-03-Tc6"
+        },
+        {
+          "bbox_xyxy": [
+            61.142273,
+            209.42026,
+            141.66452,
+            405.89386
+          ],
+          "frame_idx": 14279,
+          "score": 0.8895895481109619,
+          "tracklet_key": "vlincs_MS01_MC0001_MCAM08_2024-03-Tc6:996:0",
+          "video_key": "vlincs_MS01_MC0001_MCAM08_2024-03-Tc6"
+        },
+        {
+          "bbox_xyxy": [
+            0.113089874,
+            283.5509,
+            23.373585,
+            374.20804
+          ],
+          "frame_idx": 14362,
+          "score": 0.2689451575279236,
+          "tracklet_key": "vlincs_MS01_MC0001_MCAM08_2024-03-Tc6:996:0",
+          "video_key": "vlincs_MS01_MC0001_MCAM08_2024-03-Tc6"
+        }
+      ],
+      "seq": 9728
+    }
+  ],
+  "uses_anchors": false,
+  "uses_gt_for_evaluation_only": false,
+  "uses_gt_for_training_or_anchors": false,
+  "video_root": ""
+}

@@ -1,0 +1,227 @@
+{
+  "after_state": "component 38, gid 96000041, component_size 43, decision_status subpart_reassign",
+  "before_state": "component 4, gid 96000004, component_size 195",
+  "candidate": {
+    "assignment_csv": "local_runs/offline_no_anchor_split_probe_20260623/rank46base_subpart_multiview_assignments/rank47_subpart_s4_to38_2seq_assignments.csv",
+    "conflicts_to_rest": 2,
+    "focus_video_hits": 2,
+    "group_internal_sim": 0.5148007869720459,
+    "moved_preview": [
+      {
+        "from_component": 4,
+        "from_predicted_global_id": 96000004,
+        "seq": 4503,
+        "to_component": 38,
+        "to_predicted_global_id": 96000041
+      },
+      {
+        "from_component": 4,
+        "from_predicted_global_id": 96000004,
+        "seq": 5509,
+        "to_component": 38,
+        "to_predicted_global_id": 96000041
+      }
+    ],
+    "moved_tracklets": 2,
+    "rank": 47,
+    "score": 2.0337127686664416,
+    "source_component": 4,
+    "source_component_conflict_edges": 93,
+    "source_component_size": 195,
+    "source_predicted_global_id": 96000004,
+    "source_rest_cross_max": 0.6529314517974854,
+    "source_rest_cross_mean": 0.32279109954833984,
+    "source_rest_margin_max": -0.13813066482543945,
+    "source_rest_margin_mean": 0.19200968742370605,
+    "source_seqs": [
+      4503,
+      5509
+    ],
+    "source_videos": {
+      "vlincs_MS01_MC0001_MCAM04_2024-03-Tc6": 2
+    },
+    "target_component": 38,
+    "target_component_size": 41,
+    "target_margin": -0.09824848175048828,
+    "target_predicted_global_id": 96000041,
+    "target_rank_for_group": 1,
+    "target_sim": 0.5546829700469971,
+    "uses_anchors": false,
+    "uses_gt_for_evaluation_only": false,
+    "uses_gt_for_training_or_anchors": false
+  },
+  "evidence": "target_sim=0.5547, target_margin=-0.0982, source_rest_margin=0.1920",
+  "failure_montage": "",
+  "failure_reason": "After rank46, source component 4 still carried a small pair whose target similarity to component 38 was higher than the source-rest margin, but the earlier reviewer had treated related 22->38 and 30->85 moves as hard-neutral ties.",
+  "improvement": "The updated opponent filters stale tied families, then tests the new 4->38 family; direct, density_simple, and p005_area all improve, so the local repair becomes the next canonical best.",
+  "montage": "rank47_bbox_evidence.png",
+  "summary": "Two tracklets move from component 4 / gid 96000004 to component 38 / gid 96000041 on top of the rank46 base.",
+  "title": "Rank47 peels a source-4 residual island toward component 38",
+  "tracklets": [
+    {
+      "after": {
+        "avg_conf": "0.228906",
+        "camera": "MCAM04",
+        "component_external_prob_max": "0.0",
+        "component_internal_edges": "0",
+        "component_internal_prob_median": "0.0",
+        "component_internal_score_median": "0.0",
+        "component_label": "38",
+        "component_margin_prob": "0.0",
+        "component_size": "43",
+        "decision_status": "subpart_reassign",
+        "end_frame": "41947",
+        "n_dets": "202",
+        "predicted_global_id": "96000041",
+        "prediction_confidence": "0.720000",
+        "seq": "4503",
+        "start_frame": "41648",
+        "tracklet_key": "vlincs_MS01_MC0001_MCAM04_2024-03-Tc6:3057:0",
+        "video": "vlincs_MS01_MC0001_MCAM04_2024-03-Tc6"
+      },
+      "before": {
+        "avg_conf": "0.228906",
+        "camera": "MCAM04",
+        "component_external_prob_max": "0.0",
+        "component_internal_edges": "0",
+        "component_internal_prob_median": "0.0",
+        "component_internal_score_median": "0.0",
+        "component_label": "4",
+        "component_margin_prob": "0.0",
+        "component_size": "195",
+        "decision_status": "forced_component",
+        "end_frame": "41947",
+        "n_dets": "202",
+        "predicted_global_id": "96000004",
+        "prediction_confidence": "0.700000",
+        "seq": "4503",
+        "start_frame": "41648",
+        "tracklet_key": "vlincs_MS01_MC0001_MCAM04_2024-03-Tc6:3057:0",
+        "video": "vlincs_MS01_MC0001_MCAM04_2024-03-Tc6"
+      },
+      "sampled_boxes": [
+        {
+          "bbox_xyxy": [
+            1522.3864,
+            1026.5376,
+            1548.5775,
+            1095.4683
+          ],
+          "frame_idx": 41648,
+          "score": 0.10821840167045593,
+          "tracklet_key": "vlincs_MS01_MC0001_MCAM04_2024-03-Tc6:3057:0",
+          "video_key": "vlincs_MS01_MC0001_MCAM04_2024-03-Tc6"
+        },
+        {
+          "bbox_xyxy": [
+            1514.2852,
+            1015.32367,
+            1546.735,
+            1094.5743
+          ],
+          "frame_idx": 41827,
+          "score": 0.21734465658664703,
+          "tracklet_key": "vlincs_MS01_MC0001_MCAM04_2024-03-Tc6:3057:0",
+          "video_key": "vlincs_MS01_MC0001_MCAM04_2024-03-Tc6"
+        },
+        {
+          "bbox_xyxy": [
+            1521.9532,
+            1016.6739,
+            1551.1396,
+            1091.492
+          ],
+          "frame_idx": 41947,
+          "score": 0.10263607650995255,
+          "tracklet_key": "vlincs_MS01_MC0001_MCAM04_2024-03-Tc6:3057:0",
+          "video_key": "vlincs_MS01_MC0001_MCAM04_2024-03-Tc6"
+        }
+      ],
+      "seq": 4503
+    },
+    {
+      "after": {
+        "avg_conf": "0.467365",
+        "camera": "MCAM04",
+        "component_external_prob_max": "0.0",
+        "component_internal_edges": "0",
+        "component_internal_prob_median": "0.0",
+        "component_internal_score_median": "0.0",
+        "component_label": "38",
+        "component_margin_prob": "0.0",
+        "component_size": "43",
+        "decision_status": "subpart_reassign",
+        "end_frame": "12299",
+        "n_dets": "244",
+        "predicted_global_id": "96000041",
+        "prediction_confidence": "0.720000",
+        "seq": "5509",
+        "start_frame": "12000",
+        "tracklet_key": "vlincs_MS01_MC0001_MCAM04_2024-03-Tc6:654:0",
+        "video": "vlincs_MS01_MC0001_MCAM04_2024-03-Tc6"
+      },
+      "before": {
+        "avg_conf": "0.467365",
+        "camera": "MCAM04",
+        "component_external_prob_max": "0.0",
+        "component_internal_edges": "0",
+        "component_internal_prob_median": "0.0",
+        "component_internal_score_median": "0.0",
+        "component_label": "4",
+        "component_margin_prob": "0.0",
+        "component_size": "195",
+        "decision_status": "forced_component",
+        "end_frame": "12299",
+        "n_dets": "244",
+        "predicted_global_id": "96000004",
+        "prediction_confidence": "0.700000",
+        "seq": "5509",
+        "start_frame": "12000",
+        "tracklet_key": "vlincs_MS01_MC0001_MCAM04_2024-03-Tc6:654:0",
+        "video": "vlincs_MS01_MC0001_MCAM04_2024-03-Tc6"
+      },
+      "sampled_boxes": [
+        {
+          "bbox_xyxy": [
+            1962.8422,
+            991.521,
+            2001.2654,
+            1114.6312
+          ],
+          "frame_idx": 12000,
+          "score": 0.14647634327411652,
+          "tracklet_key": "vlincs_MS01_MC0001_MCAM04_2024-03-Tc6:654:0",
+          "video_key": "vlincs_MS01_MC0001_MCAM04_2024-03-Tc6"
+        },
+        {
+          "bbox_xyxy": [
+            1944.6418,
+            988.8588,
+            2000.3676,
+            1082.7949
+          ],
+          "frame_idx": 12175,
+          "score": 0.5123080015182495,
+          "tracklet_key": "vlincs_MS01_MC0001_MCAM04_2024-03-Tc6:654:0",
+          "video_key": "vlincs_MS01_MC0001_MCAM04_2024-03-Tc6"
+        },
+        {
+          "bbox_xyxy": [
+            1916.8159,
+            1020.4459,
+            1982.4122,
+            1284.1945
+          ],
+          "frame_idx": 12299,
+          "score": 0.4659491777420044,
+          "tracklet_key": "vlincs_MS01_MC0001_MCAM04_2024-03-Tc6:654:0",
+          "video_key": "vlincs_MS01_MC0001_MCAM04_2024-03-Tc6"
+        }
+      ],
+      "seq": 5509
+    }
+  ],
+  "uses_anchors": false,
+  "uses_gt_for_evaluation_only": false,
+  "uses_gt_for_training_or_anchors": false
+}
