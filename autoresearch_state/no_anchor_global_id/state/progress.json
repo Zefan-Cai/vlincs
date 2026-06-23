@@ -12,7 +12,7 @@
     "goal_global_id_pair_f1": 0.7,
     "goal_global_id_pair_precision": 0.7,
     "goal_global_id_pair_recall": 0.7,
-    "iteration": 99,
+    "iteration": 100,
     "last_artifacts": [
         "reports/no_anchor_offline_component_split_promotion_20260622.md",
         "local_runs/offline_no_anchor_split_probe_20260622/best_combo_split_assignments.csv",
@@ -30,14 +30,17 @@
         "reports/no_anchor_currentbest_residual_split_merge_refutation_20260622.md",
         "local_runs/offline_no_anchor_split_probe_20260622/currentbest_residual_top_single_fullscore/",
         "local_runs/offline_no_anchor_currentbest_edge_diagnostics_20260622_min1/",
+        "reports/no_anchor_currentbest_historical_nearmiss_projection_refutation_20260622.md",
+        "local_runs/offline_no_anchor_split_probe_20260622/currentbest_projected_historical_nearmiss/",
+        "local_runs/offline_no_anchor_split_probe_20260622/currentbest_projected_historical_nearmiss_fullscore/",
         "local_runs/offline_no_anchor_edge_diagnostics_20260622/edge_diagnostics.json",
         "kit/offline_no_anchor_component_edge_diagnostics.py",
         "kit/offline_no_anchor_component_split_probe.py"
     ],
-    "last_direction": "currentbest_residual_split_and_small_merge_refutation",
-    "last_result": "Exported and full-scored top residual single splits on top of best_combo_split_assignments.csv. Six no-anchor single splits covering component 96000032 and 96000009 all tied direct full at 0.661843/0.523137/0.534683. The most promising rank009 single also tied density_simple at 0.663955/0.524825/0.536460 and density_simple+p005_area at the current best 0.664050/0.524893/0.536568. Reran current-best component-edge diagnostics with min-size-1 candidates; no-GT top50 small-merge pool had 6/50 eval-true edges, and full-scored ranks 1-4, including the first eval-true singleton merge, all tied direct full at 0.661843/0.523137/0.534683. This turns residual single splits and naive visual-neighbor small merges into hard negatives for a full-score-sensitive admission model.",
+    "last_direction": "currentbest_historical_nearmiss_projection_refutation",
+    "last_result": "Projected the old high-mass 21->60 peel near-miss deltas onto the current 0.664050 split-best assignment. Representative size22/size16/size10 candidates changed 31/25/20 tracklets and all became negative on the new base: direct full scored 0.661628/0.522908/0.534521, 0.661687/0.522985/0.534582, and 0.661316/0.522591/0.534283. This refutes reusing the old near-miss branch without regenerating candidates from the current split-best state.",
     "last_updated": "2026-06-22",
     "next_direction": "learn_no_gt_impure_component_split_admission_and_score_more_split_candidates_locally",
-    "stale_count": 5,
-    "status": "active_no_anchor_best_e2e_0p664050_residual_split_merge_refuted_e2e_still_below_0p70"
+    "stale_count": 6,
+    "status": "active_no_anchor_best_e2e_0p664050_old_nearmiss_projection_refuted_e2e_still_below_0p70"
 }

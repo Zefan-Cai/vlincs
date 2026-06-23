@@ -28,6 +28,15 @@ including the first eval-true singleton merge, all tied direct full at
 0.661843/0.523137/0.534683. This closes the naive residual split and naive
 targeted re-merge branches.
 
+Latest historical near-miss projection:
+The old high-mass `21->60` peel near-miss branch was projected onto the current
+0.664050 split-best assignment by replaying the old candidate deltas on the
+current assignment. The representative size22/size16/size10 candidates all
+became negative on the new base: direct full scored
+0.661628/0.522908/0.534521, 0.661687/0.522985/0.534582, and
+0.661316/0.522591/0.534283. This refutes reusing the old near-miss branch
+without regenerating candidates from the current split-best state.
+
 Latest component-split promotion:
 The current rank58 assignment was scored locally without DB by using
 kit/demo_data/ds1 tracklet parquets plus DS1 GT downloaded from S3. The scorer
@@ -101,6 +110,7 @@ reports/no_anchor_rank58_structural_sync_20260622.md
 reports/no_anchor_rank58_residual_refutation_20260622.md
 reports/no_anchor_currentbest_residual_greedy12_refutation_20260622.md
 reports/no_anchor_currentbest_residual_split_merge_refutation_20260622.md
+reports/no_anchor_currentbest_historical_nearmiss_projection_refutation_20260622.md
 
 Current-best detail:
 reports/no_anchor_offline_component_split_promotion_20260622.md
@@ -115,6 +125,7 @@ reports/no_anchor_filter_sweep_currentbest_20260622.md
 reports/no_anchor_currentbest_subpart_multiview_combo_refutation_20260622.md
 reports/no_anchor_currentbest_residual_greedy12_refutation_20260622.md
 reports/no_anchor_currentbest_residual_split_merge_refutation_20260622.md
+reports/no_anchor_currentbest_historical_nearmiss_projection_refutation_20260622.md
 
 Key artifacts:
 reports/no_anchor_offline_component_split_promotion_20260622.md
@@ -133,6 +144,9 @@ local_runs/offline_no_anchor_split_probe_20260622/currentbest_residual_greedy12_
 reports/no_anchor_currentbest_residual_split_merge_refutation_20260622.md
 local_runs/offline_no_anchor_split_probe_20260622/currentbest_residual_top_single_fullscore/
 local_runs/offline_no_anchor_currentbest_edge_diagnostics_20260622_min1/
+reports/no_anchor_currentbest_historical_nearmiss_projection_refutation_20260622.md
+local_runs/offline_no_anchor_split_probe_20260622/currentbest_projected_historical_nearmiss/
+local_runs/offline_no_anchor_split_probe_20260622/currentbest_projected_historical_nearmiss_fullscore/
 local_runs/offline_no_anchor_edge_diagnostics_20260622/edge_diagnostics.json
 kit/offline_no_anchor_component_edge_diagnostics.py
 kit/offline_no_anchor_component_split_probe.py
