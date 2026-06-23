@@ -173,7 +173,7 @@
       "decision": "tie; do not run delivery"
     }
   ],
-  "bitbucket": "pending publish to Novateur/vlincs_reid_by_search wisc",
+  "bitbucket": "pushed to Novateur/vlincs_reid_by_search wisc at commit decbb2e",
   "s3": "blocked: aws sts get-caller-identity returned Unable to locate credentials; local large artifacts remain under local_runs/offline_no_anchor_split_probe_20260623/component_graph_fullscore/rank04_small_combo_next_component_probe/",
   "next": "Search side-effect-aware variants of 37->86: preserve the MCAM04/Tc6 and MCAM03/Tc8 gains while reducing MCAM03/Tc6 and MCAM08/Tc6 losses, likely by sub-splitting component 37 before attach."
 }

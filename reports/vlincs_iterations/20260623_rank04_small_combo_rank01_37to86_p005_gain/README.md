@@ -113,7 +113,7 @@ CONFIG=$(cat local_runs/offline_no_anchor_split_probe_20260623/p005_area_config.
 
 ## Upload
 
-- Bitbucket: `pending publish to Novateur/vlincs_reid_by_search wisc`
+- Bitbucket: `pushed to Novateur/vlincs_reid_by_search wisc at commit decbb2e`
 - S3: `blocked: aws sts get-caller-identity returned Unable to locate credentials; local large artifacts remain under local_runs/offline_no_anchor_split_probe_20260623/component_graph_fullscore/rank04_small_combo_next_component_probe/`
 
 ## Next
