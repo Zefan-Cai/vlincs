@@ -1,0 +1,141 @@
+{
+  "after_state": "component 36, gid 96000039, component_size 122, decision_status post_seq6257_combo_probe",
+  "before_state": "component 43, gid 96000046, component_size 94",
+  "candidate": {
+    "assignment_csv": "/Users/zcai/Codex/vlincs_reid_by_search_wisc_sync/local_runs/reproduce_generated_positive_scheduler_seq6257_p005_20260624/method_reproduction/local_gated_siglip_primary/assignments/rank02_subpart_s43_to36_1seq_assignments.csv",
+    "conflicts_to_rest": 3,
+    "focus_video_hits": 0,
+    "group_internal_sim": 1.0,
+    "moved_preview": [
+      {
+        "from_component": 43,
+        "from_predicted_global_id": 96000046,
+        "seq": 4844,
+        "to_component": 36,
+        "to_predicted_global_id": 96000039
+      }
+    ],
+    "moved_tracklets": 1,
+    "rank": 2,
+    "score": 2.7860548612504163,
+    "source_component": 43,
+    "source_component_conflict_edges": 30,
+    "source_component_size": 94,
+    "source_predicted_global_id": 96000046,
+    "source_rest_cross_max": 0.5476731657981873,
+    "source_rest_cross_mean": 0.3325597643852234,
+    "source_rest_margin_max": 0.45232683420181274,
+    "source_rest_margin_mean": 0.6674402356147766,
+    "source_seqs": [
+      4844
+    ],
+    "source_videos": {
+      "vlincs_MS01_MC0001_MCAM04_2024-03-Tc6": 1
+    },
+    "target_component": 36,
+    "target_component_size": 121,
+    "target_margin": 0.09490412473678589,
+    "target_predicted_global_id": 96000039,
+    "target_rank_for_group": 1,
+    "target_sim": 0.6425772905349731,
+    "uses_anchors": false,
+    "uses_gt_for_evaluation_only": false,
+    "uses_gt_for_training_or_anchors": false
+  },
+  "evidence": "target_sim=0.6426, target_margin=0.0949, source_rest_margin=0.6674",
+  "failure_montage": "",
+  "failure_reason": "The direct signal was tiny, so this repair would not be promoted alone.",
+  "improvement": "It is retained only in the five-repair combo because the combo remains p005-positive.",
+  "montage": "rank02_bbox_evidence.png",
+  "raw_frame_dir": "",
+  "raw_frame_status": "unavailable_coordinate_fallback",
+  "summary": "A one-tracklet island seq4844 moves from component 43 / gid 96000046 to component 36 / gid 96000039.",
+  "title": "Combo5 SigLIP rank02",
+  "tracklets": [
+    {
+      "after": {
+        "avg_conf": "0.337964",
+        "camera": "MCAM04",
+        "component_external_prob_max": "0.0",
+        "component_internal_edges": "0",
+        "component_internal_prob_median": "0.0",
+        "component_internal_score_median": "0.0",
+        "component_label": "36",
+        "component_margin_prob": "0.0",
+        "component_size": "122",
+        "decision_status": "post_seq6257_combo_probe",
+        "end_frame": "44041",
+        "n_dets": "63",
+        "predicted_global_id": "96000039",
+        "prediction_confidence": "0.7",
+        "seq": "4844",
+        "start_frame": "43945",
+        "tracklet_key": "vlincs_MS01_MC0001_MCAM04_2024-03-Tc6:3364:0",
+        "video": "vlincs_MS01_MC0001_MCAM04_2024-03-Tc6"
+      },
+      "before": {
+        "avg_conf": "0.337964",
+        "camera": "MCAM04",
+        "component_external_prob_max": "0.0",
+        "component_internal_edges": "0",
+        "component_internal_prob_median": "0.0",
+        "component_internal_score_median": "0.0",
+        "component_label": "43",
+        "component_margin_prob": "0.0",
+        "component_size": "94",
+        "decision_status": "forced_component",
+        "end_frame": "44041",
+        "n_dets": "63",
+        "predicted_global_id": "96000046",
+        "prediction_confidence": "0.7",
+        "seq": "4844",
+        "start_frame": "43945",
+        "tracklet_key": "vlincs_MS01_MC0001_MCAM04_2024-03-Tc6:3364:0",
+        "video": "vlincs_MS01_MC0001_MCAM04_2024-03-Tc6"
+      },
+      "sampled_boxes": [
+        {
+          "bbox_xyxy": [
+            1571.4034,
+            1049.8066,
+            1621.2175,
+            1161.1859
+          ],
+          "frame_idx": 43945,
+          "score": 0.5157342553138733,
+          "tracklet_key": "vlincs_MS01_MC0001_MCAM04_2024-03-Tc6:3364:0",
+          "video_key": "vlincs_MS01_MC0001_MCAM04_2024-03-Tc6"
+        },
+        {
+          "bbox_xyxy": [
+            1578.2354,
+            1050.0214,
+            1617.529,
+            1179.8188
+          ],
+          "frame_idx": 43981,
+          "score": 0.43023523688316345,
+          "tracklet_key": "vlincs_MS01_MC0001_MCAM04_2024-03-Tc6:3364:0",
+          "video_key": "vlincs_MS01_MC0001_MCAM04_2024-03-Tc6"
+        },
+        {
+          "bbox_xyxy": [
+            1491.6226,
+            1010.82355,
+            1545.4447,
+            1129.1292
+          ],
+          "frame_idx": 44041,
+          "score": 0.12102792412042618,
+          "tracklet_key": "vlincs_MS01_MC0001_MCAM04_2024-03-Tc6:3364:0",
+          "video_key": "vlincs_MS01_MC0001_MCAM04_2024-03-Tc6"
+        }
+      ],
+      "seq": 4844
+    }
+  ],
+  "uses_anchors": false,
+  "uses_gt_for_evaluation_only": false,
+  "uses_gt_for_training_or_anchors": false,
+  "video_root": ""
+}

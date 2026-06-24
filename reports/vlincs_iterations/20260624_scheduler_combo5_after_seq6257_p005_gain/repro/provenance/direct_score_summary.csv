@@ -1,0 +1,7 @@
+name,assignment,idf1,hota,assa,delta_idf1,delta_hota,delta_assa
+siglip_rank01_s89_to87_seq1199,local_runs/continued_no_anchor_local_gated_subpart_20260624/siglip_primary/assignments/rank01_subpart_s89_to87_1seq_assignments.csv,0.666656,0.527644,0.537746,8.4e-05,6.9e-05,3.4e-05
+weak_rank03_s86_to37_seq4690,local_runs/continued_no_anchor_local_gated_subpart_20260624/weak_primary/assignments/rank03_subpart_s86_to37_1seq_assignments.csv,0.666651,0.527652,0.537778,7.9e-05,7.7e-05,6.6e-05
+weak_rank01_s9_to26_seq5716,local_runs/continued_no_anchor_local_gated_subpart_20260624/weak_primary/assignments/rank01_subpart_s9_to26_1seq_assignments.csv,0.666616,0.527641,0.537789,4.4e-05,6.6e-05,7.7e-05
+siglip_rank02_s43_to36_seq4844,local_runs/continued_no_anchor_local_gated_subpart_20260624/siglip_primary/assignments/rank02_subpart_s43_to36_1seq_assignments.csv,0.666575,0.527577,0.537711,3e-06,2e-06,-1e-06
+weak_rank02_s16_to38_seq3355_3598,local_runs/continued_no_anchor_local_gated_subpart_20260624/weak_primary/assignments/rank02_subpart_s16_to38_2seq_assignments.csv,0.666541,0.527537,0.53768,-3.1e-05,-3.8e-05,-3.2e-05
+dino_rank01_s24_to88_seq1913_1924,local_runs/continued_no_anchor_local_gated_subpart_20260624/dino_primary/assignments/rank01_subpart_s24_to88_2seq_assignments.csv,0.666345,0.527245,0.537329,-0.000227,-0.00033,-0.000383

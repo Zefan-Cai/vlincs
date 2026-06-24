@@ -1,0 +1,118 @@
+{
+  "candidate": "siglip_r10_s30_to16_seq6257",
+  "baseline": {
+    "direct_idf1": 0.666778,
+    "direct_hota": 0.527787,
+    "direct_assa": 0.53789,
+    "p005_idf1": 0.668974,
+    "p005_hota": 0.529557,
+    "p005_assa": 0.539785
+  },
+  "direct": {
+    "idf1": 0.666824,
+    "hota": 0.527835,
+    "assa": 0.537933
+  },
+  "density_simple": {
+    "idf1": 0.668914,
+    "hota": 0.529521,
+    "assa": 0.539701,
+    "rows": 1688041,
+    "dropped_rows": 35029
+  },
+  "p005_area": {
+    "idf1": 0.669019,
+    "hota": 0.529605,
+    "assa": 0.539828,
+    "rows": 1642574,
+    "dropped_rows": 45467,
+    "config_name": "p005_area"
+  },
+  "per_video": {
+    "vlincs_MS01_MC0001_MCAM00_2024-03-Tc6": {
+      "assa": 0.836352,
+      "deta": 0.795662,
+      "detpr": 0.911551,
+      "detre": 0.849217,
+      "hota": 0.815354,
+      "idf1": 0.879281
+    },
+    "vlincs_MS01_MC0001_MCAM00_2024-03-Tc8": {
+      "assa": 0.787663,
+      "deta": 0.715998,
+      "detpr": 0.909123,
+      "detre": 0.761518,
+      "hota": 0.750862,
+      "idf1": 0.828799
+    },
+    "vlincs_MS01_MC0001_MCAM03_2024-03-Tc6": {
+      "assa": 0.624867,
+      "deta": 0.54536,
+      "detpr": 0.816917,
+      "detre": 0.600696,
+      "hota": 0.583561,
+      "idf1": 0.692317
+    },
+    "vlincs_MS01_MC0001_MCAM03_2024-03-Tc8": {
+      "assa": 0.558462,
+      "deta": 0.47669,
+      "detpr": 0.77808,
+      "detre": 0.531774,
+      "hota": 0.51574,
+      "idf1": 0.631769
+    },
+    "vlincs_MS01_MC0001_MCAM04_2024-03-Tc6": {
+      "assa": 0.502077,
+      "deta": 0.435073,
+      "detpr": 0.711428,
+      "detre": 0.50074,
+      "hota": 0.466929,
+      "idf1": 0.587774
+    },
+    "vlincs_MS01_MC0001_MCAM05_2024-03-Tc6": {
+      "assa": 0.637797,
+      "deta": 0.571125,
+      "detpr": 0.82406,
+      "detre": 0.633582,
+      "hota": 0.603526,
+      "idf1": 0.716375
+    },
+    "vlincs_MS01_MC0001_MCAM05_2024-03-Tc8": {
+      "assa": 0.730766,
+      "deta": 0.668144,
+      "detpr": 0.864076,
+      "detre": 0.729201,
+      "hota": 0.698745,
+      "idf1": 0.79093
+    },
+    "vlincs_MS01_MC0001_MCAM06_2024-03-Tc6": {
+      "assa": 0.601784,
+      "deta": 0.450398,
+      "detpr": 0.84292,
+      "detre": 0.481098,
+      "hota": 0.520422,
+      "idf1": 0.61257
+    },
+    "vlincs_MS01_MC0001_MCAM06_2024-03-Tc8": {
+      "assa": 0.615037,
+      "deta": 0.553248,
+      "detpr": 0.792932,
+      "detre": 0.623104,
+      "hota": 0.583172,
+      "idf1": 0.697834
+    },
+    "vlincs_MS01_MC0001_MCAM08_2024-03-Tc6": {
+      "assa": 0.683011,
+      "deta": 0.652863,
+      "detpr": 0.825116,
+      "detre": 0.732621,
+      "hota": 0.667655,
+      "idf1": 0.776122
+    }
+  },
+  "delta_direct_idf1": 4.6e-05,
+  "delta_p005_idf1": 4.5e-05,
+  "delta_p005_hota": 4.8e-05,
+  "delta_p005_assa": 4.3e-05,
+  "decision": "promote_candidate"
+}

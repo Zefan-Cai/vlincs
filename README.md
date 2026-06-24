@@ -26,7 +26,7 @@ Best reproducible WISC no-anchor DS1 delivery score:
 
 | IDF1 | HOTA | AssA |
 |---:|---:|---:|
-| 0.669019 | 0.529605 | 0.539828 |
+| 0.669311 | 0.529982 | 0.540246 |
 
 The root `./demo.sh` now runs the DS1/MS01 WISC no-anchor method reproduction by
 default.  It regenerates the promoted residual feature-outlier identity decision,
@@ -34,10 +34,11 @@ then runs a fresh one-tracklet subpart repair for `seq8367` from committed
 no-anchor feature evidence.  It then reruns local-gated weakmetric/SigLIP
 subpart proposers and composes three tiny repairs: `seq1199 89->87`,
 `seq4690 86->37`, and `seq5716 9->26`.  A final generated-positive scheduler
-reviewer then promotes one more single-tracklet repair, `seq6257 30->16`.
+reviewer then promotes `seq6257 30->16`, followed by a five-repair scheduler
+combo: SigLIP ranks `18`, `6`, `9`, `2` plus weakmetric rank `12`.
 It then runs direct export, `density_simple`, and the fixed `p005_area`
 delivery gate.  The DS1 final verification line should report
-`IDF1/HOTA/AssA = 0.669019/0.529605/0.539828`.
+`IDF1/HOTA/AssA = 0.669311/0.529982/0.540246`.
 
 Current recorded MS02 score from the gallery demo path:
 
@@ -78,7 +79,8 @@ The best promoted edit at this snapshot composes the residual feature-outlier
 repairs rank06 and rank07, then adds the fresh subpart `seq8367 10->77`
 one-tracklet repair, followed by a local-gated cross-manifest subpart combo
 for `seq1199`, `seq4690`, and `seq5716`, then a generated-positive scheduler
-repair for `seq6257 30->16`, followed by the fixed delivery calibration path.
+repair for `seq6257 30->16`, then the combo5 scheduler repairs, followed by
+the fixed delivery calibration path.
 The e2e target remains above 0.70 IDF1, so the included reports and state files
 are part of the active research trail rather than a final solved result.
 
@@ -140,9 +142,9 @@ evidence, a deterministic feature-outlier proposer, promoted repair ranks, and a
 fresh subpart proposer for `seq8367 10->77`; then it reruns local-gated
 weakmetric/SigLIP subpart proposers, composes `seq1199`, `seq4690`, and
 `seq5716` via cross-manifest repair materialization, adds the generated-positive
-scheduler repair `seq6257 30->16`, builds the submission zip, and verifies the
-canonical delivery score. It does not read a committed final-assignment CSV as
-input.
+scheduler repair `seq6257 30->16`, composes the combo5 scheduler repairs,
+builds the submission zip, and verifies the canonical delivery score. It does
+not read a committed final-assignment CSV as input.
 
 Optional overrides are passed directly to the DS1 reproduction script:
 

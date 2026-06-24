@@ -1,0 +1,38 @@
+{
+  "assignment_csv": "/Users/zcai/Codex/vlincs_reid_by_search_wisc_sync/local_runs/generated_positive_scheduler_currentbest_probe_20260624/assignments/siglip_r10_s30_to16_seq6257_assignments.csv",
+  "assignment_sha256": "5359c8675655b3795b4b485eff8705d5c63bbf3714e74e0ebe200b523cfa290e",
+  "base_assignment_csv": "/Users/zcai/Codex/vlincs_reid_by_search_wisc_sync/local_runs/demo_direct_ds1_check_20260624/method_reproduction/local_gated_cross_manifest_combo/combo_top3_siglip1_weak3_weak1_assignments.csv",
+  "changes": [
+    {
+      "after_component_label": 16,
+      "after_decision_status": "generated_positive_scheduler_probe",
+      "after_predicted_global_id": 96000017,
+      "before_component_label": 30,
+      "before_decision_status": "forced_component",
+      "before_predicted_global_id": 96000032,
+      "manifest": "/Users/zcai/Codex/vlincs_reid_by_search_wisc_sync/local_runs/continued_no_anchor_local_gated_subpart_20260624/siglip_primary/manifest.json",
+      "rank": 10,
+      "seq": 6257
+    }
+  ],
+  "decision_status": "generated_positive_scheduler_probe",
+  "moved_tracklets": 1,
+  "selected": [
+    {
+      "conflicts_to_rest": 2,
+      "manifest": "/Users/zcai/Codex/vlincs_reid_by_search_wisc_sync/local_runs/continued_no_anchor_local_gated_subpart_20260624/siglip_primary/manifest.json",
+      "moved_seqs": [
+        6257
+      ],
+      "rank": 10,
+      "score": 2.665040089798349,
+      "source_component": 30,
+      "target_component": 16,
+      "target_margin": 0.05450546741485596,
+      "target_sim": 0.6407002210617065
+    }
+  ],
+  "uses_anchors": false,
+  "uses_gt_for_evaluation_only": false,
+  "uses_gt_for_training_or_anchors": false
+}

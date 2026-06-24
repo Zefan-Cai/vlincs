@@ -1,0 +1,86 @@
+{
+  "assignment_csv": "local_runs/continued_no_anchor_local_gated_subpart_20260624/cross_manifest_combo_top3_assignments.csv",
+  "assignment_sha256": "ce6e9b2d9f78fb2302050a3e65087498ce116d4c47d40e19576d1ac726e32393",
+  "base_assignment_csv": "local_runs/demo_ds1_only_wrapper_check_20260624/method_reproduction/fresh_subpart_weak_primary/assignments/rank04_subpart_s10_to77_1seq_assignments.csv",
+  "changes": [
+    {
+      "after_component_label": 87,
+      "after_decision_status": "local_gated_cross_manifest_subpart_combo",
+      "after_predicted_global_id": 960000351,
+      "before_component_label": 89,
+      "before_decision_status": "forced_component",
+      "before_predicted_global_id": 960000481,
+      "manifest": "local_runs/continued_no_anchor_local_gated_subpart_20260624/siglip_primary/manifest.json",
+      "rank": 1,
+      "seq": 1199
+    },
+    {
+      "after_component_label": 37,
+      "after_decision_status": "local_gated_cross_manifest_subpart_combo",
+      "after_predicted_global_id": 96000040,
+      "before_component_label": 86,
+      "before_decision_status": "forced_component",
+      "before_predicted_global_id": 960000350,
+      "manifest": "local_runs/continued_no_anchor_local_gated_subpart_20260624/weak_primary/manifest.json",
+      "rank": 3,
+      "seq": 4690
+    },
+    {
+      "after_component_label": 26,
+      "after_decision_status": "local_gated_cross_manifest_subpart_combo",
+      "after_predicted_global_id": 96000028,
+      "before_component_label": 9,
+      "before_decision_status": "forced_component",
+      "before_predicted_global_id": 96000010,
+      "manifest": "local_runs/continued_no_anchor_local_gated_subpart_20260624/weak_primary/manifest.json",
+      "rank": 1,
+      "seq": 5716
+    }
+  ],
+  "decision_status": "local_gated_cross_manifest_subpart_combo",
+  "moved_tracklets": 3,
+  "selected": [
+    {
+      "conflicts_to_rest": 1,
+      "manifest": "local_runs/continued_no_anchor_local_gated_subpart_20260624/siglip_primary/manifest.json",
+      "moved_seqs": [
+        1199
+      ],
+      "rank": 1,
+      "score": 2.8899231270718517,
+      "source_component": 89,
+      "target_component": 87,
+      "target_margin": 0.15927457809448242,
+      "target_sim": 0.6939159631729126
+    },
+    {
+      "conflicts_to_rest": 2,
+      "manifest": "local_runs/continued_no_anchor_local_gated_subpart_20260624/weak_primary/manifest.json",
+      "moved_seqs": [
+        4690
+      ],
+      "rank": 3,
+      "score": 2.8090851367402103,
+      "source_component": 86,
+      "target_component": 37,
+      "target_margin": 0.049526870250701904,
+      "target_sim": 0.728726327419281
+    },
+    {
+      "conflicts_to_rest": 4,
+      "manifest": "local_runs/continued_no_anchor_local_gated_subpart_20260624/weak_primary/manifest.json",
+      "moved_seqs": [
+        5716
+      ],
+      "rank": 1,
+      "score": 2.85685080603807,
+      "source_component": 9,
+      "target_component": 26,
+      "target_margin": 0.04194080829620361,
+      "target_sim": 0.6493390202522278
+    }
+  ],
+  "uses_anchors": false,
+  "uses_gt_for_evaluation_only": false,
+  "uses_gt_for_training_or_anchors": false
+}

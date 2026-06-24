@@ -1,0 +1,91 @@
+{
+  "probe": "generated_positive_scheduler_currentbest_probe_20260624",
+  "baseline_direct": {
+    "idf1": 0.666778,
+    "hota": 0.527787,
+    "assa": 0.53789
+  },
+  "rows": [
+    {
+      "name": "siglip_r10_s30_to16_seq6257",
+      "idf1": 0.666824,
+      "hota": 0.527835,
+      "assa": 0.537933,
+      "delta_idf1": 4.6e-05,
+      "delta_hota": 4.8e-05,
+      "delta_assa": 4.3e-05,
+      "json": "local_runs/generated_positive_scheduler_currentbest_probe_20260624/direct/siglip_r10_s30_to16_seq6257.json"
+    },
+    {
+      "name": "dino_r03_s83_to89_seq1243",
+      "idf1": 0.666778,
+      "hota": 0.527787,
+      "assa": 0.53789,
+      "delta_idf1": 0.0,
+      "delta_hota": 0.0,
+      "delta_assa": 0.0,
+      "json": "local_runs/generated_positive_scheduler_currentbest_probe_20260624/direct/dino_r03_s83_to89_seq1243.json"
+    },
+    {
+      "name": "siglip_r04_s30_to38_seq3017",
+      "idf1": 0.666778,
+      "hota": 0.527787,
+      "assa": 0.53789,
+      "delta_idf1": 0.0,
+      "delta_hota": 0.0,
+      "delta_assa": 0.0,
+      "json": "local_runs/generated_positive_scheduler_currentbest_probe_20260624/direct/siglip_r04_s30_to38_seq3017.json"
+    },
+    {
+      "name": "siglip_r05_s1_to18_seq8315",
+      "idf1": 0.666778,
+      "hota": 0.527786,
+      "assa": 0.53789,
+      "delta_idf1": 0.0,
+      "delta_hota": -1e-06,
+      "delta_assa": 0.0,
+      "json": "local_runs/generated_positive_scheduler_currentbest_probe_20260624/direct/siglip_r05_s1_to18_seq8315.json"
+    },
+    {
+      "name": "siglip_r07_s91_to89_seq633",
+      "idf1": 0.666778,
+      "hota": 0.527787,
+      "assa": 0.53789,
+      "delta_idf1": 0.0,
+      "delta_hota": 0.0,
+      "delta_assa": 0.0,
+      "json": "local_runs/generated_positive_scheduler_currentbest_probe_20260624/direct/siglip_r07_s91_to89_seq633.json"
+    },
+    {
+      "name": "weak_r08_s18_to77_seq8336_8559",
+      "idf1": 0.666778,
+      "hota": 0.527787,
+      "assa": 0.53789,
+      "delta_idf1": 0.0,
+      "delta_hota": 0.0,
+      "delta_assa": 0.0,
+      "json": "local_runs/generated_positive_scheduler_currentbest_probe_20260624/direct/weak_r08_s18_to77_seq8336_8559.json"
+    },
+    {
+      "name": "weak_r07_s22_to13_seq9565",
+      "idf1": 0.666775,
+      "hota": 0.527781,
+      "assa": 0.537883,
+      "delta_idf1": -3e-06,
+      "delta_hota": -6e-06,
+      "delta_assa": -7e-06,
+      "json": "local_runs/generated_positive_scheduler_currentbest_probe_20260624/direct/weak_r07_s22_to13_seq9565.json"
+    },
+    {
+      "name": "weak_r05_s19_to0_seq8289",
+      "idf1": 0.666726,
+      "hota": 0.527704,
+      "assa": 0.537796,
+      "delta_idf1": -5.2e-05,
+      "delta_hota": -8.3e-05,
+      "delta_assa": -9.4e-05,
+      "json": "local_runs/generated_positive_scheduler_currentbest_probe_20260624/direct/weak_r05_s19_to0_seq8289.json"
+    }
+  ],
+  "decision": "run_delivery_for_direct_positive_only"
+}

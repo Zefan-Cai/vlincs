@@ -2,6 +2,25 @@ VLINCS no-anchor global ID progress
 Date: 2026-06-24
 
 Current best e2e:
+IDF1 / HOTA / AssA = 0.669311 / 0.529982 / 0.540246
+
+Latest scheduler combo5 after seq6257 gain:
+After the seq6257 best, a reviewer direct-scored 10 more local-gated scheduler
+candidates from weakmetric/SigLIP/DINO evidence. The promoted combo composes
+five non-overlapping repairs after seq6257: SigLIP rank18 seq2344/2390/2549
+51->29, SigLIP rank06 seq7200 18->0, weak rank12 seq582 2->43, SigLIP rank09
+seq1073 88->14, and SigLIP rank02 seq4844 43->36. Direct full-score improves
+to 0.667111/0.528208/0.538349, density_simple to
+0.669205/0.529898/0.540120, and valid p005_area to
+0.669311/0.529982/0.540246 with config_name=p005_area and dropped_rows=45467.
+This is +0.000292 IDF1 over the prior canonical best 0.669019. The root
+./demo.sh now defaults to this DS1 method reproduction. Package:
+reports/vlincs_iterations/20260624_scheduler_combo5_after_seq6257_p005_gain/.
+
+VLINCS no-anchor global ID progress
+Date: 2026-06-24
+
+Current best e2e:
 IDF1 / HOTA / AssA = 0.669019 / 0.529605 / 0.539828
 
 Latest generated-positive scheduler seq6257 gain:
