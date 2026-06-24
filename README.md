@@ -20,24 +20,42 @@ from the UWISC snapshot.
 
 ## Current Best
 
-Snapshot date: 2026-06-22.
+Snapshot date: 2026-06-23.
 
-Best end-to-end DS1 score:
+Best reproducible WISC no-anchor DS1 delivery score:
 
 | IDF1 | HOTA | AssA |
 |---:|---:|---:|
-| 0.657887 | 0.520944 | 0.535983 |
+| 0.668198 | 0.528747 | 0.539071 |
+
+The root `./demo.sh` replays and verifies this promoted no-anchor top32
+identity-decision artifact.  It runs direct export, `density_simple`, and the
+fixed `p005_area` delivery gate; the final verification line should report
+`IDF1/HOTA/AssA = 0.668198/0.528747/0.539071`.
+
+Fresh checkouts must materialize the DS1 Git LFS demo data before running the
+replay:
+
+```bash
+git checkout wisc
+git lfs pull --include="kit/demo_data/ds1/**"
+./demo.sh
+```
+
+Without Git LFS, the DS1 parquet files remain pointer text files and cannot be
+scored.
 
 Best model-side pair metric:
 
 | Pair F1 | Precision | Recall |
 |---:|---:|---:|
-| 0.775234 | 0.820504 | 0.734698 |
+| 0.782244 | 0.850111 | 0.724411 |
 
-The best promoted edit at this snapshot is a no-anchor side-effect-filtered
-subpart combo: `32 -> 15` plus `47 -> 2330`, moving 14 tracklets.  The e2e
-target remains above 0.70 IDF1, so the included reports and state files are
-part of the active research trail rather than a final solved result.
+The best promoted edit at this snapshot is the rank06 no-anchor top32
+component-subset repair `37 -> 86`, followed by the fixed delivery calibration
+path.  The e2e target remains above 0.70 IDF1, so the included reports and
+state files are part of the active research trail rather than a final solved
+result.
 
 ## Repository Layout
 
@@ -80,7 +98,17 @@ export PYTHONPATH="$PWD:$PWD/kit"
 The DS1 scripts expect VLINCS data under `DATA_ROOT`.  Do not commit raw data,
 video frames, model checkpoints, or generated zip submissions into this repo.
 
-## Auto-Evaluation Entrypoint
+## Auto-Evaluation Entrypoints
+
+The root replay path is the current WISC no-anchor handoff check:
+
+```bash
+./demo.sh
+```
+
+This is intentionally different from the original online-gallery DS1 demo.  It
+rebuilds the promoted global-ID submission from the committed assignment CSV and
+DS1 demo tracklets, then verifies the canonical delivery score.
 
 The branch-level auto-evaluation path is `kit/demo.sh`.  It wraps the Docker
 demo command, builds the right app image, starts the DB, and runs the same

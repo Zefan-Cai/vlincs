@@ -103,6 +103,13 @@ if [ ! -f "${tracklet_parquets[0]}" ]; then
   echo "missing DS1 tracklet parquets; run git lfs pull for kit/demo_data/ds1" >&2
   exit 2
 fi
+if head -c 80 "${tracklet_parquets[0]}" | grep -q "version https://git-lfs.github.com/spec/v1"; then
+  echo "DS1 tracklet parquet is still a Git LFS pointer, not an Apache Parquet file:" >&2
+  echo "  ${tracklet_parquets[0]}" >&2
+  echo "Install Git LFS, then run:" >&2
+  echo '  git lfs pull --include="kit/demo_data/ds1/**"' >&2
+  exit 2
+fi
 
 count_gt_files() {
   find "$1/Box/VLINCS_Performer/MS01/MC0001" -path '*2024-03-Tc*/*_v1.7.2.parquet' -type f 2>/dev/null | wc -l | tr -d ' '
