@@ -28,12 +28,11 @@ Best reproducible WISC no-anchor DS1 delivery score:
 |---:|---:|---:|
 | 0.668673 | 0.529242 | 0.539491 |
 
-The root `./demo.sh` now runs both benchmark checks: MS02 through the original
-gallery demo path, then DS1 through the WISC no-anchor method reproduction.  In
-the DS1 half it regenerates the promoted residual feature-outlier identity
-decision from committed no-anchor feature evidence, runs direct export,
-`density_simple`, and the fixed `p005_area` delivery gate.  The DS1 final
-verification line should report
+The root `./demo.sh` now runs the DS1/MS01 WISC no-anchor method reproduction by
+default.  It regenerates the promoted residual feature-outlier identity decision
+from committed no-anchor feature evidence, runs direct export, `density_simple`,
+and the fixed `p005_area` delivery gate.  The DS1 final verification line should
+report
 `IDF1/HOTA/AssA = 0.668673/0.529242/0.539491`.
 
 Current recorded MS02 score from the gallery demo path:
@@ -49,7 +48,6 @@ parquet files under `kit/demo_data/ds1/gt`:
 ```bash
 git checkout wisc
 git lfs pull --include="kit/demo_data/ds1/**"
-export DATA_ROOT=/path/to/vlincs/datastore   # required for MS02 sparse GT/videos
 ./demo.sh
 ```
 
@@ -124,31 +122,34 @@ generated zip submissions into this repo.
 
 ## Auto-Evaluation Entrypoints
 
-The root handoff check is one command and prints two `DONE` records:
+The root handoff check is one command and prints the DS1/MS01 `DONE` record:
 
 ```bash
 ./demo.sh
 ```
 
-This first runs:
+This is equivalent to:
 
 ```bash
-cd kit
-DEMO_HEADLESS=1 ./demo.sh ms02 --no-cannot-link
+./demo.sh ds1
 ```
 
-Then it runs the DS1 WISC no-anchor reproduction.  DS1 rebuilds the promoted
-global-ID assignment from committed no-anchor feature evidence, a deterministic
-feature-outlier proposer, and promoted repair ranks; then it builds the
-submission zip and verifies the canonical delivery score.  It does not read a
-committed final-assignment CSV as input.
+DS1 rebuilds the promoted global-ID assignment from committed no-anchor feature
+evidence, a deterministic feature-outlier proposer, and promoted repair ranks;
+then it builds the submission zip and verifies the canonical delivery score. It
+does not read a committed final-assignment CSV as input.
 
-Single-dataset debug commands are also supported:
+Additional explicit commands are also supported:
 
 ```bash
 ./demo.sh ms02
 ./demo.sh ds1
+./demo.sh all
 ```
+
+`./demo.sh ms02` and `./demo.sh all` require
+`DATA_ROOT=/path/to/vlincs/datastore` with
+`VLINCS_Performer-selected/MS02/MC0002/2018-03-Tc85`.
 
 The old DS1 gallery command below is intentionally not the handoff check:
 
@@ -163,15 +164,15 @@ mistaken for the WISC no-anchor replay.  Set
 `ALLOW_LEGACY_DS1_GALLERY_DEMO=1` only if you explicitly want to inspect the old
 gallery behavior.
 
-Bitbucket CI uses the same root command:
+Bitbucket CI can use the same root DS1 command:
 
 ```bash
 ./demo.sh 2>&1 | tee demo_score.txt
 python3 ci/render_scores.py --sha "$SHA" --author "$AUTHOR" --date "$CDATE" demo_score.txt
 ```
 
-The score renderer parses both `DONE: ms02 -> {...}` and `DONE: ds1 -> {...}`
-from the same log.
+For the combined check, run `./demo.sh all`; the score renderer parses both
+`DONE: ms02 -> {...}` and `DONE: ds1 -> {...}` when both are present.
 
 ## Main DS1 Pipeline
 

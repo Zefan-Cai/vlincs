@@ -7,13 +7,12 @@ REPRO="${ROOT}/reports/vlincs_iterations/20260624_feature_outlier_residual_rank0
 usage() {
   cat <<'EOF'
 Usage:
-  ./demo.sh            # run MS02 gallery demo, then DS1 WISC no-anchor method reproduction
-  ./demo.sh all        # same as default
+  ./demo.sh            # run DS1 WISC no-anchor method reproduction
+  ./demo.sh ds1        # same as default
   ./demo.sh ms02       # run only the MS02 gallery demo
-  ./demo.sh ds1        # run only the DS1 WISC no-anchor method reproduction
+  ./demo.sh all        # run MS02 gallery demo, then DS1 WISC no-anchor method reproduction
 
-The default command intentionally prints both:
-  DONE: ms02 -> {...}
+The default command intentionally prints:
   DONE: ds1  -> {...}
 
 No final assignment score is replayed. DS1 is regenerated from committed no-anchor
@@ -70,7 +69,7 @@ run_ds1() {
   bash "${REPRO}" "${filtered[@]}"
 }
 
-selected="${1:-all}"
+selected="${1:-ds1}"
 if [ "$#" -gt 0 ]; then
   shift
 fi
