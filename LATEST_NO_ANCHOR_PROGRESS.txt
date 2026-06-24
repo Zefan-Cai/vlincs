@@ -5,7 +5,7 @@ Current best e2e:
 IDF1 / HOTA / AssA = 0.668673 / 0.529242 / 0.539491
 
 Latest residual feature-outlier combo gain:
-On top of the previous feature-outlier combo best, two independent residual one-tracklet moves were composed: seq1548 component 86 -> 91 and seq4043 component 86 -> 37. Direct full-score improved to 0.666479/0.527472/0.537595; density_simple improved to 0.668568/0.529158/0.539365; valid p005_area improved to 0.668673/0.529242/0.539491 with config_name=p005_area and dropped_rows=45467. This is +0.000165 IDF1 over the prior canonical best 0.668508. Rank08/09/10/11 were tiny direct positives and rank12 was negative, so only rank06+rank07 is retained. Package: reports/vlincs_iterations/20260624_feature_outlier_residual_rank06_07_p005_gain/. Publishing pending.
+On top of the previous feature-outlier combo best, two independent residual one-tracklet moves were composed: seq1548 component 86 -> 91 and seq4043 component 86 -> 37. Direct full-score improved to 0.666479/0.527472/0.537595; density_simple improved to 0.668568/0.529158/0.539365; valid p005_area improved to 0.668673/0.529242/0.539491 with config_name=p005_area and dropped_rows=45467. This is +0.000165 IDF1 over the prior canonical best 0.668508. Rank08/09/10/11 were tiny direct positives and rank12 was negative, so only rank06+rank07 is retained. Package: reports/vlincs_iterations/20260624_feature_outlier_residual_rank06_07_p005_gain/. Bitbucket wisc commit: c5c96d3. S3: s3://dit-scale-up/zcai/vlincs/no_anchor_gains/20260624_feature_outlier_residual_rank06_07_p005_gain/.
 
 VLINCS no-anchor global ID progress
 Date: 2026-06-24

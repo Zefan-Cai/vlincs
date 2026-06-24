@@ -14,19 +14,19 @@
     "goal_global_id_pair_recall": 0.7,
     "iteration": 132,
     "last_artifacts": [
+        "https://bitbucket.org/Novateur/vlincs_reid_by_search/commits/c5c96d3",
+        "https://bitbucket.org/Novateur/vlincs_reid_by_search/src/wisc/reports/vlincs_iterations/20260624_feature_outlier_residual_rank06_07_p005_gain/",
         "reports/vlincs_iterations/20260624_feature_outlier_residual_rank06_07_p005_gain/README.md",
         "reports/vlincs_iterations/20260624_feature_outlier_residual_rank06_07_p005_gain/presentation.html",
         "reports/vlincs_iterations/20260624_feature_outlier_residual_rank06_07_p005_gain/spec.json",
         "reports/vlincs_iterations/20260624_feature_outlier_residual_rank06_07_p005_gain/reproduce.sh",
-        "reports/vlincs_iterations/20260624_feature_outlier_residual_rank06_07_p005_gain/repro/input/rank06_07_residual_feature_outlier_assignments.csv",
-        "pending Bitbucket wisc push",
-        "pending S3 upload"
+        "s3://dit-scale-up/zcai/vlincs/no_anchor_gains/20260624_feature_outlier_residual_rank06_07_p005_gain/"
     ],
     "last_direction": "residual_feature_outlier_rank06_07_combo_p005_gain",
     "last_result": "Promoted a no-anchor residual feature-outlier combo on top of the prior four-tracklet feature-outlier best. It composes seq1548 86->91 and seq4043 86->37, leaving rank08/09/10/11 as tiny positives and rank12 as negative. Direct IDF1/HOTA/AssA 0.666479/0.527472/0.537595; density_simple 0.668568/0.529158/0.539365; valid p005_area 0.668673/0.529242/0.539491 with config_name=p005_area and dropped_rows=45467. This improves canonical e2e IDF1 by +0.000165 over 0.668508.",
     "last_updated": "2026-06-24",
-    "last_upload": "pending",
+    "last_upload": "s3_uploaded:s3://dit-scale-up/zcai/vlincs/no_anchor_gains/20260624_feature_outlier_residual_rank06_07_p005_gain/",
     "next_direction": "Start the Diffusion-ReID-inspired no-anchor generated-positive probe: identity-preserving generation/augmentation must reinforce a local outlier island and pass source-specific DINO/SigLIP Re-ID confidence threshold filter before materialized scoring.",
     "stale_count": 0,
-    "status": "active_no_anchor_best_e2e_0p668673_residual_feature_outlier_rank06_07_p005_packaged_pending_push"
+    "status": "active_no_anchor_best_e2e_0p668673_residual_feature_outlier_rank06_07_p005_pushed"
 }
