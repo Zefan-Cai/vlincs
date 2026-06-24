@@ -59,8 +59,8 @@
   "failure_reason": "The whole visual edge 87 -> 86 is too broad and was killed as a false merge; keeping all source tracklets in component 87 leaves a small visually compatible island split from component 86.",
   "improvement": "The new implementation commits only the top2 Re-ID-CTF-style source tracklets selected by DINOv2, SigLIP and weakmetric agreement, preserving the rest of component 87.",
   "montage": "rank02_bbox_evidence.png",
-  "raw_frame_dir": "",
-  "raw_frame_status": "unavailable_coordinate_fallback",
+  "raw_frame_dir": "local_runs/raw_videos_s3_20260624/frames/mcam04_tc6_top2",
+  "raw_frame_status": "available",
   "summary": "Two high-consensus source tracklets move from component 87 / gid 960000351 to component 86 / gid 960000350 after visual-positive CTF ranking.",
   "title": "Rank02 top2 visual-positive subcluster CTF: component 87 -> 86",
   "tracklets": [
@@ -114,6 +114,8 @@
             1214.2023
           ],
           "frame_idx": 12123,
+          "raw_frame_path": "local_runs/raw_videos_s3_20260624/frames/mcam04_tc6_top2/vlincs_MS01_MC0001_MCAM04_2024-03-Tc6_f12123.png",
+          "raw_frame_source": "raw_frame_dir",
           "score": 0.7368722558021545,
           "tracklet_key": "vlincs_MS01_MC0001_MCAM04_2024-03-Tc6:691:0",
           "video_key": "vlincs_MS01_MC0001_MCAM04_2024-03-Tc6"
@@ -126,6 +128,8 @@
             1218.8027
           ],
           "frame_idx": 12173,
+          "raw_frame_path": "local_runs/raw_videos_s3_20260624/frames/mcam04_tc6_top2/vlincs_MS01_MC0001_MCAM04_2024-03-Tc6_f12173.png",
+          "raw_frame_source": "raw_frame_dir",
           "score": 0.885474681854248,
           "tracklet_key": "vlincs_MS01_MC0001_MCAM04_2024-03-Tc6:691:0",
           "video_key": "vlincs_MS01_MC0001_MCAM04_2024-03-Tc6"
@@ -138,6 +142,8 @@
             1203.0839
           ],
           "frame_idx": 12233,
+          "raw_frame_path": "local_runs/raw_videos_s3_20260624/frames/mcam04_tc6_top2/vlincs_MS01_MC0001_MCAM04_2024-03-Tc6_f12233.png",
+          "raw_frame_source": "raw_frame_dir",
           "score": 0.12686507403850555,
           "tracklet_key": "vlincs_MS01_MC0001_MCAM04_2024-03-Tc6:691:0",
           "video_key": "vlincs_MS01_MC0001_MCAM04_2024-03-Tc6"
@@ -195,6 +201,8 @@
             1269.6516
           ],
           "frame_idx": 20612,
+          "raw_frame_path": "local_runs/raw_videos_s3_20260624/frames/mcam04_tc6_top2/vlincs_MS01_MC0001_MCAM04_2024-03-Tc6_f20612.png",
+          "raw_frame_source": "raw_frame_dir",
           "score": 0.8215643167495728,
           "tracklet_key": "vlincs_MS01_MC0001_MCAM04_2024-03-Tc6:1693:0",
           "video_key": "vlincs_MS01_MC0001_MCAM04_2024-03-Tc6"
@@ -207,6 +215,8 @@
             1226.4746
           ],
           "frame_idx": 20753,
+          "raw_frame_path": "local_runs/raw_videos_s3_20260624/frames/mcam04_tc6_top2/vlincs_MS01_MC0001_MCAM04_2024-03-Tc6_f20753.png",
+          "raw_frame_source": "raw_frame_dir",
           "score": 0.9107899069786072,
           "tracklet_key": "vlincs_MS01_MC0001_MCAM04_2024-03-Tc6:1693:0",
           "video_key": "vlincs_MS01_MC0001_MCAM04_2024-03-Tc6"
@@ -219,6 +229,8 @@
             1085.1735
           ],
           "frame_idx": 20888,
+          "raw_frame_path": "local_runs/raw_videos_s3_20260624/frames/mcam04_tc6_top2/vlincs_MS01_MC0001_MCAM04_2024-03-Tc6_f20888.png",
+          "raw_frame_source": "raw_frame_dir",
           "score": 0.10061458498239517,
           "tracklet_key": "vlincs_MS01_MC0001_MCAM04_2024-03-Tc6:1693:0",
           "video_key": "vlincs_MS01_MC0001_MCAM04_2024-03-Tc6"
