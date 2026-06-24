@@ -85,17 +85,20 @@ PY
 
 ensure_python_deps
 
-ASSIGNMENT_CSV="${PKG_DIR}/repro/input/rank06_07_residual_feature_outlier_assignments.csv"
+BASE_ASSIGNMENT_CSV="${REPO_ROOT}/reports/vlincs_iterations/20260624_visual_subcluster_ctf_top2_p005_gain/repro/input/rank02_visual_positive_subcluster_ctf_topk_source_assignments.csv"
 P005_CONFIG="${PKG_DIR}/repro/input/p005_area_config.txt"
 EXPECTED_DIRECT="${PKG_DIR}/repro/expected/rank06_07_full_export.json"
 EXPECTED_DENSITY="${PKG_DIR}/repro/expected/rank06_07_density_simple.json"
 EXPECTED_P005="${PKG_DIR}/repro/expected/rank06_07_density_p005_area.json"
+EXPECTED_ASSIGNMENT_SHA="24010eea71583ecedb1afcec7e8ae53d33b711537c920be56f3571b110c23010"
 REPO_GT_ROOT="${REPO_ROOT}/kit/demo_data/ds1/gt"
 REPO_GT_CHECKSUMS="${REPO_GT_ROOT}/checksums.sha256"
+FEATURE_DIR="${REPO_ROOT}/kit/demo_data/ds1/features"
+FEATURE_CHECKSUMS="${FEATURE_DIR}/checksums.sha256"
 
 mkdir -p "${RUN_DIR}"
 
-for required in "${ASSIGNMENT_CSV}" "${P005_CONFIG}" "${EXPECTED_DIRECT}" "${EXPECTED_DENSITY}" "${EXPECTED_P005}"; do
+for required in "${BASE_ASSIGNMENT_CSV}" "${P005_CONFIG}" "${EXPECTED_DIRECT}" "${EXPECTED_DENSITY}" "${EXPECTED_P005}"; do
   if [ ! -f "${required}" ]; then
     echo "missing required replay file: ${required}" >&2
     exit 2
@@ -113,6 +116,29 @@ if head -c 80 "${tracklet_parquets[0]}" | grep -q "version https://git-lfs.githu
   echo "Install Git LFS, then run:" >&2
   echo '  git lfs pull --include="kit/demo_data/ds1/**"' >&2
   exit 2
+fi
+
+feature_npzs=(
+  "${FEATURE_DIR}/ds1_tracklet_weakmetric_osnet_s7_fused_w002_20260620_w0p1.npz"
+  "${FEATURE_DIR}/ds1_tracklet_dinov2base_s1_20260620.npz"
+  "${FEATURE_DIR}/ds1_tracklet_siglip2_person_reid_s1_20260620.npz"
+)
+for feature_npz in "${feature_npzs[@]}"; do
+  if [ ! -f "${feature_npz}" ]; then
+    echo "missing DS1 no-anchor feature artifact: ${feature_npz}" >&2
+    echo 'Run: git lfs pull --include="kit/demo_data/ds1/**"' >&2
+    exit 2
+  fi
+  if head -c 80 "${feature_npz}" | grep -q "version https://git-lfs.github.com/spec/v1"; then
+    echo "DS1 no-anchor feature artifact is still a Git LFS pointer:" >&2
+    echo "  ${feature_npz}" >&2
+    echo 'Run: git lfs pull --include="kit/demo_data/ds1/**"' >&2
+    exit 2
+  fi
+done
+if [ -f "${FEATURE_CHECKSUMS}" ]; then
+  echo "REPRO verifying feature_checksums=${FEATURE_CHECKSUMS}"
+  (cd "${FEATURE_DIR}" && shasum -a 256 -c "${FEATURE_CHECKSUMS}" >/dev/null)
 fi
 
 count_gt_files() {
@@ -154,10 +180,63 @@ echo "REPRO run_dir=${RUN_DIR}"
 echo "REPRO tracklet_parquets=${#tracklet_parquets[@]}"
 echo "REPRO gt_files=${gt_count}"
 
-echo "STAGE 1 direct_full_export_from_assignment"
+METHOD_DIR="${RUN_DIR}/method_reproduction"
+METHOD_CANDIDATES_DIR="${METHOD_DIR}/feature_outlier_candidates"
+METHOD_SUMMARY_JSON="${METHOD_DIR}/feature_outlier_summary.json"
+METHOD_SUMMARY_CSV="${METHOD_DIR}/feature_outlier_summary.csv"
+GENERATED_COMBO_ASSIGNMENT="${METHOD_DIR}/generated_combo_01_03_04_05_assignments.csv"
+GENERATED_COMBO_MANIFEST="${METHOD_DIR}/generated_combo_01_03_04_05_manifest.json"
+GENERATED_ASSIGNMENT="${METHOD_DIR}/generated_rank06_07_residual_feature_outlier_assignments.csv"
+GENERATED_MANIFEST="${METHOD_DIR}/generated_rank06_07_residual_feature_outlier_manifest.json"
+
+echo "STAGE 0 method_reproduction_feature_outlier_proposer"
+"${PYTHON_BIN}" "${REPO_ROOT}/kit/propose_no_anchor_feature_outlier_relinks.py" \
+  --assignment-csv "${BASE_ASSIGNMENT_CSV}" \
+  --feature "weak:${FEATURE_DIR}/ds1_tracklet_weakmetric_osnet_s7_fused_w002_20260620_w0p1.npz:1.0" \
+  --feature "dino:${FEATURE_DIR}/ds1_tracklet_dinov2base_s1_20260620.npz:0.75" \
+  --feature "siglip:${FEATURE_DIR}/ds1_tracklet_siglip2_person_reid_s1_20260620.npz:0.75" \
+  --assignments-dir "${METHOD_CANDIDATES_DIR}" \
+  --summary-json "${METHOD_SUMMARY_JSON}" \
+  --summary-csv "${METHOD_SUMMARY_CSV}" \
+  --max-source-centroid 0.72 \
+  --min-target-centroid 0.6 \
+  --min-centroid-margin 0.02 \
+  --min-neighbor-margin 0.02 \
+  --view-vote-threshold 0.55 \
+  --emit-top-groups 24 \
+  --skip-pairs '37->86,55->26,74->35,66->2,42->3,76->26,86->78,30->38,91->88,89->87,82->11,85->8,79->4'
+
+echo "STAGE 0b method_reproduction_materialize_promoted_repairs"
+"${PYTHON_BIN}" "${REPO_ROOT}/kit/apply_no_anchor_ranked_repairs.py" \
+  --base-assignment-csv "${BASE_ASSIGNMENT_CSV}" \
+  --summary-json "${METHOD_SUMMARY_JSON}" \
+  --rank 1 --rank 3 --rank 4 --rank 5 \
+  --decision-status feature_outlier_combo_relink \
+  --recompute-component-size \
+  --assignment-out "${GENERATED_COMBO_ASSIGNMENT}" \
+  --json "${GENERATED_COMBO_MANIFEST}"
+"${PYTHON_BIN}" "${REPO_ROOT}/kit/apply_no_anchor_ranked_repairs.py" \
+  --base-assignment-csv "${GENERATED_COMBO_ASSIGNMENT}" \
+  --summary-json "${METHOD_SUMMARY_JSON}" \
+  --rank 6 --rank 7 \
+  --skip-already-target \
+  --decision-status feature_outlier_after_combo_relink \
+  --assignment-out "${GENERATED_ASSIGNMENT}" \
+  --json "${GENERATED_MANIFEST}"
+
+GENERATED_ASSIGNMENT_SHA="$(shasum -a 256 "${GENERATED_ASSIGNMENT}" | awk '{print $1}')"
+if [ "${GENERATED_ASSIGNMENT_SHA}" != "${EXPECTED_ASSIGNMENT_SHA}" ]; then
+  echo "generated assignment checksum mismatch:" >&2
+  echo "  got      ${GENERATED_ASSIGNMENT_SHA}" >&2
+  echo "  expected ${EXPECTED_ASSIGNMENT_SHA}" >&2
+  exit 2
+fi
+echo "REPRO generated_assignment_sha256=${GENERATED_ASSIGNMENT_SHA}"
+
+echo "STAGE 1 direct_full_export_from_generated_assignment"
 "${PYTHON_BIN}" "${REPO_ROOT}/kit/evaluate_sample_assignments_full.py" \
   --tracklet-parquet "${tracklet_parquets[@]}" \
-  --assignments "${ASSIGNMENT_CSV}" \
+  --assignments "${GENERATED_ASSIGNMENT}" \
   --fallback singleton \
   --json "${RUN_DIR}/rank06_07_full_export.json" \
   --zip-out "${RUN_DIR}/rank06_07_full_export.zip"

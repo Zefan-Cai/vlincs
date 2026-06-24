@@ -17,7 +17,7 @@ pipelines:
   branches:
     '**':
       # MS02 + DS1 run in PARALLEL (two runners); their score artifacts both flow to the Publish step.
-      # MS02 still uses Docker gallery state. DS1 must use the root WISC replay, not kit/demo.sh.
+      # MS02 still uses Docker gallery state. DS1 must use the root WISC method reproduction, not kit/demo.sh.
       - parallel:
           - step:
               name: MS02 demo (offline) + score

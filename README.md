@@ -99,22 +99,25 @@ export PYTHONPATH="$PWD:$PWD/kit"
 ```
 
 Most DS1 research scripts expect VLINCS data under `DATA_ROOT`.  The root
-`./demo.sh` replay is self-contained for scoring because it defaults
-`DATA_ROOT` to the committed/LFS DS1 dense-GT bundle at
-`kit/demo_data/ds1/gt`.  Do not commit raw videos, model checkpoints, or
+`./demo.sh` method reproduction is self-contained for scoring because it
+defaults `DATA_ROOT` to the committed/LFS DS1 dense-GT bundle at
+`kit/demo_data/ds1/gt` and uses committed/LFS no-anchor feature artifacts under
+`kit/demo_data/ds1/features`.  Do not commit raw videos, model checkpoints, or
 generated zip submissions into this repo.
 
 ## Auto-Evaluation Entrypoints
 
-The root replay path is the current WISC no-anchor handoff check:
+The root method-reproduction path is the current WISC no-anchor handoff check:
 
 ```bash
 ./demo.sh
 ```
 
 This is intentionally different from the original online-gallery DS1 demo.  It
-rebuilds the promoted global-ID submission from the committed assignment CSV and
-DS1 demo tracklets, then verifies the canonical delivery score.
+rebuilds the promoted DS1 global-ID assignment from committed no-anchor feature
+evidence, a deterministic feature-outlier proposer, and promoted repair ranks;
+then it builds the submission zip and verifies the canonical delivery score.
+It does not read a committed final-assignment CSV as input.
 
 The old DS1 gallery command below is intentionally not the handoff check:
 
@@ -128,6 +131,9 @@ score around `0.12`; it is blocked by default on this branch so it cannot be
 mistaken for the WISC no-anchor replay.  Set
 `ALLOW_LEGACY_DS1_GALLERY_DEMO=1` only if you explicitly want to inspect the old
 gallery behavior.
+
+Bitbucket CI still reports MS02 through the original gallery demo path and DS1
+through the WISC no-anchor method reproduction path.
 
 ## Main DS1 Pipeline
 

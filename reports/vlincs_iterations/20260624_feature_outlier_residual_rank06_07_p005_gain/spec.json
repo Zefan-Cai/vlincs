@@ -50,36 +50,37 @@
     }
   ],
   "artifacts": [
-    "reports/vlincs_iterations/20260624_feature_outlier_residual_rank06_07_p005_gain/repro/input/rank06_07_residual_feature_outlier_assignments.csv",
+    "kit/demo_data/ds1/features/ds1_tracklet_weakmetric_osnet_s7_fused_w002_20260620_w0p1.npz",
+    "kit/demo_data/ds1/features/ds1_tracklet_dinov2base_s1_20260620.npz",
+    "kit/demo_data/ds1/features/ds1_tracklet_siglip2_person_reid_s1_20260620.npz",
+    "runtime: method_reproduction/feature_outlier_summary.json",
+    "runtime: method_reproduction/generated_rank06_07_residual_feature_outlier_assignments.csv",
     "reports/vlincs_iterations/20260624_feature_outlier_residual_rank06_07_p005_gain/repro/expected/rank06_07_full_export.json",
     "reports/vlincs_iterations/20260624_feature_outlier_residual_rank06_07_p005_gain/repro/expected/rank06_07_density_simple.json",
-    "reports/vlincs_iterations/20260624_feature_outlier_residual_rank06_07_p005_gain/repro/expected/rank06_07_density_p005_area.json",
-    "reports/vlincs_iterations/20260624_feature_outlier_residual_rank06_07_p005_gain/repro/provenance/rank06_07_case_manifest.json",
-    "reports/vlincs_iterations/20260624_feature_outlier_residual_rank06_07_p005_gain/repro/provenance/after_combo_overlay_summary.csv"
+    "reports/vlincs_iterations/20260624_feature_outlier_residual_rank06_07_p005_gain/repro/expected/rank06_07_density_p005_area.json"
   ],
   "bitbucket": "https://bitbucket.org/Novateur/vlincs_reid_by_search/src/wisc/reports/vlincs_iterations/20260624_feature_outlier_residual_rank06_07_p005_gain/",
   "code_paths": [
-    "kit/compose_no_anchor_assignment_overlays.py",
+    "kit/propose_no_anchor_feature_outlier_relinks.py",
+    "kit/apply_no_anchor_ranked_repairs.py",
     "kit/evaluate_sample_assignments_full.py",
     "kit/no_anchor_pervideo_filter_selector.py",
     "kit/evaluate_submission_detection_filter.py",
     "reports/vlincs_iterations/20260624_feature_outlier_residual_rank06_07_p005_gain/reproduce.sh"
   ],
   "commands": [
-    "python kit/compose_no_anchor_assignment_overlays.py --base-assignment-csv reports/vlincs_iterations/20260624_feature_outlier_combo_p005_gain/repro/input/combo_01_03_04_05_feature_outlier_assignments.csv --candidate-assignment-csv local_runs/feature_outlier_after_combo_probe_20260624/assignments/rank06_after_combo_feature_outlier_assignments.csv --candidate-assignment-csv local_runs/feature_outlier_after_combo_probe_20260624/assignments/rank07_after_combo_feature_outlier_assignments.csv --assignment-out local_runs/feature_outlier_after_combo_probe_20260624/combos/rank06_07_after_combo_feature_outlier_assignments.csv --json local_runs/feature_outlier_after_combo_probe_20260624/combos/rank06_07_after_combo_feature_outlier_manifest.json",
-    "python kit/evaluate_sample_assignments_full.py --tracklet-parquet kit/demo_data/ds1/tracklets/*/tracklets.parquet --assignments local_runs/feature_outlier_after_combo_probe_20260624/combos/rank06_07_after_combo_feature_outlier_assignments.csv --fallback singleton --json local_runs/feature_outlier_after_combo_probe_20260624/combos/rank06_07_full_export.json --zip-out local_runs/feature_outlier_after_combo_probe_20260624/combos/rank06_07_full_export.zip",
-    "python kit/no_anchor_pervideo_filter_selector.py --source-zip local_runs/feature_outlier_after_combo_probe_20260624/combos/rank06_07_full_export.zip --policies density_simple --json local_runs/feature_outlier_after_combo_probe_20260624/combos/rank06_07_density_simple.json --zip-out local_runs/feature_outlier_after_combo_probe_20260624/combos/rank06_07_density_simple.zip",
-    "python kit/evaluate_submission_detection_filter.py --submission-zip local_runs/feature_outlier_after_combo_probe_20260624/combos/rank06_07_density_simple.zip --config \"$(cat reports/vlincs_iterations/20260624_feature_outlier_combo_p005_gain/repro/input/p005_area_config.txt)\" --json local_runs/feature_outlier_after_combo_probe_20260624/combos/rank06_07_density_p005_area.json --zip-out local_runs/feature_outlier_after_combo_probe_20260624/combos/rank06_07_density_p005_area.zip",
+    "git lfs pull --include=\"kit/demo_data/ds1/**\"",
     "./demo.sh"
   ],
   "date": "2026-06-24",
   "environment": [
-    "repo=/Users/zcai/Codex/vlincs_reid_by_search",
-    "python=/private/tmp/vlincs-wisc-demo-lfs.TMM8XH/.venv-demo/bin/python",
-    "DATA_ROOT=/Users/zcai/Codex/vlincs_reid_by_search/local_runs/local_data_root_20260622",
+    "repo=<fresh clone of Novateur/vlincs_reid_by_search on wisc>",
+    "python=python3 or .venv-demo/bin/python",
+    "DATA_ROOT=kit/demo_data/ds1/gt by default",
+    "feature artifacts=kit/demo_data/ds1/features/*.npz",
     "no anchors; GT used only by full-score/delivery evaluators"
   ],
-  "implementation": "Starting from the current best assignment, compare each residual candidate assignment against the same base, extract changed seq rows, reject conflicts, compose rank06 and rank07, then run direct full-score followed by density_simple and p005_area. Evidence uses only current assignment state and cached weakmetric/OSNet, DINOv2, and SigLIP tracklet features; GT appears only in the evaluator.",
+  "implementation": "Starting from the committed visual-subcluster base assignment, rerun the no-anchor feature-outlier proposer with weakmetric/OSNet, DINOv2, and SigLIP tracklet features. Materialize promoted ranks 1/3/4/5, then residual ranks 6/7 with already-target rows skipped, verify the generated assignment checksum, then run direct full-score followed by density_simple and p005_area. GT appears only in the evaluator.",
   "improvement_table": [
     {
       "baseline": 0.666316,
@@ -158,32 +159,32 @@
   ],
   "workflow_steps": [
     {
-      "action": "emit residual one-tracklet moves rank06-12",
-      "input": "current best assignment + feature-outlier summary",
+      "step": "Proposer",
       "module": "M7/M10",
-      "output": "seven candidate assignment CSVs",
-      "step": "Proposer"
+      "input": "visual-subcluster base assignment + committed no-anchor feature NPZs",
+      "action": "rerun feature-outlier proposer",
+      "output": "58 single candidates and 24 ranked group repairs"
     },
     {
-      "action": "keep only material direct positives rank06 and rank07",
-      "input": "direct full-score labels after materialization",
+      "step": "Promotion rule",
       "module": "M5/M8",
-      "output": "two independent moves",
-      "step": "Reviewer"
+      "input": "ranked no-GT candidate summary and prior ablation decisions",
+      "action": "materialize ranks 1/3/4/5 then residual ranks 6/7; skip already-target seqs",
+      "output": "generated assignment sha256 24010eea71583ecedb1afcec7e8ae53d33b711537c920be56f3571b110c23010"
     },
     {
-      "action": "compose non-conflicting seq edits",
-      "input": "rank06 and rank07 overlays",
+      "step": "Resolver",
       "module": "M8",
-      "output": "rank06_07 assignment",
-      "step": "Resolver"
+      "input": "generated assignment CSV",
+      "action": "export full submission from DS1 tracklets",
+      "output": "direct full-score JSON and zip"
     },
     {
-      "action": "density_simple then p005_area",
-      "input": "rank06_07 full export zip",
+      "step": "Delivery gate",
       "module": "M12",
-      "output": "canonical p005 gain",
-      "step": "Delivery gate"
+      "input": "generated full export zip",
+      "action": "density_simple then p005_area",
+      "output": "canonical p005 gain"
     }
   ]
 }

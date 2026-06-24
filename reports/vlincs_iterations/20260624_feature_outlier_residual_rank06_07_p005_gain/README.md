@@ -19,13 +19,14 @@ A two-tracklet residual feature-outlier combo improves canonical p005_area IDF1 
 
 ## Implementation
 
-Starting from the current best assignment, compare each residual candidate assignment against the same base, extract changed seq rows, reject conflicts, compose rank06 and rank07, then run direct full-score followed by density_simple and p005_area. Evidence uses only current assignment state and cached weakmetric/OSNet, DINOv2, and SigLIP tracklet features; GT appears only in the evaluator.
+Starting from the committed visual-subcluster base assignment, rerun the no-anchor feature-outlier proposer with weakmetric/OSNet, DINOv2, and SigLIP tracklet features. Materialize promoted ranks 1/3/4/5, then residual ranks 6/7 with already-target rows skipped, verify the generated assignment checksum, then run direct full-score followed by density_simple and p005_area. GT appears only in the evaluator.
 
 ## Environment
 
 - `repo=<fresh clone of Novateur/vlincs_reid_by_search on wisc>`
 - `python=python3 or .venv-demo/bin/python`
 - `DATA_ROOT=kit/demo_data/ds1/gt` by default
+- `feature artifacts=kit/demo_data/ds1/features/*.npz`
 - `no anchors; GT used only by full-score/delivery evaluators`
 
 `DATA_ROOT` contains the 10 dense DS1 GT parquet files. They are not
@@ -40,6 +41,14 @@ through Git LFS:
 
 ```bash
 git lfs pull --include="kit/demo_data/ds1/**"
+```
+
+The reproduction script does not read a committed final assignment CSV.  It
+regenerates the DS1 assignment from the committed base assignment plus feature
+evidence and promoted repair ranks, then checks:
+
+```text
+generated_assignment_sha256=24010eea71583ecedb1afcec7e8ae53d33b711537c920be56f3571b110c23010
 ```
 
 ## Commands
@@ -67,6 +76,8 @@ python kit/evaluate_submission_detection_filter.py --submission-zip local_runs/f
 ## Code Paths
 
 - `kit/compose_no_anchor_assignment_overlays.py`
+- `kit/propose_no_anchor_feature_outlier_relinks.py`
+- `kit/apply_no_anchor_ranked_repairs.py`
 - `kit/evaluate_sample_assignments_full.py`
 - `kit/no_anchor_pervideo_filter_selector.py`
 - `kit/evaluate_submission_detection_filter.py`
@@ -74,7 +85,10 @@ python kit/evaluate_submission_detection_filter.py --submission-zip local_runs/f
 
 ## Artifacts
 
-- `reports/vlincs_iterations/20260624_feature_outlier_residual_rank06_07_p005_gain/repro/input/rank06_07_residual_feature_outlier_assignments.csv`
+- `kit/demo_data/ds1/features/ds1_tracklet_weakmetric_osnet_s7_fused_w002_20260620_w0p1.npz`
+- `kit/demo_data/ds1/features/ds1_tracklet_dinov2base_s1_20260620.npz`
+- `kit/demo_data/ds1/features/ds1_tracklet_siglip2_person_reid_s1_20260620.npz`
+- generated at runtime: `method_reproduction/generated_rank06_07_residual_feature_outlier_assignments.csv`
 - `reports/vlincs_iterations/20260624_feature_outlier_residual_rank06_07_p005_gain/repro/expected/rank06_07_full_export.json`
 - `reports/vlincs_iterations/20260624_feature_outlier_residual_rank06_07_p005_gain/repro/expected/rank06_07_density_simple.json`
 - `reports/vlincs_iterations/20260624_feature_outlier_residual_rank06_07_p005_gain/repro/expected/rank06_07_density_p005_area.json`
