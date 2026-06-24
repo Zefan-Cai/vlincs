@@ -1,0 +1,192 @@
+{
+  "title": "No-anchor visual-positive subcluster CTF top2 p005 gain",
+  "date": "2026-06-24",
+  "status": "gain",
+  "pipeline_module": "M7+M8+M12",
+  "module_detail": "M7 retrieves a visual-positive component edge, M8 resolves it as a small subcluster repair instead of a whole-component merge, and M12 validates the delivered identity decision through density_simple plus p005_area.",
+  "used_in_pipeline": "yes: promoted as current no-anchor best after direct, density_simple and valid p005_area scoring",
+  "no_anchor": true,
+  "summary": "A broad visual-positive edge 87 -> 86 was previously too risky as a full merge. This iteration keeps the edge but applies a Re-ID-CTF-style top-k filter using DINOv2, SigLIP and weakmetric agreement. Only seq 5550 and 2987 move from component 87 / gid 960000351 to component 86 / gid 960000350. Canonical p005_area improves from 0.668198 to 0.668332.",
+  "implementation": "The implementation treats generated/visual positive evidence as a proposal, not a forced identity label. A candidate edge first identifies the source and target components. The reviewer ranks source tracklets by agreement across DINOv2, SigLIP and weakmetric similarities to the target centroid. The scorer tests top1, top2, top4 and top8. Top2 is the only promoted setting because it improves direct score and the canonical delivery path; larger top-k settings regress, confirming that the correct operation is a small subcluster move, not a full merge.",
+  "metrics": {
+    "name": "canonical p005_area IDF1",
+    "baseline": 0.668198,
+    "candidate": 0.668332,
+    "delta": 0.000134
+  },
+  "environment": [
+    "repo=/Users/zcai/Codex/vlincs_reid_by_search",
+    "verified_publish_clone=/private/tmp/vlincs-wisc-demo-lfs.TMM8XH",
+    "DATA_ROOT=/Users/zcai/Codex/vlincs_reid_by_search/local_runs/local_data_root_20260622",
+    "python=/private/tmp/vlincs-wisc-demo-lfs.TMM8XH/.venv-demo/bin/python",
+    "tracklets=kit/demo_data/ds1/tracklets/*/tracklets.parquet",
+    "no anchors; GT used only by evaluator after assignment materialization"
+  ],
+  "workflow_steps": [
+    {
+      "step": "1",
+      "module": "M7 candidate retrieval",
+      "input": "existing visual edge 87 -> 86 plus current best assignment",
+      "action": "reuse the visual-positive edge only as a candidate source",
+      "output": "a risky full-merge candidate and a source component to audit"
+    },
+    {
+      "step": "2",
+      "module": "M5 evidence fusion",
+      "input": "DINOv2, SigLIP and weakmetric source-to-target similarities",
+      "action": "rank source tracklets by ensemble percentile agreement",
+      "output": "seq 5550 and seq 2987 as the top2 CTF-pass tracklets"
+    },
+    {
+      "step": "3",
+      "module": "M8 graph resolution",
+      "input": "ranked source tracklets and current assignment",
+      "action": "move only the top-k subcluster from component 87 to component 86",
+      "output": "rank01, rank02, rank03 and rank04 assignment variants"
+    },
+    {
+      "step": "4",
+      "module": "M10 reviewer/opponent",
+      "input": "direct full-score ablations",
+      "action": "reject broad top-k variants and keep only positive top2",
+      "output": "rank02 promoted to delivery validation"
+    },
+    {
+      "step": "5",
+      "module": "M12 calibrated delivery",
+      "input": "rank02 full submission zip",
+      "action": "run density_simple and real p005_area scoring",
+      "output": "canonical verified p005_area gain"
+    }
+  ],
+  "improvement_table": [
+    {
+      "stage": "direct full-score",
+      "baseline": 0.666005,
+      "candidate": 0.66614,
+      "delta": 0.000135,
+      "decision": "positive; send to delivery validation"
+    },
+    {
+      "stage": "density_simple",
+      "baseline": 0.668093,
+      "candidate": 0.668227,
+      "delta": 0.000134,
+      "decision": "positive delivery interaction"
+    },
+    {
+      "stage": "p005_area",
+      "baseline": 0.668198,
+      "candidate": 0.668332,
+      "delta": 0.000134,
+      "decision": "promote as current best"
+    }
+  ],
+  "per_video_table": [
+    {
+      "video": "all DS1 scored videos",
+      "baseline": 0.668198,
+      "candidate": 0.668332,
+      "delta": 0.000134,
+      "note": "canonical aggregate IDF1 after density_simple + p005_area"
+    },
+    {
+      "video": "vlincs_MS01_MC0001_MCAM04_2024-03-Tc6",
+      "baseline": "component 87 keeps seq 5550 and 2987",
+      "candidate": "seq 5550 and 2987 move to component 86",
+      "delta": "local repair",
+      "note": "the actual changed tracklets are in MCAM04 Tc6"
+    }
+  ],
+  "commands": [
+    "python kit/export_no_anchor_scheduler_manifest_assignments.py --scheduler-json local_runs/offline_no_anchor_split_probe_20260624/visual_positive_subcluster_ctf_probe/visual_positive_subcluster_ctf_candidates.json --base-assignment-csv local_runs/offline_no_anchor_split_probe_20260623/component_graph_fullscore/rank01_37to86_top28_neighbor_probe/assignments/rank06_component_subset_attach_source_assignments.csv --assignment-out-dir local_runs/offline_no_anchor_split_probe_20260624/visual_positive_subcluster_ctf_probe/assignments --manifest-json local_runs/offline_no_anchor_split_probe_20260624/visual_positive_subcluster_ctf_probe/manifest_assignments.json --selection-ranks 1,2,3,4,5,6",
+    "PYTHONPATH=$PWD DATA_ROOT=/Users/zcai/Codex/vlincs_reid_by_search/local_runs/local_data_root_20260622 python kit/evaluate_sample_assignments_full.py --tracklet-parquet kit/demo_data/ds1/tracklets/*/tracklets.parquet --assignments local_runs/offline_no_anchor_split_probe_20260624/visual_positive_subcluster_ctf_probe/assignments/rank02_visual_positive_subcluster_ctf_topk_source_assignments.csv --fallback singleton --json local_runs/offline_no_anchor_split_probe_20260624/visual_positive_subcluster_ctf_probe/rank02_subcluster_ctf_full_export_delivery.json --zip-out local_runs/offline_no_anchor_split_probe_20260624/visual_positive_subcluster_ctf_probe/rank02_subcluster_ctf_full_export.zip",
+    "PYTHONPATH=$PWD DATA_ROOT=/Users/zcai/Codex/vlincs_reid_by_search/local_runs/local_data_root_20260622 python kit/no_anchor_pervideo_filter_selector.py --source-zip local_runs/offline_no_anchor_split_probe_20260624/visual_positive_subcluster_ctf_probe/rank02_subcluster_ctf_full_export.zip --policies density_simple --json local_runs/offline_no_anchor_split_probe_20260624/visual_positive_subcluster_ctf_probe/rank02_subcluster_ctf_density_simple.json --zip-out local_runs/offline_no_anchor_split_probe_20260624/visual_positive_subcluster_ctf_probe/rank02_subcluster_ctf_density_simple.zip",
+    "PYTHONPATH=$PWD DATA_ROOT=/Users/zcai/Codex/vlincs_reid_by_search/local_runs/local_data_root_20260622 python kit/evaluate_submission_detection_filter.py --submission-zip local_runs/offline_no_anchor_split_probe_20260624/visual_positive_subcluster_ctf_probe/rank02_subcluster_ctf_density_simple.zip --config \"$(cat reports/vlincs_iterations/20260624_visual_subcluster_ctf_top2_p005_gain/repro/input/p005_area_config.txt)\" --json local_runs/offline_no_anchor_split_probe_20260624/visual_positive_subcluster_ctf_probe/rank02_subcluster_ctf_density_p005_area.json --zip-out local_runs/offline_no_anchor_split_probe_20260624/visual_positive_subcluster_ctf_probe/rank02_subcluster_ctf_density_p005_area.zip",
+    "bash reports/vlincs_iterations/20260624_visual_subcluster_ctf_top2_p005_gain/reproduce.sh"
+  ],
+  "code_paths": [
+    "kit/export_no_anchor_scheduler_manifest_assignments.py",
+    "kit/evaluate_sample_assignments_full.py",
+    "kit/no_anchor_pervideo_filter_selector.py",
+    "kit/evaluate_submission_detection_filter.py",
+    "kit/export_no_anchor_subpart_visual_case.py",
+    "reports/vlincs_iterations/20260624_visual_subcluster_ctf_top2_p005_gain/reproduce.sh"
+  ],
+  "artifacts": [
+    "reports/vlincs_iterations/20260624_visual_subcluster_ctf_top2_p005_gain/repro/input/rank02_visual_positive_subcluster_ctf_topk_source_assignments.csv",
+    "reports/vlincs_iterations/20260624_visual_subcluster_ctf_top2_p005_gain/repro/input/p005_area_config.txt",
+    "reports/vlincs_iterations/20260624_visual_subcluster_ctf_top2_p005_gain/repro/expected/rank02_full_export.json",
+    "reports/vlincs_iterations/20260624_visual_subcluster_ctf_top2_p005_gain/repro/expected/rank02_density_simple.json",
+    "reports/vlincs_iterations/20260624_visual_subcluster_ctf_top2_p005_gain/repro/expected/rank02_density_p005_area.json",
+    "reports/vlincs_iterations/20260624_visual_subcluster_ctf_top2_p005_gain/repro/provenance/visual_positive_subcluster_ctf_candidates.json",
+    "reports/vlincs_iterations/20260624_visual_subcluster_ctf_top2_p005_gain/repro/provenance/visual_positive_subcluster_ctf_ranked.csv",
+    "reports/vlincs_iterations/20260624_visual_subcluster_ctf_top2_p005_gain/cases/rank02_top2_visual_positive_subcluster_ctf/rank02_bbox_evidence.png"
+  ],
+  "visual_cases": [
+    {
+      "title": "Rank02 top2 subcluster repair: component 87 -> 86",
+      "summary": "Two moved tracklets with three sampled frames each. Shows predicted_global_id 960000351 -> 960000350 and component 87 -> 86.",
+      "failure_reason": "Full visual-positive merge 87 -> 86 was too broad; leaving all tracklets in 87 kept a small compatible island split from 86.",
+      "improvement": "The CTF reviewer keeps only seq 5550 and 2987, improving direct, density and p005 delivery while preserving the rest of component 87.",
+      "image": "cases/rank02_top2_visual_positive_subcluster_ctf/rank02_bbox_evidence.png",
+      "html": "cases/rank02_top2_visual_positive_subcluster_ctf/case.html",
+      "json": "cases/rank02_top2_visual_positive_subcluster_ctf/case.json"
+    },
+    {
+      "title": "Real-frame context: cross-camera global-id success",
+      "summary": "Previously extracted real-frame montage showing what an identity evidence chain should look like when raw frames are available.",
+      "failure_reason": "Coordinate-only panels cannot show appearance cues.",
+      "improvement": "The package carries real-frame context next to the new coordinate-level top2 case.",
+      "image": "cases/context_real_frame_examples/case_success_cross_camera_m0048_real.png"
+    },
+    {
+      "title": "Real-frame context: same-tracklet sequence",
+      "summary": "Previously extracted real-frame tracklet timeline used as visual reference for repeated-frame support.",
+      "failure_reason": "Single-frame diagnostics hide temporal consistency.",
+      "improvement": "Timeline panels illustrate how repeated-frame evidence should be inspected for future raw-frame cases.",
+      "image": "cases/context_real_frame_examples/case_focus_m0012_tracklet_sequence_real.png"
+    }
+  ],
+  "ablations": [
+    {
+      "name": "full visual-positive merge 87 -> 86",
+      "change": "Move all 147 source tracklets to target 86.",
+      "result": "direct IDF1/HOTA/AssA=0.651799/0.517692/0.535597",
+      "decision": "killed; broad false merge"
+    },
+    {
+      "name": "rank01 top1 CTF",
+      "change": "Move only seq 5550 from component 87 to 86.",
+      "result": "direct IDF1/HOTA/AssA=0.666008/0.526982/0.537177",
+      "decision": "tiny direct change; not enough for promotion"
+    },
+    {
+      "name": "rank02 top2 CTF",
+      "change": "Move seq 5550 and 2987 from component 87 to 86.",
+      "result": "direct=0.666140/0.527110/0.537273; density_simple=0.668227/0.528792/0.539038; p005_area=0.668332/0.528875/0.539163",
+      "decision": "promoted"
+    },
+    {
+      "name": "rank03 top4 CTF",
+      "change": "Move the top4 ranked source tracklets.",
+      "result": "direct IDF1/HOTA/AssA=0.665709/0.526762/0.537061",
+      "decision": "killed; adding more positives reverses the gain"
+    },
+    {
+      "name": "rank04 top8 CTF",
+      "change": "Move the top8 ranked source tracklets.",
+      "result": "direct IDF1/HOTA/AssA=0.665038/0.526225/0.536759",
+      "decision": "killed; too broad"
+    },
+    {
+      "name": "rank05 top16 CTF",
+      "change": "Start top16 broadening run after top4/top8 regressions.",
+      "result": "interrupted before completion after lower top-k variants had already failed",
+      "decision": "not kept; no evidence to justify extra complexity"
+    }
+  ],
+  "bitbucket": "pushed to Novateur/vlincs_reid_by_search branch wisc; package path reports/vlincs_iterations/20260624_visual_subcluster_ctf_top2_p005_gain/",
+  "s3": "uploaded: s3://dit-scale-up/zcai/vlincs/no_anchor_gains/20260624_visual_subcluster_ctf_top2/",
+  "next": "Use the Diffusion-ReID idea more literally: generate or augment positive views only for already CTF-passing small islands, then require an opponent score and direct+density+p005 verification before promotion. Do not use generated samples to justify whole-component merges."
+}

@@ -1,0 +1,234 @@
+{
+  "after_state": "component 86, gid 960000350, component_size 162, decision_status manifest_reassign",
+  "before_state": "component 87, gid 960000351, component_size 147",
+  "candidate": {
+    "ctf_method": "ensemble_rank_pct_dinov2_siglip_weakmetric_to_target86_centroid",
+    "ctf_rank_topk": 2,
+    "group_internal_sim": 0.0,
+    "mode": "visual_positive_subcluster_ctf_topk",
+    "moved_tracklets": 2,
+    "rank": 2,
+    "source_component": 87,
+    "source_component_label": 87,
+    "source_predicted_global_id": "960000351",
+    "source_rest_margin_mean": 0.0,
+    "source_seqs": [
+      5550,
+      2987
+    ],
+    "target_component": 86,
+    "target_margin": 0.0,
+    "target_predicted_global_id": 960000350,
+    "target_sim": 0.8902150988578796,
+    "top_source_rows": [
+      {
+        "avg_conf": 0.657173,
+        "dinov2": 0.640779972076416,
+        "end_frame": 12233,
+        "ensemble_pct": 0.9337899543378997,
+        "n_dets": 100,
+        "seq": 5550,
+        "siglip": 0.7799001336097717,
+        "start_frame": 12123,
+        "video": "vlincs_MS01_MC0001_MCAM04_2024-03-Tc6",
+        "weakmetric": 0.713170051574707
+      },
+      {
+        "avg_conf": 0.78763,
+        "dinov2": 0.6416453123092651,
+        "end_frame": 20888,
+        "ensemble_pct": 0.9315068493150686,
+        "n_dets": 257,
+        "seq": 2987,
+        "siglip": 0.7445992231369019,
+        "start_frame": 20612,
+        "video": "vlincs_MS01_MC0001_MCAM04_2024-03-Tc6",
+        "weakmetric": 0.7349585294723511
+      }
+    ],
+    "uses_anchors": false,
+    "uses_gt_for_evaluation_only": false,
+    "uses_gt_for_training_or_anchors": false,
+    "visual_confidence": 0.84,
+    "visual_edge_id": 8,
+    "visual_evidence": "dark top and light gray pants broadly match; moderate evidence",
+    "visual_score": 0.8902150988578796
+  },
+  "evidence": "target_sim=0.8902, target_margin=0.0000, source_rest_margin=0.0000",
+  "failure_montage": "",
+  "failure_reason": "The whole visual edge 87 -> 86 is too broad and was killed as a false merge; keeping all source tracklets in component 87 leaves a small visually compatible island split from component 86.",
+  "improvement": "The new implementation commits only the top2 Re-ID-CTF-style source tracklets selected by DINOv2, SigLIP and weakmetric agreement, preserving the rest of component 87.",
+  "montage": "rank02_bbox_evidence.png",
+  "raw_frame_dir": "",
+  "raw_frame_status": "unavailable_coordinate_fallback",
+  "summary": "Two high-consensus source tracklets move from component 87 / gid 960000351 to component 86 / gid 960000350 after visual-positive CTF ranking.",
+  "title": "Rank02 top2 visual-positive subcluster CTF: component 87 -> 86",
+  "tracklets": [
+    {
+      "after": {
+        "avg_conf": "0.657173",
+        "camera": "MCAM04",
+        "component_external_prob_max": "0.0",
+        "component_internal_edges": "0",
+        "component_internal_prob_median": "0.0",
+        "component_internal_score_median": "0.0",
+        "component_label": "86",
+        "component_margin_prob": "0.0",
+        "component_size": "162",
+        "decision_status": "manifest_reassign",
+        "end_frame": "12233",
+        "n_dets": "100",
+        "predicted_global_id": "960000350",
+        "prediction_confidence": "0.700000",
+        "seq": "5550",
+        "start_frame": "12123",
+        "tracklet_key": "vlincs_MS01_MC0001_MCAM04_2024-03-Tc6:691:0",
+        "video": "vlincs_MS01_MC0001_MCAM04_2024-03-Tc6"
+      },
+      "before": {
+        "avg_conf": "0.657173",
+        "camera": "MCAM04",
+        "component_external_prob_max": "0.0",
+        "component_internal_edges": "0",
+        "component_internal_prob_median": "0.0",
+        "component_internal_score_median": "0.0",
+        "component_label": "87",
+        "component_margin_prob": "0.0",
+        "component_size": "147",
+        "decision_status": "forced_component",
+        "end_frame": "12233",
+        "n_dets": "100",
+        "predicted_global_id": "960000351",
+        "prediction_confidence": "0.700000",
+        "seq": "5550",
+        "start_frame": "12123",
+        "tracklet_key": "vlincs_MS01_MC0001_MCAM04_2024-03-Tc6:691:0",
+        "video": "vlincs_MS01_MC0001_MCAM04_2024-03-Tc6"
+      },
+      "sampled_boxes": [
+        {
+          "bbox_xyxy": [
+            1510.0667,
+            1003.7119,
+            1562.241,
+            1214.2023
+          ],
+          "frame_idx": 12123,
+          "score": 0.7368722558021545,
+          "tracklet_key": "vlincs_MS01_MC0001_MCAM04_2024-03-Tc6:691:0",
+          "video_key": "vlincs_MS01_MC0001_MCAM04_2024-03-Tc6"
+        },
+        {
+          "bbox_xyxy": [
+            1520.4304,
+            1003.0307,
+            1591.7363,
+            1218.8027
+          ],
+          "frame_idx": 12173,
+          "score": 0.885474681854248,
+          "tracklet_key": "vlincs_MS01_MC0001_MCAM04_2024-03-Tc6:691:0",
+          "video_key": "vlincs_MS01_MC0001_MCAM04_2024-03-Tc6"
+        },
+        {
+          "bbox_xyxy": [
+            1558.5011,
+            1039.9667,
+            1635.6931,
+            1203.0839
+          ],
+          "frame_idx": 12233,
+          "score": 0.12686507403850555,
+          "tracklet_key": "vlincs_MS01_MC0001_MCAM04_2024-03-Tc6:691:0",
+          "video_key": "vlincs_MS01_MC0001_MCAM04_2024-03-Tc6"
+        }
+      ],
+      "seq": 5550
+    },
+    {
+      "after": {
+        "avg_conf": "0.78763",
+        "camera": "MCAM04",
+        "component_external_prob_max": "0.0",
+        "component_internal_edges": "0",
+        "component_internal_prob_median": "0.0",
+        "component_internal_score_median": "0.0",
+        "component_label": "86",
+        "component_margin_prob": "0.0",
+        "component_size": "162",
+        "decision_status": "manifest_reassign",
+        "end_frame": "20888",
+        "n_dets": "257",
+        "predicted_global_id": "960000350",
+        "prediction_confidence": "0.700000",
+        "seq": "2987",
+        "start_frame": "20612",
+        "tracklet_key": "vlincs_MS01_MC0001_MCAM04_2024-03-Tc6:1693:0",
+        "video": "vlincs_MS01_MC0001_MCAM04_2024-03-Tc6"
+      },
+      "before": {
+        "avg_conf": "0.78763",
+        "camera": "MCAM04",
+        "component_external_prob_max": "0.0",
+        "component_internal_edges": "0",
+        "component_internal_prob_median": "0.0",
+        "component_internal_score_median": "0.0",
+        "component_label": "87",
+        "component_margin_prob": "0.0",
+        "component_size": "147",
+        "decision_status": "forced_component",
+        "end_frame": "20888",
+        "n_dets": "257",
+        "predicted_global_id": "960000351",
+        "prediction_confidence": "0.700000",
+        "seq": "2987",
+        "start_frame": "20612",
+        "tracklet_key": "vlincs_MS01_MC0001_MCAM04_2024-03-Tc6:1693:0",
+        "video": "vlincs_MS01_MC0001_MCAM04_2024-03-Tc6"
+      },
+      "sampled_boxes": [
+        {
+          "bbox_xyxy": [
+            1793.9355,
+            1008.74457,
+            1849.3931,
+            1269.6516
+          ],
+          "frame_idx": 20612,
+          "score": 0.8215643167495728,
+          "tracklet_key": "vlincs_MS01_MC0001_MCAM04_2024-03-Tc6:1693:0",
+          "video_key": "vlincs_MS01_MC0001_MCAM04_2024-03-Tc6"
+        },
+        {
+          "bbox_xyxy": [
+            1341.0468,
+            1017.13184,
+            1415.3992,
+            1226.4746
+          ],
+          "frame_idx": 20753,
+          "score": 0.9107899069786072,
+          "tracklet_key": "vlincs_MS01_MC0001_MCAM04_2024-03-Tc6:1693:0",
+          "video_key": "vlincs_MS01_MC0001_MCAM04_2024-03-Tc6"
+        },
+        {
+          "bbox_xyxy": [
+            1349.5228,
+            1006.8062,
+            1364.3964,
+            1085.1735
+          ],
+          "frame_idx": 20888,
+          "score": 0.10061458498239517,
+          "tracklet_key": "vlincs_MS01_MC0001_MCAM04_2024-03-Tc6:1693:0",
+          "video_key": "vlincs_MS01_MC0001_MCAM04_2024-03-Tc6"
+        }
+      ],
+      "seq": 2987
+    }
+  ],
+  "uses_anchors": false,
+  "uses_gt_for_evaluation_only": false,
+  "uses_gt_for_training_or_anchors": false,
+  "video_root": ""
+}

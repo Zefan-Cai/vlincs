@@ -1,0 +1,603 @@
+{
+  "assignment_out_dir": "local_runs/offline_no_anchor_split_probe_20260624/visual_positive_subcluster_ctf_probe/assignments",
+  "base_assignment_csv": "local_runs/offline_no_anchor_split_probe_20260623/component_graph_fullscore/rank01_37to86_top28_neighbor_probe/assignments/rank06_component_subset_attach_source_assignments.csv",
+  "outputs": [
+    {
+      "accepted_preview_count": 1,
+      "missing_source_seqs": [],
+      "mode": "visual_positive_subcluster_ctf_topk",
+      "moved_preview": [
+        {
+          "from_component": 87,
+          "from_predicted_global_id": 960000351,
+          "seq": 5550,
+          "to_component": 86,
+          "to_predicted_global_id": 960000350
+        }
+      ],
+      "moved_tracklets": 1,
+      "output_csv": "local_runs/offline_no_anchor_split_probe_20260624/visual_positive_subcluster_ctf_probe/assignments/rank01_visual_positive_subcluster_ctf_topk_source_assignments.csv",
+      "pair_f1": null,
+      "pair_precision": null,
+      "pair_recall": null,
+      "predicted_full_idf1": null,
+      "selection_rank": 1,
+      "skipped_empty_source_components": [],
+      "source_file": null,
+      "source_rank": null,
+      "target_component_repairs": [],
+      "target_components": [
+        86
+      ],
+      "target_predicted_global_ids": [
+        960000350
+      ]
+    },
+    {
+      "accepted_preview_count": 1,
+      "missing_source_seqs": [],
+      "mode": "visual_positive_subcluster_ctf_topk",
+      "moved_preview": [
+        {
+          "from_component": 87,
+          "from_predicted_global_id": 960000351,
+          "seq": 5550,
+          "to_component": 86,
+          "to_predicted_global_id": 960000350
+        },
+        {
+          "from_component": 87,
+          "from_predicted_global_id": 960000351,
+          "seq": 2987,
+          "to_component": 86,
+          "to_predicted_global_id": 960000350
+        }
+      ],
+      "moved_tracklets": 2,
+      "output_csv": "local_runs/offline_no_anchor_split_probe_20260624/visual_positive_subcluster_ctf_probe/assignments/rank02_visual_positive_subcluster_ctf_topk_source_assignments.csv",
+      "pair_f1": null,
+      "pair_precision": null,
+      "pair_recall": null,
+      "predicted_full_idf1": null,
+      "selection_rank": 2,
+      "skipped_empty_source_components": [],
+      "source_file": null,
+      "source_rank": null,
+      "target_component_repairs": [],
+      "target_components": [
+        86
+      ],
+      "target_predicted_global_ids": [
+        960000350
+      ]
+    },
+    {
+      "accepted_preview_count": 1,
+      "missing_source_seqs": [],
+      "mode": "visual_positive_subcluster_ctf_topk",
+      "moved_preview": [
+        {
+          "from_component": 87,
+          "from_predicted_global_id": 960000351,
+          "seq": 5550,
+          "to_component": 86,
+          "to_predicted_global_id": 960000350
+        },
+        {
+          "from_component": 87,
+          "from_predicted_global_id": 960000351,
+          "seq": 2987,
+          "to_component": 86,
+          "to_predicted_global_id": 960000350
+        },
+        {
+          "from_component": 87,
+          "from_predicted_global_id": 960000351,
+          "seq": 3801,
+          "to_component": 86,
+          "to_predicted_global_id": 960000350
+        },
+        {
+          "from_component": 87,
+          "from_predicted_global_id": 960000351,
+          "seq": 3448,
+          "to_component": 86,
+          "to_predicted_global_id": 960000350
+        }
+      ],
+      "moved_tracklets": 4,
+      "output_csv": "local_runs/offline_no_anchor_split_probe_20260624/visual_positive_subcluster_ctf_probe/assignments/rank03_visual_positive_subcluster_ctf_topk_source_assignments.csv",
+      "pair_f1": null,
+      "pair_precision": null,
+      "pair_recall": null,
+      "predicted_full_idf1": null,
+      "selection_rank": 3,
+      "skipped_empty_source_components": [],
+      "source_file": null,
+      "source_rank": null,
+      "target_component_repairs": [],
+      "target_components": [
+        86
+      ],
+      "target_predicted_global_ids": [
+        960000350
+      ]
+    },
+    {
+      "accepted_preview_count": 1,
+      "missing_source_seqs": [],
+      "mode": "visual_positive_subcluster_ctf_topk",
+      "moved_preview": [
+        {
+          "from_component": 87,
+          "from_predicted_global_id": 960000351,
+          "seq": 5550,
+          "to_component": 86,
+          "to_predicted_global_id": 960000350
+        },
+        {
+          "from_component": 87,
+          "from_predicted_global_id": 960000351,
+          "seq": 2987,
+          "to_component": 86,
+          "to_predicted_global_id": 960000350
+        },
+        {
+          "from_component": 87,
+          "from_predicted_global_id": 960000351,
+          "seq": 3801,
+          "to_component": 86,
+          "to_predicted_global_id": 960000350
+        },
+        {
+          "from_component": 87,
+          "from_predicted_global_id": 960000351,
+          "seq": 3448,
+          "to_component": 86,
+          "to_predicted_global_id": 960000350
+        },
+        {
+          "from_component": 87,
+          "from_predicted_global_id": 960000351,
+          "seq": 4254,
+          "to_component": 86,
+          "to_predicted_global_id": 960000350
+        },
+        {
+          "from_component": 87,
+          "from_predicted_global_id": 960000351,
+          "seq": 3393,
+          "to_component": 86,
+          "to_predicted_global_id": 960000350
+        },
+        {
+          "from_component": 87,
+          "from_predicted_global_id": 960000351,
+          "seq": 3841,
+          "to_component": 86,
+          "to_predicted_global_id": 960000350
+        },
+        {
+          "from_component": 87,
+          "from_predicted_global_id": 960000351,
+          "seq": 4077,
+          "to_component": 86,
+          "to_predicted_global_id": 960000350
+        }
+      ],
+      "moved_tracklets": 8,
+      "output_csv": "local_runs/offline_no_anchor_split_probe_20260624/visual_positive_subcluster_ctf_probe/assignments/rank04_visual_positive_subcluster_ctf_topk_source_assignments.csv",
+      "pair_f1": null,
+      "pair_precision": null,
+      "pair_recall": null,
+      "predicted_full_idf1": null,
+      "selection_rank": 4,
+      "skipped_empty_source_components": [],
+      "source_file": null,
+      "source_rank": null,
+      "target_component_repairs": [],
+      "target_components": [
+        86
+      ],
+      "target_predicted_global_ids": [
+        960000350
+      ]
+    },
+    {
+      "accepted_preview_count": 1,
+      "missing_source_seqs": [],
+      "mode": "visual_positive_subcluster_ctf_topk",
+      "moved_preview": [
+        {
+          "from_component": 87,
+          "from_predicted_global_id": 960000351,
+          "seq": 5550,
+          "to_component": 86,
+          "to_predicted_global_id": 960000350
+        },
+        {
+          "from_component": 87,
+          "from_predicted_global_id": 960000351,
+          "seq": 2987,
+          "to_component": 86,
+          "to_predicted_global_id": 960000350
+        },
+        {
+          "from_component": 87,
+          "from_predicted_global_id": 960000351,
+          "seq": 3801,
+          "to_component": 86,
+          "to_predicted_global_id": 960000350
+        },
+        {
+          "from_component": 87,
+          "from_predicted_global_id": 960000351,
+          "seq": 3448,
+          "to_component": 86,
+          "to_predicted_global_id": 960000350
+        },
+        {
+          "from_component": 87,
+          "from_predicted_global_id": 960000351,
+          "seq": 4254,
+          "to_component": 86,
+          "to_predicted_global_id": 960000350
+        },
+        {
+          "from_component": 87,
+          "from_predicted_global_id": 960000351,
+          "seq": 3393,
+          "to_component": 86,
+          "to_predicted_global_id": 960000350
+        },
+        {
+          "from_component": 87,
+          "from_predicted_global_id": 960000351,
+          "seq": 3841,
+          "to_component": 86,
+          "to_predicted_global_id": 960000350
+        },
+        {
+          "from_component": 87,
+          "from_predicted_global_id": 960000351,
+          "seq": 4077,
+          "to_component": 86,
+          "to_predicted_global_id": 960000350
+        },
+        {
+          "from_component": 87,
+          "from_predicted_global_id": 960000351,
+          "seq": 5188,
+          "to_component": 86,
+          "to_predicted_global_id": 960000350
+        },
+        {
+          "from_component": 87,
+          "from_predicted_global_id": 960000351,
+          "seq": 5406,
+          "to_component": 86,
+          "to_predicted_global_id": 960000350
+        },
+        {
+          "from_component": 87,
+          "from_predicted_global_id": 960000351,
+          "seq": 5451,
+          "to_component": 86,
+          "to_predicted_global_id": 960000350
+        },
+        {
+          "from_component": 87,
+          "from_predicted_global_id": 960000351,
+          "seq": 4159,
+          "to_component": 86,
+          "to_predicted_global_id": 960000350
+        },
+        {
+          "from_component": 87,
+          "from_predicted_global_id": 960000351,
+          "seq": 3925,
+          "to_component": 86,
+          "to_predicted_global_id": 960000350
+        },
+        {
+          "from_component": 87,
+          "from_predicted_global_id": 960000351,
+          "seq": 2841,
+          "to_component": 86,
+          "to_predicted_global_id": 960000350
+        },
+        {
+          "from_component": 87,
+          "from_predicted_global_id": 960000351,
+          "seq": 3107,
+          "to_component": 86,
+          "to_predicted_global_id": 960000350
+        },
+        {
+          "from_component": 87,
+          "from_predicted_global_id": 960000351,
+          "seq": 2801,
+          "to_component": 86,
+          "to_predicted_global_id": 960000350
+        }
+      ],
+      "moved_tracklets": 16,
+      "output_csv": "local_runs/offline_no_anchor_split_probe_20260624/visual_positive_subcluster_ctf_probe/assignments/rank05_visual_positive_subcluster_ctf_topk_source_assignments.csv",
+      "pair_f1": null,
+      "pair_precision": null,
+      "pair_recall": null,
+      "predicted_full_idf1": null,
+      "selection_rank": 5,
+      "skipped_empty_source_components": [],
+      "source_file": null,
+      "source_rank": null,
+      "target_component_repairs": [],
+      "target_components": [
+        86
+      ],
+      "target_predicted_global_ids": [
+        960000350
+      ]
+    },
+    {
+      "accepted_preview_count": 1,
+      "missing_source_seqs": [],
+      "mode": "visual_positive_subcluster_ctf_topk",
+      "moved_preview": [
+        {
+          "from_component": 87,
+          "from_predicted_global_id": 960000351,
+          "seq": 5550,
+          "to_component": 86,
+          "to_predicted_global_id": 960000350
+        },
+        {
+          "from_component": 87,
+          "from_predicted_global_id": 960000351,
+          "seq": 2987,
+          "to_component": 86,
+          "to_predicted_global_id": 960000350
+        },
+        {
+          "from_component": 87,
+          "from_predicted_global_id": 960000351,
+          "seq": 3801,
+          "to_component": 86,
+          "to_predicted_global_id": 960000350
+        },
+        {
+          "from_component": 87,
+          "from_predicted_global_id": 960000351,
+          "seq": 3448,
+          "to_component": 86,
+          "to_predicted_global_id": 960000350
+        },
+        {
+          "from_component": 87,
+          "from_predicted_global_id": 960000351,
+          "seq": 4254,
+          "to_component": 86,
+          "to_predicted_global_id": 960000350
+        },
+        {
+          "from_component": 87,
+          "from_predicted_global_id": 960000351,
+          "seq": 3393,
+          "to_component": 86,
+          "to_predicted_global_id": 960000350
+        },
+        {
+          "from_component": 87,
+          "from_predicted_global_id": 960000351,
+          "seq": 3841,
+          "to_component": 86,
+          "to_predicted_global_id": 960000350
+        },
+        {
+          "from_component": 87,
+          "from_predicted_global_id": 960000351,
+          "seq": 4077,
+          "to_component": 86,
+          "to_predicted_global_id": 960000350
+        },
+        {
+          "from_component": 87,
+          "from_predicted_global_id": 960000351,
+          "seq": 5188,
+          "to_component": 86,
+          "to_predicted_global_id": 960000350
+        },
+        {
+          "from_component": 87,
+          "from_predicted_global_id": 960000351,
+          "seq": 5406,
+          "to_component": 86,
+          "to_predicted_global_id": 960000350
+        },
+        {
+          "from_component": 87,
+          "from_predicted_global_id": 960000351,
+          "seq": 5451,
+          "to_component": 86,
+          "to_predicted_global_id": 960000350
+        },
+        {
+          "from_component": 87,
+          "from_predicted_global_id": 960000351,
+          "seq": 4159,
+          "to_component": 86,
+          "to_predicted_global_id": 960000350
+        },
+        {
+          "from_component": 87,
+          "from_predicted_global_id": 960000351,
+          "seq": 3925,
+          "to_component": 86,
+          "to_predicted_global_id": 960000350
+        },
+        {
+          "from_component": 87,
+          "from_predicted_global_id": 960000351,
+          "seq": 2841,
+          "to_component": 86,
+          "to_predicted_global_id": 960000350
+        },
+        {
+          "from_component": 87,
+          "from_predicted_global_id": 960000351,
+          "seq": 3107,
+          "to_component": 86,
+          "to_predicted_global_id": 960000350
+        },
+        {
+          "from_component": 87,
+          "from_predicted_global_id": 960000351,
+          "seq": 2801,
+          "to_component": 86,
+          "to_predicted_global_id": 960000350
+        },
+        {
+          "from_component": 87,
+          "from_predicted_global_id": 960000351,
+          "seq": 4958,
+          "to_component": 86,
+          "to_predicted_global_id": 960000350
+        },
+        {
+          "from_component": 87,
+          "from_predicted_global_id": 960000351,
+          "seq": 3736,
+          "to_component": 86,
+          "to_predicted_global_id": 960000350
+        },
+        {
+          "from_component": 87,
+          "from_predicted_global_id": 960000351,
+          "seq": 860,
+          "to_component": 86,
+          "to_predicted_global_id": 960000350
+        },
+        {
+          "from_component": 87,
+          "from_predicted_global_id": 960000351,
+          "seq": 4700,
+          "to_component": 86,
+          "to_predicted_global_id": 960000350
+        },
+        {
+          "from_component": 87,
+          "from_predicted_global_id": 960000351,
+          "seq": 4223,
+          "to_component": 86,
+          "to_predicted_global_id": 960000350
+        },
+        {
+          "from_component": 87,
+          "from_predicted_global_id": 960000351,
+          "seq": 4838,
+          "to_component": 86,
+          "to_predicted_global_id": 960000350
+        },
+        {
+          "from_component": 87,
+          "from_predicted_global_id": 960000351,
+          "seq": 835,
+          "to_component": 86,
+          "to_predicted_global_id": 960000350
+        },
+        {
+          "from_component": 87,
+          "from_predicted_global_id": 960000351,
+          "seq": 3627,
+          "to_component": 86,
+          "to_predicted_global_id": 960000350
+        },
+        {
+          "from_component": 87,
+          "from_predicted_global_id": 960000351,
+          "seq": 4794,
+          "to_component": 86,
+          "to_predicted_global_id": 960000350
+        },
+        {
+          "from_component": 87,
+          "from_predicted_global_id": 960000351,
+          "seq": 820,
+          "to_component": 86,
+          "to_predicted_global_id": 960000350
+        },
+        {
+          "from_component": 87,
+          "from_predicted_global_id": 960000351,
+          "seq": 826,
+          "to_component": 86,
+          "to_predicted_global_id": 960000350
+        },
+        {
+          "from_component": 87,
+          "from_predicted_global_id": 960000351,
+          "seq": 5069,
+          "to_component": 86,
+          "to_predicted_global_id": 960000350
+        },
+        {
+          "from_component": 87,
+          "from_predicted_global_id": 960000351,
+          "seq": 3165,
+          "to_component": 86,
+          "to_predicted_global_id": 960000350
+        },
+        {
+          "from_component": 87,
+          "from_predicted_global_id": 960000351,
+          "seq": 6836,
+          "to_component": 86,
+          "to_predicted_global_id": 960000350
+        },
+        {
+          "from_component": 87,
+          "from_predicted_global_id": 960000351,
+          "seq": 3317,
+          "to_component": 86,
+          "to_predicted_global_id": 960000350
+        },
+        {
+          "from_component": 87,
+          "from_predicted_global_id": 960000351,
+          "seq": 3589,
+          "to_component": 86,
+          "to_predicted_global_id": 960000350
+        }
+      ],
+      "moved_tracklets": 32,
+      "output_csv": "local_runs/offline_no_anchor_split_probe_20260624/visual_positive_subcluster_ctf_probe/assignments/rank06_visual_positive_subcluster_ctf_topk_source_assignments.csv",
+      "pair_f1": null,
+      "pair_precision": null,
+      "pair_recall": null,
+      "predicted_full_idf1": null,
+      "selection_rank": 6,
+      "skipped_empty_source_components": [],
+      "source_file": null,
+      "source_rank": null,
+      "target_component_repairs": [],
+      "target_components": [
+        86
+      ],
+      "target_predicted_global_ids": [
+        960000350
+      ]
+    }
+  ],
+  "scheduler_json": "local_runs/offline_no_anchor_split_probe_20260624/visual_positive_subcluster_ctf_probe/visual_positive_subcluster_ctf_candidates.json",
+  "selection_ranks": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6
+  ],
+  "uses_anchors": false,
+  "uses_gt_for_evaluation_only": false,
+  "uses_gt_for_training_or_anchors": false
+}

@@ -1,0 +1,51 @@
+{
+  "rows": [
+    {
+      "rank": 2,
+      "mode": "visual_positive_subcluster_ctf_topk",
+      "source_component_label": 87,
+      "target_component": 86,
+      "source_seqs": [5550, 2987],
+      "target_predicted_global_id": 960000350,
+      "moved_tracklets": 2,
+      "ctf_rank_topk": 2,
+      "ctf_method": "ensemble_rank_pct_dinov2_siglip_weakmetric_to_target86_centroid",
+      "visual_edge_id": 8,
+      "visual_confidence": 0.84,
+      "visual_score": 0.8902150988578796,
+      "visual_evidence": "dark top and light gray pants broadly match; moderate evidence",
+      "target_sim": 0.8902150988578796,
+      "target_margin": 0.0,
+      "source_rest_margin_mean": 0.0,
+      "top_source_rows": [
+        {
+          "seq": 5550,
+          "dinov2": 0.640779972076416,
+          "siglip": 0.7799001336097717,
+          "weakmetric": 0.713170051574707,
+          "ensemble_pct": 0.9337899543378997,
+          "video": "vlincs_MS01_MC0001_MCAM04_2024-03-Tc6",
+          "start_frame": 12123,
+          "end_frame": 12233,
+          "n_dets": 100,
+          "avg_conf": 0.657173
+        },
+        {
+          "seq": 2987,
+          "dinov2": 0.6416453123092651,
+          "siglip": 0.7445992231369019,
+          "weakmetric": 0.7349585294723511,
+          "ensemble_pct": 0.9315068493150686,
+          "video": "vlincs_MS01_MC0001_MCAM04_2024-03-Tc6",
+          "start_frame": 20612,
+          "end_frame": 20888,
+          "n_dets": 257,
+          "avg_conf": 0.78763
+        }
+      ],
+      "uses_anchors": false,
+      "uses_gt_for_evaluation_only": false,
+      "uses_gt_for_training_or_anchors": false
+    }
+  ]
+}
