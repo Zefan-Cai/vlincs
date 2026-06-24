@@ -33,24 +33,29 @@ README_START = "<!-- CI-SCORES:START -->"
 README_END = "<!-- CI-SCORES:END -->"
 
 
-def parse_demo_output(path: str) -> dict | None:
-    """Score dict from the LAST `DONE: <ds> -> {...}` line in a demo log; None if absent/unreadable."""
+def parse_demo_outputs(path: str) -> list[dict]:
+    """Score dicts from every `DONE: <ds> -> {...}` line in a demo log."""
     try:
         text = Path(path).read_text(errors="replace")
     except OSError:
-        return None
-    last = None
+        return []
+    out = []
     for line in text.splitlines():
         m = DONE_RE.search(line)
         if m:
-            last = m
-    if last is None:
-        return None
-    try:
-        d = ast.literal_eval(last.group(2))
-        return d if isinstance(d, dict) else None
-    except (ValueError, SyntaxError):
-        return None
+            try:
+                d = ast.literal_eval(m.group(2))
+            except (ValueError, SyntaxError):
+                continue
+            if isinstance(d, dict):
+                out.append(d)
+    return out
+
+
+def parse_demo_output(path: str) -> dict | None:
+    """Score dict from the LAST `DONE: <ds> -> {...}` line; kept for callers/tests."""
+    parsed = parse_demo_outputs(path)
+    return parsed[-1] if parsed else None
 
 
 def load_history() -> list[dict]:
@@ -191,19 +196,19 @@ def main() -> None:
     # this run's per-video sub-scores (current commit only; not historized — they show where we fail NOW).
     pv_by_ds: dict[str, dict] = {}
     for path in args.inputs:
-        d = parse_demo_output(path)
-        if not d or not d.get("dataset"):
-            continue
-        ds = str(d["dataset"])
-        rows = [r for r in rows if not (r.get("dataset") == ds and r.get("commit") == sha)]
-        rows.append({
-            "dataset": ds, "commit": sha, "commit_short": short,
-            "author": args.author, "date": args.date,
-            "idf1": d.get("idf1", ""), "assa": d.get("assa", ""),
-            "detre": d.get("detre", ""), "n_ids": d.get("n_ids", ""),
-        })
-        if isinstance(d.get("per_video"), dict) and d["per_video"]:
-            pv_by_ds[ds] = d["per_video"]
+        for d in parse_demo_outputs(path):
+            if not d.get("dataset"):
+                continue
+            ds = str(d["dataset"])
+            rows = [r for r in rows if not (r.get("dataset") == ds and r.get("commit") == sha)]
+            rows.append({
+                "dataset": ds, "commit": sha, "commit_short": short,
+                "author": args.author, "date": args.date,
+                "idf1": d.get("idf1", ""), "assa": d.get("assa", ""),
+                "detre": d.get("detre", ""), "n_ids": d.get("n_ids", ""),
+            })
+            if isinstance(d.get("per_video"), dict) and d["per_video"]:
+                pv_by_ds[ds] = d["per_video"]
 
     save_history(rows)
 

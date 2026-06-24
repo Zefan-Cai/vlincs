@@ -1,5 +1,5 @@
 # VLINCS gallery/WISC CI — self-hosted CI on maxwell (Linux SHELL runner; runs-on self.hosted,linux.shell).
-# Runs the MS02 gallery demo plus the WISC DS1 no-anchor replay ON the host, scores them with
+# Runs the root demo.sh MS02 gallery demo plus WISC DS1 no-anchor replay ON the host, scores them with
 # the canonical reid_hota, and publishes the per-dataset scores back into the repo (SCORES.md + badges).
 # Background + every gotcha: memory note `gallery-ci-maxwell-runner`. Script lines are unquoted YAML
 # scalars, so keep them free of a colon-space ': '.
@@ -16,43 +16,25 @@
 pipelines:
   branches:
     '**':
-      # MS02 + DS1 run in PARALLEL (two runners); their score artifacts both flow to the Publish step.
-      # MS02 still uses Docker gallery state. DS1 must use the root WISC method reproduction, not kit/demo.sh.
-      - parallel:
-          - step:
-              name: MS02 demo (offline) + score
-              runs-on:
-                - self.hosted
-                - linux.shell
-              artifacts:
-                - ms02_score.txt
-              script:
-                - set -x
-                - unset DOCKER_HOST                          # use maxwell's host daemon, not the absent DinD
-                - cd kit
-                - export DATA_ROOT=/mnt/datastore2_videolincs/data
-                - export COMPOSE_PROJECT_NAME=gallery_ci_ms02_$BITBUCKET_BUILD_NUMBER
-                - export GALLERY_DB_HOST_PORT=0
-                - export GALLERY_CODE_SHA="$BITBUCKET_COMMIT"
-                - |
-                  trap 'docker compose down -v || true' EXIT
-                  DEMO_HEADLESS=1 DEMO_SCORE_FILE=../ms02_score.txt ./demo.sh ms02 --no-cannot-link
-          - step:
-              name: DS1 WISC no-anchor replay + score
-              runs-on:
-                - self.hosted
-                - linux.shell
-              clone:
-                lfs: true                                    # pull the ~103MB DS1 bundle (git-lfs is on maxwell)
-              artifacts:
-                - ds1_score.txt
-              script:
-                - set -x
-                - unset DOCKER_HOST
-                - git lfs pull --include="kit/demo_data/ds1/**"
-                - export GALLERY_CODE_SHA="$BITBUCKET_COMMIT"
-                - export RUN_DIR="$PWD/local_runs/ci_ds1_wisc_replay_$BITBUCKET_BUILD_NUMBER"
-                - ./demo.sh 2>&1 | tee ds1_score.txt
+      - step:
+          name: Full demo.sh reproduction plus score
+          runs-on:
+            - self.hosted
+            - linux.shell
+          clone:
+            lfs: true                                      # pull the DS1 bundle and no-anchor feature artifacts
+          artifacts:
+            - demo_score.txt
+          script:
+            - set -x
+            - unset DOCKER_HOST                            # use maxwell's host daemon, not the absent DinD
+            - git lfs pull --include="kit/demo_data/ds1/**"
+            - export DATA_ROOT=/mnt/datastore2_videolincs/data
+            - export GALLERY_CODE_SHA="$BITBUCKET_COMMIT"
+            - export COMPOSE_PROJECT_NAME=gallery_ci_demo_$BITBUCKET_BUILD_NUMBER
+            - export GALLERY_DB_HOST_PORT=0
+            - export RUN_DIR="$PWD/local_runs/ci_ds1_wisc_replay_$BITBUCKET_BUILD_NUMBER"
+            - ./demo.sh 2>&1 | tee demo_score.txt
       - step:
           name: Publish scores (SCORES.md + badges)
           runs-on:
@@ -72,5 +54,5 @@ pipelines:
             # this build's commit) and base our commit on it so the push fast-forwards and history is preserved
             - git fetch -q origin "$BITBUCKET_BRANCH" || true
             - git checkout -q -B "$BITBUCKET_BRANCH" "origin/$BITBUCKET_BRANCH" || true
-            - python3 ci/render_scores.py --sha "$SHA" --author "$AUTHOR" --date "$CDATE" ms02_score.txt ds1_score.txt
+            - python3 ci/render_scores.py --sha "$SHA" --author "$AUTHOR" --date "$CDATE" demo_score.txt
             - sh ci/publish_scores.sh

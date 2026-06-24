@@ -28,11 +28,19 @@ Best reproducible WISC no-anchor DS1 delivery score:
 |---:|---:|---:|
 | 0.668673 | 0.529242 | 0.539491 |
 
-The root `./demo.sh` replays and verifies this promoted residual
-feature-outlier identity-decision artifact.  It runs direct export,
-`density_simple`, and the fixed `p005_area` delivery gate; the final
+The root `./demo.sh` now runs both benchmark checks: MS02 through the original
+gallery demo path, then DS1 through the WISC no-anchor method reproduction.  In
+the DS1 half it regenerates the promoted residual feature-outlier identity
+decision from committed no-anchor feature evidence, runs direct export,
+`density_simple`, and the fixed `p005_area` delivery gate.  The DS1 final
 verification line should report
 `IDF1/HOTA/AssA = 0.668673/0.529242/0.539491`.
+
+Current recorded MS02 score from the gallery demo path:
+
+| IDF1 | AssA | DetRe | IDs |
+|---:|---:|---:|---:|
+| 0.7224 | 0.7681 | 0.7268 | 119 |
 
 Fresh checkouts must materialize the DS1 Git LFS demo data before running the
 replay.  This includes tracklet parquet files, embeddings, and the 10 dense GT
@@ -41,6 +49,7 @@ parquet files under `kit/demo_data/ds1/gt`:
 ```bash
 git checkout wisc
 git lfs pull --include="kit/demo_data/ds1/**"
+export DATA_ROOT=/path/to/vlincs/datastore   # required for MS02 sparse GT/videos
 ./demo.sh
 ```
 
@@ -48,6 +57,14 @@ Without Git LFS, the DS1 parquet files remain pointer text files and cannot be
 scored.  The dense GT files are evaluation-only: they are not used as
 production identity evidence, but they are required to compute and verify
 IDF1/HOTA/AssA.
+
+MS02 is still the legacy selected-tree dataset.  It requires
+`$DATA_ROOT/VLINCS_Performer-selected/MS02/MC0002/2018-03-Tc85`.  The public Box
+shared folder `https://app.box.com/s/15gds6tkwu8f7l7a3tk6oo0t7txc8w72` exposes a
+`VLINCS_Performer` Box-export tree (`sample`, `self`, `MS01`, `tracklets`,
+`datasets`) but does not contain `VLINCS_Performer-selected`, `MS02`, `MCAM310`,
+`MCAM318`, `2018-03-Tc85`, or a `DS0000` dataset JSON.  It cannot by itself
+reproduce the MS02 score.
 
 Best model-side pair metric:
 
@@ -107,17 +124,31 @@ generated zip submissions into this repo.
 
 ## Auto-Evaluation Entrypoints
 
-The root method-reproduction path is the current WISC no-anchor handoff check:
+The root handoff check is one command and prints two `DONE` records:
 
 ```bash
 ./demo.sh
 ```
 
-This is intentionally different from the original online-gallery DS1 demo.  It
-rebuilds the promoted DS1 global-ID assignment from committed no-anchor feature
-evidence, a deterministic feature-outlier proposer, and promoted repair ranks;
-then it builds the submission zip and verifies the canonical delivery score.
-It does not read a committed final-assignment CSV as input.
+This first runs:
+
+```bash
+cd kit
+DEMO_HEADLESS=1 ./demo.sh ms02 --no-cannot-link
+```
+
+Then it runs the DS1 WISC no-anchor reproduction.  DS1 rebuilds the promoted
+global-ID assignment from committed no-anchor feature evidence, a deterministic
+feature-outlier proposer, and promoted repair ranks; then it builds the
+submission zip and verifies the canonical delivery score.  It does not read a
+committed final-assignment CSV as input.
+
+Single-dataset debug commands are also supported:
+
+```bash
+./demo.sh ms02
+./demo.sh ds1
+```
 
 The old DS1 gallery command below is intentionally not the handoff check:
 
@@ -132,8 +163,15 @@ mistaken for the WISC no-anchor replay.  Set
 `ALLOW_LEGACY_DS1_GALLERY_DEMO=1` only if you explicitly want to inspect the old
 gallery behavior.
 
-Bitbucket CI still reports MS02 through the original gallery demo path and DS1
-through the WISC no-anchor method reproduction path.
+Bitbucket CI uses the same root command:
+
+```bash
+./demo.sh 2>&1 | tee demo_score.txt
+python3 ci/render_scores.py --sha "$SHA" --author "$AUTHOR" --date "$CDATE" demo_score.txt
+```
+
+The score renderer parses both `DONE: ms02 -> {...}` and `DONE: ds1 -> {...}`
+from the same log.
 
 ## Main DS1 Pipeline
 
