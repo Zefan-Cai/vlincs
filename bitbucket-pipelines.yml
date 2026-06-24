@@ -1,5 +1,5 @@
-# VLINCS gallery — self-hosted CI on maxwell (Linux SHELL runner; runs-on self.hosted,linux.shell).
-# Runs the gallery demos ON the host (host docker + Compose + the /mnt datastore mount), scores them with
+# VLINCS gallery/WISC CI — self-hosted CI on maxwell (Linux SHELL runner; runs-on self.hosted,linux.shell).
+# Runs the MS02 gallery demo plus the WISC DS1 no-anchor replay ON the host, scores them with
 # the canonical reid_hota, and publishes the per-dataset scores back into the repo (SCORES.md + badges).
 # Background + every gotcha: memory note `gallery-ci-maxwell-runner`. Script lines are unquoted YAML
 # scalars, so keep them free of a colon-space ': '.
@@ -16,11 +16,8 @@
 pipelines:
   branches:
     '**':
-      # MS02 + DS1 run in PARALLEL (two runners); their score artifacts both flow to the Publish step. Each
-      # uses a unique COMPOSE_PROJECT_NAME + ephemeral db port, so concurrent builds on the same host don't
-      # collide. A `trap ... EXIT` guarantees `docker compose down -v` on success/failure/stop (SIGTERM), so
-      # no volume orphans - no cron/manual prune. (Only a hard kill -9 could leak, and even then the unique
-      # project name means it never blocks another build.)
+      # MS02 + DS1 run in PARALLEL (two runners); their score artifacts both flow to the Publish step.
+      # MS02 still uses Docker gallery state. DS1 must use the root WISC replay, not kit/demo.sh.
       - parallel:
           - step:
               name: MS02 demo (offline) + score
@@ -41,7 +38,7 @@ pipelines:
                   trap 'docker compose down -v || true' EXIT
                   DEMO_HEADLESS=1 DEMO_SCORE_FILE=../ms02_score.txt ./demo.sh ms02 --no-cannot-link
           - step:
-              name: DS1 demo (offline LFS) + score
+              name: DS1 WISC no-anchor replay + score
               runs-on:
                 - self.hosted
                 - linux.shell
@@ -52,14 +49,10 @@ pipelines:
               script:
                 - set -x
                 - unset DOCKER_HOST
-                - cd kit
-                - export DATA_ROOT=/mnt/datastore2_videolincs/data
-                - export COMPOSE_PROJECT_NAME=gallery_ci_ds1_$BITBUCKET_BUILD_NUMBER
-                - export GALLERY_DB_HOST_PORT=0
+                - git lfs pull --include="kit/demo_data/ds1/**"
                 - export GALLERY_CODE_SHA="$BITBUCKET_COMMIT"
-                - |
-                  trap 'docker compose down -v || true' EXIT
-                  DEMO_HEADLESS=1 DEMO_SCORE_FILE=../ds1_score.txt ./demo.sh ds1 --no-cannot-link
+                - export RUN_DIR="$PWD/local_runs/ci_ds1_wisc_replay_$BITBUCKET_BUILD_NUMBER"
+                - ./demo.sh 2>&1 | tee ds1_score.txt
       - step:
           name: Publish scores (SCORES.md + badges)
           runs-on:

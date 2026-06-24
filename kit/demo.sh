@@ -39,6 +39,18 @@ case "$selected" in
   "ds1"|"ds0001")
     selected="ds1"
     selected_desc="DS0001 (36 IDs w/GT)"
+    if [[ "${ALLOW_LEGACY_DS1_GALLERY_DEMO:-0}" != "1" ]]; then
+      cat >&2 <<'EOF'
+[kit/demo.sh] DS1 here is the legacy gallery/weak-graph demo, not the WISC no-anchor best replay.
+[kit/demo.sh] It can score around 0.12 with weak bbox-auto forced output and should not be used to reproduce 0.668.
+[kit/demo.sh] Run from the repository root instead:
+  ./demo.sh
+
+To intentionally run the legacy gallery demo, set:
+  ALLOW_LEGACY_DS1_GALLERY_DEMO=1
+EOF
+      exit 2
+    fi
     # The DS1 (MLflow) extras only PULL inputs from MLflow. If the offline Git LFS bundle is pulled
     # (demo_data/ds1/ holds real files, not LFS pointers), the base kit + pyyaml runs DS1 with no
     # MLflow / SDK / devpi. Otherwise build the MLflow extras to fetch the inputs.

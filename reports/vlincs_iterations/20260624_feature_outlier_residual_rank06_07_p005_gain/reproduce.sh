@@ -229,4 +229,14 @@ print(json.dumps({
     "density_simple": {k: density[k] for k in ("idf1", "hota", "assa", "rows", "dropped_rows")},
     "p005_area": {k: p005[k] for k in ("idf1", "hota", "assa", "rows", "dropped_rows", "config_name")},
 }, sort_keys=True))
+score = {
+    "dataset": "ds1",
+    "idf1": p005["idf1"],
+    "hota": p005["hota"],
+    "assa": p005["assa"],
+    "detre": p005.get("detre"),
+    "n_ids": p005.get("predicted_ids"),
+    "per_video": p005.get("per_video", {}),
+}
+print(f"DONE: ds1 -> {score!r}")
 PY

@@ -116,19 +116,18 @@ This is intentionally different from the original online-gallery DS1 demo.  It
 rebuilds the promoted global-ID submission from the committed assignment CSV and
 DS1 demo tracklets, then verifies the canonical delivery score.
 
-The branch-level auto-evaluation path is `kit/demo.sh`.  It wraps the Docker
-demo command, builds the right app image, starts the DB, and runs the same
-`kit/demo.py` path used by local demos.
+The old DS1 gallery command below is intentionally not the handoff check:
 
 ```bash
 cd kit
 DEMO_HEADLESS=1 DEMO_SCORE_FILE=../ds1_score.txt ./demo.sh ds1 --no-cannot-link
 ```
 
-For DS1, `kit/demo.sh ds1` enables the UWISC no-anchor weak/global-ID resolve
-by default (`--weak-resolve --auto-weak-labels`, source `bbox-auto`).  Set
-`WEAK_RESOLVE=0` to run only the base gallery resolve, or pass explicit
-`demo.py` flags after the dataset name to override defaults.
+That path runs the legacy Docker gallery demo and can produce a low forced-output
+score around `0.12`; it is blocked by default on this branch so it cannot be
+mistaken for the WISC no-anchor replay.  Set
+`ALLOW_LEGACY_DS1_GALLERY_DEMO=1` only if you explicitly want to inspect the old
+gallery behavior.
 
 ## Main DS1 Pipeline
 
