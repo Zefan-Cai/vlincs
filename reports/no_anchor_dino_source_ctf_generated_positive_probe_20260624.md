@@ -23,7 +23,7 @@ tracklet-local generated/local-aug images.
 
 ## Method
 
-`kit/audit_no_anchor_generated_positive_ctf.py` now supports:
+`kit/audit_no_anchor_generated_positive_ctf.py` now supports DINOv2:
 
 ```bash
 --feature-backend dinov2 \
@@ -31,6 +31,16 @@ tracklet-local generated/local-aug images.
 --dinov2-model-id facebook/dinov2-small \
 --min-same-sim 0.80 \
 --min-margin 0.05
+```
+
+and SigLIP:
+
+```bash
+--feature-backend siglip \
+--reference-mode source \
+--siglip-model-id google/siglip-base-patch16-224 \
+--min-same-sim 0.75 \
+--min-margin 0.03
 ```
 
 The default remains the original lightweight histogram/centroid CTF, so demo
@@ -43,6 +53,7 @@ reproduction is unchanged.
 | Previous color-only CTF | 0 | 8 | killed as too brittle |
 | DINO same-tracklet mean CTF | 1 | 7 | too strict for viewpoint/occlusion variation |
 | DINO source-specific CTF | 7 | 1 | retained as future GPT-image CTF |
+| SigLIP source-specific CTF | 7 | 1 | second-view gate; rejects low-margin near match |
 
 ## Command
 
@@ -61,9 +72,9 @@ local_runs/deep_ctf_venv_20260624/bin/python \
 
 ## Decision
 
-Keep the audit backend. Do not promote any assignment or default pipeline change
-from this probe alone.
+Keep the audit backends. Do not promote any assignment or default pipeline
+change from this probe alone.
 
 The next GPT-image run should use tracklet-local source-specific DINO CTF first,
-then a second SigLIP/body-part gate before any generated image becomes weak
-training evidence.
+then SigLIP/source CTF before any generated image becomes weak training
+evidence.

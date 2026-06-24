@@ -52,12 +52,12 @@ def _hist_feature(path: Path) -> np.ndarray:
     return feat
 
 
-def _dinov2_feature_extractor(model_id: str):
+def _transformers_image_feature_extractor(model_id: str, backend: str):
     try:
         import torch
         from transformers import AutoImageProcessor, AutoModel
     except ModuleNotFoundError as exc:
-        raise SystemExit("dinov2 backend requires torch and transformers in the active environment") from exc
+        raise SystemExit(f"{backend} backend requires torch and transformers in the active environment") from exc
 
     processor = AutoImageProcessor.from_pretrained(model_id)
     model = AutoModel.from_pretrained(model_id)
@@ -67,8 +67,12 @@ def _dinov2_feature_extractor(model_id: str):
         image = Image.open(path).convert("RGB")
         inputs = processor(images=image, return_tensors="pt")
         with torch.no_grad():
-            output = model(**inputs)
-        feat = output.last_hidden_state[:, 0, :].float().numpy()[0].astype(np.float32)
+            if hasattr(model, "get_image_features"):
+                output = model.get_image_features(**inputs)
+            else:
+                model_output = model(**inputs)
+                output = getattr(model_output, "pooler_output", model_output.last_hidden_state[:, 0, :])
+        feat = output.float().numpy()[0].astype(np.float32)
         feat /= float(np.linalg.norm(feat) + 1.0e-9)
         return feat
 
@@ -107,9 +111,10 @@ def main() -> None:
     ap.add_argument("--prompt-manifest", required=True, type=Path)
     ap.add_argument("--generated-manifest", required=True, type=Path)
     ap.add_argument("--json", required=True, type=Path)
-    ap.add_argument("--feature-backend", choices=["hist", "dinov2"], default="hist")
+    ap.add_argument("--feature-backend", choices=["hist", "dinov2", "siglip"], default="hist")
     ap.add_argument("--reference-mode", choices=["centroid", "source"], default="centroid")
     ap.add_argument("--dinov2-model-id", default="facebook/dinov2-small")
+    ap.add_argument("--siglip-model-id", default="google/siglip-base-patch16-224")
     ap.add_argument("--min-same-sim", type=float, default=0.86)
     ap.add_argument("--min-margin", type=float, default=0.025)
     ap.add_argument("--repo-root", default="", help="root used to resolve relative source/generated paths; defaults to current directory")
@@ -120,7 +125,15 @@ def main() -> None:
     generated = _load(args.generated_manifest)
     if not bool(prompt.get("no_anchor")) or bool(generated.get("uses_anchors")):
         raise SystemExit("expected no-anchor prompt and generated manifests")
-    feature_fn = _hist_feature if args.feature_backend == "hist" else _dinov2_feature_extractor(str(args.dinov2_model_id))
+    if args.feature_backend == "hist":
+        feature_fn = _hist_feature
+        model_id = ""
+    elif args.feature_backend == "dinov2":
+        model_id = str(args.dinov2_model_id)
+        feature_fn = _transformers_image_feature_extractor(model_id, "dinov2")
+    else:
+        model_id = str(args.siglip_model_id)
+        feature_fn = _transformers_image_feature_extractor(model_id, "siglip")
     source, source_by_path = _source_features(prompt, repo_root, feature_fn)
     centroids = _centroids(source)
     if len(centroids) < 2:
@@ -181,7 +194,7 @@ def main() -> None:
         "backend": generated.get("backend", ""),
         "feature_backend": str(args.feature_backend),
         "reference_mode": str(args.reference_mode),
-        "dinov2_model_id": str(args.dinov2_model_id) if args.feature_backend == "dinov2" else "",
+        "model_id": model_id,
         "min_same_sim": float(args.min_same_sim),
         "min_margin": float(args.min_margin),
         "generated_images": int(len(rows)),
