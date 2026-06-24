@@ -3,7 +3,16 @@ set -euo pipefail
 
 PKG_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 REPO_ROOT="$(cd "${PKG_DIR}/../../.." && pwd)"
-PYTHON_BIN="${PYTHON_BIN:-python}"
+if [ -z "${PYTHON_BIN:-}" ]; then
+  if command -v python >/dev/null 2>&1; then
+    PYTHON_BIN="python"
+  elif command -v python3 >/dev/null 2>&1; then
+    PYTHON_BIN="python3"
+  else
+    echo "missing Python interpreter; install Python or set PYTHON_BIN=/path/to/python" >&2
+    exit 2
+  fi
+fi
 RUN_DIR="${RUN_DIR:-${REPO_ROOT}/local_runs/reproduce_rank06_top32_20260623}"
 
 while [ "$#" -gt 0 ]; do

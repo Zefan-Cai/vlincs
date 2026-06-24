@@ -34,9 +34,16 @@ From a fresh checkout:
 ```bash
 git checkout wisc
 git lfs pull --include="kit/demo_data/ds1/**"
+python3 -m venv .venv
+source .venv/bin/activate
+pip install -r kit/requirements.txt
 DATA_ROOT=/path/to/vlincs_reid_data ./demo.sh \
   --run-dir local_runs/reproduce_rank06_top32_20260623
 ```
+
+If the desired interpreter is not named `python`, either activate the venv first
+or run with `PYTHON_BIN=/path/to/python ./demo.sh ...`. The replay itself now
+falls back from `python` to `python3` when needed.
 
 `DATA_ROOT` must expose the DS1 GT files under
 `Box/VLINCS_Performer/MS01/MC0001/2024-03-Tc6` and
