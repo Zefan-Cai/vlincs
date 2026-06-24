@@ -23,10 +23,24 @@ Starting from the current best assignment, compare each residual candidate assig
 
 ## Environment
 
-- `repo=/Users/zcai/Codex/vlincs_reid_by_search`
-- `python=/private/tmp/vlincs-wisc-demo-lfs.TMM8XH/.venv-demo/bin/python`
-- `DATA_ROOT=/Users/zcai/Codex/vlincs_reid_by_search/local_runs/local_data_root_20260622`
+- `repo=<fresh clone of Novateur/vlincs_reid_by_search on wisc>`
+- `python=python3 or .venv-demo/bin/python`
+- `DATA_ROOT=kit/demo_data/ds1/gt` by default
 - `no anchors; GT used only by full-score/delivery evaluators`
+
+`DATA_ROOT` contains the 10 dense DS1 GT parquet files. They are not
+embeddings and not training labels for the identity resolver. They are the
+evaluation answer key used by `reid_hota` to compare the generated submission
+zip against ground truth and compute IDF1/HOTA/AssA. Without these files the
+demo can still build a submission, but it cannot reproduce or verify the
+reported 0.668673 score.
+
+Fresh clones must materialize both tracklet parquet files and GT parquet files
+through Git LFS:
+
+```bash
+git lfs pull --include="kit/demo_data/ds1/**"
+```
 
 ## Commands
 

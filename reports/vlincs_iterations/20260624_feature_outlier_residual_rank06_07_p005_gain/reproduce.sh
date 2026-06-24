@@ -90,6 +90,8 @@ P005_CONFIG="${PKG_DIR}/repro/input/p005_area_config.txt"
 EXPECTED_DIRECT="${PKG_DIR}/repro/expected/rank06_07_full_export.json"
 EXPECTED_DENSITY="${PKG_DIR}/repro/expected/rank06_07_density_simple.json"
 EXPECTED_P005="${PKG_DIR}/repro/expected/rank06_07_density_p005_area.json"
+REPO_GT_ROOT="${REPO_ROOT}/kit/demo_data/ds1/gt"
+REPO_GT_CHECKSUMS="${REPO_GT_ROOT}/checksums.sha256"
 
 mkdir -p "${RUN_DIR}"
 
@@ -118,24 +120,31 @@ count_gt_files() {
 }
 
 if [ -z "${DATA_ROOT:-}" ]; then
-  for candidate_root in \
-    "${REPO_ROOT}/local_runs/local_data_root_20260622" \
-    "/Users/zcai/Codex/vlincs_reid_by_search/local_runs/local_data_root_20260622" \
-    "/mnt/localssd/vlincs_reid_data" \
-    "/mnt/localssd/vlincs_reid_data_root"; do
-    if [ "$(count_gt_files "${candidate_root}")" -ge 10 ]; then
-      DATA_ROOT="${candidate_root}"
-      break
-    fi
-  done
+  DATA_ROOT="${REPO_GT_ROOT}"
 fi
-export DATA_ROOT="${DATA_ROOT:-${REPO_ROOT}/local_runs/local_data_root_20260622}"
+export DATA_ROOT
 
 gt_count="$(count_gt_files "${DATA_ROOT}")"
 if [ "${gt_count}" -lt 10 ]; then
   echo "missing DS1 GT under DATA_ROOT=${DATA_ROOT}" >&2
   echo "expected at least 10 files like Box/VLINCS_Performer/MS01/MC0001/2024-03-Tc6/*_v1.7.2.parquet" >&2
+  echo "If this is a fresh clone, run:" >&2
+  echo '  git lfs pull --include="kit/demo_data/ds1/**"' >&2
   exit 2
+fi
+
+first_gt="$(find "${DATA_ROOT}/Box/VLINCS_Performer/MS01/MC0001" -path '*2024-03-Tc*/*_v1.7.2.parquet' -type f | sort | head -1)"
+if head -c 80 "${first_gt}" | grep -q "version https://git-lfs.github.com/spec/v1"; then
+  echo "DS1 GT parquet is still a Git LFS pointer, not an Apache Parquet file:" >&2
+  echo "  ${first_gt}" >&2
+  echo "Install Git LFS, then run:" >&2
+  echo '  git lfs pull --include="kit/demo_data/ds1/**"' >&2
+  exit 2
+fi
+
+if [ -f "${REPO_GT_CHECKSUMS}" ]; then
+  echo "REPRO verifying gt_checksums=${REPO_GT_CHECKSUMS}"
+  (cd "${DATA_ROOT}" && shasum -a 256 -c "${REPO_GT_CHECKSUMS}" >/dev/null)
 fi
 
 echo "REPRO repo=${REPO_ROOT}"

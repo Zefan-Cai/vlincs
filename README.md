@@ -20,21 +20,23 @@ from the UWISC snapshot.
 
 ## Current Best
 
-Snapshot date: 2026-06-23.
+Snapshot date: 2026-06-24.
 
 Best reproducible WISC no-anchor DS1 delivery score:
 
 | IDF1 | HOTA | AssA |
 |---:|---:|---:|
-| 0.668198 | 0.528747 | 0.539071 |
+| 0.668673 | 0.529242 | 0.539491 |
 
-The root `./demo.sh` replays and verifies this promoted no-anchor top32
-identity-decision artifact.  It runs direct export, `density_simple`, and the
-fixed `p005_area` delivery gate; the final verification line should report
-`IDF1/HOTA/AssA = 0.668198/0.528747/0.539071`.
+The root `./demo.sh` replays and verifies this promoted residual
+feature-outlier identity-decision artifact.  It runs direct export,
+`density_simple`, and the fixed `p005_area` delivery gate; the final
+verification line should report
+`IDF1/HOTA/AssA = 0.668673/0.529242/0.539491`.
 
 Fresh checkouts must materialize the DS1 Git LFS demo data before running the
-replay:
+replay.  This includes tracklet parquet files, embeddings, and the 10 dense GT
+parquet files under `kit/demo_data/ds1/gt`:
 
 ```bash
 git checkout wisc
@@ -43,7 +45,9 @@ git lfs pull --include="kit/demo_data/ds1/**"
 ```
 
 Without Git LFS, the DS1 parquet files remain pointer text files and cannot be
-scored.
+scored.  The dense GT files are evaluation-only: they are not used as
+production identity evidence, but they are required to compute and verify
+IDF1/HOTA/AssA.
 
 Best model-side pair metric:
 
@@ -51,11 +55,10 @@ Best model-side pair metric:
 |---:|---:|---:|
 | 0.782244 | 0.850111 | 0.724411 |
 
-The best promoted edit at this snapshot is the rank06 no-anchor top32
-component-subset repair `37 -> 86`, followed by the fixed delivery calibration
-path.  The e2e target remains above 0.70 IDF1, so the included reports and
-state files are part of the active research trail rather than a final solved
-result.
+The best promoted edit at this snapshot composes the residual feature-outlier
+repairs rank06 and rank07, followed by the fixed delivery calibration path.
+The e2e target remains above 0.70 IDF1, so the included reports and state files
+are part of the active research trail rather than a final solved result.
 
 ## Repository Layout
 
@@ -95,8 +98,11 @@ pip install -r kit/requirements-ds1.txt
 export PYTHONPATH="$PWD:$PWD/kit"
 ```
 
-The DS1 scripts expect VLINCS data under `DATA_ROOT`.  Do not commit raw data,
-video frames, model checkpoints, or generated zip submissions into this repo.
+Most DS1 research scripts expect VLINCS data under `DATA_ROOT`.  The root
+`./demo.sh` replay is self-contained for scoring because it defaults
+`DATA_ROOT` to the committed/LFS DS1 dense-GT bundle at
+`kit/demo_data/ds1/gt`.  Do not commit raw videos, model checkpoints, or
+generated zip submissions into this repo.
 
 ## Auto-Evaluation Entrypoints
 
