@@ -1,0 +1,25 @@
+<!doctype html>
+<html><head><meta charset="utf-8"><title>Weakmetric local-gated island seq5716</title>
+<style>
+body{font-family:Arial,Helvetica,sans-serif;margin:32px;background:#f6f7f9;color:#17202c}
+main{max-width:1120px;margin:auto} img{max-width:100%;border:1px solid #ccd3dc;background:white}
+.kpi{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin:18px 0}
+.card{background:white;border:1px solid #d7dde5;padding:14px} table{border-collapse:collapse;width:100%;background:white}
+td,th{border:1px solid #d7dde5;padding:8px;text-align:left} code{background:#eef1f5;padding:2px 4px}
+</style></head><body><main>
+<h1>Weakmetric local-gated island seq5716</h1>
+<p>seq5716 moves from component 9 / gid 96000010 to component 26 / gid 96000028 after weakmetric primary evidence and support-view checks.</p>
+<div class="kpi">
+<div class="card"><b>Before</b><br>component 9, gid 96000010, component_size 245</div>
+<div class="card"><b>After</b><br>component 26, gid 96000028, component_size 201, decision_status subpart_reassign</div>
+<div class="card"><b>Evidence</b><br>target_sim=0.6493, target_margin=0.0419, source_rest_margin=0.6916<br><b>Raw frame</b><br>unavailable_coordinate_fallback</div>
+</div>
+<h2>Failure and fix</h2>
+<p><b>Old failure:</b> The previous graph left a one-tracklet MCAM04/Tc6 island in a large component despite local evidence for component 26.</p>
+<p><b>New implementation:</b> The repair moves only seq5716 and is used only after direct + p005 delivery validation.</p>
+<h2>BBox evidence</h2>
+<img src="rank01_bbox_evidence.png" alt="rank15 bbox evidence">
+<h2>Moved tracklets</h2>
+<table><thead><tr><th>seq</th><th>video</th><th>gid</th><th>component</th><th>frames</th><th>dets</th></tr></thead><tbody><tr><td>5716</td><td>vlincs_MS01_MC0001_MCAM04_2024-03-Tc6</td><td>96000010 -> 96000028</td><td>9 -> 26</td><td>12919-13218</td><td>282</td></tr></tbody></table>
+
+</main></body></html>

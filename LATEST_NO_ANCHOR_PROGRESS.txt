@@ -2,6 +2,15 @@ VLINCS no-anchor global ID progress
 Date: 2026-06-24
 
 Current best e2e:
+IDF1 / HOTA / AssA = 0.668974 / 0.529557 / 0.539785
+
+Latest local-gated cross-manifest subpart combo gain:
+On top of the reproducible seq8367 best, reran weakmetric-primary and SigLIP-primary local-gated subpart proposers using only assignment state plus weakmetric/OSNet, DINOv2, and SigLIP features. The promoted combo moves three one-tracklet islands: seq1199 89->87, seq4690 86->37, and seq5716 9->26. Direct full-score improves to 0.666778/0.527787/0.537890, density_simple to 0.668868/0.529473/0.539658, and valid p005_area to 0.668974/0.529557/0.539785 with config_name=p005_area and dropped_rows=45467. This is +0.000207 IDF1 over the prior canonical best 0.668767. Single-candidate and combo ablations are recorded; dino rank01 was killed as direct-negative. Package: reports/vlincs_iterations/20260624_local_gated_subpart_combo_p005_gain/.
+
+VLINCS no-anchor global ID progress
+Date: 2026-06-24
+
+Current best e2e:
 IDF1 / HOTA / AssA = 0.668673 / 0.529242 / 0.539491
 
 Latest residual feature-outlier combo gain:
