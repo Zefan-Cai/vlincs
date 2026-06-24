@@ -26,14 +26,15 @@ Best reproducible WISC no-anchor DS1 delivery score:
 
 | IDF1 | HOTA | AssA |
 |---:|---:|---:|
-| 0.668673 | 0.529242 | 0.539491 |
+| 0.668767 | 0.529344 | 0.539607 |
 
 The root `./demo.sh` now runs the DS1/MS01 WISC no-anchor method reproduction by
-default.  It regenerates the promoted residual feature-outlier identity decision
-from committed no-anchor feature evidence, runs direct export, `density_simple`,
-and the fixed `p005_area` delivery gate.  The DS1 final verification line should
+default.  It regenerates the promoted residual feature-outlier identity decision,
+then runs a fresh one-tracklet subpart repair for `seq8367` from committed
+no-anchor feature evidence.  It then runs direct export, `density_simple`, and
+the fixed `p005_area` delivery gate.  The DS1 final verification line should
 report
-`IDF1/HOTA/AssA = 0.668673/0.529242/0.539491`.
+`IDF1/HOTA/AssA = 0.668767/0.529344/0.539607`.
 
 Current recorded MS02 score from the gallery demo path:
 
@@ -71,7 +72,8 @@ Best model-side pair metric:
 | 0.782244 | 0.850111 | 0.724411 |
 
 The best promoted edit at this snapshot composes the residual feature-outlier
-repairs rank06 and rank07, followed by the fixed delivery calibration path.
+repairs rank06 and rank07, then adds the fresh subpart `seq8367 10->77`
+one-tracklet repair, followed by the fixed delivery calibration path.
 The e2e target remains above 0.70 IDF1, so the included reports and state files
 are part of the active research trail rather than a final solved result.
 
@@ -128,28 +130,24 @@ The root handoff check is one command and prints the DS1/MS01 `DONE` record:
 ./demo.sh
 ```
 
-This is equivalent to:
-
-```bash
-./demo.sh ds1
-```
-
 DS1 rebuilds the promoted global-ID assignment from committed no-anchor feature
-evidence, a deterministic feature-outlier proposer, and promoted repair ranks;
-then it builds the submission zip and verifies the canonical delivery score. It
-does not read a committed final-assignment CSV as input.
+evidence, a deterministic feature-outlier proposer, promoted repair ranks, and a
+fresh subpart proposer for `seq8367 10->77`; then it builds the submission zip
+and verifies the canonical delivery score. It does not read a committed
+final-assignment CSV as input.
 
-Additional explicit commands are also supported:
+Optional overrides are passed directly to the DS1 reproduction script:
 
 ```bash
-./demo.sh ms02
-./demo.sh ds1
-./demo.sh all
+./demo.sh --run-dir /tmp/vlincs_ds1_repro
+./demo.sh --data-root /path/to/ds1/evaluator_gt
 ```
 
-`./demo.sh ms02` and `./demo.sh all` require
-`DATA_ROOT=/path/to/vlincs/datastore` with
-`VLINCS_Performer-selected/MS02/MC0002/2018-03-Tc85`.
+The root `./demo.sh` no longer exposes an MS02 selector.  MS02 remains a legacy
+gallery-path diagnostic that requires a separate
+`DATA_ROOT=/path/to/vlincs/datastore` tree with
+`VLINCS_Performer-selected/MS02/MC0002/2018-03-Tc85`; it is not the WISC
+handoff command.
 
 The old DS1 gallery command below is intentionally not the handoff check:
 
@@ -170,9 +168,6 @@ Bitbucket CI can use the same root DS1 command:
 ./demo.sh 2>&1 | tee demo_score.txt
 python3 ci/render_scores.py --sha "$SHA" --author "$AUTHOR" --date "$CDATE" demo_score.txt
 ```
-
-For the combined check, run `./demo.sh all`; the score renderer parses both
-`DONE: ms02 -> {...}` and `DONE: ds1 -> {...}` when both are present.
 
 ## Main DS1 Pipeline
 

@@ -1,0 +1,37 @@
+{
+  "assignment_csv": "local_runs/feature_outlier_after_combo_probe_20260624/combos/rank06_07_after_combo_feature_outlier_assignments.csv",
+  "base_assignment_csv": "reports/vlincs_iterations/20260624_feature_outlier_combo_p005_gain/repro/input/combo_01_03_04_05_feature_outlier_assignments.csv",
+  "candidate_assignment_csvs": [
+    "local_runs/feature_outlier_after_combo_probe_20260624/assignments/rank06_after_combo_feature_outlier_assignments.csv",
+    "local_runs/feature_outlier_after_combo_probe_20260624/assignments/rank07_after_combo_feature_outlier_assignments.csv"
+  ],
+  "changes": [
+    {
+      "after_component_label": 91,
+      "after_decision_status": "feature_outlier_after_combo_relink",
+      "after_predicted_global_id": 960000483,
+      "before_component_label": 86,
+      "before_decision_status": "forced_component",
+      "before_predicted_global_id": 960000350,
+      "label": "rank06_after_combo_feature_outlier_assignments",
+      "seq": 1548,
+      "tracklet_key": "vlincs_MS01_MC0001_MCAM03_2024-03-Tc6:9:0"
+    },
+    {
+      "after_component_label": 37,
+      "after_decision_status": "feature_outlier_after_combo_relink",
+      "after_predicted_global_id": 96000040,
+      "before_component_label": 86,
+      "before_decision_status": "manifest_reassign",
+      "before_predicted_global_id": 960000350,
+      "label": "rank07_after_combo_feature_outlier_assignments",
+      "seq": 4043,
+      "tracklet_key": "vlincs_MS01_MC0001_MCAM04_2024-03-Tc6:2643:0"
+    }
+  ],
+  "moved_tracklets": 2,
+  "note": "Composes explicit candidate assignment overlays only; no GT/anchor evidence is read.",
+  "uses_anchors": false,
+  "uses_gt_for_evaluation_only": false,
+  "uses_gt_for_training_or_anchors": false
+}

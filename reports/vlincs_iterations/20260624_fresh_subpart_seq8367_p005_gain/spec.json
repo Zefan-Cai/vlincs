@@ -1,0 +1,225 @@
+{
+  "title": "Fresh Subpart Repair seq8367 P005 Gain",
+  "date": "2026-06-24",
+  "status": "gain",
+  "pipeline_module": "M8",
+  "module_detail": "Graph resolution after the residual feature-outlier combo: regenerate small conflict-supported subpart candidates from the current-best assignment and commit one reviewer-selected one-tracklet island.",
+  "used_in_pipeline": "yes",
+  "no_anchor": true,
+  "summary": "A fresh one-tracklet subpart repair moves seq8367 from component 10 to component 77 and improves canonical p005_area IDF1 from 0.668673 to 0.668767 without anchors.",
+  "implementation": "Starting from the method-reproduced rank06+rank07 current-best assignment, run a weakmetric-primary subpart proposer with DINOv2 and SigLIP support views. The promoted action is weak-primary rank04: move seq8367 from component 10 / gid 96000011 to component 77 / gid 96002328. The run then rebuilds the submission and validates direct, density_simple, and p005_area delivery. GT is used only by the evaluator after the assignment is materialized.",
+  "metrics": {
+    "name": "canonical p005_area IDF1",
+    "baseline": 0.668673,
+    "candidate": 0.668767,
+    "delta": 0.000094
+  },
+  "environment": [
+    "branch=wisc",
+    "python with numpy pandas pyarrow scikit-learn reid-hota",
+    "DATA_ROOT defaults to kit/demo_data/ds1/gt",
+    "features from kit/demo_data/ds1/features",
+    "tracklets from kit/demo_data/ds1/tracklets"
+  ],
+  "commands": [
+    "./demo.sh",
+    "reports/vlincs_iterations/20260624_fresh_subpart_seq8367_p005_gain/reproduce.sh",
+    "python kit/propose_no_anchor_subpart_repair_candidates.py --assignment-csv <generated_rank06_07_assignment> --feature-npz kit/demo_data/ds1/features/ds1_tracklet_weakmetric_osnet_s7_fused_w002_20260620_w0p1.npz --view dino:kit/demo_data/ds1/features/ds1_tracklet_dinov2base_s1_20260620.npz:0.80 --view siglip:kit/demo_data/ds1/features/ds1_tracklet_siglip2_person_reid_s1_20260620.npz:0.30 --top-n 12",
+    "python kit/evaluate_sample_assignments_full.py --tracklet-parquet kit/demo_data/ds1/tracklets/*/tracklets.parquet --assignments <rank04_subpart_s10_to77_assignment> --fallback singleton",
+    "python kit/no_anchor_pervideo_filter_selector.py --source-zip <direct_zip> --policies density_simple",
+    "python kit/evaluate_submission_detection_filter.py --submission-zip <density_zip> --config \"$(cat reports/vlincs_iterations/20260624_fresh_subpart_seq8367_p005_gain/repro/input/p005_area_config.txt)\""
+  ],
+  "code_paths": [
+    "demo.sh",
+    "kit/propose_no_anchor_feature_outlier_relinks.py",
+    "kit/apply_no_anchor_ranked_repairs.py",
+    "kit/propose_no_anchor_subpart_repair_candidates.py",
+    "kit/evaluate_sample_assignments_full.py",
+    "kit/no_anchor_pervideo_filter_selector.py",
+    "kit/evaluate_submission_detection_filter.py",
+    "reports/vlincs_iterations/20260624_fresh_subpart_seq8367_p005_gain/reproduce.sh"
+  ],
+  "artifacts": [
+    "reports/vlincs_iterations/20260624_fresh_subpart_seq8367_p005_gain/metrics/seq8367_10_to77_full_export.json",
+    "reports/vlincs_iterations/20260624_fresh_subpart_seq8367_p005_gain/metrics/seq8367_10_to77_density_simple.json",
+    "reports/vlincs_iterations/20260624_fresh_subpart_seq8367_p005_gain/metrics/seq8367_10_to77_density_p005_area.json",
+    "reports/vlincs_iterations/20260624_fresh_subpart_seq8367_p005_gain/repro/expected/seq8367_10_to77_full_export.json",
+    "reports/vlincs_iterations/20260624_fresh_subpart_seq8367_p005_gain/repro/expected/seq8367_10_to77_density_simple.json",
+    "reports/vlincs_iterations/20260624_fresh_subpart_seq8367_p005_gain/repro/expected/seq8367_10_to77_density_p005_area.json",
+    "reports/vlincs_iterations/20260624_fresh_subpart_seq8367_p005_gain/cases/seq8367_fresh_subpart/case.json",
+    "reports/vlincs_iterations/20260624_fresh_subpart_seq8367_p005_gain/cases/seq8367_fresh_subpart/case.html",
+    "reports/vlincs_iterations/20260624_fresh_subpart_seq8367_p005_gain/cases/seq8367_fresh_subpart/rank04_bbox_evidence.png"
+  ],
+  "workflow_steps": [
+    {
+      "step": "1",
+      "module": "M7/M8",
+      "input": "visual-subcluster base assignment + no-anchor features",
+      "action": "regenerate feature-outlier candidates and apply ranks 1,3,4,5",
+      "output": "four-tracklet combo assignment"
+    },
+    {
+      "step": "2",
+      "module": "M8",
+      "input": "combo assignment + feature-outlier summary",
+      "action": "apply residual ranks 6 and 7",
+      "output": "rank06+rank07 current-best assignment, sha256 24010eea..."
+    },
+    {
+      "step": "3",
+      "module": "M7/M10",
+      "input": "current-best assignment + weakmetric/DINOv2/SigLIP features",
+      "action": "generate weak-primary fresh subpart candidates",
+      "output": "rank04 seq8367 10->77 candidate"
+    },
+    {
+      "step": "4",
+      "module": "M8/M12",
+      "input": "rank04 assignment",
+      "action": "run direct export, density_simple, then p005_area",
+      "output": "canonical p005_area IDF1 0.668767"
+    }
+  ],
+  "improvement_table": [
+    {
+      "stage": "direct full-score",
+      "baseline": 0.666479,
+      "candidate": 0.666572,
+      "delta": 0.000093,
+      "decision": "use as candidate signal"
+    },
+    {
+      "stage": "density_simple",
+      "baseline": 0.668568,
+      "candidate": 0.668661,
+      "delta": 0.000093,
+      "decision": "continue to p005_area"
+    },
+    {
+      "stage": "p005_area",
+      "baseline": 0.668673,
+      "candidate": 0.668767,
+      "delta": 0.000094,
+      "decision": "promote canonical gain"
+    },
+    {
+      "stage": "HOTA / AssA",
+      "baseline": "0.529242 / 0.539491",
+      "candidate": "0.529344 / 0.539607",
+      "delta": "+0.000102 / +0.000116",
+      "decision": "secondary metrics also improve"
+    }
+  ],
+  "per_video_table": [
+    {
+      "video": "vlincs_MS01_MC0001_MCAM00_2024-03-Tc6",
+      "baseline": 0.879281,
+      "candidate": 0.879281,
+      "delta": 0.0,
+      "note": "unchanged"
+    },
+    {
+      "video": "vlincs_MS01_MC0001_MCAM00_2024-03-Tc8",
+      "baseline": 0.828799,
+      "candidate": 0.828799,
+      "delta": 0.0,
+      "note": "unchanged"
+    },
+    {
+      "video": "vlincs_MS01_MC0001_MCAM03_2024-03-Tc6",
+      "baseline": 0.69159,
+      "candidate": 0.69159,
+      "delta": 0.0,
+      "note": "unchanged"
+    },
+    {
+      "video": "vlincs_MS01_MC0001_MCAM03_2024-03-Tc8",
+      "baseline": 0.631769,
+      "candidate": 0.631769,
+      "delta": 0.0,
+      "note": "unchanged"
+    },
+    {
+      "video": "vlincs_MS01_MC0001_MCAM04_2024-03-Tc6",
+      "baseline": 0.587483,
+      "candidate": 0.587483,
+      "delta": 0.0,
+      "note": "unchanged"
+    },
+    {
+      "video": "vlincs_MS01_MC0001_MCAM05_2024-03-Tc6",
+      "baseline": 0.712131,
+      "candidate": 0.712131,
+      "delta": 0.0,
+      "note": "unchanged"
+    },
+    {
+      "video": "vlincs_MS01_MC0001_MCAM05_2024-03-Tc8",
+      "baseline": 0.79093,
+      "candidate": 0.79093,
+      "delta": 0.0,
+      "note": "unchanged"
+    },
+    {
+      "video": "vlincs_MS01_MC0001_MCAM06_2024-03-Tc6",
+      "baseline": 0.61257,
+      "candidate": 0.61257,
+      "delta": 0.0,
+      "note": "unchanged"
+    },
+    {
+      "video": "vlincs_MS01_MC0001_MCAM06_2024-03-Tc8",
+      "baseline": 0.697834,
+      "candidate": 0.697834,
+      "delta": 0.0,
+      "note": "unchanged"
+    },
+    {
+      "video": "vlincs_MS01_MC0001_MCAM08_2024-03-Tc6",
+      "baseline": 0.775713,
+      "candidate": 0.776122,
+      "delta": 0.000409,
+      "note": "seq8367 lives here"
+    }
+  ],
+  "visual_cases": [
+    {
+      "title": "seq8367 fresh subpart island",
+      "summary": "One MCAM08 tracklet moves from gid 96000011 to gid 96002328 after weakmetric+DINO+SigLIP evidence ranks target component 77 above the source rest.",
+      "failure_reason": "The previous current-best graph left seq8367 inside a large component 10 even though it had conflicts to the rest and a strong target margin to a tiny component 77.",
+      "improvement": "The fresh subpart stage keeps the repair local: only seq8367 is moved, then the full delivery path confirms the global ID decision.",
+      "image": "cases/seq8367_fresh_subpart/rank04_bbox_evidence.png",
+      "html": "cases/seq8367_fresh_subpart/case.html",
+      "json": "cases/seq8367_fresh_subpart/case.json"
+    }
+  ],
+  "ablations": [
+    {
+      "name": "weak rank04 10->77",
+      "change": "move seq8367 from component 10 / gid 96000011 to component 77 / gid 96002328",
+      "result": "direct 0.666572; density_simple 0.668661; p005_area 0.668767",
+      "decision": "promote"
+    },
+    {
+      "name": "siglip rank09 10->18",
+      "change": "move seq8367 from component 10 / gid 96000011 to component 18 / gid 96000019",
+      "result": "direct 0.666572; density_simple 0.668661; p005_area 0.668767",
+      "decision": "tie; keep weak rank04 because reviewer score and proposer rank are stronger"
+    },
+    {
+      "name": "residual rank06+rank07 baseline",
+      "change": "previous current-best two-tracklet residual feature-outlier combo",
+      "result": "direct 0.666479; density_simple 0.668568; p005_area 0.668673",
+      "decision": "baseline for this gain"
+    },
+    {
+      "name": "generated-positive budget reviewer",
+      "change": "review 24 residual feature-outlier candidates before spending GPT-image budget",
+      "result": "0/24 approved for generation; two strict candidates were known direct negatives",
+      "decision": "refute image generation for that stale family"
+    }
+  ],
+  "bitbucket": "https://bitbucket.org/Novateur/vlincs_reid_by_search/src/wisc/reports/vlincs_iterations/20260624_fresh_subpart_seq8367_p005_gain/",
+  "s3": "s3://dit-scale-up/zcai/vlincs/no_anchor_gains/20260624_fresh_subpart_seq8367_p005_gain/",
+  "next": "Use the fresh subpart reviewer as the new local gate for generated positives: only spend image-generation budget when a candidate clears multi-view target margin and is not a stale direct-negative family. The e2e target is still 0.70, so continue searching for larger independent islands rather than stacking many tiny noisy moves."
+}
