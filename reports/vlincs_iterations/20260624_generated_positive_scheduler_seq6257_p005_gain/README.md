@@ -1,0 +1,127 @@
+# Generated-Positive Scheduler Seq6257 P005 Gain
+
+- Date: `2026-06-24`
+- Pipeline module: `M7/M10 + M8 + M12`
+- Used in pipeline: `yes: root ./demo.sh now defaults to this DS1 method reproduction`
+- Status: `gain`
+- No-anchor: `True`
+
+## Summary
+
+A generated-positive scheduler/reviewer pass finds one additional residual island, seq6257, and moves it from component 30 / gid 96000032 to component 16 / gid 96000017. Canonical p005_area IDF1 improves from 0.668974 to 0.669019.
+
+## Metrics
+
+- Baseline: `0.668974`
+- Candidate: `0.669019`
+- Delta: `0.000045`
+- Metric name: `canonical p005_area IDF1`
+
+## Implementation
+
+This is not score replay and not an anchor-trained classifier. The script rebuilds the previous best from no-anchor tracklet evidence, reruns weakmetric/SigLIP local-gated candidate generation, materializes SigLIP rank10 as a single-tracklet repair, exports a fresh submission zip, then scores direct, density_simple and p005_area. The generated-positive idea is used as a scheduler/admission principle: local positives must agree with DINO/SigLIP/weakmetric evidence before M8 can move a tracklet. No plaintext API key is used or stored; no image API output is required for this promoted gain.
+
+## Environment
+
+- `branch wisc`
+- `python with numpy pandas pyarrow scikit-learn reid-hota and Pillow`
+- `git lfs materialized kit/demo_data/ds1/**`
+- `DATA_ROOT defaults to kit/demo_data/ds1/gt`
+- `OPENAI_API_KEY is optional for future image experiments and is never passed as plaintext in commands`
+
+## Commands
+
+```bash
+./demo.sh
+```
+
+```bash
+reports/vlincs_iterations/20260624_generated_positive_scheduler_seq6257_p005_gain/reproduce.sh
+```
+
+```bash
+python kit/compose_no_anchor_cross_manifest_repairs.py --base-assignment-csv <previous_best_assignment> --candidate <local_siglip_manifest>:10
+```
+
+```bash
+python kit/evaluate_sample_assignments_full.py --tracklet-parquet kit/demo_data/ds1/tracklets/*/tracklets.parquet --assignments <seq6257_assignment> --fallback singleton
+```
+
+```bash
+python kit/no_anchor_pervideo_filter_selector.py --source-zip <direct_zip> --policies density_simple
+```
+
+```bash
+python kit/evaluate_submission_detection_filter.py --submission-zip <density_zip> --config "$(cat reports/vlincs_iterations/20260624_generated_positive_scheduler_seq6257_p005_gain/repro/input/p005_area_config.txt)"
+```
+
+## Code Paths
+
+- `kit/compose_no_anchor_cross_manifest_repairs.py`
+- `kit/propose_no_anchor_subpart_repair_candidates.py`
+- `kit/evaluate_sample_assignments_full.py`
+- `kit/no_anchor_pervideo_filter_selector.py`
+- `kit/evaluate_submission_detection_filter.py`
+- `kit/export_no_anchor_subpart_visual_case.py`
+- `reports/vlincs_iterations/20260624_generated_positive_scheduler_seq6257_p005_gain/reproduce.sh`
+- `demo.sh`
+
+## Artifacts
+
+- `reports/vlincs_iterations/20260624_generated_positive_scheduler_seq6257_p005_gain/metrics/seq6257_full_export.json`
+- `reports/vlincs_iterations/20260624_generated_positive_scheduler_seq6257_p005_gain/metrics/seq6257_density_simple.json`
+- `reports/vlincs_iterations/20260624_generated_positive_scheduler_seq6257_p005_gain/metrics/seq6257_density_p005_area.json`
+- `reports/vlincs_iterations/20260624_generated_positive_scheduler_seq6257_p005_gain/repro/provenance/generated_positive_scheduler_direct_summary.json`
+- `reports/vlincs_iterations/20260624_generated_positive_scheduler_seq6257_p005_gain/repro/provenance/generated_positive_scheduler_delivery_summary.json`
+- `reports/vlincs_iterations/20260624_generated_positive_scheduler_seq6257_p005_gain/cases/siglip_rank10_seq6257/rank10_bbox_evidence.png`
+
+## Visual Cases
+
+- Generated-positive scheduler seq6257: A one-tracklet MCAM05/Tc6 island moves from component 30 / gid 96000032 to component 16 / gid 96000017 after local weak-positive scheduling and SigLIP-led reviewer evidence.
+  - failure: The previous graph kept seq6257 in component 30 even though local visual evidence across SigLIP, weakmetric and DINO manifests pointed to component 16.
+  - improvement: Move only seq6257, then require direct, density_simple and p005_area end-to-end validation before promotion.
+  - image: `cases/siglip_rank10_seq6257/rank10_bbox_evidence.png`
+  - html: `cases/siglip_rank10_seq6257/case.html`
+  - json: `cases/siglip_rank10_seq6257/case.json`
+- SigLIP local-gated island seq1199: A one-tracklet MCAM03/Tc6 island moves from component 89 / gid 960000481 to component 87 / gid 960000351. This is the strongest single p005 repair.
+  - failure: The previous graph left seq1199 as a residual island in component 89 even though local SigLIP evidence preferred component 87.
+  - improvement: Move only seq1199, then require direct+density+p005 validation before using it.
+  - image: `cases/siglip_rank01_seq1199/rank01_bbox_evidence.png`
+  - html: `cases/siglip_rank01_seq1199/case.html`
+  - json: `cases/siglip_rank01_seq1199/case.json`
+- Weakmetric local-gated island seq4690: A one-tracklet MCAM04/Tc6 island moves from component 86 / gid 960000350 to component 37 / gid 96000040.
+  - failure: A broad 86->37 merge is risky, but this individual island has local support and direct/p005 validation.
+  - improvement: Move only seq4690; avoid broad component merge.
+  - image: `cases/weak_rank03_seq4690/rank03_bbox_evidence.png`
+  - html: `cases/weak_rank03_seq4690/case.html`
+  - json: `cases/weak_rank03_seq4690/case.json`
+- Weakmetric local-gated island seq5716: A one-tracklet MCAM04/Tc6 island moves from component 9 / gid 96000010 to component 26 / gid 96000028.
+  - failure: The previous graph kept seq5716 in a large source component despite local evidence for component 26.
+  - improvement: Move only seq5716 and keep it only because it improves the top3 combo.
+  - image: `cases/weak_rank01_seq5716/rank01_bbox_evidence.png`
+  - html: `cases/weak_rank01_seq5716/case.html`
+  - json: `cases/weak_rank01_seq5716/case.json`
+
+## Ablations
+
+| name | change | result | decision |
+|---|---|---|---|
+| siglip_r10_s30_to16_seq6257 | direct score: siglip_r10_s30_to16_seq6257.json | direct IDF1 0.666824, HOTA 0.527835, AssA 0.537933, delta +0.000046 | promote: only direct-positive candidate |
+| seq6257_density_simple | run density_simple delivery after direct export | IDF1 0.668914, HOTA 0.529521, AssA 0.539701, dropped 35029 | positive but not canonical final |
+| seq6257_p005_area | run canonical p005_area delivery validation | IDF1 0.669019, HOTA 0.529605, AssA 0.539828, dropped 45467, config p005_area | promote: canonical e2e gain |
+| dino_r03_s83_to89_seq1243 | direct score: dino_r03_s83_to89_seq1243.json | direct IDF1 0.666778, HOTA 0.527787, AssA 0.537890, delta +0.000000 | kill: tie/no delivery |
+| siglip_r04_s30_to38_seq3017 | direct score: siglip_r04_s30_to38_seq3017.json | direct IDF1 0.666778, HOTA 0.527787, AssA 0.537890, delta +0.000000 | kill: tie/no delivery |
+| siglip_r05_s1_to18_seq8315 | direct score: siglip_r05_s1_to18_seq8315.json | direct IDF1 0.666778, HOTA 0.527786, AssA 0.537890, delta +0.000000 | kill: tie/no delivery |
+| siglip_r07_s91_to89_seq633 | direct score: siglip_r07_s91_to89_seq633.json | direct IDF1 0.666778, HOTA 0.527787, AssA 0.537890, delta +0.000000 | kill: tie/no delivery |
+| weak_r08_s18_to77_seq8336_8559 | direct score: weak_r08_s18_to77_seq8336_8559.json | direct IDF1 0.666778, HOTA 0.527787, AssA 0.537890, delta +0.000000 | kill: tie/no delivery |
+| weak_r07_s22_to13_seq9565 | direct score: weak_r07_s22_to13_seq9565.json | direct IDF1 0.666775, HOTA 0.527781, AssA 0.537883, delta -0.000003 | kill: direct-negative |
+| weak_r05_s19_to0_seq8289 | direct score: weak_r05_s19_to0_seq8289.json | direct IDF1 0.666726, HOTA 0.527704, AssA 0.537796, delta -0.000052 | kill: direct-negative |
+
+## Upload
+
+- Bitbucket: `https://bitbucket.org/Novateur/vlincs_reid_by_search/src/wisc/reports/vlincs_iterations/20260624_generated_positive_scheduler_seq6257_p005_gain/`
+- S3: `s3://dit-scale-up/zcai/vlincs/no_anchor_gains/20260624_generated_positive_scheduler_seq6257_p005_gain/`
+
+## Next
+
+Use seq6257 as a hard positive training/admission example for the scheduler, but keep all seven tie/negative candidates as hard negatives. Future image-generation positives should only be admitted through environment-variable API access plus DINO/SigLIP/weakmetric CTF; never plaintext key commands.

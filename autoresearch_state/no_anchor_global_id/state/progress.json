@@ -1,8 +1,8 @@
 {
-    "best_assignment_csv": "reports/vlincs_iterations/20260624_local_gated_subpart_combo_p005_gain/reproduce.sh#generated_LOCAL_COMBO_ASSIGNMENT",
-    "best_e2e_assa": 0.539785,
-    "best_e2e_hota": 0.529557,
-    "best_e2e_idf1": 0.668974,
+    "best_assignment_csv": "reports/vlincs_iterations/20260624_generated_positive_scheduler_seq6257_p005_gain/reproduce.sh#generated_GENERATED_SEQ6257_ASSIGNMENT",
+    "best_e2e_assa": 0.539828,
+    "best_e2e_hota": 0.529605,
+    "best_e2e_idf1": 0.669019,
     "best_model_pair_f1": 0.782244,
     "best_model_pair_precision": 0.850111,
     "best_model_pair_recall": 0.724411,
@@ -12,20 +12,20 @@
     "goal_global_id_pair_f1": 0.7,
     "goal_global_id_pair_precision": 0.7,
     "goal_global_id_pair_recall": 0.7,
-    "iteration": 134,
+    "iteration": 135,
     "last_artifacts": [
-        "https://bitbucket.org/Novateur/vlincs_reid_by_search/src/wisc/reports/vlincs_iterations/20260624_local_gated_subpart_combo_p005_gain/",
-        "reports/vlincs_iterations/20260624_local_gated_subpart_combo_p005_gain/README.md",
-        "reports/vlincs_iterations/20260624_local_gated_subpart_combo_p005_gain/presentation.html",
-        "reports/vlincs_iterations/20260624_local_gated_subpart_combo_p005_gain/spec.json",
-        "reports/vlincs_iterations/20260624_local_gated_subpart_combo_p005_gain/reproduce.sh",
-        "s3://dit-scale-up/zcai/vlincs/no_anchor_gains/20260624_local_gated_subpart_combo_p005_gain/"
+        "https://bitbucket.org/Novateur/vlincs_reid_by_search/src/wisc/reports/vlincs_iterations/20260624_generated_positive_scheduler_seq6257_p005_gain/",
+        "reports/vlincs_iterations/20260624_generated_positive_scheduler_seq6257_p005_gain/README.md",
+        "reports/vlincs_iterations/20260624_generated_positive_scheduler_seq6257_p005_gain/presentation.html",
+        "reports/vlincs_iterations/20260624_generated_positive_scheduler_seq6257_p005_gain/spec.json",
+        "reports/vlincs_iterations/20260624_generated_positive_scheduler_seq6257_p005_gain/reproduce.sh",
+        "s3://dit-scale-up/zcai/vlincs/no_anchor_gains/20260624_generated_positive_scheduler_seq6257_p005_gain/"
     ],
-    "last_direction": "local_gated_cross_manifest_subpart_combo_p005_gain",
-    "last_result": "Promoted a no-anchor local-gated cross-manifest subpart combo on top of the seq8367 best. It composes seq1199 89->87, seq4690 86->37, and seq5716 9->26 from weakmetric/SigLIP primary proposers with DINO/SigLIP/weak support views. Direct IDF1/HOTA/AssA 0.666778/0.527787/0.537890; density_simple 0.668868/0.529473/0.539658; valid p005_area 0.668974/0.529557/0.539785 with config_name=p005_area and dropped_rows=45467. This improves canonical e2e IDF1 by +0.000207 over 0.668767.",
+    "last_direction": "generated_positive_scheduler_seq6257_p005_gain",
+    "last_result": "Promoted one no-anchor generated-positive scheduler repair on top of the local-gated subpart combo best: seq6257 moves 30->16 / gid 96000032->96000017. Direct 0.666824/0.527835/0.537933; density_simple 0.668914/0.529521/0.539701; valid p005_area 0.669019/0.529605/0.539828 with config_name=p005_area and dropped_rows=45467. This is +0.000045 IDF1 over previous canonical 0.668974. Seven other scheduler candidates were ties or direct negatives and are retained as hard negatives.",
     "last_updated": "2026-06-24",
-    "last_upload": "s3_uploaded:s3://dit-scale-up/zcai/vlincs/no_anchor_gains/20260624_local_gated_subpart_combo_p005_gain/",
-    "next_direction": "Use local-gated positive/negative labels as the generation scheduler: only spend GPT-image calls on candidates that pass DINO/SigLIP local evidence, avoid known direct negatives, and are likely to improve the M8 graph decision after delivery.",
+    "last_upload": "s3_uploaded:s3://dit-scale-up/zcai/vlincs/no_anchor_gains/20260624_generated_positive_scheduler_seq6257_p005_gain/",
+    "next_direction": "Use seq6257 as a hard positive/admission example and the seven tie/negative scheduler probes as hard negatives. Future image-generation positives must read OPENAI_API_KEY from environment only and pass DINO/SigLIP/weakmetric CTF before M8 promotion.",
     "stale_count": 0,
-    "status": "active_no_anchor_best_e2e_0p668974_local_gated_subpart_combo_pushed"
+    "status": "active_no_anchor_best_e2e_0p669019_generated_positive_scheduler_seq6257_pushed"
 }

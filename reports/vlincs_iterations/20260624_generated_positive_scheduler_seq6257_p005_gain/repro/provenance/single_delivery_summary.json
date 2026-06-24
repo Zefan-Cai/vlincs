@@ -1,0 +1,65 @@
+{
+  "baseline": {
+    "direct_idf1": 0.666572,
+    "density_idf1": 0.668661,
+    "p005_idf1": 0.668767,
+    "p005_hota": 0.529344,
+    "p005_assa": 0.539607
+  },
+  "rows": [
+    {
+      "name": "siglip_rank01_s89_to87_seq1199",
+      "assignment": "local_runs/continued_no_anchor_local_gated_subpart_20260624/siglip_primary/assignments/rank01_subpart_s89_to87_1seq_assignments.csv",
+      "direct_idf1": 0.666656,
+      "direct_hota": 0.527644,
+      "direct_assa": 0.537746,
+      "density_idf1": 0.668745,
+      "density_hota": 0.52933,
+      "density_assa": 0.539515,
+      "density_dropped_rows": 35029,
+      "p005_idf1": 0.668851,
+      "p005_hota": 0.529413,
+      "p005_assa": 0.539641,
+      "p005_dropped_rows": 45467,
+      "p005_config_name": "p005_area",
+      "delta_p005_idf1": 8.4e-05,
+      "delta_direct_idf1": 8.4e-05
+    },
+    {
+      "name": "weak_rank03_s86_to37_seq4690",
+      "assignment": "local_runs/continued_no_anchor_local_gated_subpart_20260624/weak_primary/assignments/rank03_subpart_s86_to37_1seq_assignments.csv",
+      "direct_idf1": 0.666651,
+      "direct_hota": 0.527652,
+      "direct_assa": 0.537778,
+      "density_idf1": 0.668741,
+      "density_hota": 0.529339,
+      "density_assa": 0.539548,
+      "density_dropped_rows": 35029,
+      "p005_idf1": 0.668846,
+      "p005_hota": 0.529423,
+      "p005_assa": 0.539674,
+      "p005_dropped_rows": 45467,
+      "p005_config_name": "p005_area",
+      "delta_p005_idf1": 7.9e-05,
+      "delta_direct_idf1": 7.9e-05
+    },
+    {
+      "name": "weak_rank01_s9_to26_seq5716",
+      "assignment": "local_runs/continued_no_anchor_local_gated_subpart_20260624/weak_primary/assignments/rank01_subpart_s9_to26_1seq_assignments.csv",
+      "direct_idf1": 0.666616,
+      "direct_hota": 0.527641,
+      "direct_assa": 0.537789,
+      "density_idf1": 0.668704,
+      "density_hota": 0.529325,
+      "density_assa": 0.539557,
+      "density_dropped_rows": 35029,
+      "p005_idf1": 0.66881,
+      "p005_hota": 0.529409,
+      "p005_assa": 0.539683,
+      "p005_dropped_rows": 45467,
+      "p005_config_name": "p005_area",
+      "delta_p005_idf1": 4.3e-05,
+      "delta_direct_idf1": 4.4e-05
+    }
+  ]
+}

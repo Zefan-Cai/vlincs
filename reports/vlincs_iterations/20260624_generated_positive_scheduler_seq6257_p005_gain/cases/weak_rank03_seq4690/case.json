@@ -1,0 +1,141 @@
+{
+  "after_state": "component 37, gid 96000040, component_size 39, decision_status subpart_reassign",
+  "before_state": "component 86, gid 960000350, component_size 159",
+  "candidate": {
+    "assignment_csv": "local_runs/continued_no_anchor_local_gated_subpart_20260624/weak_primary/assignments/rank03_subpart_s86_to37_1seq_assignments.csv",
+    "conflicts_to_rest": 2,
+    "focus_video_hits": 0,
+    "group_internal_sim": 1.0,
+    "moved_preview": [
+      {
+        "from_component": 86,
+        "from_predicted_global_id": 960000350,
+        "seq": 4690,
+        "to_component": 37,
+        "to_predicted_global_id": 96000040
+      }
+    ],
+    "moved_tracklets": 1,
+    "rank": 3,
+    "score": 2.8090851367402103,
+    "source_component": 86,
+    "source_component_conflict_edges": 78,
+    "source_component_size": 159,
+    "source_predicted_global_id": 960000350,
+    "source_rest_cross_max": 0.6791994571685791,
+    "source_rest_cross_mean": 0.3407430648803711,
+    "source_rest_margin_max": 0.3208005428314209,
+    "source_rest_margin_mean": 0.6592569351196289,
+    "source_seqs": [
+      4690
+    ],
+    "source_videos": {
+      "vlincs_MS01_MC0001_MCAM04_2024-03-Tc6": 1
+    },
+    "target_component": 37,
+    "target_component_size": 38,
+    "target_margin": 0.049526870250701904,
+    "target_predicted_global_id": 96000040,
+    "target_rank_for_group": 1,
+    "target_sim": 0.728726327419281,
+    "uses_anchors": false,
+    "uses_gt_for_evaluation_only": false,
+    "uses_gt_for_training_or_anchors": false
+  },
+  "evidence": "target_sim=0.7287, target_margin=0.0495, source_rest_margin=0.6593",
+  "failure_montage": "",
+  "failure_reason": "The previous graph kept one MCAM04/Tc6 tracklet in the large component 86 even though it behaved like a residual island near component 37.",
+  "improvement": "The repair is local: only seq4690 moves, avoiding a broad 86->37 merge.",
+  "montage": "rank03_bbox_evidence.png",
+  "raw_frame_dir": "",
+  "raw_frame_status": "unavailable_coordinate_fallback",
+  "summary": "seq4690 moves from component 86 / gid 960000350 to component 37 / gid 96000040 after weakmetric primary evidence and DINO/SigLIP support.",
+  "title": "Weakmetric local-gated island seq4690",
+  "tracklets": [
+    {
+      "after": {
+        "avg_conf": "0.554327",
+        "camera": "MCAM04",
+        "component_external_prob_max": "0.0",
+        "component_internal_edges": "0",
+        "component_internal_prob_median": "0.0",
+        "component_internal_score_median": "0.0",
+        "component_label": "37",
+        "component_margin_prob": "0.0",
+        "component_size": "39",
+        "decision_status": "subpart_reassign",
+        "end_frame": "43213",
+        "n_dets": "300",
+        "predicted_global_id": "96000040",
+        "prediction_confidence": "0.720000",
+        "seq": "4690",
+        "start_frame": "42914",
+        "tracklet_key": "vlincs_MS01_MC0001_MCAM04_2024-03-Tc6:3225:0",
+        "video": "vlincs_MS01_MC0001_MCAM04_2024-03-Tc6"
+      },
+      "before": {
+        "avg_conf": "0.554327",
+        "camera": "MCAM04",
+        "component_external_prob_max": "0.0",
+        "component_internal_edges": "0",
+        "component_internal_prob_median": "0.0",
+        "component_internal_score_median": "0.0",
+        "component_label": "86",
+        "component_margin_prob": "0.0",
+        "component_size": "159",
+        "decision_status": "forced_component",
+        "end_frame": "43213",
+        "n_dets": "300",
+        "predicted_global_id": "960000350",
+        "prediction_confidence": "0.700000",
+        "seq": "4690",
+        "start_frame": "42914",
+        "tracklet_key": "vlincs_MS01_MC0001_MCAM04_2024-03-Tc6:3225:0",
+        "video": "vlincs_MS01_MC0001_MCAM04_2024-03-Tc6"
+      },
+      "sampled_boxes": [
+        {
+          "bbox_xyxy": [
+            2056.9036,
+            996.01624,
+            2126.2368,
+            1170.0258
+          ],
+          "frame_idx": 42914,
+          "score": 0.4395213723182678,
+          "tracklet_key": "vlincs_MS01_MC0001_MCAM04_2024-03-Tc6:3225:0",
+          "video_key": "vlincs_MS01_MC0001_MCAM04_2024-03-Tc6"
+        },
+        {
+          "bbox_xyxy": [
+            2060.6228,
+            997.4698,
+            2133.2393,
+            1170.5587
+          ],
+          "frame_idx": 43064,
+          "score": 0.5514730215072632,
+          "tracklet_key": "vlincs_MS01_MC0001_MCAM04_2024-03-Tc6:3225:0",
+          "video_key": "vlincs_MS01_MC0001_MCAM04_2024-03-Tc6"
+        },
+        {
+          "bbox_xyxy": [
+            2060.0278,
+            993.0376,
+            2141.9253,
+            1169.6979
+          ],
+          "frame_idx": 43213,
+          "score": 0.6828196048736572,
+          "tracklet_key": "vlincs_MS01_MC0001_MCAM04_2024-03-Tc6:3225:0",
+          "video_key": "vlincs_MS01_MC0001_MCAM04_2024-03-Tc6"
+        }
+      ],
+      "seq": 4690
+    }
+  ],
+  "uses_anchors": false,
+  "uses_gt_for_evaluation_only": false,
+  "uses_gt_for_training_or_anchors": false,
+  "video_root": ""
+}

@@ -1,0 +1,9 @@
+name,idf1,hota,assa,delta_idf1,delta_hota,delta_assa,json
+siglip_r10_s30_to16_seq6257,0.666824,0.527835,0.537933,4.6e-05,4.8e-05,4.3e-05,local_runs/generated_positive_scheduler_currentbest_probe_20260624/direct/siglip_r10_s30_to16_seq6257.json
+dino_r03_s83_to89_seq1243,0.666778,0.527787,0.53789,0.0,0.0,0.0,local_runs/generated_positive_scheduler_currentbest_probe_20260624/direct/dino_r03_s83_to89_seq1243.json
+siglip_r04_s30_to38_seq3017,0.666778,0.527787,0.53789,0.0,0.0,0.0,local_runs/generated_positive_scheduler_currentbest_probe_20260624/direct/siglip_r04_s30_to38_seq3017.json
+siglip_r05_s1_to18_seq8315,0.666778,0.527786,0.53789,0.0,-1e-06,0.0,local_runs/generated_positive_scheduler_currentbest_probe_20260624/direct/siglip_r05_s1_to18_seq8315.json
+siglip_r07_s91_to89_seq633,0.666778,0.527787,0.53789,0.0,0.0,0.0,local_runs/generated_positive_scheduler_currentbest_probe_20260624/direct/siglip_r07_s91_to89_seq633.json
+weak_r08_s18_to77_seq8336_8559,0.666778,0.527787,0.53789,0.0,0.0,0.0,local_runs/generated_positive_scheduler_currentbest_probe_20260624/direct/weak_r08_s18_to77_seq8336_8559.json
+weak_r07_s22_to13_seq9565,0.666775,0.527781,0.537883,-3e-06,-6e-06,-7e-06,local_runs/generated_positive_scheduler_currentbest_probe_20260624/direct/weak_r07_s22_to13_seq9565.json
+weak_r05_s19_to0_seq8289,0.666726,0.527704,0.537796,-5.2e-05,-8.3e-05,-9.4e-05,local_runs/generated_positive_scheduler_currentbest_probe_20260624/direct/weak_r05_s19_to0_seq8289.json

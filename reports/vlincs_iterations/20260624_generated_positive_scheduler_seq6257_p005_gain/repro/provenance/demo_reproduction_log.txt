@@ -1,0 +1,73 @@
+[demo.sh] running DS1 WISC no-anchor method reproduction...
+REPRO verifying feature_checksums=/Users/zcai/Codex/vlincs_reid_by_search_wisc_sync/kit/demo_data/ds1/features/checksums.sha256
+REPRO verifying gt_checksums=/Users/zcai/Codex/vlincs_reid_by_search_wisc_sync/kit/demo_data/ds1/gt/checksums.sha256
+REPRO repo=/Users/zcai/Codex/vlincs_reid_by_search_wisc_sync
+REPRO package=/Users/zcai/Codex/vlincs_reid_by_search_wisc_sync/reports/vlincs_iterations/20260624_generated_positive_scheduler_seq6257_p005_gain
+REPRO data_root=/Users/zcai/Codex/vlincs_reid_by_search_wisc_sync/kit/demo_data/ds1/gt
+REPRO run_dir=/Users/zcai/Codex/vlincs_reid_by_search_wisc_sync/local_runs/reproduce_generated_positive_scheduler_seq6257_p005_20260624
+REPRO tracklet_parquets=10
+REPRO gt_files=10
+STAGE 0 method_reproduction_feature_outlier_proposer
+{"groups_emitted": 24, "single_candidates": 58, "summary_json": "/Users/zcai/Codex/vlincs_reid_by_search_wisc_sync/local_runs/reproduce_generated_positive_scheduler_seq6257_p005_20260624/method_reproduction/feature_outlier_summary.json"}
+STAGE 0b method_reproduction_materialize_promoted_repairs
+{"assignment_csv": "/Users/zcai/Codex/vlincs_reid_by_search_wisc_sync/local_runs/reproduce_generated_positive_scheduler_seq6257_p005_20260624/method_reproduction/generated_combo_01_03_04_05_assignments.csv", "assignment_sha256": "b204b13b037dd5f788b84b77f3e9749f200006a88ed015d8fab83ef1b7d6a731", "moved_tracklets": 4, "selected_ranks": [1, 3, 4, 5]}
+{"assignment_csv": "/Users/zcai/Codex/vlincs_reid_by_search_wisc_sync/local_runs/reproduce_generated_positive_scheduler_seq6257_p005_20260624/method_reproduction/generated_rank06_07_residual_feature_outlier_assignments.csv", "assignment_sha256": "24010eea71583ecedb1afcec7e8ae53d33b711537c920be56f3571b110c23010", "moved_tracklets": 2, "selected_ranks": [6, 7]}
+REPRO generated_assignment_sha256=24010eea71583ecedb1afcec7e8ae53d33b711537c920be56f3571b110c23010
+STAGE 0c method_reproduction_fresh_subpart_proposer
+{"candidate_count": 65, "json": "/Users/zcai/Codex/vlincs_reid_by_search_wisc_sync/local_runs/reproduce_generated_positive_scheduler_seq6257_p005_20260624/method_reproduction/fresh_subpart_weak_primary/manifest.json", "selected": 12}
+REPRO final_assignment_sha256=42f8f62f641cfe5f126cc781f58c365f746654f33a9861bd343ecd985d6afd39
+STAGE 0d method_reproduction_local_gated_subpart_rescan
+{"candidate_count": 68, "json": "/Users/zcai/Codex/vlincs_reid_by_search_wisc_sync/local_runs/reproduce_generated_positive_scheduler_seq6257_p005_20260624/method_reproduction/local_gated_weak_primary/manifest.json", "selected": 24}
+{"candidate_count": 134, "json": "/Users/zcai/Codex/vlincs_reid_by_search_wisc_sync/local_runs/reproduce_generated_positive_scheduler_seq6257_p005_20260624/method_reproduction/local_gated_siglip_primary/manifest.json", "selected": 24}
+STAGE 0e method_reproduction_cross_manifest_combo
+{"assignment_csv": "/Users/zcai/Codex/vlincs_reid_by_search_wisc_sync/local_runs/reproduce_generated_positive_scheduler_seq6257_p005_20260624/method_reproduction/local_gated_cross_manifest_combo/combo_top3_siglip1_weak3_weak1_assignments.csv", "assignment_sha256": "ce6e9b2d9f78fb2302050a3e65087498ce116d4c47d40e19576d1ac726e32393", "moved_tracklets": 3, "selected": [{"manifest": "/Users/zcai/Codex/vlincs_reid_by_search_wisc_sync/local_runs/reproduce_generated_positive_scheduler_seq6257_p005_20260624/method_reproduction/local_gated_siglip_primary/manifest.json", "moved_seqs": [1199], "rank": 1}, {"manifest": "/Users/zcai/Codex/vlincs_reid_by_search_wisc_sync/local_runs/reproduce_generated_positive_scheduler_seq6257_p005_20260624/method_reproduction/local_gated_weak_primary/manifest.json", "moved_seqs": [4690], "rank": 3}, {"manifest": "/Users/zcai/Codex/vlincs_reid_by_search_wisc_sync/local_runs/reproduce_generated_positive_scheduler_seq6257_p005_20260624/method_reproduction/local_gated_weak_primary/manifest.json", "moved_seqs": [5716], "rank": 1}]}
+REPRO combo_assignment_sha256=ce6e9b2d9f78fb2302050a3e65087498ce116d4c47d40e19576d1ac726e32393
+STAGE 0f method_reproduction_generated_positive_scheduler_seq6257
+{"assignment_csv": "/Users/zcai/Codex/vlincs_reid_by_search_wisc_sync/local_runs/reproduce_generated_positive_scheduler_seq6257_p005_20260624/method_reproduction/generated_positive_scheduler_seq6257_assignments.csv", "assignment_sha256": "5359c8675655b3795b4b485eff8705d5c63bbf3714e74e0ebe200b523cfa290e", "moved_tracklets": 1, "selected": [{"manifest": "/Users/zcai/Codex/vlincs_reid_by_search_wisc_sync/local_runs/reproduce_generated_positive_scheduler_seq6257_p005_20260624/method_reproduction/local_gated_siglip_primary/manifest.json", "moved_seqs": [6257], "rank": 10}]}
+REPRO seq6257_assignment_sha256=5359c8675655b3795b4b485eff8705d5c63bbf3714e74e0ebe200b523cfa290e
+STAGE 1 direct_full_export_from_generated_positive_scheduler_seq6257
+=== Computing ReID HOTA metrics ===
+Computing cost matrix for every frame
+  took: 38.81244397163391 seconds
+Jaccard merge of per-frame cost
+  took: 3.9241368770599365 seconds
+Computing per-frame HOTA data
+  took: 45.52484607696533 seconds
+Merging HOTA data
+  took: 0.0017359256744384766 seconds
+Total time taken: 88.26320171356201 seconds
+Number of frames: 198841
+fps: 2252.818798090884
+{"assa": 0.537933, "assigned_tracklets": 7487, "assignment_status_counts": {"forced_component": 7454, "forced_singleton": 28, "generated_positive_scheduler_probe": 1, "local_gated_cross_manifest_subpart_combo": 3, "subpart_reassign": 1}, "deta": 0.517965, "detpr": 0.770067, "detre": 0.587992, "fallback": "singleton", "hota": 0.527835, "idf1": 0.666824, "input_rows": 1723070, "input_tracklets": 9734, "missing_assignment_tracklets": 2247, "per_video": {"vlincs_MS01_MC0001_MCAM00_2024-03-Tc6": {"assa": 0.835905, "deta": 0.79496, "detpr": 0.910942, "detre": 0.84865, "hota": 0.81476, "idf1": 0.878694}, "vlincs_MS01_MC0001_MCAM00_2024-03-Tc8": {"assa": 0.786603, "deta": 0.715036, "detpr": 0.906797, "detre": 0.761913, "hota": 0.74985, "idf1": 0.828065}, "vlincs_MS01_MC0001_MCAM03_2024-03-Tc6": {"assa": 0.623288, "deta": 0.543206, "detpr": 0.810903, "detre": 0.600122, "hota": 0.58162, "idf1": 0.689769}, "vlincs_MS01_MC0001_MCAM03_2024-03-Tc8": {"assa": 0.556884, "deta": 0.475241, "detpr": 0.774125, "detre": 0.53093, "hota": 0.514224, "idf1": 0.629868}, "vlincs_MS01_MC0001_MCAM04_2024-03-Tc6": {"assa": 0.499929, "deta": 0.434094, "detpr": 0.701998, "detre": 0.502688, "hota": 0.465368, "idf1": 0.585856}, "vlincs_MS01_MC0001_MCAM05_2024-03-Tc6": {"assa": 0.637951, "deta": 0.571102, "detpr": 0.821248, "detre": 0.634586, "hota": 0.603586, "idf1": 0.71595}, "vlincs_MS01_MC0001_MCAM05_2024-03-Tc8": {"assa": 0.728795, "deta": 0.666277, "detpr": 0.860223, "detre": 0.729116, "hota": 0.696826, "idf1": 0.789262}, "vlincs_MS01_MC0001_MCAM06_2024-03-Tc6": {"assa": 0.598228, "deta": 0.448875, "detpr": 0.838449, "detre": 0.480085, "hota": 0.518041, "idf1": 0.610567}, "vlincs_MS01_MC0001_MCAM06_2024-03-Tc8": {"assa": 0.614314, "deta": 0.551932, "detpr": 0.790347, "detre": 0.622104, "hota": 0.582124, "idf1": 0.696205}, "vlincs_MS01_MC0001_MCAM08_2024-03-Tc6": {"assa": 0.680603, "deta": 0.650299, "detpr": 0.81746, "detre": 0.73383, "hota": 0.665163, "idf1": 0.773391}}, "predicted_ids": 2336, "scored_rows": 1723070, "unmatched_fp": 295307, "uses_anchors": false, "uses_gt_for_evaluation_only": true, "uses_gt_for_training_or_anchors": false, "videos_scored": ["vlincs_MS01_MC0001_MCAM00_2024-03-Tc6", "vlincs_MS01_MC0001_MCAM00_2024-03-Tc8", "vlincs_MS01_MC0001_MCAM03_2024-03-Tc6", "vlincs_MS01_MC0001_MCAM03_2024-03-Tc8", "vlincs_MS01_MC0001_MCAM04_2024-03-Tc6", "vlincs_MS01_MC0001_MCAM05_2024-03-Tc6", "vlincs_MS01_MC0001_MCAM05_2024-03-Tc8", "vlincs_MS01_MC0001_MCAM06_2024-03-Tc6", "vlincs_MS01_MC0001_MCAM06_2024-03-Tc8", "vlincs_MS01_MC0001_MCAM08_2024-03-Tc6"], "zip_files": 10, "zip_out": "/Users/zcai/Codex/vlincs_reid_by_search_wisc_sync/local_runs/reproduce_generated_positive_scheduler_seq6257_p005_20260624/seq6257_full_export.zip"}
+STAGE 2 density_simple_delivery
+=== Computing ReID HOTA metrics ===
+Computing cost matrix for every frame
+  took: 36.66997289657593 seconds
+Jaccard merge of per-frame cost
+  took: 3.9376487731933594 seconds
+Computing per-frame HOTA data
+  took: 49.67829132080078 seconds
+Merging HOTA data
+  took: 0.0014348030090332031 seconds
+Total time taken: 90.28738498687744 seconds
+Number of frames: 198812
+fps: 2201.9908986055557
+{"assa": 0.539701, "detpr": 0.776463, "detre": 0.587533, "dropped_rows": 35029, "hota": 0.529521, "idf1": 0.668914, "policy_name": "density_simple", "rows": 1688041, "stage": "scored"}
+{"json": "/Users/zcai/Codex/vlincs_reid_by_search_wisc_sync/local_runs/reproduce_generated_positive_scheduler_seq6257_p005_20260624/seq6257_density_simple.json", "primary": {"assa": 0.539701, "detpr": 0.776463, "detre": 0.587533, "dropped_rows": 35029, "hota": 0.529521, "idf1": 0.668914, "policy_name": "density_simple", "rows": 1688041}, "stage": "done"}
+STAGE 3 p005_area_delivery
+=== Computing ReID HOTA metrics ===
+Computing cost matrix for every frame
+  took: 37.08606195449829 seconds
+Jaccard merge of per-frame cost
+  took: 4.091883897781372 seconds
+Computing per-frame HOTA data
+  took: 50.22317433357239 seconds
+Merging HOTA data
+  took: 0.0014929771423339844 seconds
+Total time taken: 91.4026529788971 seconds
+Number of frames: 198014
+fps: 2166.3922604710083
+{"assa": 0.539828, "config_name": "p005_area", "detpr": 0.777653, "detre": 0.587016, "dropped_rows": 45467, "hota": 0.529605, "idf1": 0.669019, "rows": 1642574, "stage": "scored"}
+{"best": {"assa": 0.539828, "config_name": "p005_area", "detpr": 0.777653, "detre": 0.587016, "dropped_rows": 45467, "hota": 0.529605, "idf1": 0.669019, "rows": 1642574}, "json": "/Users/zcai/Codex/vlincs_reid_by_search_wisc_sync/local_runs/reproduce_generated_positive_scheduler_seq6257_p005_20260624/seq6257_density_p005_area.json", "stage": "done"}
+{"density_simple": {"assa": 0.539701, "dropped_rows": 35029, "hota": 0.529521, "idf1": 0.668914, "rows": 1688041}, "direct": {"assa": 0.537933, "hota": 0.527835, "idf1": 0.666824}, "p005_area": {"assa": 0.539828, "config_name": "p005_area", "dropped_rows": 45467, "hota": 0.529605, "idf1": 0.669019, "rows": 1642574}, "stage": "verified"}
+DONE: ds1 -> {'dataset': 'ds1', 'idf1': 0.669019, 'hota': 0.529605, 'assa': 0.539828, 'detre': 0.587016, 'n_ids': 2483, 'per_video': {'vlincs_MS01_MC0001_MCAM00_2024-03-Tc6': {'assa': 0.836352, 'deta': 0.795662, 'detpr': 0.911551, 'detre': 0.849217, 'hota': 0.815354, 'idf1': 0.879281}, 'vlincs_MS01_MC0001_MCAM00_2024-03-Tc8': {'assa': 0.787663, 'deta': 0.715998, 'detpr': 0.909123, 'detre': 0.761518, 'hota': 0.750862, 'idf1': 0.828799}, 'vlincs_MS01_MC0001_MCAM03_2024-03-Tc6': {'assa': 0.624867, 'deta': 0.54536, 'detpr': 0.816917, 'detre': 0.600696, 'hota': 0.583561, 'idf1': 0.692317}, 'vlincs_MS01_MC0001_MCAM03_2024-03-Tc8': {'assa': 0.558462, 'deta': 0.47669, 'detpr': 0.77808, 'detre': 0.531774, 'hota': 0.51574, 'idf1': 0.631769}, 'vlincs_MS01_MC0001_MCAM04_2024-03-Tc6': {'assa': 0.502077, 'deta': 0.435073, 'detpr': 0.711428, 'detre': 0.50074, 'hota': 0.466929, 'idf1': 0.587774}, 'vlincs_MS01_MC0001_MCAM05_2024-03-Tc6': {'assa': 0.637797, 'deta': 0.571125, 'detpr': 0.82406, 'detre': 0.633582, 'hota': 0.603526, 'idf1': 0.716375}, 'vlincs_MS01_MC0001_MCAM05_2024-03-Tc8': {'assa': 0.730766, 'deta': 0.668144, 'detpr': 0.864076, 'detre': 0.729201, 'hota': 0.698745, 'idf1': 0.79093}, 'vlincs_MS01_MC0001_MCAM06_2024-03-Tc6': {'assa': 0.601784, 'deta': 0.450398, 'detpr': 0.84292, 'detre': 0.481098, 'hota': 0.520422, 'idf1': 0.61257}, 'vlincs_MS01_MC0001_MCAM06_2024-03-Tc8': {'assa': 0.615037, 'deta': 0.553248, 'detpr': 0.792932, 'detre': 0.623104, 'hota': 0.583172, 'idf1': 0.697834}, 'vlincs_MS01_MC0001_MCAM08_2024-03-Tc6': {'assa': 0.683011, 'deta': 0.652863, 'detpr': 0.825116, 'detre': 0.732621, 'hota': 0.667655, 'idf1': 0.776122}}}

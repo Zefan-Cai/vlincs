@@ -2,6 +2,28 @@ VLINCS no-anchor global ID progress
 Date: 2026-06-24
 
 Current best e2e:
+IDF1 / HOTA / AssA = 0.669019 / 0.529605 / 0.539828
+
+Latest generated-positive scheduler seq6257 gain:
+On top of the reproducible local-gated subpart combo best, a generated-positive
+scheduler/reviewer tested eight no-anchor local repair candidates from the
+weakmetric/SigLIP/DINO evidence manifests. Only SigLIP rank10 was direct
+positive: it moves one MCAM05/Tc6 tracklet, seq6257, from component 30 /
+gid 96000032 to component 16 / gid 96000017. Direct full-score is
+0.666824/0.527835/0.537933, density_simple is
+0.668914/0.529521/0.539701, and valid p005_area is
+0.669019/0.529605/0.539828 with config_name=p005_area and dropped_rows=45467.
+This is +0.000045 IDF1 over the prior canonical best 0.668974. The root
+./demo.sh now defaults to this DS1 method reproduction. Package:
+reports/vlincs_iterations/20260624_generated_positive_scheduler_seq6257_p005_gain/.
+No plaintext API key is used; future image-generation positives must read keys
+from environment variables and pass DINO/SigLIP/weakmetric CTF before any M8
+promotion.
+
+VLINCS no-anchor global ID progress
+Date: 2026-06-24
+
+Current best e2e:
 IDF1 / HOTA / AssA = 0.668974 / 0.529557 / 0.539785
 
 Latest local-gated cross-manifest subpart combo gain:

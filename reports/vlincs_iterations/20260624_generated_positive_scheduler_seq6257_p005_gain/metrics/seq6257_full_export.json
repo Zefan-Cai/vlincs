@@ -1,0 +1,122 @@
+{
+  "assa": 0.537933,
+  "assigned_tracklets": 7487,
+  "assignment_status_counts": {
+    "forced_component": 7454,
+    "forced_singleton": 28,
+    "generated_positive_scheduler_probe": 1,
+    "local_gated_cross_manifest_subpart_combo": 3,
+    "subpart_reassign": 1
+  },
+  "deta": 0.517965,
+  "detpr": 0.770067,
+  "detre": 0.587992,
+  "fallback": "singleton",
+  "hota": 0.527835,
+  "idf1": 0.666824,
+  "input_rows": 1723070,
+  "input_tracklets": 9734,
+  "missing_assignment_tracklets": 2247,
+  "per_video": {
+    "vlincs_MS01_MC0001_MCAM00_2024-03-Tc6": {
+      "assa": 0.835905,
+      "deta": 0.79496,
+      "detpr": 0.910942,
+      "detre": 0.84865,
+      "hota": 0.81476,
+      "idf1": 0.878694
+    },
+    "vlincs_MS01_MC0001_MCAM00_2024-03-Tc8": {
+      "assa": 0.786603,
+      "deta": 0.715036,
+      "detpr": 0.906797,
+      "detre": 0.761913,
+      "hota": 0.74985,
+      "idf1": 0.828065
+    },
+    "vlincs_MS01_MC0001_MCAM03_2024-03-Tc6": {
+      "assa": 0.623288,
+      "deta": 0.543206,
+      "detpr": 0.810903,
+      "detre": 0.600122,
+      "hota": 0.58162,
+      "idf1": 0.689769
+    },
+    "vlincs_MS01_MC0001_MCAM03_2024-03-Tc8": {
+      "assa": 0.556884,
+      "deta": 0.475241,
+      "detpr": 0.774125,
+      "detre": 0.53093,
+      "hota": 0.514224,
+      "idf1": 0.629868
+    },
+    "vlincs_MS01_MC0001_MCAM04_2024-03-Tc6": {
+      "assa": 0.499929,
+      "deta": 0.434094,
+      "detpr": 0.701998,
+      "detre": 0.502688,
+      "hota": 0.465368,
+      "idf1": 0.585856
+    },
+    "vlincs_MS01_MC0001_MCAM05_2024-03-Tc6": {
+      "assa": 0.637951,
+      "deta": 0.571102,
+      "detpr": 0.821248,
+      "detre": 0.634586,
+      "hota": 0.603586,
+      "idf1": 0.71595
+    },
+    "vlincs_MS01_MC0001_MCAM05_2024-03-Tc8": {
+      "assa": 0.728795,
+      "deta": 0.666277,
+      "detpr": 0.860223,
+      "detre": 0.729116,
+      "hota": 0.696826,
+      "idf1": 0.789262
+    },
+    "vlincs_MS01_MC0001_MCAM06_2024-03-Tc6": {
+      "assa": 0.598228,
+      "deta": 0.448875,
+      "detpr": 0.838449,
+      "detre": 0.480085,
+      "hota": 0.518041,
+      "idf1": 0.610567
+    },
+    "vlincs_MS01_MC0001_MCAM06_2024-03-Tc8": {
+      "assa": 0.614314,
+      "deta": 0.551932,
+      "detpr": 0.790347,
+      "detre": 0.622104,
+      "hota": 0.582124,
+      "idf1": 0.696205
+    },
+    "vlincs_MS01_MC0001_MCAM08_2024-03-Tc6": {
+      "assa": 0.680603,
+      "deta": 0.650299,
+      "detpr": 0.81746,
+      "detre": 0.73383,
+      "hota": 0.665163,
+      "idf1": 0.773391
+    }
+  },
+  "predicted_ids": 2336,
+  "scored_rows": 1723070,
+  "unmatched_fp": 295307,
+  "uses_anchors": false,
+  "uses_gt_for_evaluation_only": true,
+  "uses_gt_for_training_or_anchors": false,
+  "videos_scored": [
+    "vlincs_MS01_MC0001_MCAM00_2024-03-Tc6",
+    "vlincs_MS01_MC0001_MCAM00_2024-03-Tc8",
+    "vlincs_MS01_MC0001_MCAM03_2024-03-Tc6",
+    "vlincs_MS01_MC0001_MCAM03_2024-03-Tc8",
+    "vlincs_MS01_MC0001_MCAM04_2024-03-Tc6",
+    "vlincs_MS01_MC0001_MCAM05_2024-03-Tc6",
+    "vlincs_MS01_MC0001_MCAM05_2024-03-Tc8",
+    "vlincs_MS01_MC0001_MCAM06_2024-03-Tc6",
+    "vlincs_MS01_MC0001_MCAM06_2024-03-Tc8",
+    "vlincs_MS01_MC0001_MCAM08_2024-03-Tc6"
+  ],
+  "zip_files": 10,
+  "zip_out": "/Users/zcai/Codex/vlincs_reid_by_search_wisc_sync/local_runs/generated_positive_scheduler_currentbest_probe_20260624/delivery/siglip_r10_s30_to16_seq6257/full_export.zip"
+}
