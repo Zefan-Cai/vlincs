@@ -1,8 +1,86 @@
 VLINCS no-anchor global ID progress
+Date: 2026-06-24
+
+Current best e2e:
+IDF1 / HOTA / AssA = 0.668673 / 0.529242 / 0.539491
+
+Latest residual feature-outlier combo gain:
+On top of the previous feature-outlier combo best, two independent residual one-tracklet moves were composed: seq1548 component 86 -> 91 and seq4043 component 86 -> 37. Direct full-score improved to 0.666479/0.527472/0.537595; density_simple improved to 0.668568/0.529158/0.539365; valid p005_area improved to 0.668673/0.529242/0.539491 with config_name=p005_area and dropped_rows=45467. This is +0.000165 IDF1 over the prior canonical best 0.668508. Rank08/09/10/11 were tiny direct positives and rank12 was negative, so only rank06+rank07 is retained. Package: reports/vlincs_iterations/20260624_feature_outlier_residual_rank06_07_p005_gain/. Publishing pending.
+
+VLINCS no-anchor global ID progress
+Date: 2026-06-24
+
+Current best e2e:
+IDF1 / HOTA / AssA = 0.668508 / 0.529081 / 0.539354
+
+Latest feature-outlier combo gain:
+A no-anchor feature-outlier reviewer found four one-tracklet islands using only the current assignment plus weakmetric/OSNet, DINOv2, and SigLIP feature evidence. The promoted combo moves seq2354 4->0, seq685 86->91, seq9343 45->26, and seq5628 20->3. Direct full-score is 0.666316/0.527313/0.537460, density_simple is 0.668403/0.528998/0.539229, and valid p005_area is 0.668508/0.529081/0.539354 with config_name=p005_area and dropped_rows=45467. This improves the previous canonical best 0.668332 by +0.000176 IDF1. Package: reports/vlincs_iterations/20260624_feature_outlier_combo_p005_gain/. Bitbucket wisc commit: 6df2b72. S3: s3://dit-scale-up/zcai/vlincs/no_anchor_gains/20260624_feature_outlier_combo_p005_gain/.
+
+VLINCS no-anchor global ID progress
+Date: 2026-06-24
+
+Current best e2e:
+IDF1 / HOTA / AssA = 0.668332 / 0.528875 / 0.539163
+
+Latest retained generated-positive CTF tool update:
+Promoted source-specific CTF into the existing `kit/audit_no_anchor_generated_positive_ctf.py` tool, without adding a new script and without changing the default demo path. The old default hist/centroid gate still rejects 8/8 local augmentations; opt-in `--feature-backend dinov2 --reference-mode source --min-same-sim 0.80 --min-margin 0.05` accepts 7/8, and opt-in `--feature-backend siglip --reference-mode source --min-same-sim 0.75 --min-margin 0.03` also accepts 7/8 while rejecting a low-margin near match. Bitbucket wisc commits: 0f0ee05 and 63670b9. This is an admission-tool gain, not an end-to-end pipeline gain.
+
+Latest generated-positive DINO source-CTF probe:
+Built a local torch/PIL venv and ran facebook/dinov2-small on the restored top2 real crops plus 8 tracklet-local local-aug positives. Same-tracklet mean CTF was too strict (1/8 pass), but source-specific DINO CTF with source_sim>=0.80 and source_margin>=0.05 accepted 7/8 and rejected the one low source-sim image. This is not an e2e gain, but it replaces the failed color-only 0/8 gate as the next GPT-image admission rule. Report: reports/no_anchor_dino_source_ctf_generated_positive_probe_20260624.md.
+
+VLINCS no-anchor global ID progress
+Date: 2026-06-24
+
+Current best e2e:
+IDF1 / HOTA / AssA = 0.668198 / 0.528747 / 0.539071
+
+Latest visual-positive transfer refutation:
+Mapped existing no-GT VLINCS visual montage weak-positive decisions onto the current top32 best assignment. Stale positives were ignored, broad 87->86 was excluded, and already-tested generated-positive actions 55->26 and 74->35 were skipped. Three small-island repairs were direct-scored: 42->3 tied at 0.666005/0.526982/0.537182, 66->2 reached 0.666009/0.526988/0.537189, and 76->26 reached 0.666007/0.526985/0.537185. Only 66->2 was delivered: density_simple 0.668097/0.528671/0.538954, valid p005_area 0.668201/0.528753/0.539078 with config_name=p005_area and dropped_rows=45467. This is only +0.000003 IDF1 over standing best, so no promotion; zip outputs were deleted and JSON metrics retained. Report: reports/no_anchor_visual_positive_transfer_refutation_20260624.md.
+
+VLINCS no-anchor global ID progress
+Date: 2026-06-24
+
+Current best e2e:
+IDF1 / HOTA / AssA = 0.668198 / 0.528747 / 0.539071
+
+Latest generated-positive borderline combo refutation:
+After rank1+rank2 produced only a micro p005 result, two direct-only borderline interactions were tested: rank1+rank2+rank3 and rank1+rank2+rank4. Both move four tracklets and both scored direct 0.666007/0.526985/0.537185, exactly matching the rank1+rank2 direct boundary and not clearing a material signal. Delivery was skipped, generated zip outputs were deleted, and the branch is killed unless current VLINCS pixels or a safe image-generation environment becomes available. Report: reports/no_anchor_generated_positive_rank1_rank2_combo_refutation_20260624.md.
+
+VLINCS no-anchor global ID progress
+Date: 2026-06-24
+
+Current best e2e:
+IDF1 / HOTA / AssA = 0.668198 / 0.528747 / 0.539071
+
+Latest generated-positive rank1+rank2 combo refutation:
+The two strict-CTF generated-positive micro candidates were composed and fully replayed on the current top32 best. The combo moves seq8627 from component 74 to 35 and seq2398 from component 55 to 26. Direct full-score is 0.666007/0.526985/0.537185, density_simple is 0.668095/0.528668/0.538950, and valid p005_area is 0.668200/0.528750/0.539074 with config_name=p005_area and dropped_rows=45467. This is only about +0.000002 IDF1 over the standing p005 best, so it is not promoted; generated zip outputs were deleted and JSON metrics were retained. Report: reports/no_anchor_generated_positive_rank1_rank2_combo_refutation_20260624.md.
+
+VLINCS no-anchor global ID progress
 Date: 2026-06-23
 
 Current best e2e:
 IDF1 / HOTA / AssA = 0.668198 / 0.528747 / 0.539071
+
+Latest GPT-image prompt pilot + CTF gate:
+Prepared a no-anchor CCVID GPT-image2 prompt pilot with same-ID source crops, one hard negative, a contact sheet, and a conservative identity-preserving prompt. No GPT-image call was made because OPENAI_API_KEY was not present in the shell environment; the key was not printed, copied, stored, or written. Then applied the external CTF lesson to the existing generated-positive top32 candidates: strict gate target_best_sim>=0.8879 or target_min_view_sim>=0.80 keeps only rank1 74->35 and rank2 55->26. Both were already full-scored and are only micro-positive: rank1 direct 0.666006, rank2 direct 0.666007, and rank2 p005_area 0.668199 is only +0.000001 over standing best. Decision: no new full-score, no promoted gain; keep the source/prompt manifest only as future GPT-image input. Report: reports/no_anchor_gpt_image2_prompt_and_ctf_gate_refutation_20260624.md.
+
+Latest external image positive CTF probe:
+Adapted the Diffusion-ReID generation + Re-ID confidence threshold filter idea to a no-anchor external-image probe before calling any image generator. The cheap MEVID color/layout proxy was refuted (AUC 0.011, AP 0.308). Cached deep features are more informative but only in constrained slices: CCVID+DINOv2 full_plus_parts reaches win/AUC 0.969/0.945 on all same-ID positives, and an 80% precision CTF keeps 91.8% positives. However cross-clothes is near-random (win/AUC 0.505/0.522, 13.2% positive recall at 80% precision), cross-camera cannot reach 80% precision, and MEVID+OSNet cross-clothes remains weak. Decision: no promoted gain; future GPT-image work should generate conservative identity-preserving variants and require DINOv2/body-part Re-ID CTF before using them as weak positives. Report: reports/no_anchor_external_image_positive_ctf_probe_20260624.md.
+
+Latest generated-positive feature-space refutation:
+Adapted the Diffusion-ReID generation + CTF idea into a no-anchor feature-space probe on the current top32 assignment. The proposer generated 5474/5520 CTF-passed synthetic positives and emitted 120 candidate repairs. Eight diverse candidates were direct full-scored. Best was rank02 55->26, moving one tracklet, at 0.666007/0.526984/0.537184, only +0.000002 IDF1 over the direct baseline 0.666005/0.526982/0.537182. Rank01 was +0.000001, ranks 3/4/27/66 tied, ranks 19 and 50 were negative. This is too small to keep; the experimental proposer code was deleted. Report: reports/no_anchor_generated_positive_feature_probe_refutation_20260624.md. Next generated-positive attempt should restore real crops/frames, use image-model augmentation, extract normal ReID features, and CTF-filter generated images before using them as positives.
+
+Generated-positive delivery postcheck:
+The best direct generated-positive candidate rank02 55->26 was rerun through density_simple + p005_area. It scored direct 0.666007/0.526984/0.537184, density_simple 0.668095/0.528667/0.538949, and p005_area 0.668199/0.528749/0.539073. This is only +0.000001 IDF1 over the standing p005 best 0.668198/0.528747/0.539071, so it remains killed and is not promoted. Generated zips were deleted; JSON metrics were kept under local_runs/offline_no_anchor_split_probe_20260624/generated_positive_top32_probe/rank02_delivery_sample/.
+
+Generated-positive pixel asset audit:
+Current DS1 top32 pixels are still unavailable locally and on h100-test-2/3. The repo has tracklet parquets and embeddings; DATA_ROOT has Box/GT parquets; no current VLINCS videos/images were found. Old videolincs contact sheets use stream_<large id> names and do not match current video:local_track_id:0 tracklets. Report: reports/no_anchor_generated_positive_pixel_asset_audit_20260624.md. Next generated-positive path should use external ReID images (CCVID/MEVID) as non-VLINCS pretraining/CTF evidence, or restore the current VLINCS video root before calling an image generator.
+
+Latest top32 remaining 37->86 refutation:
+After the rank06 top32 gain, six no-anchor residual component-37 -> component-86 continuation candidates were direct full-scored: top36, top32, side-effect-loss exclusion, side-effect-positive videos, MCAM04-only, and MCAM08-only. All were below the current top32 direct baseline 0.666005/0.526982/0.537182. The best was rank17 MCAM08-only with 0.665834/0.526799/0.537024, still -0.000171 IDF1 below baseline. density_simple and p005_area were intentionally skipped. This is a hard negative for greedy continuation beyond top32 on 37->86; next search should combine top32 with other component repairs or run a diverse preemptible Pluto batch. Report: reports/no_anchor_top32_remaining_37to86_subset_refutation_20260623.md
+
+Latest top32-base component-graph raw probe:
+The component-graph proposer was rerun on the current rank06 top32 best assignment. It emitted 26 no-GT rows. The directional filter selected only stale 79->4 and the small-fragment filter selected 0 rows, so six diverse raw non-37->86 candidates were direct full-scored: 30->38, 91->88, 86->78, 89->87, 82->11, and 85->8. Three tied the current top32 direct baseline 0.666005/0.526982/0.537182; three were negative. 86->78 is a strong hard negative at 0.650119/0.515595/0.533501. No density_simple/p005_area run was triggered. Report: reports/no_anchor_top32base_component_graph_raw_probe_20260623.md
 
 Latest rank06 top32 subset 37->86 gain:
 After promoting top28, a local top-k neighborhood search tested top22/top24/top26/top30/top32/top34. Top32 is the best direct boundary point at 0.666005/0.526982/0.537182. It moves 32 high target-similarity component 37 tracklets into component 86 / gid 960000350, recovering four compatible tracklets that top28 left out. density_simple reaches 0.668093/0.528665/0.538947. Valid p005_area reaches the new canonical best 0.668198/0.528747/0.539071 with config_name=p005_area and dropped_rows=45467, improving top28 by +0.000052 IDF1, +0.000078 HOTA, and +0.000070 AssA. The package is reports/vlincs_iterations/20260623_rank01_37to86_top32_p005_gain/ with README.md, presentation.html, spec.json, metrics, six direct ablations, coordinate-fallback top32 case, and two real-frame context images. Current top32 raw frames are still absent locally, so its component case is coordinate-only evidence rather than a path failure.
@@ -385,3 +463,11 @@ s3://dit-scale-up/zcai/vlincs/remote_runs_h100-test-3_20260622/no_anchor_sideeff
 
 GitHub:
 https://github.com/Zefan-Cai/vlincs
+VLINCS no-anchor global ID progress
+Date: 2026-06-24
+
+Current best e2e:
+IDF1 / HOTA / AssA = 0.668332 / 0.528875 / 0.539163
+
+Latest top2 weak/generated combo refutation:
+Composed the current visual-subcluster CTF top2 best with two previously tested weak/generated positive repairs: visual transfer 66->2 and generated pair 55->26 + 74->35. The best direct combo moves 6 total tracklets and scores 0.666145/0.527118/0.537283, only +0.000005 direct IDF1 over current top2 direct 0.666140/0.527110/0.537273. Delivery was skipped because the signal is below the material retention bar; zip outputs were deleted and JSON metrics retained. Report: reports/no_anchor_top2_weak_generated_combo_refutation_20260624.md.

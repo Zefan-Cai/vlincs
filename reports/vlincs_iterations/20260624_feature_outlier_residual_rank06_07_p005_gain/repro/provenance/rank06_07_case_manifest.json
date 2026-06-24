@@ -1,0 +1,40 @@
+{
+  "rows": [
+    {
+      "evidence": "feature_outlier_after_combo_relink using assignment + weakmetric/OSNet + DINOv2 + SigLIP only",
+      "group_internal_sim": 0.952902,
+      "moved_tracklets": 1,
+      "rank": 6,
+      "source_component": 86,
+      "source_predicted_global_id": 960000350,
+      "source_rest_margin_mean": 0.131068,
+      "source_seqs": [
+        1548
+      ],
+      "target_component": 91,
+      "target_margin": 0.248355,
+      "target_predicted_global_id": 960000483,
+      "target_sim": 0.952902,
+      "videos": "['vlincs_MS01_MC0001_MCAM03_2024-03-Tc6']"
+    },
+    {
+      "evidence": "feature_outlier_after_combo_relink using assignment + weakmetric/OSNet + DINOv2 + SigLIP only",
+      "group_internal_sim": 0.934589,
+      "moved_tracklets": 1,
+      "rank": 7,
+      "source_component": 86,
+      "source_predicted_global_id": 960000350,
+      "source_rest_margin_mean": 0.213102,
+      "source_seqs": [
+        4043
+      ],
+      "target_component": 37,
+      "target_margin": 0.164356,
+      "target_predicted_global_id": 96000040,
+      "target_sim": 0.934589,
+      "videos": "['vlincs_MS01_MC0001_MCAM04_2024-03-Tc6']"
+    }
+  ],
+  "uses_anchors": false,
+  "uses_gt_for_training_or_anchors": false
+}

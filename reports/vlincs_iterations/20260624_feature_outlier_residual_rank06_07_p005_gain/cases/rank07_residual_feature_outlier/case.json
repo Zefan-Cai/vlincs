@@ -1,0 +1,117 @@
+{
+  "after_state": "component 37, gid 96000040, component_size 38, decision_status feature_outlier_after_combo_relink",
+  "before_state": "component 86, gid 960000350, component_size 161",
+  "candidate": {
+    "evidence": "feature_outlier_after_combo_relink using assignment + weakmetric/OSNet + DINOv2 + SigLIP only",
+    "group_internal_sim": 0.934589,
+    "moved_tracklets": 1,
+    "rank": 7,
+    "source_component": 86,
+    "source_predicted_global_id": 960000350,
+    "source_rest_margin_mean": 0.213102,
+    "source_seqs": [
+      4043
+    ],
+    "target_component": 37,
+    "target_margin": 0.164356,
+    "target_predicted_global_id": 96000040,
+    "target_sim": 0.934589,
+    "videos": "['vlincs_MS01_MC0001_MCAM04_2024-03-Tc6']"
+  },
+  "evidence": "target_sim=0.9346, target_margin=0.1644, source_rest_margin=0.2131",
+  "failure_montage": "",
+  "failure_reason": "The previous best already fixed four local islands, but this tracklet still remained in a visually weaker source component.",
+  "improvement": "The residual reviewer composes only this local outlier with another independent outlier, then promotes it only after direct, density_simple, and p005_area validation.",
+  "montage": "rank07_bbox_evidence.png",
+  "raw_frame_dir": "",
+  "raw_frame_status": "unavailable_coordinate_fallback",
+  "summary": "Three sampled bbox frames show the residual one-tracklet move after the previous four-tracklet combo.",
+  "title": "Residual feature-outlier relink rank 07",
+  "tracklets": [
+    {
+      "after": {
+        "avg_conf": "0.390115",
+        "camera": "MCAM04",
+        "component_external_prob_max": "0.0",
+        "component_internal_edges": "0",
+        "component_internal_prob_median": "0.0",
+        "component_internal_score_median": "0.0",
+        "component_label": "37",
+        "component_margin_prob": "0.0",
+        "component_size": "38",
+        "decision_status": "feature_outlier_after_combo_relink",
+        "end_frame": "39602",
+        "n_dets": "300",
+        "predicted_global_id": "96000040",
+        "prediction_confidence": "0.7",
+        "seq": "4043",
+        "start_frame": "39303",
+        "tracklet_key": "vlincs_MS01_MC0001_MCAM04_2024-03-Tc6:2643:0",
+        "video": "vlincs_MS01_MC0001_MCAM04_2024-03-Tc6"
+      },
+      "before": {
+        "avg_conf": "0.390115",
+        "camera": "MCAM04",
+        "component_external_prob_max": "0.0",
+        "component_internal_edges": "0",
+        "component_internal_prob_median": "0.0",
+        "component_internal_score_median": "0.0",
+        "component_label": "86",
+        "component_margin_prob": "0.0",
+        "component_size": "161",
+        "decision_status": "manifest_reassign",
+        "end_frame": "39602",
+        "n_dets": "300",
+        "predicted_global_id": "960000350",
+        "prediction_confidence": "0.7",
+        "seq": "4043",
+        "start_frame": "39303",
+        "tracklet_key": "vlincs_MS01_MC0001_MCAM04_2024-03-Tc6:2643:0",
+        "video": "vlincs_MS01_MC0001_MCAM04_2024-03-Tc6"
+      },
+      "sampled_boxes": [
+        {
+          "bbox_xyxy": [
+            2013.1263,
+            1061.5908,
+            2102.9185,
+            1346.977
+          ],
+          "frame_idx": 39303,
+          "score": 0.4114696979522705,
+          "tracklet_key": "vlincs_MS01_MC0001_MCAM04_2024-03-Tc6:2643:0",
+          "video_key": "vlincs_MS01_MC0001_MCAM04_2024-03-Tc6"
+        },
+        {
+          "bbox_xyxy": [
+            2003.5164,
+            1061.7155,
+            2111.4846,
+            1359.0397
+          ],
+          "frame_idx": 39453,
+          "score": 0.254533052444458,
+          "tracklet_key": "vlincs_MS01_MC0001_MCAM04_2024-03-Tc6:2643:0",
+          "video_key": "vlincs_MS01_MC0001_MCAM04_2024-03-Tc6"
+        },
+        {
+          "bbox_xyxy": [
+            1997.2935,
+            1061.7494,
+            2094.6677,
+            1355.1218
+          ],
+          "frame_idx": 39602,
+          "score": 0.3799612522125244,
+          "tracklet_key": "vlincs_MS01_MC0001_MCAM04_2024-03-Tc6:2643:0",
+          "video_key": "vlincs_MS01_MC0001_MCAM04_2024-03-Tc6"
+        }
+      ],
+      "seq": 4043
+    }
+  ],
+  "uses_anchors": false,
+  "uses_gt_for_evaluation_only": false,
+  "uses_gt_for_training_or_anchors": false,
+  "video_root": ""
+}
