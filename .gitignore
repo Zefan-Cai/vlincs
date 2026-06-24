@@ -6,6 +6,8 @@ _shared_tools_append.md
 .angular
 .idea
 .venv
+.venv-demo
+local_runs
 .claude
 docs
 scripts

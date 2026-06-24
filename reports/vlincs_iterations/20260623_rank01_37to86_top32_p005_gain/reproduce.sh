@@ -37,7 +37,51 @@ while [ "$#" -gt 0 ]; do
 done
 
 export PYTHONPATH="${REPO_ROOT}${PYTHONPATH:+:${PYTHONPATH}}"
-export DATA_ROOT="${DATA_ROOT:-${REPO_ROOT}/local_runs/local_data_root_20260622}"
+
+ensure_python_deps() {
+  if "${PYTHON_BIN}" - <<'PY' >/dev/null 2>&1
+import numpy
+import pandas
+import pyarrow
+import reid_hota
+import sklearn
+PY
+  then
+    export PYTHON_BIN
+    return
+  fi
+
+  if [ "${VLINC_DEMO_NO_VENV:-0}" = "1" ]; then
+    echo "Python dependencies missing; unset VLINC_DEMO_NO_VENV or install numpy pandas pyarrow scikit-learn reid-hota" >&2
+    exit 2
+  fi
+
+  VENV_DIR="${REPO_ROOT}/.venv-demo"
+  if [ -x "${VENV_DIR}/bin/python" ] && "${VENV_DIR}/bin/python" - <<'PY' >/dev/null 2>&1
+import numpy
+import pandas
+import pyarrow
+import reid_hota
+import sklearn
+PY
+  then
+    PYTHON_BIN="${VENV_DIR}/bin/python"
+    export PYTHON_BIN
+    return
+  fi
+
+  if [ ! -x "${VENV_DIR}/bin/python" ]; then
+    echo "DEMO creating ${VENV_DIR}"
+    "${PYTHON_BIN}" -m venv "${VENV_DIR}"
+  fi
+  echo "DEMO installing/verifying Python dependencies in ${VENV_DIR}"
+  "${VENV_DIR}/bin/python" -m pip install --quiet --upgrade pip
+  "${VENV_DIR}/bin/python" -m pip install --quiet numpy pandas pyarrow scikit-learn reid-hota
+  PYTHON_BIN="${VENV_DIR}/bin/python"
+  export PYTHON_BIN
+}
+
+ensure_python_deps
 
 ASSIGNMENT_CSV="${PKG_DIR}/repro/input/rank06_component_subset_attach_source_assignments.csv"
 P005_CONFIG="${PKG_DIR}/repro/input/p005_area_config.txt"
@@ -60,7 +104,26 @@ if [ ! -f "${tracklet_parquets[0]}" ]; then
   exit 2
 fi
 
-gt_count="$(find "${DATA_ROOT}/Box/VLINCS_Performer/MS01/MC0001" -path '*2024-03-Tc*/*_v1.7.2.parquet' -type f 2>/dev/null | wc -l | tr -d ' ')"
+count_gt_files() {
+  find "$1/Box/VLINCS_Performer/MS01/MC0001" -path '*2024-03-Tc*/*_v1.7.2.parquet' -type f 2>/dev/null | wc -l | tr -d ' '
+}
+
+if [ -z "${DATA_ROOT:-}" ]; then
+  for candidate_root in \
+    "${REPO_ROOT}/local_runs/local_data_root_20260622" \
+    "/Users/zcai/Codex/vlincs_reid_by_search/local_runs/local_data_root_20260622" \
+    "/mnt/localssd/vlincs_reid_data" \
+    "/mnt/localssd/vlincs_reid_data_root"; do
+    if [ "$(count_gt_files "${candidate_root}")" -ge 10 ]; then
+      DATA_ROOT="${candidate_root}"
+      break
+    fi
+  done
+fi
+
+export DATA_ROOT="${DATA_ROOT:-${REPO_ROOT}/local_runs/local_data_root_20260622}"
+
+gt_count="$(count_gt_files "${DATA_ROOT}")"
 if [ "${gt_count}" -lt 10 ]; then
   echo "missing DS1 GT under DATA_ROOT=${DATA_ROOT}" >&2
   echo "expected at least 10 files like Box/VLINCS_Performer/MS01/MC0001/2024-03-Tc6/*_v1.7.2.parquet" >&2
