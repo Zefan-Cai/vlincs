@@ -52,19 +52,45 @@ def _hist_feature(path: Path) -> np.ndarray:
     return feat
 
 
+def _dinov2_feature_extractor(model_id: str):
+    try:
+        import torch
+        from transformers import AutoImageProcessor, AutoModel
+    except ModuleNotFoundError as exc:
+        raise SystemExit("dinov2 backend requires torch and transformers in the active environment") from exc
+
+    processor = AutoImageProcessor.from_pretrained(model_id)
+    model = AutoModel.from_pretrained(model_id)
+    model.eval()
+
+    def extract(path: Path) -> np.ndarray:
+        image = Image.open(path).convert("RGB")
+        inputs = processor(images=image, return_tensors="pt")
+        with torch.no_grad():
+            output = model(**inputs)
+        feat = output.last_hidden_state[:, 0, :].float().numpy()[0].astype(np.float32)
+        feat /= float(np.linalg.norm(feat) + 1.0e-9)
+        return feat
+
+    return extract
+
+
 def _cos(a: np.ndarray, b: np.ndarray) -> float:
     return float(np.dot(a, b) / ((np.linalg.norm(a) * np.linalg.norm(b)) + 1.0e-9))
 
 
-def _source_features(prompt_manifest: dict[str, Any], repo_root: Path) -> dict[int, list[np.ndarray]]:
+def _source_features(prompt_manifest: dict[str, Any], repo_root: Path, feature_fn) -> tuple[dict[int, list[np.ndarray]], dict[str, np.ndarray]]:
     by_seq: dict[int, list[np.ndarray]] = {}
+    by_path: dict[str, np.ndarray] = {}
     for row in prompt_manifest.get("crops", []):
         if not isinstance(row, dict):
             continue
         path = _resolve(str(row["crop_path"]), repo_root)
         if path.is_file():
-            by_seq.setdefault(int(row["seq"]), []).append(_hist_feature(path))
-    return by_seq
+            feat = feature_fn(path)
+            by_seq.setdefault(int(row["seq"]), []).append(feat)
+            by_path[str(path)] = feat
+    return by_seq, by_path
 
 
 def _centroids(by_seq: dict[int, list[np.ndarray]]) -> dict[int, np.ndarray]:
@@ -81,6 +107,9 @@ def main() -> None:
     ap.add_argument("--prompt-manifest", required=True, type=Path)
     ap.add_argument("--generated-manifest", required=True, type=Path)
     ap.add_argument("--json", required=True, type=Path)
+    ap.add_argument("--feature-backend", choices=["hist", "dinov2"], default="hist")
+    ap.add_argument("--reference-mode", choices=["centroid", "source"], default="centroid")
+    ap.add_argument("--dinov2-model-id", default="facebook/dinov2-small")
     ap.add_argument("--min-same-sim", type=float, default=0.86)
     ap.add_argument("--min-margin", type=float, default=0.025)
     ap.add_argument("--repo-root", default="", help="root used to resolve relative source/generated paths; defaults to current directory")
@@ -91,7 +120,8 @@ def main() -> None:
     generated = _load(args.generated_manifest)
     if not bool(prompt.get("no_anchor")) or bool(generated.get("uses_anchors")):
         raise SystemExit("expected no-anchor prompt and generated manifests")
-    source = _source_features(prompt, repo_root)
+    feature_fn = _hist_feature if args.feature_backend == "hist" else _dinov2_feature_extractor(str(args.dinov2_model_id))
+    source, source_by_path = _source_features(prompt, repo_root, feature_fn)
     centroids = _centroids(source)
     if len(centroids) < 2:
         raise SystemExit("need at least two local tracklet sequences for counter-tracklet CTF")
@@ -103,8 +133,24 @@ def main() -> None:
             continue
         seq = int(item["seq"])
         image_path = _resolve(str(item["image_path"]), repo_root)
-        feat = _hist_feature(image_path)
-        same = _cos(feat, centroids[seq])
+        feat = feature_fn(image_path)
+        source_paths = []
+        if item.get("source_crop_path"):
+            source_paths.append(_resolve(str(item["source_crop_path"]), repo_root))
+        for raw in item.get("reference_crop_paths", []) if isinstance(item.get("reference_crop_paths"), list) else []:
+            source_paths.append(_resolve(str(raw), repo_root))
+        source_feats = [source_by_path[str(path)] for path in source_paths if str(path) in source_by_path]
+
+        if args.reference_mode == "source":
+            if not source_feats:
+                raise SystemExit(f"reference-mode=source needs source_crop_path or reference_crop_paths for {image_path}")
+            same_scores = [_cos(feat, src_feat) for src_feat in source_feats]
+            same = float(max(same_scores))
+            source_similarity = same
+        else:
+            same = _cos(feat, centroids[seq])
+            source_similarity = None
+
         others = {other_seq: _cos(feat, centroid) for other_seq, centroid in centroids.items() if other_seq != seq}
         best_other_seq, best_other = max(others.items(), key=lambda kv: kv[1])
         margin = same - best_other
@@ -116,7 +162,10 @@ def main() -> None:
                 "variant": int(item.get("variant", -1)),
                 "backend": item.get("backend", ""),
                 "image_path": str(image_path),
+                "feature_backend": str(args.feature_backend),
+                "reference_mode": str(args.reference_mode),
                 "same_seq_similarity": round(float(same), 6),
+                "source_similarity": None if source_similarity is None else round(float(source_similarity), 6),
                 "best_other_seq": int(best_other_seq),
                 "best_other_similarity": round(float(best_other), 6),
                 "margin": round(float(margin), 6),
@@ -130,6 +179,9 @@ def main() -> None:
         "source_prompt_manifest": str(args.prompt_manifest),
         "generated_manifest": str(args.generated_manifest),
         "backend": generated.get("backend", ""),
+        "feature_backend": str(args.feature_backend),
+        "reference_mode": str(args.reference_mode),
+        "dinov2_model_id": str(args.dinov2_model_id) if args.feature_backend == "dinov2" else "",
         "min_same_sim": float(args.min_same_sim),
         "min_margin": float(args.min_margin),
         "generated_images": int(len(rows)),
