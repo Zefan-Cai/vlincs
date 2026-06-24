@@ -1,0 +1,25 @@
+<!doctype html>
+<html><head><meta charset="utf-8"><title>Feature-outlier relink case rank2</title>
+<style>
+body{font-family:Arial,Helvetica,sans-serif;margin:32px;background:#f6f7f9;color:#17202c}
+main{max-width:1120px;margin:auto} img{max-width:100%;border:1px solid #ccd3dc;background:white}
+.kpi{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin:18px 0}
+.card{background:white;border:1px solid #d7dde5;padding:14px} table{border-collapse:collapse;width:100%;background:white}
+td,th{border:1px solid #d7dde5;padding:8px;text-align:left} code{background:#eef1f5;padding:2px 4px}
+</style></head><body><main>
+<h1>Feature-outlier relink case rank2</h1>
+<p>One no-anchor feature-outlier tracklet is moved to a closer target component in the promoted four-tracklet combo.</p>
+<div class="kpi">
+<div class="card"><b>Before</b><br>component 86, gid 960000350, component_size 162</div>
+<div class="card"><b>After</b><br>component 91, gid 960000483, component_size 55, decision_status feature_outlier_combo_relink</div>
+<div class="card"><b>Evidence</b><br>target_sim=0.9604, target_margin=0.2485, source_rest_margin=0.1345<br><b>Raw frame</b><br>unavailable_coordinate_fallback</div>
+</div>
+<h2>Failure and fix</h2>
+<p><b>Old failure:</b> The previous graph kept a visually isolated tracklet inside a larger component even though DINOv2, SigLIP and weakmetric evidence preferred another component.</p>
+<p><b>New implementation:</b> The feature-outlier reviewer moves only this local island, preserving the rest of the source component and requiring direct plus p005 delivery validation.</p>
+<h2>BBox evidence</h2>
+<img src="rank02_bbox_evidence.png" alt="rank15 bbox evidence">
+<h2>Moved tracklets</h2>
+<table><thead><tr><th>seq</th><th>video</th><th>gid</th><th>component</th><th>frames</th><th>dets</th></tr></thead><tbody><tr><td>685</td><td>vlincs_MS01_MC0001_MCAM03_2024-03-Tc6</td><td>960000350 -> 960000483</td><td>86 -> 91</td><td>352-651</td><td>300</td></tr></tbody></table>
+
+</main></body></html>

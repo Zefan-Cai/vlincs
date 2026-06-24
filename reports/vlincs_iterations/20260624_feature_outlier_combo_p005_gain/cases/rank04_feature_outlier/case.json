@@ -1,0 +1,124 @@
+{
+  "after_state": "component 3, gid 96000003, component_size 250, decision_status feature_outlier_combo_relink",
+  "before_state": "component 20, gid 96000022, component_size 166",
+  "candidate": {
+    "conflicts_to_rest": 2,
+    "group_internal_sim": 0.953053,
+    "moved_tracklets": 1,
+    "original_rank": 5,
+    "rank": 4,
+    "score": 0.953053,
+    "source_component": 20,
+    "source_component_conflict_edges": 2,
+    "source_component_label": 20,
+    "source_predicted_global_id": "96000022",
+    "source_rest_margin_mean": 0.140114,
+    "source_seqs": [
+      5628
+    ],
+    "summary": "rank05 feature outlier relink seq 5628: component 20 -> 3",
+    "target_component": 3,
+    "target_margin": 0.296457,
+    "target_predicted_global_id": 96000003,
+    "target_sim": 0.953053,
+    "tracklet_keys": [
+      5628
+    ]
+  },
+  "evidence": "target_sim=0.9531, target_margin=0.2965, source_rest_margin=0.1401",
+  "failure_montage": "",
+  "failure_reason": "The previous graph kept a visually isolated tracklet inside a larger component even though DINOv2, SigLIP and weakmetric evidence preferred another component.",
+  "improvement": "The feature-outlier reviewer moves only this local island, preserving the rest of the source component and requiring direct plus p005 delivery validation.",
+  "montage": "rank04_bbox_evidence.png",
+  "raw_frame_dir": "",
+  "raw_frame_status": "unavailable_coordinate_fallback",
+  "summary": "One no-anchor feature-outlier tracklet is moved to a closer target component in the promoted four-tracklet combo.",
+  "title": "Feature-outlier relink case rank4",
+  "tracklets": [
+    {
+      "after": {
+        "avg_conf": "0.514031",
+        "camera": "MCAM04",
+        "component_external_prob_max": "0.0",
+        "component_internal_edges": "0",
+        "component_internal_prob_median": "0.0",
+        "component_internal_score_median": "0.0",
+        "component_label": "3",
+        "component_margin_prob": "0.0",
+        "component_size": "250",
+        "decision_status": "feature_outlier_combo_relink",
+        "end_frame": "12550",
+        "n_dets": "86",
+        "predicted_global_id": "96000003",
+        "prediction_confidence": "0.7",
+        "seq": "5628",
+        "start_frame": "12465",
+        "tracklet_key": "vlincs_MS01_MC0001_MCAM04_2024-03-Tc6:761:0",
+        "video": "vlincs_MS01_MC0001_MCAM04_2024-03-Tc6"
+      },
+      "before": {
+        "avg_conf": "0.514031",
+        "camera": "MCAM04",
+        "component_external_prob_max": "0.0",
+        "component_internal_edges": "0",
+        "component_internal_prob_median": "0.0",
+        "component_internal_score_median": "0.0",
+        "component_label": "20",
+        "component_margin_prob": "0.0",
+        "component_size": "166",
+        "decision_status": "forced_component",
+        "end_frame": "12550",
+        "n_dets": "86",
+        "predicted_global_id": "96000022",
+        "prediction_confidence": "0.700000",
+        "seq": "5628",
+        "start_frame": "12465",
+        "tracklet_key": "vlincs_MS01_MC0001_MCAM04_2024-03-Tc6:761:0",
+        "video": "vlincs_MS01_MC0001_MCAM04_2024-03-Tc6"
+      },
+      "sampled_boxes": [
+        {
+          "bbox_xyxy": [
+            2325.8992,
+            1009.5117,
+            2389.228,
+            1224.1464
+          ],
+          "frame_idx": 12465,
+          "score": 0.5261861085891724,
+          "tracklet_key": "vlincs_MS01_MC0001_MCAM04_2024-03-Tc6:761:0",
+          "video_key": "vlincs_MS01_MC0001_MCAM04_2024-03-Tc6"
+        },
+        {
+          "bbox_xyxy": [
+            2317.1567,
+            1012.92206,
+            2381.9485,
+            1258.9686
+          ],
+          "frame_idx": 12507,
+          "score": 0.7328898906707764,
+          "tracklet_key": "vlincs_MS01_MC0001_MCAM04_2024-03-Tc6:761:0",
+          "video_key": "vlincs_MS01_MC0001_MCAM04_2024-03-Tc6"
+        },
+        {
+          "bbox_xyxy": [
+            2285.2358,
+            1088.6372,
+            2299.9268,
+            1170.652
+          ],
+          "frame_idx": 12550,
+          "score": 0.23633582890033722,
+          "tracklet_key": "vlincs_MS01_MC0001_MCAM04_2024-03-Tc6:761:0",
+          "video_key": "vlincs_MS01_MC0001_MCAM04_2024-03-Tc6"
+        }
+      ],
+      "seq": 5628
+    }
+  ],
+  "uses_anchors": false,
+  "uses_gt_for_evaluation_only": false,
+  "uses_gt_for_training_or_anchors": false,
+  "video_root": ""
+}

@@ -1,0 +1,95 @@
+{
+  "rows": [
+    {
+      "conflicts_to_rest": 0,
+      "group_internal_sim": 1.026054,
+      "moved_tracklets": 1,
+      "original_rank": 1,
+      "rank": 1,
+      "score": 1.026054,
+      "source_component_conflict_edges": 0,
+      "source_component_label": 4,
+      "source_rest_margin_mean": 0.251735,
+      "source_seqs": [
+        2354
+      ],
+      "summary": "rank01 feature outlier relink seq 2354: component 4 -> 0",
+      "target_component": 0,
+      "target_margin": 0.358527,
+      "target_predicted_global_id": 96000000,
+      "target_sim": 1.026054,
+      "tracklet_keys": [
+        2354
+      ]
+    },
+    {
+      "conflicts_to_rest": 0,
+      "group_internal_sim": 0.960354,
+      "moved_tracklets": 1,
+      "original_rank": 3,
+      "rank": 2,
+      "score": 0.960354,
+      "source_component_conflict_edges": 0,
+      "source_component_label": 86,
+      "source_rest_margin_mean": 0.134501,
+      "source_seqs": [
+        685
+      ],
+      "summary": "rank03 feature outlier relink seq 685: component 86 -> 91",
+      "target_component": 91,
+      "target_margin": 0.248487,
+      "target_predicted_global_id": 960000483,
+      "target_sim": 0.960354,
+      "tracklet_keys": [
+        685
+      ]
+    },
+    {
+      "conflicts_to_rest": 4,
+      "group_internal_sim": 0.95308,
+      "moved_tracklets": 1,
+      "original_rank": 4,
+      "rank": 3,
+      "score": 0.95308,
+      "source_component_conflict_edges": 4,
+      "source_component_label": 45,
+      "source_rest_margin_mean": 0.16801,
+      "source_seqs": [
+        9343
+      ],
+      "summary": "rank04 feature outlier relink seq 9343: component 45 -> 26",
+      "target_component": 26,
+      "target_margin": 0.154551,
+      "target_predicted_global_id": 96000028,
+      "target_sim": 0.95308,
+      "tracklet_keys": [
+        9343
+      ]
+    },
+    {
+      "conflicts_to_rest": 2,
+      "group_internal_sim": 0.953053,
+      "moved_tracklets": 1,
+      "original_rank": 5,
+      "rank": 4,
+      "score": 0.953053,
+      "source_component_conflict_edges": 2,
+      "source_component_label": 20,
+      "source_rest_margin_mean": 0.140114,
+      "source_seqs": [
+        5628
+      ],
+      "summary": "rank05 feature outlier relink seq 5628: component 20 -> 3",
+      "target_component": 3,
+      "target_margin": 0.296457,
+      "target_predicted_global_id": 96000003,
+      "target_sim": 0.953053,
+      "tracklet_keys": [
+        5628
+      ]
+    }
+  ],
+  "uses_anchors": false,
+  "uses_gt_for_evaluation_only": false,
+  "uses_gt_for_training_or_anchors": false
+}
