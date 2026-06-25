@@ -1,0 +1,34 @@
+[
+  {
+    "assa": 0.503751,
+    "decision": "best",
+    "delta_idf1": 0.001158,
+    "hota": 0.487977,
+    "idf1": 0.628913,
+    "name": "combo_all_positive_r04_r01_r11_r16_r19_r20"
+  },
+  {
+    "assa": 0.503352,
+    "decision": "positive interaction",
+    "delta_idf1": 0.000461,
+    "hota": 0.487397,
+    "idf1": 0.628216,
+    "name": "combo_r04_r01"
+  },
+  {
+    "assa": 0.503394,
+    "decision": "positive interaction",
+    "delta_idf1": 0.000537,
+    "hota": 0.487461,
+    "idf1": 0.628292,
+    "name": "combo_r04_r01_r11"
+  },
+  {
+    "assa": 0.503639,
+    "decision": "positive interaction",
+    "delta_idf1": 0.00091,
+    "hota": 0.487781,
+    "idf1": 0.628665,
+    "name": "combo_r04_r01_r16"
+  }
+]

@@ -1,0 +1,119 @@
+{
+  "assa": 0.503751,
+  "assigned_tracklets": 9734,
+  "assignment_status_counts": {
+    "main_72c55bc_two_tier_component": 9723,
+    "subpart_reassign_combo": 11
+  },
+  "deta": 0.472731,
+  "detpr": 0.741765,
+  "detre": 0.545865,
+  "fallback": "singleton",
+  "hota": 0.487977,
+  "idf1": 0.628913,
+  "input_rows": 1723070,
+  "input_tracklets": 9734,
+  "missing_assignment_tracklets": 0,
+  "per_video": {
+    "vlincs_MS01_MC0001_MCAM00_2024-03-Tc6": {
+      "assa": 0.836394,
+      "deta": 0.708657,
+      "detpr": 0.904472,
+      "detre": 0.753888,
+      "hota": 0.769475,
+      "idf1": 0.822344
+    },
+    "vlincs_MS01_MC0001_MCAM00_2024-03-Tc8": {
+      "assa": 0.737765,
+      "deta": 0.620221,
+      "detpr": 0.832564,
+      "detre": 0.701006,
+      "hota": 0.676361,
+      "idf1": 0.761142
+    },
+    "vlincs_MS01_MC0001_MCAM03_2024-03-Tc6": {
+      "assa": 0.604234,
+      "deta": 0.525168,
+      "detpr": 0.808436,
+      "detre": 0.578936,
+      "hota": 0.563077,
+      "idf1": 0.674704
+    },
+    "vlincs_MS01_MC0001_MCAM03_2024-03-Tc8": {
+      "assa": 0.521551,
+      "deta": 0.425742,
+      "detpr": 0.748931,
+      "detre": 0.479713,
+      "hota": 0.470761,
+      "idf1": 0.584827
+    },
+    "vlincs_MS01_MC0001_MCAM04_2024-03-Tc6": {
+      "assa": 0.473267,
+      "deta": 0.399803,
+      "detpr": 0.695223,
+      "detre": 0.461988,
+      "hota": 0.434586,
+      "idf1": 0.555102
+    },
+    "vlincs_MS01_MC0001_MCAM05_2024-03-Tc6": {
+      "assa": 0.545612,
+      "deta": 0.201435,
+      "detpr": 0.233965,
+      "detre": 0.575914,
+      "hota": 0.331508,
+      "idf1": 0.33275
+    },
+    "vlincs_MS01_MC0001_MCAM05_2024-03-Tc8": {
+      "assa": 0.699681,
+      "deta": 0.55454,
+      "detpr": 0.806802,
+      "detre": 0.626748,
+      "hota": 0.62288,
+      "idf1": 0.705467
+    },
+    "vlincs_MS01_MC0001_MCAM06_2024-03-Tc6": {
+      "assa": 0.561933,
+      "deta": 0.368926,
+      "detpr": 0.760065,
+      "detre": 0.4087,
+      "hota": 0.455038,
+      "idf1": 0.531567
+    },
+    "vlincs_MS01_MC0001_MCAM06_2024-03-Tc8": {
+      "assa": 0.58192,
+      "deta": 0.435341,
+      "detpr": 0.687517,
+      "detre": 0.526887,
+      "hota": 0.503119,
+      "idf1": 0.596578
+    },
+    "vlincs_MS01_MC0001_MCAM08_2024-03-Tc6": {
+      "assa": 0.672591,
+      "deta": 0.631962,
+      "detpr": 0.828896,
+      "detre": 0.703936,
+      "hota": 0.651871,
+      "idf1": 0.761322
+    }
+  },
+  "predicted_ids": 114,
+  "scored_rows": 1723070,
+  "unmatched_fp": 316136,
+  "uses_anchors": false,
+  "uses_gt_for_evaluation_only": true,
+  "uses_gt_for_training_or_anchors": false,
+  "videos_scored": [
+    "vlincs_MS01_MC0001_MCAM00_2024-03-Tc6",
+    "vlincs_MS01_MC0001_MCAM00_2024-03-Tc8",
+    "vlincs_MS01_MC0001_MCAM03_2024-03-Tc6",
+    "vlincs_MS01_MC0001_MCAM03_2024-03-Tc8",
+    "vlincs_MS01_MC0001_MCAM04_2024-03-Tc6",
+    "vlincs_MS01_MC0001_MCAM05_2024-03-Tc6",
+    "vlincs_MS01_MC0001_MCAM05_2024-03-Tc8",
+    "vlincs_MS01_MC0001_MCAM06_2024-03-Tc6",
+    "vlincs_MS01_MC0001_MCAM06_2024-03-Tc8",
+    "vlincs_MS01_MC0001_MCAM08_2024-03-Tc6"
+  ],
+  "zip_files": 10,
+  "zip_out": "/Users/zcai/Codex/vlincs_reid_by_search_wisc_sync/local_runs/main72c55bc_stack_reproduce_script_check/combo_all_positive_r04_r01_r11_r16_r19_r20_sample.zip"
+}

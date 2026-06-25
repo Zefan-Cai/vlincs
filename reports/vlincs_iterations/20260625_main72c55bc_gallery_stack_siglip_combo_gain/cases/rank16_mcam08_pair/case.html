@@ -1,0 +1,26 @@
+<!doctype html>
+<html><head><meta charset="utf-8"><title>Main 72c55bc stack repair: rank16 MCAM08 pair</title>
+<style>
+body{font-family:Arial,Helvetica,sans-serif;margin:32px;background:#f6f7f9;color:#17202c}
+main{max-width:1120px;margin:auto} img{max-width:100%;border:1px solid #ccd3dc;background:white}
+.kpi{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin:18px 0}
+.card{background:white;border:1px solid #d7dde5;padding:14px} table{border-collapse:collapse;width:100%;background:white}
+td,th{border:1px solid #d7dde5;padding:8px;text-align:left} code{background:#eef1f5;padding:2px 4px}
+</style></head><body><main>
+<h1>Main 72c55bc stack repair: rank16 MCAM08 pair</h1>
+<p>Two MCAM08 tracklets move from component 35 to component 63; this is the strongest single direct gain in the second review batch.</p>
+<div class="kpi">
+<div class="card"><b>Before</b><br>component 35, gid 100000035, component_size 168</div>
+<div class="card"><b>After</b><br>component 63, gid 100000063, component_size 193, decision_status subpart_reassign_combo</div>
+<div class="card"><b>Evidence</b><br>target_sim=0.6653, target_margin=0.1288, source_rest_margin=0.6940<br><b>Raw frame</b><br>available</div>
+</div>
+<h2>Failure and fix</h2>
+<p><b>Old failure:</b> The gallery assignment leaves two MCAM08 residual tracklets attached to a broad component where they create a weak association island.</p>
+<p><b>New implementation:</b> The repair promotes a small pair only after visual evidence and no temporal overlap conflict with the target component.</p>
+<h2>BBox evidence</h2>
+<img src="rank16_bbox_evidence.png" alt="rank15 bbox evidence">
+<h2>Moved tracklets</h2>
+<table><thead><tr><th>seq</th><th>video</th><th>gid</th><th>component</th><th>frames</th><th>dets</th></tr></thead><tbody><tr><td>7973</td><td>vlincs_MS01_MC0001_MCAM08_2024-03-Tc6</td><td>100000035 -> 100000063</td><td>35 -> 63</td><td>0-299</td><td>300</td></tr>
+<tr><td>9244</td><td>vlincs_MS01_MC0001_MCAM08_2024-03-Tc6</td><td>100000035 -> 100000063</td><td>35 -> 63</td><td>300-599</td><td>300</td></tr></tbody></table>
+
+</main></body></html>

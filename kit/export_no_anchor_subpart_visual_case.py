@@ -231,6 +231,8 @@ def _extract_video_frame(
     frame_idx: int,
     output_dir: Path,
     ffmpeg_bin: str,
+    fast_seek_fps: float,
+    timeout_sec: float,
 ) -> Path | None:
     video_path = _find_video_file(video_root, video_key)
     if video_path is None:
@@ -240,24 +242,41 @@ def _extract_video_frame(
     out_path = out_dir / f"{_safe_stem(video_key)}_f{frame_idx}.png"
     if out_path.is_file():
         return out_path
-    expr = f"select=eq(n\\,{int(frame_idx)})"
-    cmd = [
-        ffmpeg_bin,
-        "-hide_banner",
-        "-loglevel",
-        "error",
-        "-i",
-        str(video_path),
-        "-vf",
-        expr,
-        "-frames:v",
-        "1",
-        "-y",
-        str(out_path),
-    ]
+    if fast_seek_fps > 0:
+        seek_sec = max(0.0, float(frame_idx) / float(fast_seek_fps))
+        cmd = [
+            ffmpeg_bin,
+            "-hide_banner",
+            "-loglevel",
+            "error",
+            "-ss",
+            f"{seek_sec:.3f}",
+            "-i",
+            str(video_path),
+            "-frames:v",
+            "1",
+            "-y",
+            str(out_path),
+        ]
+    else:
+        expr = f"select=eq(n\\,{int(frame_idx)})"
+        cmd = [
+            ffmpeg_bin,
+            "-hide_banner",
+            "-loglevel",
+            "error",
+            "-i",
+            str(video_path),
+            "-vf",
+            expr,
+            "-frames:v",
+            "1",
+            "-y",
+            str(out_path),
+        ]
     try:
-        subprocess.run(cmd, check=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
-    except (OSError, subprocess.CalledProcessError):
+        subprocess.run(cmd, check=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True, timeout=timeout_sec)
+    except (OSError, subprocess.CalledProcessError, subprocess.TimeoutExpired):
         return None
     return out_path if out_path.is_file() else None
 
@@ -268,6 +287,8 @@ def _attach_raw_frames(
     video_root: Path | None,
     output_dir: Path,
     ffmpeg_bin: str,
+    fast_seek_fps: float,
+    timeout_sec: float,
 ) -> None:
     for box in boxes:
         video_key = str(box.get("video_key", ""))
@@ -276,7 +297,7 @@ def _attach_raw_frames(
         raw_path = _find_raw_frame(raw_frame_dir, video_key, tracklet_key, frame_idx)
         source = "raw_frame_dir"
         if raw_path is None:
-            raw_path = _extract_video_frame(video_root, video_key, frame_idx, output_dir, ffmpeg_bin)
+            raw_path = _extract_video_frame(video_root, video_key, frame_idx, output_dir, ffmpeg_bin, fast_seek_fps, timeout_sec)
             source = "video_root"
         if raw_path is not None:
             box["raw_frame_path"] = str(raw_path)
@@ -484,6 +505,8 @@ def main() -> None:
     ap.add_argument("--raw-frame-dir", default=None, type=Path, help="Optional directory containing pre-extracted raw frame images.")
     ap.add_argument("--video-root", default=None, type=Path, help="Optional video root; if present, ffmpeg extracts exact frame images.")
     ap.add_argument("--ffmpeg-bin", default="ffmpeg", help="ffmpeg executable used with --video-root.")
+    ap.add_argument("--fast-video-seek-fps", type=float, default=0.0, help="If >0, extract raw frames by frame_idx/fps time seek instead of slow exact frame scan.")
+    ap.add_argument("--ffmpeg-timeout-sec", type=float, default=30.0, help="Per-frame ffmpeg extraction timeout.")
     ap.add_argument("--failure-montage", default="", type=Path)
     ap.add_argument("--title", default="No-anchor subpart reassignment visual case")
     ap.add_argument("--summary", default="")
@@ -503,7 +526,15 @@ def main() -> None:
         b = before[seq]
         a = after[seq]
         boxes = _sample_boxes(args.tracklet_parquet, a["tracklet_key"], 3)
-        _attach_raw_frames(boxes, args.raw_frame_dir, args.video_root, args.output_dir, args.ffmpeg_bin)
+        _attach_raw_frames(
+            boxes,
+            args.raw_frame_dir,
+            args.video_root,
+            args.output_dir,
+            args.ffmpeg_bin,
+            float(args.fast_video_seek_fps),
+            float(args.ffmpeg_timeout_sec),
+        )
         tracklets.append({"seq": seq, "before": b, "after": a, "sampled_boxes": boxes})
 
     args.output_dir.mkdir(parents=True, exist_ok=True)

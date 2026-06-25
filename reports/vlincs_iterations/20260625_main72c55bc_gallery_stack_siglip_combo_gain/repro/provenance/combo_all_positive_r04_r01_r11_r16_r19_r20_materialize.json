@@ -1,0 +1,247 @@
+{
+  "assignment_csv": "/Users/zcai/Codex/vlincs_reid_by_search_main_latest/local_runs/main_72c55bc_stack_20260625/repro_check/combo_all_positive_r04_r01_r11_r16_r19_r20.csv",
+  "assignment_sha256": "954612ba9e8b11dc3f6af8d457a2e487a8bd69cf12c1087baaefc795a5168471",
+  "base_assignment_csv": "/Users/zcai/Codex/vlincs_reid_by_search_main_latest/local_runs/main_72c55bc_stack_20260625/repro_check/exported_main72c55bc_assignments.csv",
+  "base_assignment_sha256": "e4922ee9382e3574515190b53e182f195e53af817c295c187440d0dcd267ce71",
+  "changes": [
+    {
+      "after_component_label": 37,
+      "after_decision_status": "subpart_reassign_combo",
+      "after_predicted_global_id": 100000037,
+      "before_component_label": 17,
+      "before_decision_status": "main_72c55bc_two_tier_component",
+      "before_predicted_global_id": 100000017,
+      "rank": 4,
+      "seq": 4558,
+      "tracklet_key": "vlincs_MS01_MC0001_MCAM04_2024-03-Tc6:3106:0"
+    },
+    {
+      "after_component_label": 37,
+      "after_decision_status": "subpart_reassign_combo",
+      "after_predicted_global_id": 100000037,
+      "before_component_label": 17,
+      "before_decision_status": "main_72c55bc_two_tier_component",
+      "before_predicted_global_id": 100000017,
+      "rank": 4,
+      "seq": 4609,
+      "tracklet_key": "vlincs_MS01_MC0001_MCAM04_2024-03-Tc6:3152:0"
+    },
+    {
+      "after_component_label": 37,
+      "after_decision_status": "subpart_reassign_combo",
+      "after_predicted_global_id": 100000037,
+      "before_component_label": 17,
+      "before_decision_status": "main_72c55bc_two_tier_component",
+      "before_predicted_global_id": 100000017,
+      "rank": 4,
+      "seq": 4649,
+      "tracklet_key": "vlincs_MS01_MC0001_MCAM04_2024-03-Tc6:3189:0"
+    },
+    {
+      "after_component_label": 110,
+      "after_decision_status": "subpart_reassign_combo",
+      "after_predicted_global_id": 100000110,
+      "before_component_label": 34,
+      "before_decision_status": "main_72c55bc_two_tier_component",
+      "before_predicted_global_id": 100000034,
+      "rank": 1,
+      "seq": 7045,
+      "tracklet_key": "vlincs_MS01_MC0001_MCAM06_2024-03-Tc6:246:0"
+    },
+    {
+      "after_component_label": 8,
+      "after_decision_status": "subpart_reassign_combo",
+      "after_predicted_global_id": 100000008,
+      "before_component_label": 35,
+      "before_decision_status": "main_72c55bc_two_tier_component",
+      "before_predicted_global_id": 100000035,
+      "rank": 11,
+      "seq": 6669,
+      "tracklet_key": "vlincs_MS01_MC0001_MCAM05_2024-03-Tc6:799:0"
+    },
+    {
+      "after_component_label": 8,
+      "after_decision_status": "subpart_reassign_combo",
+      "after_predicted_global_id": 100000008,
+      "before_component_label": 35,
+      "before_decision_status": "main_72c55bc_two_tier_component",
+      "before_predicted_global_id": 100000035,
+      "rank": 11,
+      "seq": 6677,
+      "tracklet_key": "vlincs_MS01_MC0001_MCAM05_2024-03-Tc6:805:0"
+    },
+    {
+      "after_component_label": 63,
+      "after_decision_status": "subpart_reassign_combo",
+      "after_predicted_global_id": 100000063,
+      "before_component_label": 35,
+      "before_decision_status": "main_72c55bc_two_tier_component",
+      "before_predicted_global_id": 100000035,
+      "rank": 16,
+      "seq": 7973,
+      "tracklet_key": "vlincs_MS01_MC0001_MCAM08_2024-03-Tc6:14:0"
+    },
+    {
+      "after_component_label": 63,
+      "after_decision_status": "subpart_reassign_combo",
+      "after_predicted_global_id": 100000063,
+      "before_component_label": 35,
+      "before_decision_status": "main_72c55bc_two_tier_component",
+      "before_predicted_global_id": 100000035,
+      "rank": 16,
+      "seq": 9244,
+      "tracklet_key": "vlincs_MS01_MC0001_MCAM08_2024-03-Tc6:55:0"
+    },
+    {
+      "after_component_label": 25,
+      "after_decision_status": "subpart_reassign_combo",
+      "after_predicted_global_id": 100000025,
+      "before_component_label": 31,
+      "before_decision_status": "main_72c55bc_two_tier_component",
+      "before_predicted_global_id": 100000031,
+      "rank": 19,
+      "seq": 9343,
+      "tracklet_key": "vlincs_MS01_MC0001_MCAM08_2024-03-Tc6:649:0"
+    },
+    {
+      "after_component_label": 17,
+      "after_decision_status": "subpart_reassign_combo",
+      "after_predicted_global_id": 100000017,
+      "before_component_label": 5,
+      "before_decision_status": "main_72c55bc_two_tier_component",
+      "before_predicted_global_id": 100000005,
+      "rank": 20,
+      "seq": 3137,
+      "tracklet_key": "vlincs_MS01_MC0001_MCAM04_2024-03-Tc6:1828:0"
+    },
+    {
+      "after_component_label": 17,
+      "after_decision_status": "subpart_reassign_combo",
+      "after_predicted_global_id": 100000017,
+      "before_component_label": 5,
+      "before_decision_status": "main_72c55bc_two_tier_component",
+      "before_predicted_global_id": 100000005,
+      "rank": 20,
+      "seq": 3167,
+      "tracklet_key": "vlincs_MS01_MC0001_MCAM04_2024-03-Tc6:1855:0"
+    }
+  ],
+  "decision_status": "subpart_reassign_combo",
+  "manifest": "/Users/zcai/Codex/vlincs_reid_by_search_main_latest/local_runs/main_72c55bc_stack_20260625/siglip_primary/manifest.json",
+  "manifest_sha256": "d9bff4ecba80017d9165b50246450ebdbfba0118137d9f0941f1cf3adc8aa6ed",
+  "moved_tracklets": 11,
+  "selected": [
+    {
+      "conflicts_to_rest": 5,
+      "moved_tracklets": 3,
+      "rank": 4,
+      "score": 3.17824878691903,
+      "source_component": 17,
+      "source_predicted_global_id": 100000017,
+      "source_rest_margin_mean": 0.45812878012657166,
+      "source_seqs": [
+        4558,
+        4609,
+        4649
+      ],
+      "target_component": 37,
+      "target_margin": 0.18721804022789001,
+      "target_predicted_global_id": 100000037,
+      "target_sim": 0.6812902688980103
+    },
+    {
+      "conflicts_to_rest": 5,
+      "moved_tracklets": 1,
+      "rank": 1,
+      "score": 3.368197616220687,
+      "source_component": 34,
+      "source_predicted_global_id": 100000034,
+      "source_rest_margin_mean": 0.760381743311882,
+      "source_seqs": [
+        7045
+      ],
+      "target_component": 110,
+      "target_margin": 0.23217463493347168,
+      "target_predicted_global_id": 100000110,
+      "target_sim": 0.7233315706253052
+    },
+    {
+      "conflicts_to_rest": 3,
+      "moved_tracklets": 2,
+      "rank": 11,
+      "score": 3.094004011966672,
+      "source_component": 35,
+      "source_predicted_global_id": 100000035,
+      "source_rest_margin_mean": 0.4006526470184326,
+      "source_seqs": [
+        6669,
+        6677
+      ],
+      "target_component": 8,
+      "target_margin": 0.10543620586395264,
+      "target_predicted_global_id": 100000008,
+      "target_sim": 0.8091333508491516
+    },
+    {
+      "conflicts_to_rest": 3,
+      "moved_tracklets": 2,
+      "rank": 16,
+      "score": 3.060274870581004,
+      "source_component": 35,
+      "source_predicted_global_id": 100000035,
+      "source_rest_margin_mean": 0.6939947456121445,
+      "source_seqs": [
+        7973,
+        9244
+      ],
+      "target_component": 63,
+      "target_margin": 0.12884652614593506,
+      "target_predicted_global_id": 100000063,
+      "target_sim": 0.6652795672416687
+    },
+    {
+      "conflicts_to_rest": 2,
+      "moved_tracklets": 1,
+      "rank": 19,
+      "score": 3.0317125856660203,
+      "source_component": 31,
+      "source_predicted_global_id": 100000031,
+      "source_rest_margin_mean": 0.6511121988296509,
+      "source_seqs": [
+        9343
+      ],
+      "target_component": 25,
+      "target_margin": 0.15547186136245728,
+      "target_predicted_global_id": 100000025,
+      "target_sim": 0.7108410596847534
+    },
+    {
+      "conflicts_to_rest": 9,
+      "moved_tracklets": 2,
+      "rank": 20,
+      "score": 3.027579126636849,
+      "source_component": 5,
+      "source_predicted_global_id": 100000005,
+      "source_rest_margin_mean": 0.49055859446525574,
+      "source_seqs": [
+        3137,
+        3167
+      ],
+      "target_component": 17,
+      "target_margin": 0.11497849225997925,
+      "target_predicted_global_id": 100000017,
+      "target_sim": 0.6347157955169678
+    }
+  ],
+  "selected_ranks": [
+    4,
+    1,
+    11,
+    16,
+    19,
+    20
+  ],
+  "uses_anchors": false,
+  "uses_gt_for_evaluation_only": false,
+  "uses_gt_for_training_or_anchors": false
+}

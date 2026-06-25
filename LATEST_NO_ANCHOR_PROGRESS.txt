@@ -4,6 +4,15 @@ Date: 2026-06-25
 Current best e2e:
 IDF1 / HOTA / AssA = 0.669494 / 0.530188 / 0.540439
 
+Latest main-72c55bc stacking proof:
+The previous 66.8 no-anchor final assignment cannot be pasted onto latest main because the tracklet/component namespace changed. The method does stack: run latest main gallery first, export the gallery DB assignment, regenerate SigLIP+weakmetric+DINO no-anchor subpart candidates, apply reviewer-selected ranks 4,1,11,16,19,20, and score by tracklet-key delivery evaluator. Reproduce script regenerated 642 candidates, moved 11 tracklets, and scored DS1 IDF1/HOTA/AssA = 0.628913 / 0.487977 / 0.503751 versus latest-main baseline 0.627755 / 0.486854 / 0.502790, a +0.001158 IDF1 main-stack gain. This is an integration proof on the 62.8 main branch, not a replacement for the separate wisc canonical p005 best 0.669494. Package: reports/vlincs_iterations/20260625_main72c55bc_gallery_stack_siglip_combo_gain/.
+
+VLINCS no-anchor global ID progress
+Date: 2026-06-25
+
+Current best e2e:
+IDF1 / HOTA / AssA = 0.669494 / 0.530188 / 0.540439
+
 Latest seq7771 best-crop component-82 microgain:
 The generated-positive best-crop CTF probe made component 82 a stable no-anchor target. A MCAM08-focused SigLIP scheduler then proposed rank17, moving only seq3403 from component 11 / gid96000012 into component 82 / gid960000202. Direct full-score improves from 0.667266 to 0.667294, density_simple scores 0.669388, and canonical density_simple + valid p005_area improves the tracked best from 0.669466 / 0.530154 / 0.540397 to 0.669494 / 0.530188 / 0.540439 with config_name=p005_area and dropped_rows=45467. No anchors or GT labels were used as assignment evidence; GT was eval-only after materialization. Package: reports/vlincs_iterations/20260625_seq7771_bestcrop_component82_p005_gain/.
 

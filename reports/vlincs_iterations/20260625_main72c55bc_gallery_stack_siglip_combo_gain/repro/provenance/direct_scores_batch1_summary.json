@@ -1,0 +1,122 @@
+[
+  {
+    "assa": 0.503005,
+    "assignment_csv": "local_runs/main_72c55bc_stack_20260625/siglip_primary/assignments/rank01_subpart_s34_to110_1seq_assignments.csv",
+    "delta_idf1": 0.00013,
+    "hota": 0.487032,
+    "idf1": 0.627885,
+    "json": "local_runs/main_72c55bc_stack_20260625/direct_scores/siglip_r01_s34_to110_7045.json",
+    "name": "siglip_r01_s34_to110_7045",
+    "rank": 1,
+    "source_component": 34,
+    "source_seqs": [
+      7045
+    ],
+    "source_videos": {
+      "vlincs_MS01_MC0001_MCAM06_2024-03-Tc6": 1
+    },
+    "target_component": 110,
+    "zip": "local_runs/main_72c55bc_stack_20260625/direct_scores/siglip_r01_s34_to110_7045.zip"
+  },
+  {
+    "assa": 0.50279,
+    "assignment_csv": "local_runs/main_72c55bc_stack_20260625/siglip_primary/assignments/rank02_subpart_s45_to10_1seq_assignments.csv",
+    "delta_idf1": 0.0,
+    "hota": 0.486854,
+    "idf1": 0.627755,
+    "json": "local_runs/main_72c55bc_stack_20260625/direct_scores/siglip_r02_s45_to10_1243.json",
+    "name": "siglip_r02_s45_to10_1243",
+    "rank": 2,
+    "source_component": 45,
+    "source_seqs": [
+      1243
+    ],
+    "source_videos": {
+      "vlincs_MS01_MC0001_MCAM03_2024-03-Tc6": 1
+    },
+    "target_component": 10,
+    "zip": "local_runs/main_72c55bc_stack_20260625/direct_scores/siglip_r02_s45_to10_1243.zip"
+  },
+  {
+    "assa": 0.503137,
+    "assignment_csv": "local_runs/main_72c55bc_stack_20260625/siglip_primary/assignments/rank04_subpart_s17_to37_3seq_assignments.csv",
+    "delta_idf1": 0.000332,
+    "hota": 0.487219,
+    "idf1": 0.628087,
+    "json": "local_runs/main_72c55bc_stack_20260625/direct_scores/siglip_r04_s17_to37_4558_4609_4649.json",
+    "name": "siglip_r04_s17_to37_4558_4609_4649",
+    "rank": 4,
+    "source_component": 17,
+    "source_seqs": [
+      4558,
+      4609,
+      4649
+    ],
+    "source_videos": {
+      "vlincs_MS01_MC0001_MCAM04_2024-03-Tc6": 3
+    },
+    "target_component": 37,
+    "zip": "local_runs/main_72c55bc_stack_20260625/direct_scores/siglip_r04_s17_to37_4558_4609_4649.zip"
+  },
+  {
+    "assa": 0.50279,
+    "assignment_csv": "local_runs/main_72c55bc_stack_20260625/siglip_primary/assignments/rank08_subpart_s15_to32_3seq_assignments.csv",
+    "delta_idf1": 0.0,
+    "hota": 0.486854,
+    "idf1": 0.627755,
+    "json": "local_runs/main_72c55bc_stack_20260625/direct_scores/siglip_r08_s15_to32_6575_6616_6624.json",
+    "name": "siglip_r08_s15_to32_6575_6616_6624",
+    "rank": 8,
+    "source_component": 15,
+    "source_seqs": [
+      6575,
+      6616,
+      6624
+    ],
+    "source_videos": {
+      "vlincs_MS01_MC0001_MCAM05_2024-03-Tc6": 3
+    },
+    "target_component": 32,
+    "zip": "local_runs/main_72c55bc_stack_20260625/direct_scores/siglip_r08_s15_to32_6575_6616_6624.zip"
+  },
+  {
+    "assa": 0.502831,
+    "assignment_csv": "local_runs/main_72c55bc_stack_20260625/siglip_primary/assignments/rank11_subpart_s35_to8_2seq_assignments.csv",
+    "delta_idf1": 7.5e-05,
+    "hota": 0.486918,
+    "idf1": 0.62783,
+    "json": "local_runs/main_72c55bc_stack_20260625/direct_scores/siglip_r11_s35_to8_6669_6677.json",
+    "name": "siglip_r11_s35_to8_6669_6677",
+    "rank": 11,
+    "source_component": 35,
+    "source_seqs": [
+      6669,
+      6677
+    ],
+    "source_videos": {
+      "vlincs_MS01_MC0001_MCAM05_2024-03-Tc6": 2
+    },
+    "target_component": 8,
+    "zip": "local_runs/main_72c55bc_stack_20260625/direct_scores/siglip_r11_s35_to8_6669_6677.zip"
+  },
+  {
+    "assa": 0.502665,
+    "assignment_csv": "local_runs/main_72c55bc_stack_20260625/siglip_primary/assignments/rank14_subpart_s65_to21_2seq_assignments.csv",
+    "delta_idf1": -9.3e-05,
+    "hota": 0.486739,
+    "idf1": 0.627662,
+    "json": "local_runs/main_72c55bc_stack_20260625/direct_scores/siglip_r14_s65_to21_6103_6108.json",
+    "name": "siglip_r14_s65_to21_6103_6108",
+    "rank": 14,
+    "source_component": 65,
+    "source_seqs": [
+      6103,
+      6108
+    ],
+    "source_videos": {
+      "vlincs_MS01_MC0001_MCAM05_2024-03-Tc6": 2
+    },
+    "target_component": 21,
+    "zip": "local_runs/main_72c55bc_stack_20260625/direct_scores/siglip_r14_s65_to21_6103_6108.zip"
+  }
+]

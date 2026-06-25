@@ -1,0 +1,239 @@
+{
+  "ablations": [
+    {
+      "change": "move seqs [7045] from component 34 to 110",
+      "decision": "keep for combo",
+      "name": "rank01 siglip_r01_s34_to110_7045",
+      "result": "IDF1 0.627885; delta +0.000130"
+    },
+    {
+      "change": "move seqs [1243] from component 45 to 10",
+      "decision": "tie/refute",
+      "name": "rank02 siglip_r02_s45_to10_1243",
+      "result": "IDF1 0.627755; delta +0.000000"
+    },
+    {
+      "change": "move seqs [4558, 4609, 4649] from component 17 to 37",
+      "decision": "keep for combo",
+      "name": "rank04 siglip_r04_s17_to37_4558_4609_4649",
+      "result": "IDF1 0.628087; delta +0.000332"
+    },
+    {
+      "change": "move seqs [6575, 6616, 6624] from component 15 to 32",
+      "decision": "tie/refute",
+      "name": "rank08 siglip_r08_s15_to32_6575_6616_6624",
+      "result": "IDF1 0.627755; delta +0.000000"
+    },
+    {
+      "change": "move seqs [6669, 6677] from component 35 to 8",
+      "decision": "keep for combo",
+      "name": "rank11 siglip_r11_s35_to8_6669_6677",
+      "result": "IDF1 0.627830; delta +0.000075"
+    },
+    {
+      "change": "move seqs [6103, 6108] from component 65 to 21",
+      "decision": "tie/refute",
+      "name": "rank14 siglip_r14_s65_to21_6103_6108",
+      "result": "IDF1 0.627662; delta -0.000093"
+    },
+    {
+      "change": "move seqs [6293, 6349, 6426, 6471, 6548, 6582, 6637] from component 83 to 29",
+      "decision": "tie/refute",
+      "name": "rank03 siglip_r03_s83_to29_6293_6349_6426_6471_6548_6582_6637",
+      "result": "IDF1 0.627755; delta +0.000000"
+    },
+    {
+      "change": "move seqs [986] from component 93 to 34",
+      "decision": "tie/refute",
+      "name": "rank05 siglip_r05_s93_to34_986",
+      "result": "IDF1 0.627725; delta -0.000030"
+    },
+    {
+      "change": "move seqs [6866] from component 55 to 51",
+      "decision": "positive singleton",
+      "name": "rank10 siglip_r10_s55_to51_6866",
+      "result": "IDF1 0.627756; delta +0.000001"
+    },
+    {
+      "change": "move seqs [4454] from component 74 to 5",
+      "decision": "tie/refute",
+      "name": "rank12 siglip_r12_s74_to5_4454",
+      "result": "IDF1 0.627692; delta -0.000063"
+    },
+    {
+      "change": "move seqs [6421] from component 7 to 8",
+      "decision": "tie/refute",
+      "name": "rank13 siglip_r13_s7_to8_6421",
+      "result": "IDF1 0.627755; delta +0.000000"
+    },
+    {
+      "change": "move seqs [7973, 9244] from component 35 to 63",
+      "decision": "keep for combo",
+      "name": "rank16 siglip_r16_s35_to63_7973_9244",
+      "result": "IDF1 0.628204; delta +0.000449"
+    },
+    {
+      "change": "move seqs [9343] from component 31 to 25",
+      "decision": "keep for combo",
+      "name": "rank19 siglip_r19_s31_to25_9343",
+      "result": "IDF1 0.627825; delta +0.000070"
+    },
+    {
+      "change": "move seqs [3137, 3167] from component 5 to 17",
+      "decision": "keep for combo",
+      "name": "rank20 siglip_r20_s5_to17_3137_3167",
+      "result": "IDF1 0.627858; delta +0.000103"
+    },
+    {
+      "change": "combine non-overlapping positive local repairs",
+      "decision": "best",
+      "name": "combo_all_positive_r04_r01_r11_r16_r19_r20",
+      "result": "IDF1 0.628913; delta +0.001158"
+    },
+    {
+      "change": "combine non-overlapping positive local repairs",
+      "decision": "positive interaction",
+      "name": "combo_r04_r01",
+      "result": "IDF1 0.628216; delta +0.000461"
+    },
+    {
+      "change": "combine non-overlapping positive local repairs",
+      "decision": "positive interaction",
+      "name": "combo_r04_r01_r11",
+      "result": "IDF1 0.628292; delta +0.000537"
+    },
+    {
+      "change": "combine non-overlapping positive local repairs",
+      "decision": "positive interaction",
+      "name": "combo_r04_r01_r16",
+      "result": "IDF1 0.628665; delta +0.000910"
+    },
+    {
+      "change": "evaluate 0-based feature-seq CSV with DB-seq scorer",
+      "decision": "refuted scorer path; use tracklet-key sample scorer for no-anchor CSV",
+      "name": "wrong DB-seq scorer guard",
+      "result": "IDF1 0.063683 because seq origin mismatches DB 1-based seq"
+    }
+  ],
+  "artifacts": [
+    "reproduce.sh",
+    "metrics/main_72c55bc_baseline_assignment_score.json",
+    "metrics/combo_all_positive_r04_r01_r11_r16_r19_r20_sample_score.json",
+    "repro/provenance/siglip_primary_manifest.json",
+    "repro/provenance/combo_all_positive_r04_r01_r11_r16_r19_r20_materialize.json",
+    "repro/provenance/combo_scores_summary.json",
+    "repro/provenance/reproduce_script_check_score.json",
+    "repro/provenance/reproduce_script_exported_assignments.json",
+    "repro/provenance/reproduce_script_combo_materialize.json"
+  ],
+  "bitbucket": "pending commit to wisc",
+  "code_paths": [
+    "kit/export_gallery_db_assignments.py",
+    "kit/apply_no_anchor_candidate_combo.py",
+    "kit/propose_no_anchor_subpart_repair_candidates.py",
+    "kit/evaluate_sample_assignments_full.py",
+    "kit/export_no_anchor_subpart_visual_case.py"
+  ],
+  "commands": [
+    "./reports/vlincs_iterations/20260625_main72c55bc_gallery_stack_siglip_combo_gain/reproduce.sh",
+    "PGHOST=localhost PGPORT=55434 PGUSER=gallery PGPASSWORD=gallery python kit/export_gallery_db_assignments.py --dbname gallery_ds1 --tracklet-root kit/demo_data/ds1/tracklets --embedding-root kit/demo_data/ds1/embeddings --decision-status main_72c55bc_two_tier_component --assignment-out local_runs/main_72c55bc_stack_20260625/exported_main72c55bc_assignments.csv --json local_runs/main_72c55bc_stack_20260625/exported_main72c55bc_assignments.json",
+    "python kit/propose_no_anchor_subpart_repair_candidates.py --assignment-csv exported_main72c55bc_assignments.csv --feature-npz kit/demo_data/ds1/features/ds1_tracklet_siglip2_person_reid_s1_20260620.npz --primary-weight 1.0 --view weak:kit/demo_data/ds1/features/ds1_tracklet_weakmetric_osnet_s7_fused_w002_20260620_w0p1.npz:0.70 --view dino:kit/demo_data/ds1/features/ds1_tracklet_dinov2base_s1_20260620.npz:0.80 --top-n 48 --min-source-component-size 20 --max-source-component-size 900 --min-target-component-size 3 --max-target-component-size 400 --max-seeds-per-component 40 --min-group-size 1 --max-group-size 8 --seed-sim 0.72 --min-source-margin 0.0 --min-target-sim 0.5 --min-target-margin 0.0 --targets-per-group 3 --focus-videos vlincs_MS01_MC0001_MCAM05_2024-03-Tc6,vlincs_MS01_MC0001_MCAM06_2024-03-Tc6,vlincs_MS01_MC0001_MCAM04_2024-03-Tc6,vlincs_MS01_MC0001_MCAM03_2024-03-Tc8,vlincs_MS01_MC0001_MCAM08_2024-03-Tc6 --output-dir siglip_primary/assignments --json siglip_primary/manifest.json",
+    "python kit/apply_no_anchor_candidate_combo.py --base-assignment-csv exported_main72c55bc_assignments.csv --manifest siglip_primary/manifest.json --rank 4,1,11,16,19,20 --assignment-out combo_all_positive_r04_r01_r11_r16_r19_r20.csv --json combo_all_positive_r04_r01_r11_r16_r19_r20.json",
+    "DATA_ROOT=kit/demo_data/ds1/gt python kit/evaluate_sample_assignments_full.py --tracklet-parquet kit/demo_data/ds1/tracklets/*/tracklets.parquet --assignments combo_all_positive_r04_r01_r11_r16_r19_r20.csv --json combo_all_positive_r04_r01_r11_r16_r19_r20_sample_score.json --zip-out combo_all_positive_r04_r01_r11_r16_r19_r20_sample.zip"
+  ],
+  "date": "2026-06-25",
+  "environment": [
+    "Repo wisc worktree: /Users/zcai/Codex/vlincs_reid_by_search_wisc_sync",
+    "Latest main test worktree: /Users/zcai/Codex/vlincs_reid_by_search_main_latest at 72c55bce5c2c4fad34fa1ce0ecc141b09898f134",
+    "Postgres gallery_ds1 on PGHOST=localhost PGPORT=55434 PGUSER=gallery",
+    "DATA_ROOT points to kit/demo_data/ds1/gt for evaluation only",
+    "No anchors or GT labels are read by export/proposer/materializer."
+  ],
+  "implementation": "Run latest main gallery first. Export DB seq->gid as a tracklet-key assignment CSV with kit/export_gallery_db_assignments.py. Generate candidate subpart repairs from production features only with kit/propose_no_anchor_subpart_repair_candidates.py. Apply selected ranks 4,1,11,16,19,20 with kit/apply_no_anchor_candidate_combo.py. Score the materialized assignment through kit/evaluate_sample_assignments_full.py, using GT only as evaluator answer key. The proposer configuration used SigLIP primary features with weakmetric weight 0.70 and DINOv2 weight 0.80; focus videos targeted the weak DS1 slices MCAM04/05/06/08 and MCAM03-Tc8.",
+  "metric_table": [
+    {
+      "assa": 0.50279,
+      "decision": "baseline",
+      "delta": 0.0,
+      "detre": 0.544578,
+      "hota": 0.486854,
+      "idf1": 0.627755,
+      "name": "latest main 72c55bc gallery baseline",
+      "predicted_ids": 114
+    },
+    {
+      "assa": 0.503751,
+      "decision": "promote as main-stack proof",
+      "delta": 0.001158,
+      "detre": 0.545865,
+      "hota": 0.487977,
+      "idf1": 0.628913,
+      "name": "no-anchor combo ranks 4,1,11,16,19,20",
+      "predicted_ids": 114
+    }
+  ],
+  "metrics": {
+    "baseline": 0.627755,
+    "candidate": 0.628913,
+    "delta": 0.001158,
+    "name": "DS1 IDF1 on main 72c55bc + no-anchor repair combo"
+  },
+  "module_detail": "Post-gallery evidence graph resolution plus M7 candidate retrieval and M12 delivery validation.",
+  "next": "Replace the manual reviewer-selected combo with a learned reviewer that predicts which post-main repair candidates interact positively, then rerun on MS02 once the MS02 bundle is available.",
+  "no_anchor": true,
+  "per_video_table": [
+    {
+      "baseline_idf1": 0.554067,
+      "candidate_idf1": 0.555102,
+      "delta": 0.001035,
+      "video": "vlincs_MS01_MC0001_MCAM04_2024-03-Tc6"
+    },
+    {
+      "baseline_idf1": 0.33082,
+      "candidate_idf1": 0.33275,
+      "delta": 0.00193,
+      "video": "vlincs_MS01_MC0001_MCAM05_2024-03-Tc6"
+    },
+    {
+      "baseline_idf1": 0.52651,
+      "candidate_idf1": 0.531567,
+      "delta": 0.005057,
+      "video": "vlincs_MS01_MC0001_MCAM06_2024-03-Tc6"
+    },
+    {
+      "baseline_idf1": 0.759169,
+      "candidate_idf1": 0.761322,
+      "delta": 0.002153,
+      "video": "vlincs_MS01_MC0001_MCAM08_2024-03-Tc6"
+    }
+  ],
+  "pipeline_module": "M8",
+  "s3": "not uploaded in this package; large scorer zips remain local under /Users/zcai/Codex/vlincs_reid_by_search_main_latest/local_runs/main_72c55bc_stack_20260625/repro_check/",
+  "status": "direct_gain_only",
+  "summary": "The old 66.8 final assignment cannot be pasted onto the latest main 62.8 gallery state, but the method ports cleanly as a post-gallery no-anchor repair layer. On exact main commit 72c55bc, live DS1 baseline is IDF1 0.627755; exporting that gallery state, proposing SigLIP/DINO/weakmetric subpart repairs, and applying six non-overlapping positive repairs gives IDF1 0.628913 (+0.001158). The packaged reproduce.sh was run with the existing main gallery_ds1 DB and reproduced the same 0.628913 score.",
+  "title": "Stacking no-anchor evidence repairs on main 72c55bc gallery output",
+  "used_in_pipeline": "candidate-only",
+  "visual_cases": [
+    {
+      "html": "cases/rank04_mcam04_island/case.html",
+      "image": "cases/rank04_mcam04_island/rank04_bbox_evidence.png",
+      "json": "cases/rank04_mcam04_island/case.json",
+      "summary": "Three MCAM04 tracklets move 17 -> 37 with raw-frame bbox evidence.",
+      "title": "Rank04 MCAM04 island"
+    },
+    {
+      "html": "cases/rank16_mcam08_pair/case.html",
+      "image": "cases/rank16_mcam08_pair/rank16_bbox_evidence.png",
+      "json": "cases/rank16_mcam08_pair/case.json",
+      "summary": "Two MCAM08 tracklets move 35 -> 63; strongest single candidate from batch 2.",
+      "title": "Rank16 MCAM08 pair"
+    },
+    {
+      "html": "cases/rank20_mcam04_pair/case.html",
+      "image": "cases/rank20_mcam04_pair/rank20_bbox_evidence.png",
+      "json": "cases/rank20_mcam04_pair/case.json",
+      "summary": "Two MCAM04 tracklets move 5 -> 17 and combine positively with the other repairs.",
+      "title": "Rank20 MCAM04 pair"
+    }
+  ]
+}

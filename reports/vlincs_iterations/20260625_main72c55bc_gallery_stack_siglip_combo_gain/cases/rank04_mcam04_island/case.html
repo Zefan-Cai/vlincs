@@ -1,0 +1,27 @@
+<!doctype html>
+<html><head><meta charset="utf-8"><title>Main 72c55bc stack repair: rank04 MCAM04 island</title>
+<style>
+body{font-family:Arial,Helvetica,sans-serif;margin:32px;background:#f6f7f9;color:#17202c}
+main{max-width:1120px;margin:auto} img{max-width:100%;border:1px solid #ccd3dc;background:white}
+.kpi{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin:18px 0}
+.card{background:white;border:1px solid #d7dde5;padding:14px} table{border-collapse:collapse;width:100%;background:white}
+td,th{border:1px solid #d7dde5;padding:8px;text-align:left} code{background:#eef1f5;padding:2px 4px}
+</style></head><body><main>
+<h1>Main 72c55bc stack repair: rank04 MCAM04 island</h1>
+<p>Three MCAM04 tracklets move from component 17 to visually closer component 37 after evidence-graph repair.</p>
+<div class="kpi">
+<div class="card"><b>Before</b><br>component 17, gid 100000017, component_size 54</div>
+<div class="card"><b>After</b><br>component 37, gid 100000037, component_size 220, decision_status subpart_reassign_combo</div>
+<div class="card"><b>Evidence</b><br>target_sim=0.6813, target_margin=0.1872, source_rest_margin=0.4581<br><b>Raw frame</b><br>available</div>
+</div>
+<h2>Failure and fix</h2>
+<p><b>Old failure:</b> Latest main gallery kept this small island inside source component 17 even though the subpart has conflict support and stronger target similarity to component 37.</p>
+<p><b>New implementation:</b> No-anchor graph repair moves only the three compatible tracklets, leaving the rest of the source component untouched.</p>
+<h2>BBox evidence</h2>
+<img src="rank04_bbox_evidence.png" alt="rank15 bbox evidence">
+<h2>Moved tracklets</h2>
+<table><thead><tr><th>seq</th><th>video</th><th>gid</th><th>component</th><th>frames</th><th>dets</th></tr></thead><tbody><tr><td>4558</td><td>vlincs_MS01_MC0001_MCAM04_2024-03-Tc6</td><td>100000017 -> 100000037</td><td>17 -> 37</td><td>42016-42315</td><td>300</td></tr>
+<tr><td>4609</td><td>vlincs_MS01_MC0001_MCAM04_2024-03-Tc6</td><td>100000017 -> 100000037</td><td>17 -> 37</td><td>42316-42615</td><td>300</td></tr>
+<tr><td>4649</td><td>vlincs_MS01_MC0001_MCAM04_2024-03-Tc6</td><td>100000017 -> 100000037</td><td>17 -> 37</td><td>42616-42915</td><td>300</td></tr></tbody></table>
+
+</main></body></html>

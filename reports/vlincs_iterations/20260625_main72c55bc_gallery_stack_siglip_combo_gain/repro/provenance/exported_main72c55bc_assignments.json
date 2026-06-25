@@ -1,0 +1,20 @@
+{
+  "ambiguous_seq_gid_votes": 0,
+  "assignment_csv": "/Users/zcai/Codex/vlincs_reid_by_search_main_latest/local_runs/main_72c55bc_stack_20260625/repro_check/exported_main72c55bc_assignments.csv",
+  "assignment_sha256": "e4922ee9382e3574515190b53e182f195e53af817c295c187440d0dcd267ce71",
+  "component_label_mode": "offset",
+  "component_offset": 100000000,
+  "db_tracklets": 9734,
+  "dbname": "gallery_ds1",
+  "decision_status": "main_72c55bc_two_tier_component",
+  "embedding_root": "/Users/zcai/Codex/vlincs_reid_by_search_main_latest/kit/demo_data/ds1/embeddings",
+  "max_db_seq": 9734,
+  "min_db_seq": 1,
+  "predicted_ids": 114,
+  "rows": 9734,
+  "seq_origin": "zero",
+  "tracklet_root": "/Users/zcai/Codex/vlincs_reid_by_search_main_latest/kit/demo_data/ds1/tracklets",
+  "uses_anchors": false,
+  "uses_gt_for_evaluation_only": false,
+  "uses_gt_for_training_or_anchors": false
+}

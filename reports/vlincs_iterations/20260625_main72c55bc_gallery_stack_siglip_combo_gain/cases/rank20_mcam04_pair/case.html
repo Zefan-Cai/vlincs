@@ -1,0 +1,26 @@
+<!doctype html>
+<html><head><meta charset="utf-8"><title>Main 72c55bc stack repair: rank20 MCAM04 pair</title>
+<style>
+body{font-family:Arial,Helvetica,sans-serif;margin:32px;background:#f6f7f9;color:#17202c}
+main{max-width:1120px;margin:auto} img{max-width:100%;border:1px solid #ccd3dc;background:white}
+.kpi{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin:18px 0}
+.card{background:white;border:1px solid #d7dde5;padding:14px} table{border-collapse:collapse;width:100%;background:white}
+td,th{border:1px solid #d7dde5;padding:8px;text-align:left} code{background:#eef1f5;padding:2px 4px}
+</style></head><body><main>
+<h1>Main 72c55bc stack repair: rank20 MCAM04 pair</h1>
+<p>Two MCAM04 tracklets move from component 5 to component 17 and combine positively with other small repairs.</p>
+<div class="kpi">
+<div class="card"><b>Before</b><br>component 5, gid 100000005, component_size 293</div>
+<div class="card"><b>After</b><br>component 17, gid 100000017, component_size 53, decision_status subpart_reassign_combo</div>
+<div class="card"><b>Evidence</b><br>target_sim=0.6347, target_margin=0.1150, source_rest_margin=0.4906<br><b>Raw frame</b><br>available</div>
+</div>
+<h2>Failure and fix</h2>
+<p><b>Old failure:</b> The baseline component assignment over-splits a short MCAM04 residual pair from its closer local component.</p>
+<p><b>New implementation:</b> The combo applies this as a local repair only after single-candidate scoring shows a positive direct signal.</p>
+<h2>BBox evidence</h2>
+<img src="rank20_bbox_evidence.png" alt="rank15 bbox evidence">
+<h2>Moved tracklets</h2>
+<table><thead><tr><th>seq</th><th>video</th><th>gid</th><th>component</th><th>frames</th><th>dets</th></tr></thead><tbody><tr><td>3137</td><td>vlincs_MS01_MC0001_MCAM04_2024-03-Tc6</td><td>100000005 -> 100000017</td><td>5 -> 17</td><td>32627-32926</td><td>278</td></tr>
+<tr><td>3167</td><td>vlincs_MS01_MC0001_MCAM04_2024-03-Tc6</td><td>100000005 -> 100000017</td><td>5 -> 17</td><td>32927-33226</td><td>300</td></tr></tbody></table>
+
+</main></body></html>

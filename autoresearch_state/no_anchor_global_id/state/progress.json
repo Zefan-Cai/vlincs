@@ -12,20 +12,32 @@
   "goal_global_id_pair_f1": 0.7,
   "goal_global_id_pair_precision": 0.7,
   "goal_global_id_pair_recall": 0.7,
-  "iteration": 144,
+  "iteration": 145,
   "last_artifacts": [
-    "https://bitbucket.org/Novateur/vlincs_reid_by_search/src/wisc/reports/vlincs_iterations/20260625_seq7771_bestcrop_component82_p005_gain/",
-    "reports/vlincs_iterations/20260625_seq7771_bestcrop_component82_p005_gain/README.md",
-    "reports/vlincs_iterations/20260625_seq7771_bestcrop_component82_p005_gain/presentation.html",
-    "reports/vlincs_iterations/20260625_seq7771_bestcrop_component82_p005_gain/spec.json",
-    "reports/vlincs_iterations/20260625_seq7771_bestcrop_component82_p005_gain/reproduce.sh",
-    "reports/vlincs_iterations/20260625_seq7771_bestcrop_component82_p005_gain/cases/siglip_rank17_seq3403/rank17_bbox_evidence.png"
+    "https://bitbucket.org/Novateur/vlincs_reid_by_search/src/wisc/reports/vlincs_iterations/20260625_main72c55bc_gallery_stack_siglip_combo_gain/",
+    "reports/vlincs_iterations/20260625_main72c55bc_gallery_stack_siglip_combo_gain/README.md",
+    "reports/vlincs_iterations/20260625_main72c55bc_gallery_stack_siglip_combo_gain/presentation.html",
+    "reports/vlincs_iterations/20260625_main72c55bc_gallery_stack_siglip_combo_gain/spec.json",
+    "reports/vlincs_iterations/20260625_main72c55bc_gallery_stack_siglip_combo_gain/reproduce.sh",
+    "reports/vlincs_iterations/20260625_main72c55bc_gallery_stack_siglip_combo_gain/cases/rank04_mcam04_island/rank04_bbox_evidence.png",
+    "reports/vlincs_iterations/20260625_main72c55bc_gallery_stack_siglip_combo_gain/cases/rank16_mcam08_pair/rank16_bbox_evidence.png",
+    "reports/vlincs_iterations/20260625_main72c55bc_gallery_stack_siglip_combo_gain/cases/rank20_mcam04_pair/rank20_bbox_evidence.png"
   ],
-  "last_direction": "seq7771_bestcrop_component82_p005_gain",
-  "last_result": "Seq7771 best-crop DINO/SigLIP CTF admitted component 82 as a generated-positive target. MCAM08-focused SigLIP scheduler rank17 moved seq3403 from comp11/gid96000012 to comp82/gid960000202. Direct score improved by +0.000028 IDF1 and canonical density_simple+p005_area improved best from 0.669466/0.530154/0.540397 to 0.669494/0.530188/0.540439. No anchors; GT eval-only after materialization.",
+  "last_direction": "main72c55bc_gallery_stack_siglip_combo_direct_gain",
+  "last_result": "Latest main/gallery commit 72c55bc reproduces DS1 baseline IDF1/HOTA/AssA 0.627755/0.486854/0.502790. The old 66.8 final assignment is not portable as a CSV, but the no-anchor evidence-graph repair method stacks after main: export gallery DB assignments, propose SigLIP+weakmetric+DINO subpart repairs, apply ranks 4,1,11,16,19,20, and score by tracklet-key delivery evaluator. Reproduce script regenerated 642 candidates, moved 11 tracklets, and scored 0.628913/0.487977/0.503751, a +0.001158 IDF1 main-stack direct gain. This does not supersede the separate wisc canonical p005 best 0.669494.",
   "last_updated": "2026-06-25",
-  "last_upload": "s3_pending_no_local_aws_credentials",
-  "next_direction": "Test whether this same seq7771 best-crop component-82 repair stacks on the latest main branch 0.62 DS1 implementation; use a separate main worktree and report baseline vs repaired p005 metrics.",
+  "last_upload": "not_uploaded_large_zips_local_only",
+  "latest_main_stack": {
+    "assa": 0.503751,
+    "baseline_idf1": 0.627755,
+    "candidate_idf1": 0.628913,
+    "delta_idf1": 0.001158,
+    "hota": 0.487977,
+    "moved_tracklets": 11,
+    "reproduce_script": "reports/vlincs_iterations/20260625_main72c55bc_gallery_stack_siglip_combo_gain/reproduce.sh",
+    "source_commit": "72c55bce5c2c4fad34fa1ce0ecc141b09898f134"
+  },
+  "next_direction": "Automate the reviewer for latest-main post-gallery repair candidates, then test the same no-anchor stack on MS02 once the MS02 bundle/GT path is available.",
   "stale_count": 0,
-  "status": "active_no_anchor_best_e2e_0p669494_seq7771_bestcrop_component82_microgain"
+  "status": "active_no_anchor_best_e2e_0p669494_main72c55bc_stack_proof_0p628913"
 }

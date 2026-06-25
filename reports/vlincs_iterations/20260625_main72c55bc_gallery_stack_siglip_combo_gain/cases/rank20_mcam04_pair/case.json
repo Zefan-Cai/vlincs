@@ -1,0 +1,246 @@
+{
+  "after_state": "component 17, gid 100000017, component_size 53, decision_status subpart_reassign_combo",
+  "before_state": "component 5, gid 100000005, component_size 293",
+  "candidate": {
+    "assignment_csv": "local_runs/main_72c55bc_stack_20260625/siglip_primary/assignments/rank20_subpart_s5_to17_2seq_assignments.csv",
+    "conflicts_to_rest": 9,
+    "focus_video_hits": 2,
+    "group_internal_sim": 0.7742102146148682,
+    "moved_preview": [
+      {
+        "from_component": 5,
+        "from_predicted_global_id": 100000005,
+        "seq": 3137,
+        "to_component": 17,
+        "to_predicted_global_id": 100000017
+      },
+      {
+        "from_component": 5,
+        "from_predicted_global_id": 100000005,
+        "seq": 3167,
+        "to_component": 17,
+        "to_predicted_global_id": 100000017
+      }
+    ],
+    "moved_tracklets": 2,
+    "rank": 20,
+    "score": 3.027579126636849,
+    "source_component": 5,
+    "source_component_conflict_edges": 184,
+    "source_component_size": 293,
+    "source_predicted_global_id": 100000005,
+    "source_rest_cross_max": 0.5197373032569885,
+    "source_rest_cross_mean": 0.2836516201496124,
+    "source_rest_margin_max": 0.25447291135787964,
+    "source_rest_margin_mean": 0.49055859446525574,
+    "source_seqs": [
+      3137,
+      3167
+    ],
+    "source_videos": {
+      "vlincs_MS01_MC0001_MCAM04_2024-03-Tc6": 2
+    },
+    "target_component": 17,
+    "target_component_size": 54,
+    "target_margin": 0.11497849225997925,
+    "target_predicted_global_id": 100000017,
+    "target_rank_for_group": 1,
+    "target_sim": 0.6347157955169678,
+    "uses_anchors": false,
+    "uses_gt_for_evaluation_only": false,
+    "uses_gt_for_training_or_anchors": false
+  },
+  "evidence": "target_sim=0.6347, target_margin=0.1150, source_rest_margin=0.4906",
+  "failure_montage": "",
+  "failure_reason": "The baseline component assignment over-splits a short MCAM04 residual pair from its closer local component.",
+  "improvement": "The combo applies this as a local repair only after single-candidate scoring shows a positive direct signal.",
+  "montage": "rank20_bbox_evidence.png",
+  "raw_frame_dir": "",
+  "raw_frame_status": "available",
+  "summary": "Two MCAM04 tracklets move from component 5 to component 17 and combine positively with other small repairs.",
+  "title": "Main 72c55bc stack repair: rank20 MCAM04 pair",
+  "tracklets": [
+    {
+      "after": {
+        "avg_conf": "0.4693801847668432",
+        "camera": "MCAM04",
+        "component_external_prob_max": "0.0",
+        "component_internal_edges": "0",
+        "component_internal_prob_median": "0.0",
+        "component_internal_score_median": "0.0",
+        "component_label": "17",
+        "component_margin_prob": "0.0",
+        "component_size": "53",
+        "db_seq": "3138",
+        "decision_status": "subpart_reassign_combo",
+        "end_frame": "32926",
+        "n_dets": "278",
+        "predicted_global_id": "100000017",
+        "prediction_confidence": "0.72",
+        "seq": "3137",
+        "start_frame": "32627",
+        "tracklet_key": "vlincs_MS01_MC0001_MCAM04_2024-03-Tc6:1828:0",
+        "video": "vlincs_MS01_MC0001_MCAM04_2024-03-Tc6"
+      },
+      "before": {
+        "avg_conf": "0.4693801847668432",
+        "camera": "MCAM04",
+        "component_external_prob_max": "0.0",
+        "component_internal_edges": "0",
+        "component_internal_prob_median": "0.0",
+        "component_internal_score_median": "0.0",
+        "component_label": "5",
+        "component_margin_prob": "0.0",
+        "component_size": "293",
+        "db_seq": "3138",
+        "decision_status": "main_72c55bc_two_tier_component",
+        "end_frame": "32926",
+        "n_dets": "278",
+        "predicted_global_id": "100000005",
+        "prediction_confidence": "0.700000",
+        "seq": "3137",
+        "start_frame": "32627",
+        "tracklet_key": "vlincs_MS01_MC0001_MCAM04_2024-03-Tc6:1828:0",
+        "video": "vlincs_MS01_MC0001_MCAM04_2024-03-Tc6"
+      },
+      "sampled_boxes": [
+        {
+          "bbox_xyxy": [
+            2279.2812,
+            924.1817,
+            2318.034,
+            1050.04
+          ],
+          "frame_idx": 32627,
+          "raw_frame_path": "/Users/zcai/Codex/vlincs_reid_by_search_wisc_sync/reports/vlincs_iterations/20260625_main72c55bc_gallery_stack_siglip_combo_gain/cases/rank20_mcam04_pair/raw_frames/vlincs_MS01_MC0001_MCAM04_2024-03-Tc6_f32627.png",
+          "raw_frame_source": "video_root",
+          "score": 0.5027675628662109,
+          "tracklet_key": "vlincs_MS01_MC0001_MCAM04_2024-03-Tc6:1828:0",
+          "video_key": "vlincs_MS01_MC0001_MCAM04_2024-03-Tc6"
+        },
+        {
+          "bbox_xyxy": [
+            2280.2732,
+            923.80194,
+            2320.7632,
+            1049.6838
+          ],
+          "frame_idx": 32786,
+          "raw_frame_path": "/Users/zcai/Codex/vlincs_reid_by_search_wisc_sync/reports/vlincs_iterations/20260625_main72c55bc_gallery_stack_siglip_combo_gain/cases/rank20_mcam04_pair/raw_frames/vlincs_MS01_MC0001_MCAM04_2024-03-Tc6_f32786.png",
+          "raw_frame_source": "video_root",
+          "score": 0.5040597319602966,
+          "tracklet_key": "vlincs_MS01_MC0001_MCAM04_2024-03-Tc6:1828:0",
+          "video_key": "vlincs_MS01_MC0001_MCAM04_2024-03-Tc6"
+        },
+        {
+          "bbox_xyxy": [
+            2280.2937,
+            924.05426,
+            2321.9949,
+            1050.1887
+          ],
+          "frame_idx": 32926,
+          "raw_frame_path": "/Users/zcai/Codex/vlincs_reid_by_search_wisc_sync/reports/vlincs_iterations/20260625_main72c55bc_gallery_stack_siglip_combo_gain/cases/rank20_mcam04_pair/raw_frames/vlincs_MS01_MC0001_MCAM04_2024-03-Tc6_f32926.png",
+          "raw_frame_source": "video_root",
+          "score": 0.6606014370918274,
+          "tracklet_key": "vlincs_MS01_MC0001_MCAM04_2024-03-Tc6:1828:0",
+          "video_key": "vlincs_MS01_MC0001_MCAM04_2024-03-Tc6"
+        }
+      ],
+      "seq": 3137
+    },
+    {
+      "after": {
+        "avg_conf": "0.5585207982858023",
+        "camera": "MCAM04",
+        "component_external_prob_max": "0.0",
+        "component_internal_edges": "0",
+        "component_internal_prob_median": "0.0",
+        "component_internal_score_median": "0.0",
+        "component_label": "17",
+        "component_margin_prob": "0.0",
+        "component_size": "53",
+        "db_seq": "3168",
+        "decision_status": "subpart_reassign_combo",
+        "end_frame": "33226",
+        "n_dets": "300",
+        "predicted_global_id": "100000017",
+        "prediction_confidence": "0.72",
+        "seq": "3167",
+        "start_frame": "32927",
+        "tracklet_key": "vlincs_MS01_MC0001_MCAM04_2024-03-Tc6:1855:0",
+        "video": "vlincs_MS01_MC0001_MCAM04_2024-03-Tc6"
+      },
+      "before": {
+        "avg_conf": "0.5585207982858023",
+        "camera": "MCAM04",
+        "component_external_prob_max": "0.0",
+        "component_internal_edges": "0",
+        "component_internal_prob_median": "0.0",
+        "component_internal_score_median": "0.0",
+        "component_label": "5",
+        "component_margin_prob": "0.0",
+        "component_size": "293",
+        "db_seq": "3168",
+        "decision_status": "main_72c55bc_two_tier_component",
+        "end_frame": "33226",
+        "n_dets": "300",
+        "predicted_global_id": "100000005",
+        "prediction_confidence": "0.700000",
+        "seq": "3167",
+        "start_frame": "32927",
+        "tracklet_key": "vlincs_MS01_MC0001_MCAM04_2024-03-Tc6:1855:0",
+        "video": "vlincs_MS01_MC0001_MCAM04_2024-03-Tc6"
+      },
+      "sampled_boxes": [
+        {
+          "bbox_xyxy": [
+            2280.2554,
+            924.0488,
+            2322.0022,
+            1050.1948
+          ],
+          "frame_idx": 32927,
+          "raw_frame_path": "/Users/zcai/Codex/vlincs_reid_by_search_wisc_sync/reports/vlincs_iterations/20260625_main72c55bc_gallery_stack_siglip_combo_gain/cases/rank20_mcam04_pair/raw_frames/vlincs_MS01_MC0001_MCAM04_2024-03-Tc6_f32927.png",
+          "raw_frame_source": "video_root",
+          "score": 0.6606264114379883,
+          "tracklet_key": "vlincs_MS01_MC0001_MCAM04_2024-03-Tc6:1855:0",
+          "video_key": "vlincs_MS01_MC0001_MCAM04_2024-03-Tc6"
+        },
+        {
+          "bbox_xyxy": [
+            2280.851,
+            923.6934,
+            2322.7234,
+            1049.9316
+          ],
+          "frame_idx": 33077,
+          "raw_frame_path": "/Users/zcai/Codex/vlincs_reid_by_search_wisc_sync/reports/vlincs_iterations/20260625_main72c55bc_gallery_stack_siglip_combo_gain/cases/rank20_mcam04_pair/raw_frames/vlincs_MS01_MC0001_MCAM04_2024-03-Tc6_f33077.png",
+          "raw_frame_source": "video_root",
+          "score": 0.6534610986709595,
+          "tracklet_key": "vlincs_MS01_MC0001_MCAM04_2024-03-Tc6:1855:0",
+          "video_key": "vlincs_MS01_MC0001_MCAM04_2024-03-Tc6"
+        },
+        {
+          "bbox_xyxy": [
+            2280.4788,
+            922.6848,
+            2328.5847,
+            1050.1694
+          ],
+          "frame_idx": 33226,
+          "raw_frame_path": "/Users/zcai/Codex/vlincs_reid_by_search_wisc_sync/reports/vlincs_iterations/20260625_main72c55bc_gallery_stack_siglip_combo_gain/cases/rank20_mcam04_pair/raw_frames/vlincs_MS01_MC0001_MCAM04_2024-03-Tc6_f33226.png",
+          "raw_frame_source": "video_root",
+          "score": 0.43602272868156433,
+          "tracklet_key": "vlincs_MS01_MC0001_MCAM04_2024-03-Tc6:1855:0",
+          "video_key": "vlincs_MS01_MC0001_MCAM04_2024-03-Tc6"
+        }
+      ],
+      "seq": 3167
+    }
+  ],
+  "uses_anchors": false,
+  "uses_gt_for_evaluation_only": false,
+  "uses_gt_for_training_or_anchors": false,
+  "video_root": "/Users/zcai/Codex/vlincs_reid_by_search/local_runs/raw_videos_s3_20260624"
+}
