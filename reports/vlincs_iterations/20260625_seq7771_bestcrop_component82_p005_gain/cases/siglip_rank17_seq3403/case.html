@@ -1,0 +1,25 @@
+<!doctype html>
+<html><head><meta charset="utf-8"><title>Seq7771 best-crop target-82 repair: seq3403</title>
+<style>
+body{font-family:Arial,Helvetica,sans-serif;margin:32px;background:#f6f7f9;color:#17202c}
+main{max-width:1120px;margin:auto} img{max-width:100%;border:1px solid #ccd3dc;background:white}
+.kpi{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin:18px 0}
+.card{background:white;border:1px solid #d7dde5;padding:14px} table{border-collapse:collapse;width:100%;background:white}
+td,th{border:1px solid #d7dde5;padding:8px;text-align:left} code{background:#eef1f5;padding:2px 4px}
+</style></head><body><main>
+<h1>Seq7771 best-crop target-82 repair: seq3403</h1>
+<p>Generated-positive best-crop CTF made component 82 a stable target; SigLIP rank17 moves only seq3403 from comp11/gid96000012 to comp82/gid960000202.</p>
+<div class="kpi">
+<div class="card"><b>Before</b><br>component 11, gid 96000012, component_size 183</div>
+<div class="card"><b>After</b><br>component 82, gid 960000202, component_size 21, decision_status subpart_reassign</div>
+<div class="card"><b>Evidence</b><br>target_sim=0.6790, target_margin=0.0375, source_rest_margin=0.6300<br><b>Raw frame</b><br>available</div>
+</div>
+<h2>Failure and fix</h2>
+<p><b>Old failure:</b> Before the repair, seq3403 stayed in a large comp11 island even though the current best already contains a DINO/SigLIP-stable component-82 seed seq7771.</p>
+<p><b>New implementation:</b> Move only seq3403 into component 82, then require direct, density_simple, and canonical p005_area validation before promotion.</p>
+<h2>BBox evidence</h2>
+<img src="rank17_bbox_evidence.png" alt="rank15 bbox evidence">
+<h2>Moved tracklets</h2>
+<table><thead><tr><th>seq</th><th>video</th><th>gid</th><th>component</th><th>frames</th><th>dets</th></tr></thead><tbody><tr><td>3403</td><td>vlincs_MS01_MC0001_MCAM04_2024-03-Tc6</td><td>96000012 -> 960000202</td><td>11 -> 82</td><td>35215-35321</td><td>106</td></tr></tbody></table>
+
+</main></body></html>

@@ -2,6 +2,15 @@ VLINCS no-anchor global ID progress
 Date: 2026-06-25
 
 Current best e2e:
+IDF1 / HOTA / AssA = 0.669494 / 0.530188 / 0.540439
+
+Latest seq7771 best-crop component-82 microgain:
+The generated-positive best-crop CTF probe made component 82 a stable no-anchor target. A MCAM08-focused SigLIP scheduler then proposed rank17, moving only seq3403 from component 11 / gid96000012 into component 82 / gid960000202. Direct full-score improves from 0.667266 to 0.667294, density_simple scores 0.669388, and canonical density_simple + valid p005_area improves the tracked best from 0.669466 / 0.530154 / 0.540397 to 0.669494 / 0.530188 / 0.540439 with config_name=p005_area and dropped_rows=45467. No anchors or GT labels were used as assignment evidence; GT was eval-only after materialization. Package: reports/vlincs_iterations/20260625_seq7771_bestcrop_component82_p005_gain/.
+
+VLINCS no-anchor global ID progress
+Date: 2026-06-25
+
+Current best e2e:
 IDF1 / HOTA / AssA = 0.669466 / 0.530154 / 0.540397
 
 Latest generated-positive best-crop CTF admission probe:

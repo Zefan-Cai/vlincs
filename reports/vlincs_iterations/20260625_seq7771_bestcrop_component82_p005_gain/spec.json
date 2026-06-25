@@ -1,0 +1,255 @@
+{
+  "title": "Seq7771 Best-Crop Component-82 P005 Gain",
+  "date": "2026-06-25",
+  "status": "gain",
+  "pipeline_module": "M2/M3 + M7/M10 + M8 + M12",
+  "module_detail": "Best-crop generated-positive CTF stabilizes component 82 as a scheduler target; M8 moves one residual island seq3403; M12 verifies direct, density_simple, and p005_area delivery.",
+  "used_in_pipeline": "candidate-only now; eligible to become next default after reproduce.sh verification and demo.sh integration",
+  "no_anchor": true,
+  "summary": "A seq7771 best-crop CTF pass makes component 82 a stable generated-positive target. The focused SigLIP scheduler proposes rank17, moving seq3403 from comp11/gid96000012 to comp82/gid960000202. Canonical p005_area IDF1 improves from 0.669466 to 0.669494.",
+  "implementation": "No anchors or GT labels are used as identity evidence. The method starts from the previous no-anchor best assignment, rebuilds a MCAM08-focused SigLIP/weak/DINO subpart candidate manifest from tracklet features, materializes SigLIP rank17 as a one-tracklet repair, exports a fresh submission zip, runs direct full-score, then validates density_simple and p005_area. GT is used only by the evaluator after materialization.",
+  "metrics": {
+    "name": "canonical p005_area IDF1",
+    "baseline": 0.669466,
+    "candidate": 0.669494,
+    "delta": 2.8e-05
+  },
+  "secondary_metrics": {
+    "hota": {
+      "baseline": 0.530154,
+      "candidate": 0.530188,
+      "delta": 3.4e-05
+    },
+    "assa": {
+      "baseline": 0.540397,
+      "candidate": 0.540439,
+      "delta": 4.2e-05
+    }
+  },
+  "workflow_steps": [
+    {
+      "step": "1",
+      "module": "M2/M3",
+      "input": "raw crops for seq7771 plus hard counters 8315/8336",
+      "action": "use best-crop-only generated-positive admission after DINOv2/SigLIP CTF",
+      "output": "seq7771 DINOv2/SigLIP source CTF 3/3 and 3/3"
+    },
+    {
+      "step": "2",
+      "module": "M7/M10",
+      "input": "previous best assignment plus SigLIP primary fused with weakmetric and DINO features",
+      "action": "rerun MCAM08-focused local subpart scheduler",
+      "output": "SigLIP rank17 candidate: seq3403 comp11 -> comp82"
+    },
+    {
+      "step": "3",
+      "module": "M8",
+      "input": "rank17 candidate manifest",
+      "action": "materialize only seq3403; no broad component merge",
+      "output": "assignment sha 14a0c6a3a06724fbc7dc6abfd995f05ac48640aab72b15706876cd5bddc2d8cd"
+    },
+    {
+      "step": "4",
+      "module": "M12",
+      "input": "fresh assignment zip",
+      "action": "score direct, density_simple, then p005_area with config_name and dropped-row checks",
+      "output": "canonical p005_area IDF1 0.669494"
+    }
+  ],
+  "improvement_table": [
+    {
+      "stage": "previous canonical p005 best",
+      "baseline": "-",
+      "candidate": 0.669466,
+      "delta": "-",
+      "decision": "baseline"
+    },
+    {
+      "stage": "siglip rank17 direct full-score",
+      "baseline": 0.667266,
+      "candidate": 0.667294,
+      "delta": 2.8e-05,
+      "decision": "positive enough for delivery"
+    },
+    {
+      "stage": "siglip rank17 density_simple",
+      "baseline": 0.669466,
+      "candidate": 0.669388,
+      "delta": -7.8e-05,
+      "decision": "below best but continue because direct is positive"
+    },
+    {
+      "stage": "siglip rank17 canonical p005_area",
+      "baseline": 0.669466,
+      "candidate": 0.669494,
+      "delta": 2.8e-05,
+      "decision": "promoted"
+    }
+  ],
+  "per_video_table": [
+    {
+      "video": "vlincs_MS01_MC0001_MCAM00_2024-03-Tc6",
+      "baseline": 0.879281,
+      "candidate": 0.879281,
+      "delta": 0.0,
+      "note": "unchanged or global-alignment side effect"
+    },
+    {
+      "video": "vlincs_MS01_MC0001_MCAM00_2024-03-Tc8",
+      "baseline": 0.8295,
+      "candidate": 0.8295,
+      "delta": 0.0,
+      "note": "unchanged or global-alignment side effect"
+    },
+    {
+      "video": "vlincs_MS01_MC0001_MCAM03_2024-03-Tc6",
+      "baseline": 0.692518,
+      "candidate": 0.692518,
+      "delta": 0.0,
+      "note": "unchanged or global-alignment side effect"
+    },
+    {
+      "video": "vlincs_MS01_MC0001_MCAM03_2024-03-Tc8",
+      "baseline": 0.631769,
+      "candidate": 0.631769,
+      "delta": 0.0,
+      "note": "unchanged or global-alignment side effect"
+    },
+    {
+      "video": "vlincs_MS01_MC0001_MCAM04_2024-03-Tc6",
+      "baseline": 0.588294,
+      "candidate": 0.588357,
+      "delta": 6.3e-05,
+      "note": "changed source tracklet seq3403 in MCAM04"
+    },
+    {
+      "video": "vlincs_MS01_MC0001_MCAM05_2024-03-Tc6",
+      "baseline": 0.716375,
+      "candidate": 0.716375,
+      "delta": 0.0,
+      "note": "unchanged or global-alignment side effect"
+    },
+    {
+      "video": "vlincs_MS01_MC0001_MCAM05_2024-03-Tc8",
+      "baseline": 0.79093,
+      "candidate": 0.79093,
+      "delta": 0.0,
+      "note": "unchanged or global-alignment side effect"
+    },
+    {
+      "video": "vlincs_MS01_MC0001_MCAM06_2024-03-Tc6",
+      "baseline": 0.61257,
+      "candidate": 0.61257,
+      "delta": 0.0,
+      "note": "unchanged or global-alignment side effect"
+    },
+    {
+      "video": "vlincs_MS01_MC0001_MCAM06_2024-03-Tc8",
+      "baseline": 0.701496,
+      "candidate": 0.701496,
+      "delta": 0.0,
+      "note": "unchanged or global-alignment side effect"
+    },
+    {
+      "video": "vlincs_MS01_MC0001_MCAM08_2024-03-Tc6",
+      "baseline": 0.776358,
+      "candidate": 0.776358,
+      "delta": 0.0,
+      "note": "unchanged or global-alignment side effect"
+    }
+  ],
+  "environment": [
+    "branch wisc",
+    "Python with numpy pandas pyarrow reid-hota scikit-learn Pillow",
+    "git lfs materialized kit/demo_data/ds1/**",
+    "DATA_ROOT defaults to kit/demo_data/ds1/gt",
+    "OPENAI_API_KEY not required for this promoted gain and never stored in commands/files"
+  ],
+  "commands": [
+    "reports/vlincs_iterations/20260625_seq7771_bestcrop_component82_p005_gain/reproduce.sh",
+    "python kit/propose_no_anchor_subpart_repair_candidates.py --focus-videos vlincs_MS01_MC0001_MCAM08_2024-03-Tc6 ...",
+    "python kit/evaluate_sample_assignments_full.py --assignments <rank17 assignment> ...",
+    "python kit/no_anchor_pervideo_filter_selector.py --source-zip <direct zip> --policies density_simple ...",
+    "python kit/evaluate_submission_detection_filter.py --submission-zip <density zip> --config \"$(cat repro/input/p005_area_config.txt)\" ..."
+  ],
+  "code_paths": [
+    "kit/build_no_anchor_generated_positive_prompt_assets.py",
+    "kit/generate_no_anchor_tracklet_local_positives.py",
+    "kit/audit_no_anchor_generated_positive_ctf.py",
+    "kit/propose_no_anchor_subpart_repair_candidates.py",
+    "kit/evaluate_sample_assignments_full.py",
+    "kit/no_anchor_pervideo_filter_selector.py",
+    "kit/evaluate_submission_detection_filter.py",
+    "kit/export_no_anchor_subpart_visual_case.py",
+    "reports/vlincs_iterations/20260625_seq7771_bestcrop_component82_p005_gain/reproduce.sh"
+  ],
+  "artifacts": [
+    "reports/vlincs_iterations/20260625_seq7771_bestcrop_component82_p005_gain/metrics/siglip_r17_s11_to82_seq3403_full_export.json",
+    "reports/vlincs_iterations/20260625_seq7771_bestcrop_component82_p005_gain/metrics/siglip_r17_s11_to82_seq3403_density_simple.json",
+    "reports/vlincs_iterations/20260625_seq7771_bestcrop_component82_p005_gain/metrics/siglip_r17_s11_to82_seq3403_density_p005_area.json",
+    "reports/vlincs_iterations/20260625_seq7771_bestcrop_component82_p005_gain/repro/provenance/direct_score_summary.json",
+    "local_runs/generated_positive_bestcrop_scheduler_seq7771_20260625/"
+  ],
+  "visual_cases": [
+    {
+      "title": "Seq7771 best-crop target-82 repair: seq3403",
+      "summary": "SigLIP rank17 moves seq3403 from comp11/gid96000012 to comp82/gid960000202 after component 82 is admitted as a DINO/SigLIP-stable generated-positive target.",
+      "image": "cases/siglip_rank17_seq3403/rank17_bbox_evidence.png",
+      "html": "cases/siglip_rank17_seq3403/case.html",
+      "json": "cases/siglip_rank17_seq3403/case.json"
+    }
+  ],
+  "ablations": [
+    {
+      "name": "siglip_r17_s11_to82_seq3403",
+      "change": "direct full-score candidate from MCAM08 component-82 focused scheduler",
+      "result": "IDF1 0.667294, HOTA 0.528414, AssA 0.538540, delta +0.000028",
+      "decision": "promote to delivery"
+    },
+    {
+      "name": "dino_r07_s82_to11_seq5382",
+      "change": "direct full-score candidate from MCAM08 component-82 focused scheduler",
+      "result": "IDF1 0.667264, HOTA 0.528377, AssA 0.538494, delta -0.000002",
+      "decision": "kill: direct tie/negative"
+    },
+    {
+      "name": "dino_r08_s11_to82_seq4488",
+      "change": "direct full-score candidate from MCAM08 component-82 focused scheduler",
+      "result": "IDF1 0.667264, HOTA 0.528374, AssA 0.538491, delta -0.000002",
+      "decision": "kill: direct tie/negative"
+    },
+    {
+      "name": "weak_r10_s82_to11_seq5382",
+      "change": "direct full-score candidate from MCAM08 component-82 focused scheduler",
+      "result": "IDF1 0.667264, HOTA 0.528377, AssA 0.538494, delta -0.000002",
+      "decision": "kill: direct tie/negative"
+    },
+    {
+      "name": "siglip_r17_density_simple",
+      "change": "run no-GT density_simple delivery on direct-positive zip",
+      "result": "IDF1 0.669388, HOTA 0.530104, AssA 0.540312, dropped 35029",
+      "decision": "continue to p005 because direct was positive"
+    },
+    {
+      "name": "siglip_r17_p005_area",
+      "change": "run canonical p005_area after density_simple",
+      "result": "IDF1 0.669494, HOTA 0.530188, AssA 0.540439, dropped 45467, config p005_area",
+      "decision": "promote: canonical e2e gain over 0.669466"
+    },
+    {
+      "name": "seq7771_multicrop_vs_bestcrop_ctf",
+      "change": "generated-positive admission ablation before scheduler",
+      "result": "seq7771 DINOv2 source CTF improves 1/3 -> 3/3; SigLIP stays 3/3",
+      "decision": "keep best-crop admission for component-82 target evidence"
+    },
+    {
+      "name": "seq5486_bestcrop_ctf",
+      "change": "same best-crop rule on seq5486",
+      "result": "DINOv2 remains 0/3; SigLIP 3/3",
+      "decision": "reject for GPT-image and downstream scheduler"
+    }
+  ],
+  "bitbucket": "https://bitbucket.org/Novateur/vlincs_reid_by_search/src/wisc/reports/vlincs_iterations/20260625_seq7771_bestcrop_component82_p005_gain/",
+  "s3": "pending: local AWS credentials still unavailable in this session; package records local artifact paths",
+  "next": "Integrate this gain into root demo.sh only after reproduce.sh verifies from a fresh method run; then search for additional component-82 target repairs and GPT-image only from safe OPENAI_API_KEY env."
+}

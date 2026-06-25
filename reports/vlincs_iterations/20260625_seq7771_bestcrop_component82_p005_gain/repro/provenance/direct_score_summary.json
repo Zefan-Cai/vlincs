@@ -1,0 +1,52 @@
+{
+  "baseline_direct": {
+    "idf1": 0.667266,
+    "hota": 0.52838,
+    "assa": 0.538499
+  },
+  "rows": [
+    {
+      "name": "siglip_r17_s11_to82_seq3403",
+      "idf1": 0.667294,
+      "hota": 0.528414,
+      "assa": 0.53854,
+      "delta_idf1": 2.8e-05,
+      "delta_hota": 3.4e-05,
+      "delta_assa": 4.1e-05,
+      "json": "local_runs/generated_positive_bestcrop_scheduler_seq7771_20260625/direct_scores/siglip_r17_s11_to82_seq3403.json"
+    },
+    {
+      "name": "dino_r07_s82_to11_seq5382",
+      "idf1": 0.667264,
+      "hota": 0.528377,
+      "assa": 0.538494,
+      "delta_idf1": -2e-06,
+      "delta_hota": -3e-06,
+      "delta_assa": -5e-06,
+      "json": "local_runs/generated_positive_bestcrop_scheduler_seq7771_20260625/direct_scores/dino_r07_s82_to11_seq5382.json"
+    },
+    {
+      "name": "dino_r08_s11_to82_seq4488",
+      "idf1": 0.667264,
+      "hota": 0.528374,
+      "assa": 0.538491,
+      "delta_idf1": -2e-06,
+      "delta_hota": -6e-06,
+      "delta_assa": -8e-06,
+      "json": "local_runs/generated_positive_bestcrop_scheduler_seq7771_20260625/direct_scores/dino_r08_s11_to82_seq4488.json"
+    },
+    {
+      "name": "weak_r10_s82_to11_seq5382",
+      "idf1": 0.667264,
+      "hota": 0.528377,
+      "assa": 0.538494,
+      "delta_idf1": -2e-06,
+      "delta_hota": -3e-06,
+      "delta_assa": -5e-06,
+      "json": "local_runs/generated_positive_bestcrop_scheduler_seq7771_20260625/direct_scores/weak_r10_s82_to11_seq5382.json"
+    }
+  ],
+  "uses_anchors": false,
+  "uses_gt_for_evaluation_only": true,
+  "uses_gt_for_training_or_anchors": false
+}

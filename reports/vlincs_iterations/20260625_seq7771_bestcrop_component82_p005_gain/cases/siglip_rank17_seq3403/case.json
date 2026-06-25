@@ -1,0 +1,147 @@
+{
+  "after_state": "component 82, gid 960000202, component_size 21, decision_status subpart_reassign",
+  "before_state": "component 11, gid 96000012, component_size 183",
+  "candidate": {
+    "assignment_csv": "local_runs/generated_positive_bestcrop_scheduler_seq7771_20260625/siglip_primary/assignments/rank17_subpart_s11_to82_1seq_assignments.csv",
+    "conflicts_to_rest": 2,
+    "focus_video_hits": 0,
+    "group_internal_sim": 1.0,
+    "moved_preview": [
+      {
+        "from_component": 11,
+        "from_predicted_global_id": 96000012,
+        "seq": 3403,
+        "to_component": 82,
+        "to_predicted_global_id": 960000202
+      }
+    ],
+    "moved_tracklets": 1,
+    "rank": 17,
+    "score": 2.602778246434213,
+    "source_component": 11,
+    "source_component_conflict_edges": 57,
+    "source_component_size": 183,
+    "source_predicted_global_id": 96000012,
+    "source_rest_cross_max": 0.6415471434593201,
+    "source_rest_cross_mean": 0.3700186014175415,
+    "source_rest_margin_max": 0.35845285654067993,
+    "source_rest_margin_mean": 0.6299813985824585,
+    "source_seqs": [
+      3403
+    ],
+    "source_videos": {
+      "vlincs_MS01_MC0001_MCAM04_2024-03-Tc6": 1
+    },
+    "target_component": 82,
+    "target_component_size": 20,
+    "target_margin": 0.03748112916946411,
+    "target_predicted_global_id": 960000202,
+    "target_rank_for_group": 1,
+    "target_sim": 0.6790282726287842,
+    "uses_anchors": false,
+    "uses_gt_for_evaluation_only": false,
+    "uses_gt_for_training_or_anchors": false
+  },
+  "evidence": "target_sim=0.6790, target_margin=0.0375, source_rest_margin=0.6300",
+  "failure_montage": "",
+  "failure_reason": "Before the repair, seq3403 stayed in a large comp11 island even though the current best already contains a DINO/SigLIP-stable component-82 seed seq7771.",
+  "improvement": "Move only seq3403 into component 82, then require direct, density_simple, and canonical p005_area validation before promotion.",
+  "montage": "rank17_bbox_evidence.png",
+  "raw_frame_dir": "",
+  "raw_frame_status": "available",
+  "summary": "Generated-positive best-crop CTF made component 82 a stable target; SigLIP rank17 moves only seq3403 from comp11/gid96000012 to comp82/gid960000202.",
+  "title": "Seq7771 best-crop target-82 repair: seq3403",
+  "tracklets": [
+    {
+      "after": {
+        "avg_conf": "0.628033",
+        "camera": "MCAM04",
+        "component_external_prob_max": "0.0",
+        "component_internal_edges": "0",
+        "component_internal_prob_median": "0.0",
+        "component_internal_score_median": "0.0",
+        "component_label": "82",
+        "component_margin_prob": "0.0",
+        "component_size": "21",
+        "decision_status": "subpart_reassign",
+        "end_frame": "35321",
+        "n_dets": "106",
+        "predicted_global_id": "960000202",
+        "prediction_confidence": "0.720000",
+        "seq": "3403",
+        "start_frame": "35215",
+        "tracklet_key": "vlincs_MS01_MC0001_MCAM04_2024-03-Tc6:2067:0",
+        "video": "vlincs_MS01_MC0001_MCAM04_2024-03-Tc6"
+      },
+      "before": {
+        "avg_conf": "0.628033",
+        "camera": "MCAM04",
+        "component_external_prob_max": "0.0",
+        "component_internal_edges": "0",
+        "component_internal_prob_median": "0.0",
+        "component_internal_score_median": "0.0",
+        "component_label": "11",
+        "component_margin_prob": "0.0",
+        "component_size": "183",
+        "decision_status": "forced_component",
+        "end_frame": "35321",
+        "n_dets": "106",
+        "predicted_global_id": "96000012",
+        "prediction_confidence": "0.7",
+        "seq": "3403",
+        "start_frame": "35215",
+        "tracklet_key": "vlincs_MS01_MC0001_MCAM04_2024-03-Tc6:2067:0",
+        "video": "vlincs_MS01_MC0001_MCAM04_2024-03-Tc6"
+      },
+      "sampled_boxes": [
+        {
+          "bbox_xyxy": [
+            1565.4614,
+            1021.6237,
+            1616.5186,
+            1098.5449
+          ],
+          "frame_idx": 35215,
+          "raw_frame_path": "reports/vlincs_iterations/20260625_seq7771_bestcrop_component82_p005_gain/cases/siglip_rank17_seq3403/raw_frames/vlincs_MS01_MC0001_MCAM04_2024-03-Tc6_f35215.png",
+          "raw_frame_source": "video_root",
+          "score": 0.6040889620780945,
+          "tracklet_key": "vlincs_MS01_MC0001_MCAM04_2024-03-Tc6:2067:0",
+          "video_key": "vlincs_MS01_MC0001_MCAM04_2024-03-Tc6"
+        },
+        {
+          "bbox_xyxy": [
+            1597.216,
+            1021.27686,
+            1646.1597,
+            1082.86
+          ],
+          "frame_idx": 35267,
+          "raw_frame_path": "reports/vlincs_iterations/20260625_seq7771_bestcrop_component82_p005_gain/cases/siglip_rank17_seq3403/raw_frames/vlincs_MS01_MC0001_MCAM04_2024-03-Tc6_f35267.png",
+          "raw_frame_source": "video_root",
+          "score": 0.4234766364097595,
+          "tracklet_key": "vlincs_MS01_MC0001_MCAM04_2024-03-Tc6:2067:0",
+          "video_key": "vlincs_MS01_MC0001_MCAM04_2024-03-Tc6"
+        },
+        {
+          "bbox_xyxy": [
+            1662.611,
+            1027.4629,
+            1710.6562,
+            1163.2399
+          ],
+          "frame_idx": 35321,
+          "raw_frame_path": "reports/vlincs_iterations/20260625_seq7771_bestcrop_component82_p005_gain/cases/siglip_rank17_seq3403/raw_frames/vlincs_MS01_MC0001_MCAM04_2024-03-Tc6_f35321.png",
+          "raw_frame_source": "video_root",
+          "score": 0.6058095097541809,
+          "tracklet_key": "vlincs_MS01_MC0001_MCAM04_2024-03-Tc6:2067:0",
+          "video_key": "vlincs_MS01_MC0001_MCAM04_2024-03-Tc6"
+        }
+      ],
+      "seq": 3403
+    }
+  ],
+  "uses_anchors": false,
+  "uses_gt_for_evaluation_only": false,
+  "uses_gt_for_training_or_anchors": false,
+  "video_root": "/Users/zcai/Codex/vlincs_reid_by_search/local_runs/raw_videos_s3_20260624"
+}
