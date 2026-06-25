@@ -12,7 +12,7 @@
   "goal_global_id_pair_f1": 0.7,
   "goal_global_id_pair_precision": 0.7,
   "goal_global_id_pair_recall": 0.7,
-  "iteration": 141,
+  "iteration": 142,
   "last_artifacts": [
     "https://bitbucket.org/Novateur/vlincs_reid_by_search/src/wisc/reports/vlincs_iterations/20260625_post_combo5_sig14_weak22_p005_gain/",
     "reports/vlincs_iterations/20260625_post_combo5_sig14_weak22_p005_gain/README.md",
@@ -21,11 +21,11 @@
     "reports/vlincs_iterations/20260625_post_combo5_sig14_weak22_p005_gain/reproduce.sh",
     "s3://dit-scale-up/zcai/vlincs/no_anchor_gains/20260625_post_combo5_sig14_weak22_p005_gain/"
   ],
-  "last_direction": "generated_positive_include_seq_filter_no_gain",
-  "last_result": "Added repeatable --include-seq to the no-anchor generated-positive tool so GPT-image probes can generate only the intended source tracklet while keeping hard counters in the prompt manifest for CTF. Smoke generated 2 local_aug images for seq4043 only; DINOv2 source CTF rejected 2/2 and SigLIP source CTF accepted 2/2. No e2e score was run and best remains 0.669466.",
+  "last_direction": "post_sig14_weak22_tie_combo_refutation_no_gain",
+  "last_result": "Focused post-best tie-combo probe composed SigLIP rank5 seq8315 1->18 with weak rank4 seq1874 18->88 and weak rank8 seq8336/8559 18->77. Direct full-score exactly tied the current direct baseline at 0.667266/0.528380/0.538499, so density_simple+p005_area was skipped and best remains 0.669466.",
   "last_updated": "2026-06-25",
   "last_upload": "s3_blocked_no_local_aws_credentials_pluto_ssh_unreachable",
-  "next_direction": "Run GPT-image only from a safe environment OPENAI_API_KEY with --include-seq 4043, then require both DINOv2 and SigLIP source CTF before any generated positive can affect M7/M8 repair proposals.",
+  "next_direction": "Run GPT-image only from a safe environment OPENAI_API_KEY with --include-seq 4043, then require both DINOv2 and SigLIP source CTF before any generated positive can affect M7/M8 repair proposals. Do not retest post-sig14 tie-combo reshuffles without new generated-positive evidence.",
   "stale_count": 0,
   "status": "active_no_anchor_best_e2e_0p669466_post_sig14_weak22_reviewer_refuted"
 }
