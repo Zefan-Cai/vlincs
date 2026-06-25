@@ -1,0 +1,27 @@
+<!doctype html>
+<html><head><meta charset="utf-8"><title>Combo5 SigLIP rank18</title>
+<style>
+body{font-family:Arial,Helvetica,sans-serif;margin:32px;background:#f6f7f9;color:#17202c}
+main{max-width:1120px;margin:auto} img{max-width:100%;border:1px solid #ccd3dc;background:white}
+.kpi{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin:18px 0}
+.card{background:white;border:1px solid #d7dde5;padding:14px} table{border-collapse:collapse;width:100%;background:white}
+td,th{border:1px solid #d7dde5;padding:8px;text-align:left} code{background:#eef1f5;padding:2px 4px}
+</style></head><body><main>
+<h1>Combo5 SigLIP rank18</h1>
+<p>Three-tracklet island seq2344/2390/2549 moves from component 51 / gid 96000053 to component 29 / gid 96000031 as the largest direct-positive contributor.</p>
+<div class="kpi">
+<div class="card"><b>Before</b><br>component 51, gid 96000055, component_size 159</div>
+<div class="card"><b>After</b><br>component 29, gid 96000031, component_size 48, decision_status post_seq6257_combo_probe</div>
+<div class="card"><b>Evidence</b><br>target_sim=0.6421, target_margin=0.0289, source_rest_margin=0.4176<br><b>Raw frame</b><br>unavailable_coordinate_fallback</div>
+</div>
+<h2>Failure and fix</h2>
+<p><b>Old failure:</b> The previous graph left a small component-51 island split from the component-29 identity despite local SigLIP evidence.</p>
+<p><b>New implementation:</b> Move only the three ranked island tracklets, then keep the repair only as part of a direct-positive and p005-positive combo.</p>
+<h2>BBox evidence</h2>
+<img src="rank18_bbox_evidence.png" alt="rank15 bbox evidence">
+<h2>Moved tracklets</h2>
+<table><thead><tr><th>seq</th><th>video</th><th>gid</th><th>component</th><th>frames</th><th>dets</th></tr></thead><tbody><tr><td>2344</td><td>vlincs_MS01_MC0001_MCAM04_2024-03-Tc6</td><td>96000055 -> 96000031</td><td>51 -> 29</td><td>14911-15210</td><td>299</td></tr>
+<tr><td>2390</td><td>vlincs_MS01_MC0001_MCAM04_2024-03-Tc6</td><td>96000055 -> 96000031</td><td>51 -> 29</td><td>15211-15394</td><td>177</td></tr>
+<tr><td>2549</td><td>vlincs_MS01_MC0001_MCAM04_2024-03-Tc6</td><td>96000055 -> 96000031</td><td>51 -> 29</td><td>16553-16852</td><td>300</td></tr></tbody></table>
+
+</main></body></html>

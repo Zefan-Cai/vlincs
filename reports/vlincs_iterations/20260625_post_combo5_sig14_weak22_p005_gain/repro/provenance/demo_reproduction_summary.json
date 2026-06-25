@@ -1,0 +1,18 @@
+{
+  "command": "./demo.sh --run-dir local_runs/demo_post_combo5_sig14_weak22_verify_20260625",
+  "final_done": {
+    "assa": 0.540397,
+    "assignment_sha256": "7719d5494242d65a70613a769b13df05a846bd0af85d8af276894f6674e7648a",
+    "config_name": "p005_area",
+    "dataset": "ds1",
+    "dropped_rows": 45467,
+    "hota": 0.530154,
+    "idf1": 0.669466,
+    "method_reproduction": true,
+    "uses_anchors": false,
+    "uses_gt_for_evaluation_only": true,
+    "uses_gt_for_training_or_anchors": false
+  },
+  "run_dir": "local_runs/demo_post_combo5_sig14_weak22_verify_20260625",
+  "verified_at": "2026-06-25"
+}

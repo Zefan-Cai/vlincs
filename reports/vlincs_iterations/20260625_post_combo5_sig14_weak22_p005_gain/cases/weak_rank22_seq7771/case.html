@@ -1,0 +1,25 @@
+<!doctype html>
+<html><head><meta charset="utf-8"><title>Weakmetric rank22: seq7771 island repair</title>
+<style>
+body{font-family:Arial,Helvetica,sans-serif;margin:32px;background:#f6f7f9;color:#17202c}
+main{max-width:1120px;margin:auto} img{max-width:100%;border:1px solid #ccd3dc;background:white}
+.kpi{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin:18px 0}
+.card{background:white;border:1px solid #d7dde5;padding:14px} table{border-collapse:collapse;width:100%;background:white}
+td,th{border:1px solid #d7dde5;padding:8px;text-align:left} code{background:#eef1f5;padding:2px 4px}
+</style></head><body><main>
+<h1>Weakmetric rank22: seq7771 island repair</h1>
+<p>seq7771 moves from component 6 to component 82; it is a smaller positive that becomes useful when paired with SigLIP rank14.</p>
+<div class="kpi">
+<div class="card"><b>Before</b><br>component 6, gid 96000007, component_size 216</div>
+<div class="card"><b>After</b><br>component 82, gid 960000202, component_size 20, decision_status post_combo5_reviewer_combo_probe</div>
+<div class="card"><b>Evidence</b><br>target_sim=0.5275, target_margin=0.2076, source_rest_margin=0.8595<br><b>Raw frame</b><br>unavailable_coordinate_fallback</div>
+</div>
+<h2>Failure and fix</h2>
+<p><b>Old failure:</b> The previous component assignment kept seq7771 in a residual island. Standalone direct gain was small, so it needed interaction testing instead of standalone promotion.</p>
+<p><b>New implementation:</b> Keep as a tiny local repair only because the two-candidate combo improves canonical p005_area.</p>
+<h2>BBox evidence</h2>
+<img src="rank22_bbox_evidence.png" alt="rank15 bbox evidence">
+<h2>Moved tracklets</h2>
+<table><thead><tr><th>seq</th><th>video</th><th>gid</th><th>component</th><th>frames</th><th>dets</th></tr></thead><tbody><tr><td>7771</td><td>vlincs_MS01_MC0001_MCAM08_2024-03-Tc6</td><td>96000007 -> 960000202</td><td>6 -> 82</td><td>16948-17240</td><td>197</td></tr></tbody></table>
+
+</main></body></html>

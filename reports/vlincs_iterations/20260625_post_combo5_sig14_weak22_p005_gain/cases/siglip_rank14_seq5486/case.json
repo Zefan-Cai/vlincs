@@ -1,0 +1,141 @@
+{
+  "after_state": "component 47, gid 96000051, component_size 184, decision_status post_combo5_reviewer_combo_probe",
+  "before_state": "component 14, gid 96000015, component_size 167",
+  "candidate": {
+    "assignment_csv": "/Users/zcai/Codex/vlincs_reid_by_search_wisc_sync/local_runs/reproduce_scheduler_combo5_after_seq6257_p005_20260624/method_reproduction/local_gated_siglip_primary/assignments/rank14_subpart_s14_to47_1seq_assignments.csv",
+    "conflicts_to_rest": 2,
+    "focus_video_hits": 0,
+    "group_internal_sim": 1.0,
+    "moved_preview": [
+      {
+        "from_component": 14,
+        "from_predicted_global_id": 96000015,
+        "seq": 5486,
+        "to_component": 47,
+        "to_predicted_global_id": 96000051
+      }
+    ],
+    "moved_tracklets": 1,
+    "rank": 14,
+    "score": 2.6383661828451035,
+    "source_component": 14,
+    "source_component_conflict_edges": 45,
+    "source_component_size": 166,
+    "source_predicted_global_id": 96000015,
+    "source_rest_cross_max": 0.4973403811454773,
+    "source_rest_cross_mean": 0.3303885757923126,
+    "source_rest_margin_max": 0.5026596188545227,
+    "source_rest_margin_mean": 0.6696114242076874,
+    "source_seqs": [
+      5486
+    ],
+    "source_videos": {
+      "vlincs_MS01_MC0001_MCAM04_2024-03-Tc6": 1
+    },
+    "target_component": 47,
+    "target_component_size": 183,
+    "target_margin": 0.09311848878860474,
+    "target_predicted_global_id": 96000051,
+    "target_rank_for_group": 1,
+    "target_sim": 0.590458869934082,
+    "uses_anchors": false,
+    "uses_gt_for_evaluation_only": false,
+    "uses_gt_for_training_or_anchors": false
+  },
+  "evidence": "target_sim=0.5905, target_margin=0.0931, source_rest_margin=0.6696",
+  "failure_montage": "",
+  "failure_reason": "The prior graph left a one-tracklet island in component 14; the target component 47 explanation had better local visual evidence but was too small to trust without reviewer scoring.",
+  "improvement": "Move only seq5486, then require direct, density_simple, and p005_area validation before promotion.",
+  "montage": "rank14_bbox_evidence.png",
+  "raw_frame_dir": "",
+  "raw_frame_status": "unavailable_coordinate_fallback",
+  "summary": "seq5486 moves from component 14 to component 47 after local SigLIP evidence and survives direct plus p005 delivery.",
+  "title": "SigLIP rank14: seq5486 island repair",
+  "tracklets": [
+    {
+      "after": {
+        "avg_conf": "0.665151",
+        "camera": "MCAM04",
+        "component_external_prob_max": "0.0",
+        "component_internal_edges": "0",
+        "component_internal_prob_median": "0.0",
+        "component_internal_score_median": "0.0",
+        "component_label": "47",
+        "component_margin_prob": "0.0",
+        "component_size": "184",
+        "decision_status": "post_combo5_reviewer_combo_probe",
+        "end_frame": "12037",
+        "n_dets": "225",
+        "predicted_global_id": "96000051",
+        "prediction_confidence": "0.7",
+        "seq": "5486",
+        "start_frame": "11813",
+        "tracklet_key": "vlincs_MS01_MC0001_MCAM04_2024-03-Tc6:633:0",
+        "video": "vlincs_MS01_MC0001_MCAM04_2024-03-Tc6"
+      },
+      "before": {
+        "avg_conf": "0.665151",
+        "camera": "MCAM04",
+        "component_external_prob_max": "0.0",
+        "component_internal_edges": "0",
+        "component_internal_prob_median": "0.0",
+        "component_internal_score_median": "0.0",
+        "component_label": "14",
+        "component_margin_prob": "0.0",
+        "component_size": "167",
+        "decision_status": "forced_component",
+        "end_frame": "12037",
+        "n_dets": "225",
+        "predicted_global_id": "96000015",
+        "prediction_confidence": "0.7",
+        "seq": "5486",
+        "start_frame": "11813",
+        "tracklet_key": "vlincs_MS01_MC0001_MCAM04_2024-03-Tc6:633:0",
+        "video": "vlincs_MS01_MC0001_MCAM04_2024-03-Tc6"
+      },
+      "sampled_boxes": [
+        {
+          "bbox_xyxy": [
+            2283.7593,
+            1019.563,
+            2323.4092,
+            1264.0901
+          ],
+          "frame_idx": 11813,
+          "score": 0.7364153861999512,
+          "tracklet_key": "vlincs_MS01_MC0001_MCAM04_2024-03-Tc6:633:0",
+          "video_key": "vlincs_MS01_MC0001_MCAM04_2024-03-Tc6"
+        },
+        {
+          "bbox_xyxy": [
+            2284.0947,
+            1021.2987,
+            2327.9055,
+            1245.4113
+          ],
+          "frame_idx": 11925,
+          "score": 0.7515085339546204,
+          "tracklet_key": "vlincs_MS01_MC0001_MCAM04_2024-03-Tc6:633:0",
+          "video_key": "vlincs_MS01_MC0001_MCAM04_2024-03-Tc6"
+        },
+        {
+          "bbox_xyxy": [
+            2284.1494,
+            1070.4022,
+            2316.716,
+            1266.6262
+          ],
+          "frame_idx": 12037,
+          "score": 0.16604728996753693,
+          "tracklet_key": "vlincs_MS01_MC0001_MCAM04_2024-03-Tc6:633:0",
+          "video_key": "vlincs_MS01_MC0001_MCAM04_2024-03-Tc6"
+        }
+      ],
+      "seq": 5486
+    }
+  ],
+  "uses_anchors": false,
+  "uses_gt_for_evaluation_only": false,
+  "uses_gt_for_training_or_anchors": false,
+  "video_root": ""
+}

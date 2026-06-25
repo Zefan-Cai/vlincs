@@ -2,7 +2,7 @@
 set -euo pipefail
 
 ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-REPRO="${ROOT}/reports/vlincs_iterations/20260624_scheduler_combo5_after_seq6257_p005_gain/reproduce.sh"
+REPRO="${ROOT}/reports/vlincs_iterations/20260625_post_combo5_sig14_weak22_p005_gain/reproduce.sh"
 
 usage() {
   cat <<'EOF'

@@ -1,0 +1,62 @@
+{
+  "assignment_csv": "local_runs/post_combo5_reviewer_probe_20260625/assignments/combo_sig14_weak22_assignments.csv",
+  "assignment_sha256": "7719d5494242d65a70613a769b13df05a846bd0af85d8af276894f6674e7648a",
+  "base_assignment_csv": "local_runs/reproduce_scheduler_combo5_after_seq6257_p005_20260624/method_reproduction/scheduler_combo5_after_seq6257_assignments.csv",
+  "changes": [
+    {
+      "after_component_label": 47,
+      "after_decision_status": "post_combo5_reviewer_combo_probe",
+      "after_predicted_global_id": 96000051,
+      "before_component_label": 14,
+      "before_decision_status": "forced_component",
+      "before_predicted_global_id": 96000015,
+      "manifest": "local_runs/reproduce_scheduler_combo5_after_seq6257_p005_20260624/method_reproduction/local_gated_siglip_primary/manifest.json",
+      "rank": 14,
+      "seq": 5486
+    },
+    {
+      "after_component_label": 82,
+      "after_decision_status": "post_combo5_reviewer_combo_probe",
+      "after_predicted_global_id": 960000202,
+      "before_component_label": 6,
+      "before_decision_status": "forced_component",
+      "before_predicted_global_id": 96000007,
+      "manifest": "local_runs/reproduce_scheduler_combo5_after_seq6257_p005_20260624/method_reproduction/local_gated_weak_primary/manifest.json",
+      "rank": 22,
+      "seq": 7771
+    }
+  ],
+  "decision_status": "post_combo5_reviewer_combo_probe",
+  "moved_tracklets": 2,
+  "selected": [
+    {
+      "conflicts_to_rest": 2,
+      "manifest": "local_runs/reproduce_scheduler_combo5_after_seq6257_p005_20260624/method_reproduction/local_gated_siglip_primary/manifest.json",
+      "moved_seqs": [
+        5486
+      ],
+      "rank": 14,
+      "score": 2.6383661828451035,
+      "source_component": 14,
+      "target_component": 47,
+      "target_margin": 0.09311848878860474,
+      "target_sim": 0.590458869934082
+    },
+    {
+      "conflicts_to_rest": 2,
+      "manifest": "local_runs/reproduce_scheduler_combo5_after_seq6257_p005_20260624/method_reproduction/local_gated_weak_primary/manifest.json",
+      "moved_seqs": [
+        7771
+      ],
+      "rank": 22,
+      "score": 2.550728761595031,
+      "source_component": 6,
+      "target_component": 82,
+      "target_margin": 0.20756474137306213,
+      "target_sim": 0.5274817943572998
+    }
+  ],
+  "uses_anchors": false,
+  "uses_gt_for_evaluation_only": false,
+  "uses_gt_for_training_or_anchors": false
+}

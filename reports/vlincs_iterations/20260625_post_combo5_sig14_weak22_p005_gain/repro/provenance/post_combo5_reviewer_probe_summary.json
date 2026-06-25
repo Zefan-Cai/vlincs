@@ -1,0 +1,91 @@
+{
+  "probe": "post_combo5_reviewer_probe_20260625",
+  "baseline_direct": {
+    "idf1": 0.667111,
+    "hota": 0.528208,
+    "assa": 0.538349
+  },
+  "rows": [
+    {
+      "name": "siglip_r12_s91_to83_seq633",
+      "manifest": "SIG",
+      "rank": "12",
+      "idf1": 0.667111,
+      "hota": 0.528208,
+      "assa": 0.538349,
+      "delta_idf1_vs_combo5_direct": 0.0,
+      "delta_hota_vs_combo5_direct": 0.0,
+      "delta_assa_vs_combo5_direct": 0.0,
+      "assignment": "local_runs/post_combo5_reviewer_probe_20260625/assignments/siglip_r12_s91_to83_seq633_assignments.csv",
+      "json": "local_runs/post_combo5_reviewer_probe_20260625/direct/siglip_r12_s91_to83_seq633.json"
+    },
+    {
+      "name": "siglip_r14_s14_to47_seq5486",
+      "manifest": "SIG",
+      "rank": "14",
+      "idf1": 0.66721,
+      "hota": 0.528331,
+      "assa": 0.538464,
+      "delta_idf1_vs_combo5_direct": 9.9e-05,
+      "delta_hota_vs_combo5_direct": 0.000123,
+      "delta_assa_vs_combo5_direct": 0.000115,
+      "assignment": "local_runs/post_combo5_reviewer_probe_20260625/assignments/siglip_r14_s14_to47_seq5486_assignments.csv",
+      "json": "local_runs/post_combo5_reviewer_probe_20260625/direct/siglip_r14_s14_to47_seq5486.json"
+    },
+    {
+      "name": "siglip_r15_s87_to91_seq991",
+      "manifest": "SIG",
+      "rank": "15",
+      "idf1": 0.66703,
+      "hota": 0.52814,
+      "assa": 0.538314,
+      "delta_idf1_vs_combo5_direct": -8.1e-05,
+      "delta_hota_vs_combo5_direct": -6.8e-05,
+      "delta_assa_vs_combo5_direct": -3.5e-05,
+      "assignment": "local_runs/post_combo5_reviewer_probe_20260625/assignments/siglip_r15_s87_to91_seq991_assignments.csv",
+      "json": "local_runs/post_combo5_reviewer_probe_20260625/direct/siglip_r15_s87_to91_seq991.json"
+    },
+    {
+      "name": "siglip_r19_s89_to91_seq4487_4566",
+      "manifest": "SIG",
+      "rank": "19",
+      "idf1": 0.667111,
+      "hota": 0.528208,
+      "assa": 0.538349,
+      "delta_idf1_vs_combo5_direct": 0.0,
+      "delta_hota_vs_combo5_direct": 0.0,
+      "delta_assa_vs_combo5_direct": 0.0,
+      "assignment": "local_runs/post_combo5_reviewer_probe_20260625/assignments/siglip_r19_s89_to91_seq4487_4566_assignments.csv",
+      "json": "local_runs/post_combo5_reviewer_probe_20260625/direct/siglip_r19_s89_to91_seq4487_4566.json"
+    },
+    {
+      "name": "weak_r20_s19_to81_seq1419_6295",
+      "manifest": "WEAK",
+      "rank": "20",
+      "idf1": 0.666927,
+      "hota": 0.528044,
+      "assa": 0.538247,
+      "delta_idf1_vs_combo5_direct": -0.000184,
+      "delta_hota_vs_combo5_direct": -0.000164,
+      "delta_assa_vs_combo5_direct": -0.000102,
+      "assignment": "local_runs/post_combo5_reviewer_probe_20260625/assignments/weak_r20_s19_to81_seq1419_6295_assignments.csv",
+      "json": "local_runs/post_combo5_reviewer_probe_20260625/direct/weak_r20_s19_to81_seq1419_6295.json"
+    },
+    {
+      "name": "weak_r22_s6_to82_seq7771",
+      "manifest": "WEAK",
+      "rank": "22",
+      "idf1": 0.667167,
+      "hota": 0.528257,
+      "assa": 0.538383,
+      "delta_idf1_vs_combo5_direct": 5.6e-05,
+      "delta_hota_vs_combo5_direct": 4.9e-05,
+      "delta_assa_vs_combo5_direct": 3.4e-05,
+      "assignment": "local_runs/post_combo5_reviewer_probe_20260625/assignments/weak_r22_s6_to82_seq7771_assignments.csv",
+      "json": "local_runs/post_combo5_reviewer_probe_20260625/direct/weak_r22_s6_to82_seq7771.json"
+    }
+  ],
+  "uses_anchors": false,
+  "uses_gt_for_evaluation_only": true,
+  "uses_gt_for_training_or_anchors": false
+}

@@ -1,4 +1,13 @@
 VLINCS no-anchor global ID progress
+Date: 2026-06-25
+
+Current best e2e:
+IDF1 / HOTA / AssA = 0.669466 / 0.530154 / 0.540397
+
+Latest post-combo5 SigLIP14 + Weak22 gain:
+After the scheduler combo5 best, a reviewer direct-scored six compatible remaining local-gated candidates. The promoted interaction composes two one-tracklet repairs: SigLIP rank14 seq5486 14->47 and weakmetric rank22 seq7771 6->82. Direct full-score improves from 0.667111 to 0.667266, density_simple from 0.669205 to 0.669360, and valid p005_area from 0.669311 to 0.669466 with config_name=p005_area and dropped_rows=45467. Root ./demo.sh method-reproduced the result from feature evidence and manifests, not by replaying a score. Package: reports/vlincs_iterations/20260625_post_combo5_sig14_weak22_p005_gain/.
+
+VLINCS no-anchor global ID progress
 Date: 2026-06-24
 
 Current best e2e:
