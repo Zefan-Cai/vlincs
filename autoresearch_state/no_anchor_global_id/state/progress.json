@@ -12,7 +12,7 @@
     "goal_global_id_pair_f1": 0.7,
     "goal_global_id_pair_precision": 0.7,
     "goal_global_id_pair_recall": 0.7,
-    "iteration": 136,
+    "iteration": 137,
     "last_artifacts": [
         "https://bitbucket.org/Novateur/vlincs_reid_by_search/src/wisc/reports/vlincs_iterations/20260624_scheduler_combo5_after_seq6257_p005_gain/",
         "reports/vlincs_iterations/20260624_scheduler_combo5_after_seq6257_p005_gain/README.md",
@@ -21,11 +21,11 @@
         "reports/vlincs_iterations/20260624_scheduler_combo5_after_seq6257_p005_gain/reproduce.sh",
         "s3://dit-scale-up/zcai/vlincs/no_anchor_gains/20260624_scheduler_combo5_after_seq6257_p005_gain/"
     ],
-    "last_direction": "scheduler_combo5_after_seq6257_p005_gain",
-    "last_result": "Promoted a no-anchor combo of five local-gated scheduler repairs after seq6257: SigLIP r18/r6/r9/r2 plus weak r12. Direct 0.667111/0.528208/0.538349; density_simple 0.669205/0.529898/0.540120; valid p005_area 0.669311/0.529982/0.540246 with config_name=p005_area and dropped_rows=45467. This is +0.000292 IDF1 over prior canonical 0.669019. Ten direct single-candidate ablations and four combo ablations are recorded.",
+    "last_direction": "generated_positive_siglip_ctf_output_fix_no_gain",
+    "last_result": "Fixed generated-positive SigLIP CTF extraction for transformer outputs that return pooled model objects instead of raw tensors. Rebuilt the seq4043 local-augmentation dry-run in the current checkout: DINO source CTF passes 8/12 and SigLIP source CTF passes 12/12. This is infrastructure for GPT-image positives and does not change the canonical best 0.669311.",
     "last_updated": "2026-06-24",
     "last_upload": "s3_uploaded:s3://dit-scale-up/zcai/vlincs/no_anchor_gains/20260624_scheduler_combo5_after_seq6257_p005_gain/",
-    "next_direction": "Train or fit a lightweight reviewer over post-seq6257 local-gated candidates using combo5 positives and the tied/negative direct labels; keep image-generation positives gated by env-key calls plus DINO/SigLIP/weakmetric CTF only.",
+    "next_direction": "Run GPT-image-2 on the seq4043 prompt manifest once OPENAI_API_KEY is safely available in env or launchctl; generated images must pass DINO and SigLIP source CTF before any M8 repair proposal.",
     "stale_count": 0,
     "status": "active_no_anchor_best_e2e_0p669311_scheduler_combo5_pushed"
 }

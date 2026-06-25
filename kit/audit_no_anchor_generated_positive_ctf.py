@@ -63,6 +63,15 @@ def _transformers_image_feature_extractor(model_id: str, backend: str):
     model = AutoModel.from_pretrained(model_id)
     model.eval()
 
+    def pooled_tensor(output):
+        if hasattr(output, "float"):
+            return output
+        if hasattr(output, "pooler_output") and output.pooler_output is not None:
+            return output.pooler_output
+        if hasattr(output, "last_hidden_state") and output.last_hidden_state is not None:
+            return output.last_hidden_state[:, 0, :]
+        raise TypeError(f"{backend} model returned unsupported output type: {type(output).__name__}")
+
     def extract(path: Path) -> np.ndarray:
         image = Image.open(path).convert("RGB")
         inputs = processor(images=image, return_tensors="pt")
@@ -71,7 +80,8 @@ def _transformers_image_feature_extractor(model_id: str, backend: str):
                 output = model.get_image_features(**inputs)
             else:
                 model_output = model(**inputs)
-                output = getattr(model_output, "pooler_output", model_output.last_hidden_state[:, 0, :])
+                output = pooled_tensor(model_output)
+            output = pooled_tensor(output)
         feat = output.float().numpy()[0].astype(np.float32)
         feat /= float(np.linalg.norm(feat) + 1.0e-9)
         return feat
