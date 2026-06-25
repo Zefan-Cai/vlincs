@@ -4,6 +4,15 @@ Date: 2026-06-25
 Current best e2e:
 IDF1 / HOTA / AssA = 0.669466 / 0.530154 / 0.540397
 
+Latest generated-positive include-seq filter:
+Added repeatable --include-seq to kit/generate_no_anchor_tracklet_local_positives.py so a GPT-image probe can generate only the intended source tracklet while keeping hard-counter tracklets in the prompt manifest for DINO/SigLIP CTF. Smoke test with --include-seq 4043 generated 2 local_aug images for seq4043 only, with uses_anchors=false and uses_gt_for_training_or_anchors=false. DINOv2 source CTF rejected 2/2; SigLIP source CTF accepted 2/2. This is not an e2e gain, no submission was scored, and best remains 0.669466. Report: reports/no_anchor_generated_positive_relocalized_ctf_probe_20260625.md.
+
+VLINCS no-anchor global ID progress
+Date: 2026-06-25
+
+Current best e2e:
+IDF1 / HOTA / AssA = 0.669466 / 0.530154 / 0.540397
+
 Latest post-sig14/weak22 reviewer refutation:
 Direct-scored six compatible remaining local-gated candidates after the current best. weak r02 is negative (-0.000030 IDF1), weak r07 is micro-negative (-0.000003), and weak r04 / SigLIP r05 / weak r08 / SigLIP r08 all tie the current direct baseline 0.667266. No direct-positive candidate remains in this batch, so density_simple+p005_area was skipped. Best remains 0.669466. Report: reports/no_anchor_post_sig14_weak22_reviewer_refutation_20260625.md.
 

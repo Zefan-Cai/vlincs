@@ -164,6 +164,13 @@ def main() -> None:
     ap.add_argument("--model", default="gpt-image-2")
     ap.add_argument("--variants-per-seq", type=int, default=2)
     ap.add_argument("--max-reference-crops", type=int, default=2)
+    ap.add_argument(
+        "--include-seq",
+        action="append",
+        type=int,
+        default=[],
+        help="Only generate for these seq ids; repeatable. Counter seqs can remain in the prompt manifest for CTF.",
+    )
     ap.add_argument("--seed", type=int, default=62624)
     ap.add_argument("--repo-root", default="", help="root used to resolve relative crop paths; defaults to current directory")
     args = ap.parse_args()
@@ -173,6 +180,9 @@ def main() -> None:
     if not bool(manifest.get("no_anchor")):
         raise SystemExit("prompt manifest must explicitly be no_anchor=true")
     by_seq = _best_crops(manifest, repo_root, int(args.max_reference_crops))
+    if args.include_seq:
+        keep = {int(seq) for seq in args.include_seq}
+        by_seq = {seq: rows for seq, rows in by_seq.items() if seq in keep}
     if not by_seq:
         raise SystemExit("no readable source crops found")
     args.output_dir.mkdir(parents=True, exist_ok=True)
@@ -193,6 +203,7 @@ def main() -> None:
         "source_prompt_manifest": str(args.prompt_manifest),
         "generation_policy": manifest.get("generation_policy", ""),
         "identity_pair_warning": manifest.get("identity_pair_warning", ""),
+        "included_seqs": sorted(int(seq) for seq in by_seq),
         "uses_anchors": False,
         "uses_gt_for_training_or_anchors": False,
         "generated_images": generated,

@@ -29,6 +29,50 @@ self-contained in the current `wisc` checkout before calling GPT-image.
   `launchctl` environment. The API key was not written to commands, files,
   repo, S3, shell history, or logs.
 
+## Include-Seq Follow-Up
+
+The first dry-run generated positives for the intended source tracklet and for
+local hard-counter tracklets. That is fine for local augmentation, but it is
+wasteful and risky for GPT-image: the hard counters should stay in the prompt
+manifest as CTF opponents, not become generated positives themselves.
+
+`kit/generate_no_anchor_tracklet_local_positives.py` now supports repeatable
+`--include-seq`. The prompt manifest can still contain source and counter
+tracklets, while the generator only emits images for the requested source seq.
+
+Smoke command:
+
+```bash
+python kit/generate_no_anchor_tracklet_local_positives.py \
+  --prompt-manifest local_runs/generated_positive_pixel_inputs_20260625/seq4043_residual_feature_outlier_ctf/prompt_manifest.json \
+  --output-dir local_runs/generated_positive_pixel_inputs_20260625/seq4043_residual_feature_outlier_ctf/include_seq_smoke \
+  --backend local_aug \
+  --include-seq 4043 \
+  --variants-per-seq 2 \
+  --max-reference-crops 2 \
+  --repo-root "$PWD"
+```
+
+Smoke result:
+
+| Check | Result |
+|---|---:|
+| Generated images | 2 |
+| Generated seqs | 4043 only |
+| uses_anchors | false |
+| uses_gt_for_training_or_anchors | false |
+
+CTF result for the filtered source-only smoke:
+
+| Gate | Generated | Pass | Reject | Note |
+|---|---:|---:|---:|---|
+| DINOv2 source CTF | 2 | 0 | 2 | seq4043 remains below 0.80 same-source threshold |
+| SigLIP source CTF | 2 | 2 | 0 | second-view gate still accepts both variants |
+
+Decision: keep the small `--include-seq` control because it reduces GPT-image
+spend and prevents generated hard-counter leakage. This is not an e2e gain and
+does not change the current best score.
+
 ## Commands
 
 ```bash
@@ -96,6 +140,7 @@ python kit/generate_no_anchor_tracklet_local_positives.py \
   --output-dir local_runs/generated_positive_pixel_inputs_20260625/seq4043_residual_feature_outlier_ctf/gpt_image2_probe \
   --backend openai \
   --model gpt-image-2 \
+  --include-seq 4043 \
   --variants-per-seq 4 \
   --max-reference-crops 2 \
   --repo-root "$PWD"

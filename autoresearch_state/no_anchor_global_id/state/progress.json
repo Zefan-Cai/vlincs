@@ -12,7 +12,7 @@
   "goal_global_id_pair_f1": 0.7,
   "goal_global_id_pair_precision": 0.7,
   "goal_global_id_pair_recall": 0.7,
-  "iteration": 140,
+  "iteration": 141,
   "last_artifacts": [
     "https://bitbucket.org/Novateur/vlincs_reid_by_search/src/wisc/reports/vlincs_iterations/20260625_post_combo5_sig14_weak22_p005_gain/",
     "reports/vlincs_iterations/20260625_post_combo5_sig14_weak22_p005_gain/README.md",
@@ -21,11 +21,11 @@
     "reports/vlincs_iterations/20260625_post_combo5_sig14_weak22_p005_gain/reproduce.sh",
     "s3://dit-scale-up/zcai/vlincs/no_anchor_gains/20260625_post_combo5_sig14_weak22_p005_gain/"
   ],
-  "last_direction": "post_sig14_weak22_reviewer_refutation_no_gain",
-  "last_result": "Direct-scored six compatible remaining local-gated SigLIP/weakmetric candidates after the 0.669466 best. Results: weak r02 -0.000030 IDF1, weak r07 -0.000003, weak r04/siglip r05/weak r08/siglip r08 all tied current direct 0.667266. No candidate cleared direct gate, so density_simple+p005_area was skipped and best remains 0.669466.",
+  "last_direction": "generated_positive_include_seq_filter_no_gain",
+  "last_result": "Added repeatable --include-seq to the no-anchor generated-positive tool so GPT-image probes can generate only the intended source tracklet while keeping hard counters in the prompt manifest for CTF. Smoke generated 2 local_aug images for seq4043 only; DINOv2 source CTF rejected 2/2 and SigLIP source CTF accepted 2/2. No e2e score was run and best remains 0.669466.",
   "last_updated": "2026-06-25",
   "last_upload": "s3_blocked_no_local_aws_credentials_pluto_ssh_unreachable",
-  "next_direction": "Prioritize CTF-passed GPT-image generated positives from safe env OPENAI_API_KEY; remaining local-gated post-sig14/weak22 candidates have low direct signal.",
+  "next_direction": "Run GPT-image only from a safe environment OPENAI_API_KEY with --include-seq 4043, then require both DINOv2 and SigLIP source CTF before any generated positive can affect M7/M8 repair proposals.",
   "stale_count": 0,
   "status": "active_no_anchor_best_e2e_0p669466_post_sig14_weak22_reviewer_refuted"
 }
