@@ -12,20 +12,18 @@
   "goal_global_id_pair_f1": 0.7,
   "goal_global_id_pair_precision": 0.7,
   "goal_global_id_pair_recall": 0.7,
-  "iteration": 142,
+  "iteration": 143,
   "last_artifacts": [
-    "https://bitbucket.org/Novateur/vlincs_reid_by_search/src/wisc/reports/vlincs_iterations/20260625_post_combo5_sig14_weak22_p005_gain/",
-    "reports/vlincs_iterations/20260625_post_combo5_sig14_weak22_p005_gain/README.md",
-    "reports/vlincs_iterations/20260625_post_combo5_sig14_weak22_p005_gain/presentation.html",
-    "reports/vlincs_iterations/20260625_post_combo5_sig14_weak22_p005_gain/spec.json",
-    "reports/vlincs_iterations/20260625_post_combo5_sig14_weak22_p005_gain/reproduce.sh",
-    "s3://dit-scale-up/zcai/vlincs/no_anchor_gains/20260625_post_combo5_sig14_weak22_p005_gain/"
+    "kit/build_no_anchor_generated_positive_prompt_assets.py",
+    "reports/no_anchor_generated_positive_bestcrop_ctf_probe_20260625.md",
+    "local_runs/generated_positive_pixel_inputs_20260625/seq5486_promoted_postcombo5_realframe_ctf/",
+    "local_runs/generated_positive_pixel_inputs_20260625/seq7771_promoted_postcombo5_realframe_ctf/"
   ],
-  "last_direction": "post_sig14_weak22_tie_combo_refutation_no_gain",
-  "last_result": "Focused post-best tie-combo probe composed SigLIP rank5 seq8315 1->18 with weak rank4 seq1874 18->88 and weak rank8 seq8336/8559 18->77. Direct full-score exactly tied the current direct baseline at 0.667266/0.528380/0.538499, so density_simple+p005_area was skipped and best remains 0.669466.",
+  "last_direction": "generated_positive_bestcrop_ctf_admission_probe",
+  "last_result": "Built real-frame no-anchor generated-positive prompt assets for current-best-related seq5486 and seq7771. Multi-crop local_aug CTF showed seq5486 DINOv2/SigLIP 0/3 and 3/3, seq7771 1/3 and 3/3. Best-crop-only admission rescued seq7771 to DINOv2/SigLIP 3/3 and 3/3; seq5486 remained DINOv2 0/3. No e2e promotion; best remains 0.669466.",
   "last_updated": "2026-06-25",
   "last_upload": "s3_blocked_no_local_aws_credentials_pluto_ssh_unreachable",
-  "next_direction": "Run GPT-image only from a safe environment OPENAI_API_KEY with --include-seq 4043, then require both DINOv2 and SigLIP source CTF before any generated positive can affect M7/M8 repair proposals. Do not retest post-sig14 tie-combo reshuffles without new generated-positive evidence.",
+  "next_direction": "Run GPT-image only from a safe environment OPENAI_API_KEY for seq7771 with --include-seq 7771 and --max-reference-crops 1. Require both DINOv2 and SigLIP source CTF before any generated positive can affect M7/M8 repair proposals. Do not spend GPT-image budget on seq5486 or seq4043 without new DINO-stable reference evidence.",
   "stale_count": 0,
-  "status": "active_no_anchor_best_e2e_0p669466_post_sig14_weak22_reviewer_refuted"
+  "status": "active_no_anchor_best_e2e_0p669466_generated_positive_bestcrop_ctf_ready_seq7771"
 }

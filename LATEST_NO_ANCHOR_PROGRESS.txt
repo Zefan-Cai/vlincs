@@ -4,6 +4,15 @@ Date: 2026-06-25
 Current best e2e:
 IDF1 / HOTA / AssA = 0.669466 / 0.530154 / 0.540397
 
+Latest generated-positive best-crop CTF admission probe:
+Built real-frame no-anchor prompt assets for current-best-related seq5486 and seq7771 using raw MP4 frames, bbox crops, hard-counter tracklets, and no GT/anchor evidence. The new helper is kit/build_no_anchor_generated_positive_prompt_assets.py. Multi-crop local_aug CTF showed seq5486 DINOv2/SigLIP = 0/3 and 3/3, seq7771 = 1/3 and 3/3. Best-crop-only admission rescued seq7771 to DINOv2/SigLIP = 3/3 and 3/3, while seq5486 stayed DINOv2 0/3. This is not an e2e gain; best remains 0.669466. Next: run GPT-image only for seq7771 with --include-seq 7771 and --max-reference-crops 1 after a safe OPENAI_API_KEY env is available. Report: reports/no_anchor_generated_positive_bestcrop_ctf_probe_20260625.md.
+
+VLINCS no-anchor global ID progress
+Date: 2026-06-25
+
+Current best e2e:
+IDF1 / HOTA / AssA = 0.669466 / 0.530154 / 0.540397
+
 Latest post-sig14/weak22 tie-combo refutation:
 Focused combo test composed SigLIP rank5 seq8315 1->18 with weak rank4 seq1874 18->88 and weak rank8 seq8336/8559 18->77, moving 4 total tracklets as a local component-18 reshuffle. Direct full-score exactly tied the current direct baseline: 0.667266 / 0.528380 / 0.538499. No density_simple or p005_area delivery was run, and best remains 0.669466. Report: reports/no_anchor_post_sig14_weak22_tie_combo_refutation_20260625.md.
 
