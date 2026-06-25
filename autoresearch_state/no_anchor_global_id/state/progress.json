@@ -12,7 +12,7 @@
   "goal_global_id_pair_f1": 0.7,
   "goal_global_id_pair_precision": 0.7,
   "goal_global_id_pair_recall": 0.7,
-  "iteration": 138,
+  "iteration": 139,
   "last_artifacts": [
     "https://bitbucket.org/Novateur/vlincs_reid_by_search/src/wisc/reports/vlincs_iterations/20260625_post_combo5_sig14_weak22_p005_gain/",
     "reports/vlincs_iterations/20260625_post_combo5_sig14_weak22_p005_gain/README.md",
@@ -21,11 +21,11 @@
     "reports/vlincs_iterations/20260625_post_combo5_sig14_weak22_p005_gain/reproduce.sh",
     "s3://dit-scale-up/zcai/vlincs/no_anchor_gains/20260625_post_combo5_sig14_weak22_p005_gain/"
   ],
-  "last_direction": "post_combo5_siglip14_weak22_local_island_gain",
-  "last_result": "Verified no-anchor M8 local-island combo after combo5: SigLIP rank14 seq5486 plus weakmetric rank22 seq7771. Root ./demo.sh method-reproduced DS1 p005_area IDF1/HOTA/AssA 0.669466/0.530154/0.540397 with config_name=p005_area and dropped_rows=45467. This is +0.000155 IDF1 over prior best 0.669311.",
+  "last_direction": "generated_positive_relocalized_ctf_probe_no_gain",
+  "last_result": "Relocalized seq4043 generated-positive prompt/crop assets into the current wisc checkout and reran local_aug CTF. DINO source CTF passed 8/12 but 0/4 for intended seq4043; SigLIP source CTF passed 12/12 and 4/4 for seq4043. No GPT-image call was made because OPENAI_API_KEY was not safely present in env. No e2e score changed; best remains 0.669466.",
   "last_updated": "2026-06-25",
   "last_upload": "s3_blocked_no_local_aws_credentials_pluto_ssh_unreachable",
-  "next_direction": "Safely inject OPENAI_API_KEY via environment/launchctl, then run GPT-image positive generation only through DINO/SigLIP/weakmetric CTF and reviewer-gated M8 repairs.",
+  "next_direction": "Safely inject OPENAI_API_KEY via launchctl/env, then run GPT-image-2 on the relocalized seq4043 prompt manifest and require DINO+SigLIP source CTF before M8 repair proposals.",
   "stale_count": 0,
-  "status": "active_no_anchor_best_e2e_0p669466_post_combo5_sig14_weak22_demo_verified"
+  "status": "active_no_anchor_best_e2e_0p669466_generated_positive_ctf_ready_key_missing"
 }
